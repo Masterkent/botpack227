@@ -1,0 +1,22 @@
+class B227_BotpackUserUtils expands Inventory;
+
+var transient B227_SpeechMenu B227_SpeechMenu;
+
+function GiveTo(Pawn P)
+{
+	Instigator = P;
+	BecomeItem();
+	RemoteRole = ROLE_SimulatedProxy;
+	P.AddInventory(self);
+}
+
+simulated exec function ShowSpeech()
+{
+	class'B227_SpeechMenu'.static.ShowMenu(PlayerPawn(Owner), B227_SpeechMenu);
+}
+
+defaultproperties
+{
+	bGameRelevant=True
+	bTravel=False
+}

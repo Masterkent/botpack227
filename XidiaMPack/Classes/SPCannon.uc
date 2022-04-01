@@ -1,0 +1,151 @@
+// ============================================================
+//This package is for use with the Partial Conversion, Operation: Na Pali, by Team Vortex.
+//SPCannon: Cannon for SP
+// Sets teams differently and blows up :P
+// myteam=0 means enemy myteam=1 means friend.
+// ============================================================
+
+class SPCannon expands TeamCannon;
+
+function bool IsEnemy(pawn p){ //is this a potential enemy?
+  If (p==self||p.health<=0||(!p.bisplayer&&p.attitudetoplayer==ATTITUDE_Ignore&&p.target==none))
+    return false; //don't shoot enemies who are doing nothing.
+  If (p.bisplayer||p.attitudetoplayer>=ATTITUDE_Friendly||(p.IsA('cow')||p.isa('nali')))
+    return (myteam==0);
+  else if (p.attitudetoplayer==ATTITUDE_Ignore&&p.target==none) //don't shoot enemies who do nothing.
+    return false;
+  else
+    return (myteam==1);
+}
+auto state Idle
+{
+  ignores EnemyNotVisible;
+  function SeePlayer(Actor SeenPlayer)
+  {
+  if ( myteam==0&&pawn(seenplayer)!=none&&pawn(seenplayer).bisplayer )
+    {
+      Enemy = Pawn(SeenPlayer);
+      GotoState('ActiveCannon');
+    }
+  }
+
+  function BeginState()
+  {
+    Enemy = None;
+    settimer(1,true);
+  }
+  function timer(){
+  local pawn apawn;
+  local pawn temp;
+   for (aPawn=level.pawnlist;apawn!=none;apawn=apawn.nextpawn)
+  {
+    if (IsEnemy(apawn)&&cansee(aPawn))
+     {
+      temp=apawn;
+      if (apawn.target!=none){
+        enemy=apawn; // Set him as enemy
+        gotostate('ActiveCannon');  // ATTACK!
+        return;
+      }
+     }
+  }
+  enemy=temp;
+  if (enemy!=none)
+    GotoState('ActiveCannon');
+  }
+}
+//blow up on damage take
+function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
+          Vector momentum, name damageType)
+{
+  MakeNoise(1.0);
+  Health -= NDamage;
+  if (Health <0)
+  {
+    PlaySound(DeActivateSound, SLOT_None,5.0);
+    skinnedFrag(class'Fragment1',texture'JCannon1', Momentum,1.0,17);  //ripped from cannon
+    spawn(class'UT_SpriteBallExplosion');
+    Destroy();
+  }
+  else if ( instigatedBy == None )
+    return;
+  else if ( (Enemy == None) && IsEnemy(instigatedby) )
+  {
+    Enemy = instigatedBy;
+    GotoState('ActiveCannon');
+  }
+}
+//from decoration
+function skinnedFrag(class<fragment> FragType, texture FragSkin, vector Momentum, float DSize, int NumFrags)
+{
+  local int i;
+  local actor A, Toucher;
+  local Fragment s;
+
+  if (Event!='')
+    foreach AllActors( class 'Actor', A, Event )
+      A.Trigger( Toucher, pawn(Toucher) );
+  for (i=0 ; i<NumFrags ; i++)
+  {
+    s = Spawn( FragType, Owner);
+    s.CalcVelocity(Momentum/100,0);
+    s.Skin = FragSkin;
+    s.DrawScale = DSize*0.5+0.7*DSize*FRand();
+  }
+}
+function Shoot()   //wiped deathmatch plus check
+{
+  local Vector FireSpot, ProjStart;
+  local Projectile P;
+
+  if (DesiredRotation.Pitch < -20000) Return;
+  PlaySound(FireSound, SLOT_None,5.0);
+  PlayAnim(PickAnim());
+
+  ProjStart = Location+Vector(DesiredRotation)*100 - Vect(0,0,1)*Drop;
+  if ( bLeadTarget )
+  {
+    FireSpot = Target.Location + FMin(1, 0.7 + 0.6 * FRand()) * (Target.Velocity * VSize(Target.Location - ProjStart)/ProjectileType.Default.Speed);
+    if ( !FastTrace(FireSpot, ProjStart) )
+      FireSpot = 0.5 * (FireSpot + Target.Location);
+    DesiredRotation = Rotator(FireSpot - ProjStart);
+  }
+  P = Spawn(ProjectileType,,, ProjStart, DesiredRotation);
+  if (P != none)
+  {
+    P.Damage *= (0.4 + 0.3 * Level.Game.Difficulty);
+    if (Target.IsA('WarShell'))
+      P.speed *= 2;
+  }
+  bShoot=False;
+  SetTimer(0.05,True);
+}
+
+// B227 fix:
+state ActiveCannon
+{
+	event EnemyNotVisible()
+	{
+		local Pawn P;
+
+		Enemy = none;
+		if (MyTeam == 0)
+		{
+			for (P = Level.PawnList; P != none; P = P.NextPawn)
+				if (P.bIsPlayer &&
+					!P.bDeleteMe &&
+					P.Health > 0 &&
+					LineOfSightTo(P))
+				{
+					Enemy = P;
+					return;
+				}
+		}
+		GotoState('Idle');
+	}
+}
+
+defaultproperties
+{
+     DeActivateSound=Sound'UnrealI.Cannon.CannonExplode'
+}

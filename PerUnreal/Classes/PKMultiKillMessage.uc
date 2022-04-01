@@ -1,0 +1,110 @@
+class PKMultiKillMessage extends LocalMessagePlus;
+
+var(Messages)	localized string 	DoubleKillString;
+var(Messages)	localized string 	TripleKillString;
+var(Messages)	localized string 	MultiKillString;
+var(Messages)	localized string 	MegaKillString;
+var(Messages)	localized string 	UltraKillString;
+var(Messages)	localized string 	MonsterKillString;
+
+#exec OBJ LOAD FILE="PerUnrealResources.u" PACKAGE=PerUnreal
+
+static function float GetOffset(int Switch, float YL, float ClipY )
+{
+	return (Default.YPos/768.0) * ClipY + YL;
+}
+
+static function int GetFontSize( int Switch )
+{
+	if ( Switch == 1 )
+		return Default.FontSize;
+	else
+		return 2;
+}
+
+static function string GetString(
+	optional int Switch,
+	optional PlayerReplicationInfo RelatedPRI_1,
+	optional PlayerReplicationInfo RelatedPRI_2,
+	optional Object OptionalObject
+	)
+{
+	switch (Switch)
+	{
+		case 1:
+			return Default.DoubleKillString;
+			break;
+		case 2:
+			return Default.TripleKillString;
+			break;
+		case 3:
+			return Default.MultiKillString;
+			break;
+		case 4:
+			return Default.MegaKillString;
+			break;
+		case 5:
+			return Default.UltraKillString;
+			break;
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+			return Default.MonsterKillString;
+			break;
+	}
+	return "";
+}
+
+static simulated function ClientReceive(
+	PlayerPawn P,
+	optional int Switch,
+	optional PlayerReplicationInfo RelatedPRI_1,
+	optional PlayerReplicationInfo RelatedPRI_2,
+	optional Object OptionalObject
+	)
+{
+	Super.ClientReceive(P, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
+
+	switch (Switch)
+	{
+		case 1:
+			class'UTC_PlayerPawn'.static.B227_ClientPlayVoice(P, sound'Announcer.DoubleKill',, true);
+			break;
+		case 2:
+			class'UTC_PlayerPawn'.static.B227_ClientPlayVoice(P, sound'Announcer.TripleKill',, true);
+			break;
+		case 3:
+			class'UTC_PlayerPawn'.static.B227_ClientPlayVoice(P, sound'Announcer.MultiKill',, true);
+			break;
+		case 4:
+			class'UTC_PlayerPawn'.static.B227_ClientPlayVoice(P, sound'Announcer.MegaKill',, true);
+			break;
+		case 5:
+			class'UTC_PlayerPawn'.static.B227_ClientPlayVoice(P, sound'Announcer.UltraKill',, true);
+			break;
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+			class'UTC_PlayerPawn'.static.B227_ClientPlayVoice(P, sound'Announcer.MonsterKill',, true);
+			break;
+	}
+}
+
+defaultproperties
+{
+     DoubleKillString="Double Kill!"
+     TripleKillString="Triple Kill!"
+     MultiKillString="Multi Kill!"
+     MegaKillString="Mega Kill!!"
+     UltraKillString="ULTRA KILL!!"
+     MonsterKillString="M O N S T E R  K I L L !!!"
+     FontSize=1
+     bIsSpecial=True
+     bIsUnique=True
+     bFadeMessage=True
+     DrawColor=(G=0,B=0)
+     YPos=196.000000
+     bCenter=True
+}

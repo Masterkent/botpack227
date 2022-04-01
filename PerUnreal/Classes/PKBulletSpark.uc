@@ -1,0 +1,43 @@
+//=============================================================================
+// BulletSpark.
+//=============================================================================
+class PKBulletSpark extends Effects;
+
+function PostBeginPlay()
+{
+	Velocity = (Vector(Rotation) + VRand()) * 200 * FRand();
+}
+
+auto state Explode
+{
+	simulated function ZoneChange( ZoneInfo NewZone )
+	{
+		if ( NewZone.bWaterZone )
+			Destroy();
+	}
+
+	simulated function Landed( vector HitNormal )
+	{
+		Destroy();
+	}
+
+	simulated function HitWall( vector HitNormal, actor Wall )
+	{
+		Destroy();
+	}
+}
+
+defaultproperties
+{
+     Physics=PHYS_Falling
+     RemoteRole=ROLE_None
+     LifeSpan=1.000000
+     DrawType=DT_Sprite
+     Style=STY_Translucent
+     Texture=FireTexture'UnrealShare.Effect1.FireEffect1e'
+     DrawScale=0.050000
+     bUnlit=True
+     bCollideWorld=True
+     bBounce=True
+     NetPriority=2.000000
+}
