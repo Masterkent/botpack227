@@ -16,6 +16,7 @@ simulated function CheckBeam(vector X, float DeltaTime)
   local actor HitActor;
   local vector HitLocation, HitNormal;
   local float DamageMult;
+  local int bCanHitInstigator;
 
 	if (B227_BeamStarter != none)
 		DamageMult = FMax(1, B227_BeamStarter.B227_DamageMult);
@@ -28,7 +29,9 @@ simulated function CheckBeam(vector X, float DeltaTime)
 
   // check to see if hits something, else spawn or orient child
 
-  HitActor = Trace(HitLocation, HitNormal, Location + BeamSize * X, Location, true);
+  //-HitActor = Trace(HitLocation, HitNormal, Location + BeamSize * X, Location, true);
+  HitActor = B227_TraceBeam(X, HitLocation, HitNormal, bCanHitInstigator);
+
   if ( (HitActor != None)  && (HitActor != Instigator)
     && (HitActor.bProjTarget || (HitActor == Level) || (HitActor.bBlockActors && HitActor.bBlockPlayers))
     && ((Pawn(HitActor) == None) || Pawn(HitActor).AdjustHitLocation(HitLocation, Velocity)) )
@@ -106,19 +109,19 @@ simulated function CheckBeam(vector X, float DeltaTime)
   {
     if ( (WallEffect == None) || WallEffect.bDeleteMe )
     {
-      WallEffect = Spawn(class'PlasmaCap',,, Location + (BeamSize - 4) * X);
+      WallEffect = Spawn(class'PlasmaCap',,, HitLocation - 4 * X);
       WallEffect.Texture=Texture'SevenB.RedBoltHit.pfphit_a00';
       WallEffect.LightHue=10;
     }
     else if ( WallEffect.IsA('PlasmaHit') )
     {
       WallEffect.Destroy();
-      WallEffect = Spawn(class'PlasmaCap',,, Location + (BeamSize - 4) * X);
+      WallEffect = Spawn(class'PlasmaCap',,, HitLocation - 4 * X);
       WallEffect.Texture=Texture'SevenB.RedBoltHit.pfphit_a00';
       WallEffect.LightHue=10;
     }
     else
-      WallEffect.SetLocation(Location + (BeamSize - 4) * X);
+      WallEffect.SetLocation(HitLocation - 4 * X);
   }
   else
   {
@@ -129,12 +132,12 @@ simulated function CheckBeam(vector X, float DeltaTime)
     }
     if ( PlasmaBeam == None )
     {
-      PlasmaBeam = Spawn(class'SBPBolt',,, Location + BeamSize * X);
+      PlasmaBeam = Spawn(class'SBPBolt',,, HitLocation, rotator(X));
       PlasmaBeam.Position = Position + 1;
       PlasmaBeam.B227_BeamStarter = B227_BeamStarter;
     }
     else
-      PlasmaBeam.UpdateBeam(self, X, DeltaTime);
+      PlasmaBeam.B227_UpdateBeam(self, HitLocation, X, false, DeltaTime);
 
     B227_ModifyLighting(PlasmaBeam);
   }

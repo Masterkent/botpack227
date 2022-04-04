@@ -17,6 +17,7 @@ simulated function CheckBeam(vector X, float DeltaTime)
   local actor HitActor;
   local vector HitLocation, HitNormal;
   local float DamageMult;
+  local int bCanHitInstigator;
 
     if (B227_BeamStarter != none)
         DamageMult = FMax(1, B227_BeamStarter.B227_DamageMult);
@@ -29,7 +30,10 @@ simulated function CheckBeam(vector X, float DeltaTime)
 
   // check to see if hits something, else spawn or orient child
 
-  HitActor = Trace(HitLocation, HitNormal, Location + BeamSize * X, Location, true);
+  //-HitActor = Trace(HitLocation, HitNormal, Location + BeamSize * X, Location, true);
+  B227_bCanHitInstigator = true;
+  HitActor = B227_TraceBeam(X, HitLocation, HitNormal, bCanHitInstigator);
+
   if ( (HitActor != None)  && (HitActor != Instigator || Position>0)
     && (HitActor.bProjTarget || (HitActor == Level) || (HitActor.bBlockActors && HitActor.bBlockPlayers))
     && ((Pawn(HitActor) == None) || Pawn(HitActor).AdjustHitLocation(HitLocation, X)) )
@@ -159,11 +163,11 @@ simulated function CheckBeam(vector X, float DeltaTime)
       WallEffect.Destroy();
       WallEffect = None;
       BeamLength+=BeamSize;
-      HitLocation = Location + BeamSize * X;
+      //-HitLocation = Location + BeamSize * X;
     }
     else{
       BeamLength+=BeamSize;
-      HitLocation = Location + BeamSize * X;
+      //-HitLocation = Location + BeamSize * X;
     }
     if ( PlasmaBeam == None )
     {

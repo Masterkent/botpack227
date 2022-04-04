@@ -237,7 +237,7 @@ simulated function Actor B227_TraceBeam(out vector Dir, out vector HitLocation, 
 		return none;
 	}
 	// Dir and HitLocation are set above
-	bCanHitInstigator = 0;
+	bCanHitInstigator = int(B227_bCanHitInstigator);
 	return HitActor;
 }
 

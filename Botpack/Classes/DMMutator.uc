@@ -193,58 +193,61 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	log("Found "$Other$" at "$Other.location);
 	//Assert(false);
 
-	if ( Other.IsA('JumpBoots') )
+	if (Pickup(Other) != none)
 	{
-		if ( MyGame.bJumpMatch )
+		if ( Other.IsA('JumpBoots') )
+		{
+			if ( MyGame.bJumpMatch )
+				return false;
+			if (ReplaceWith( Other, "Botpack.UT_JumpBoots" ) && UT_JumpBoots(B227_ReplacingActor) != none && Inventory(Other) != none)
+				UT_JumpBoots(B227_ReplacingActor).Charge = Inventory(Other).Charge;
 			return false;
-		if (ReplaceWith( Other, "Botpack.UT_JumpBoots" ) && UT_JumpBoots(B227_ReplacingActor) != none && Inventory(Other) != none)
-			UT_JumpBoots(B227_ReplacingActor).Charge = Inventory(Other).Charge;
-		return false;
-	}
-	if ( Other.IsA('Amplifier') )
-	{
-		ReplaceWith( Other, "Botpack.UDamage" );
-		return false;
-	}
-	if ( Other.IsA('WeaponPowerUp') )
-		return false; 
+		}
+		if ( Other.IsA('Amplifier') )
+		{
+			ReplaceWith( Other, "Botpack.UDamage" );
+			return false;
+		}
+		if ( Other.IsA('WeaponPowerUp') )
+			return false; 
 
-	if ( Other.IsA('KevlarSuit') )
-	{
-		ReplaceWith( Other, "Botpack.ThighPads");
-		return false;
-	}
-	if ( Other.IsA('SuperHealth') )
-	{
-		ReplaceWith( Other, "Botpack.HealthPack" );
-		return false;
-	}
-	if ( Other.IsA('Armor') )
-	{
-		ReplaceWith( Other, "Botpack.Armor2" );
-		return false;
-	}
-	if ( Other.IsA('Bandages') )
-	{
-		ReplaceWith( Other, "Botpack.HealthVial" );
-		return false;
-	}
-	///if ( Other.IsA('Health') && !Other.IsA('HealthPack') && !Other.IsA('HealthVial')
-	///	 && !Other.IsA('MedBox') && !Other.IsA('NaliFruit') )
-	if (Other.Class == class'Health')
-	{
-		ReplaceWith( Other, "Botpack.MedBox" );
-		return false;
-	}
-	if ( Other.IsA('ShieldBelt') )
-	{
-		ReplaceWith( Other, "Botpack.UT_ShieldBelt" );
-		return false;
-	}
-	if ( Other.IsA('Invisibility') )
-	{
-		ReplaceWith( Other, "Botpack.UT_Invisibility" );
-		return false;
+		if ( Other.IsA('KevlarSuit') )
+		{
+			ReplaceWith( Other, "Botpack.ThighPads");
+			return false;
+		}
+		if ( Other.IsA('SuperHealth') )
+		{
+			ReplaceWith( Other, "Botpack.HealthPack" );
+			return false;
+		}
+		if ( Other.IsA('Armor') )
+		{
+			ReplaceWith( Other, "Botpack.Armor2" );
+			return false;
+		}
+		if ( Other.IsA('Bandages') )
+		{
+			ReplaceWith( Other, "Botpack.HealthVial" );
+			return false;
+		}
+		///if ( Other.IsA('Health') && !Other.IsA('HealthPack') && !Other.IsA('HealthVial')
+		///	 && !Other.IsA('MedBox') && !Other.IsA('NaliFruit') )
+		if (Other.Class == class'Health')
+		{
+			ReplaceWith( Other, "Botpack.MedBox" );
+			return false;
+		}
+		if ( Other.IsA('ShieldBelt') )
+		{
+			ReplaceWith( Other, "Botpack.UT_ShieldBelt" );
+			return false;
+		}
+		if ( Other.IsA('Invisibility') )
+		{
+			ReplaceWith( Other, "Botpack.UT_Invisibility" );
+			return false;
+		}
 	}
 
 	bSuperRelevant = 0;

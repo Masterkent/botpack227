@@ -18,6 +18,9 @@ var private bool B227_bFindPlayerStart_Default;
 
 function bool IsRelevant(Actor Other)
 {
+	if (Other.bIsPawn && Pawn(Other).PlayerReplicationInfoClass == class'PlayerReplicationInfo')
+		Pawn(Other).PlayerReplicationInfoClass = class'UTC_PlayerReplicationInfo';
+
 	if (BaseMutator != none && class'UTC_Mutator'.static.UTSF_AlwaysKeep(BaseMutator, Other))
 		return true;
 	return super.IsRelevant(Other);

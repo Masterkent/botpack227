@@ -529,15 +529,19 @@ simulated function B227_AdjustCurrentClientTimestamp(out float DeltaTime)
 	local float Diff;
 	local float Delta;
 
+	if (B227_CurrentServerTimestamp == 0)
+		return;
+
 	Diff = B227_CurrentServerTimestamp - B227_CurrentTimestamp;
 
-	if (Diff > 0.3)
-		Delta = FMin(Diff, DeltaTime / 2);
+	if (Diff > 0)
+		Delta = Diff;
 	else if (Diff < -0.3)
 		Delta = FMax(Diff, -DeltaTime / 2);
 	else
 		return;
 
+	B227_CurrentServerTimestamp = 0;
 	B227_CurrentTimestamp += Delta;
 	DeltaTime += Delta;
 }
