@@ -22,6 +22,7 @@ replication
 	reliable if (Role == ROLE_Authority && !bDemoRecording)
 		ReceiveLocalizedMessage;
 	reliable if (Role < ROLE_Authority)
+		Mutate,
 		B227_GetWeapon;
 }
 

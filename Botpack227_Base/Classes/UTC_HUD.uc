@@ -133,15 +133,44 @@ function UTC_PlayerReplicationInfo B227_OwnerPRI()
 	return UTC_PlayerReplicationInfo(PlayerOwner.PlayerReplicationInfo);
 }
 
-static function UTC_Mutator B227_GetHUDMutator(HUD this)
+function UTC_Mutator B227_FindHUDMutator(class<UTC_Mutator> MutatorClass, optional bool bIsBaseClass)
 {
 	local UTC_Mutator Mutator;
 
-	if (UTC_HUD(this) != none)
-		return UTC_HUD(this).HUDMutator;
-	foreach this.ChildActors(class'UTC_Mutator', Mutator)
+	if (MutatorClass == none)
+		return none;
+
+	if (bIsBaseClass)
+	{
+		for (Mutator = HUDMutator; Mutator != none; Mutator = Mutator.NextHUDMutator)
+			if (ClassIsChildOf(Mutator.Class, MutatorClass))
+				return Mutator;
+	}
+	else
+	{
+		for (Mutator = HUDMutator; Mutator != none; Mutator = Mutator.NextHUDMutator)
+			if (Mutator.Class == MutatorClass)
+				return Mutator;
+	}
+	return none;
+}
+
+function UTC_Mutator B227_AddHUDMutator(class<UTC_Mutator> MutatorClass)
+{
+	local UTC_Mutator Mutator;
+
+	if (MutatorClass == none)
+		return none;
+
+	Mutator = Spawn(MutatorClass);
+	if (Mutator != none)
+	{
+		Mutator.RegisterHUDMutator();
 		if (Mutator.bHUDMutator)
 			return Mutator;
+		Mutator.Destroy(); // Failed to register the mutator for this HUD
+	}
+
 	return none;
 }
 

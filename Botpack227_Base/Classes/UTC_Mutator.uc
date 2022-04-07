@@ -11,7 +11,8 @@ var private transient UTC_Mutator B227_BaseMutator;
 
 event PreBeginPlay()
 {
-	class'B227_MutatorGR'.static.WrapMutator(self);
+	if (Level.NetMode != NM_Client) // Note: HUD mutators can be spawned client-side with Role == ROLE_Authority
+		class'B227_MutatorGR'.static.WrapMutator(self);
 }
 
 simulated function PostRender(Canvas Canvas);
@@ -245,19 +246,13 @@ function RegisterHUDMutator()
 	local PlayerPawn Player;
 
 	Player = Level.GetLocalPlayerPawn();
-	if (Player == none || Player.myHUD == none || Player.myHUD.bDeleteMe)
+
+	// If a HUD modifier is supposed to be used with HUD classes that are not derived from ChallengeHUD,
+	// it should use HUDOverlay.
+	if (Player == none || UTC_HUD(Player.myHUD) == none || Player.myHUD.bDeleteMe)
 		return;
 
-	NextHUDMutator = class'UTC_HUD'.static.B227_GetHUDMutator(Player.myHUD);
-
-	if (UTC_HUD(Player.myHUD) != none)
-		UTC_HUD(Player.myHUD).HUDMutator = self;
-	else
-	{
-		if (NextHUDMutator != none && NextHUDMutator.Owner == Player.myHUD)
-			NextHUDMutator.SetOwner(none);
-		SetOwner(Player.myHUD);
-	}
-
+	NextHUDMutator = UTC_HUD(Player.myHUD).HUDMutator;
+	UTC_HUD(Player.myHUD).HUDMutator = self;
 	bHUDMutator = true;
 }
