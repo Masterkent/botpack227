@@ -384,6 +384,8 @@ function EndSpree(Pawn Killer, Pawn Other)
 				TournamentPlayer(P).EndSpree(None, Other.PlayerReplicationInfo);
 			else if (Killer.PlayerReplicationInfo != none)
 				TournamentPlayer(P).EndSpree(Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo);
+			else
+				TournamentPlayer(P).B227_EndSpree(Killer, Other);
 		}
 }
 

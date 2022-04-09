@@ -27,19 +27,21 @@ event float BotDesireability(Pawn Bot)
 
 function PlayPickupMessage(Pawn Other)
 {
-	class'UTC_Pawn'.static.UTSF_ReceiveLocalizedMessage(Other, class'PickupMessageHealthPlus', 0, none, none, self.Class);
+	//-Other.ReceiveLocalizedMessage( class'PickupMessageHealthPlus', 0, None, None, Self.Class );
+	class'UTC_Pawn'.static.B227_StaticReceiveLocalizedMessage(
+		Other, class'PickupMessageHealthPlus', 0,,, self.Class, string(HealingAmount));
 }
 
 auto state Pickup
-{	
+{
 	function Touch( actor Other )
 	{
 		local int HealMax;
 		local Pawn P;
-			
+
 		if ( ValidTouch(Other) ) 
-		{	
-			P = Pawn(Other);	
+		{
+			P = Pawn(Other);
 			HealMax = P.default.health;
 			if (bSuperHeal) HealMax = Min(199, HealMax * 2.0);
 			if (P.Health < HealMax) 
@@ -52,7 +54,7 @@ auto state Pickup
 				if (P.Health > HealMax) P.Health = HealMax;
 				PlayPickupMessage(P);
 				PlaySound (PickupSound,,2.5);
-				Other.MakeNoise(0.2);		
+				Other.MakeNoise(0.2);
 				SetRespawn();
 			}
 		}

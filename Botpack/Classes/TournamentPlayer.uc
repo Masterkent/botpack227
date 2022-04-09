@@ -1447,6 +1447,14 @@ function B227_GiveUTArmor(class<TournamentPickup> ArmorClass, bool bIndependent)
 	Inv.Charge = InvCharge;
 }
 
+function B227_EndSpree(Pawn Killer, Pawn Other)
+{
+	if (Killer == Other || Killer == none)
+		ReceiveLocalizedMessage(class'KillingSpreeMessage', 1, none, Other.PlayerReplicationInfo);
+	else
+		B227_ReceiveLocalizedMessage(class'KillingSpreeMessage', 0, Other.GetHumanName(), Killer.GetHumanName());
+}
+
 defaultproperties
 {
 	spreenote(0)="is on a killing spree!"

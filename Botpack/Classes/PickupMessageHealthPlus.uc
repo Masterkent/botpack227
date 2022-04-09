@@ -21,6 +21,8 @@ static function string GetString(
 		else
 			return Class<Inventory>(OptionalObject).Default.PickupMessage;
 	}
+	if (default.B227_bHasRelatedContext)
+		return class<Inventory>(default.B227_RelatedClass).default.PickupMessage $ default.B227_RelatedInfo;
 	return "";
 }
 

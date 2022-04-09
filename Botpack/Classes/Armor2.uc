@@ -15,7 +15,10 @@ function bool HandlePickupQuery(Inventory Item)
 			Level.Game.LocalLog.LogPickup(Item, Pawn(Owner));
 		if (Level.Game.WorldLog != None)
 			Level.Game.WorldLog.LogPickup(Item, Pawn(Owner));
-		Pawn(Owner).ClientMessage(PickupMessage, 'Pickup');
+		if (UTC_Pickup(Item).PickupMessageClass == None)
+			Pawn(Owner).ClientMessage(Item.PickupMessage, 'Pickup');
+		else
+			class'UTC_Pawn'.static.UTSF_ReceiveLocalizedMessage(Pawn(Owner), UTC_Pickup(Item).PickupMessageClass, 0, None, None, Self.Class);
 		Item.PlaySound (PickupSound,,2.0);
 		Item.SetReSpawn();
 		return true;

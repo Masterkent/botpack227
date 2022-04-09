@@ -13,11 +13,14 @@ var(Messages)	localized string EndSpreeNoteTrailer;
  
 static function string GetString(
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)
 {
+	if (default.B227_bHasRelatedContext)
+		return B227_GetString(Switch);
+
 	if (RelatedPRI_2 == None)
 	{
 		if (RelatedPRI_1 == None)
@@ -26,7 +29,7 @@ static function string GetString(
 		if (RelatedPRI_1.PlayerName != "")
 			return RelatedPRI_1.PlayerName@Default.SpreeNote[Switch];
 	} 
-	else 
+	else
 	{
 		if (RelatedPRI_1 == None)
 		{
@@ -37,8 +40,8 @@ static function string GetString(
 				else
 					return RelatedPRI_2.PlayerName@Default.EndSelfSpree;
 			}
-		} 
-		else 
+		}
+		else
 		{
 			return RelatedPRI_1.PlayerName$Default.EndSpreeNote@RelatedPRI_2.PlayerName@Default.EndSpreeNoteTrailer;
 		}
@@ -56,7 +59,7 @@ static simulated function ClientReceive(
 {
 	Super.ClientReceive(P, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 
-	if (RelatedPRI_2 != None)
+	if (RelatedPRI_2 != None || default.B227_bHasRelatedContext)
 		return;
 
 	if (RelatedPRI_1 != P.PlayerReplicationInfo)
@@ -66,6 +69,11 @@ static simulated function ClientReceive(
 	}
 	class'UTC_PlayerPawn'.static.B227_ClientPlayVoice(P, default.SpreeSound[Switch],, true);
 
+}
+
+static function string B227_GetString(optional int Switch)
+{
+	return default.B227_RelatedPawnInfo_1 $ default.EndSpreeNote @ default.B227_RelatedPawnInfo_2 @ default.EndSpreeNoteTrailer;
 }
 
 defaultproperties

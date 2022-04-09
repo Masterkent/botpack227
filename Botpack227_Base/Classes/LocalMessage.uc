@@ -23,6 +23,13 @@ var bool	bCenter;										// Whether or not to center the message.
 // Port extensions
 var name B227_MessageName;
 
+// Hack for UTC_PlayerPawn.B227_ReceiveLocalizedMessage
+var transient bool B227_bHasRelatedContext;
+var transient string B227_RelatedPawnInfo_1;
+var transient string B227_RelatedPawnInfo_2;
+var transient class<Object> B227_RelatedClass;
+var transient string B227_RelatedInfo;
+
 static function RenderComplexMessage( 
 	Canvas Canvas, 
 	out float XL,

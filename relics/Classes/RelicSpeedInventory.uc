@@ -18,7 +18,7 @@ state Activated
 		Super.BeginState();
 
 		// Alter player's stats.
-		Pawn(Owner).AirControl = 0.65;
+		Pawn(Owner).AirControl = FMax(0.65, Pawn(Owner).AirControl);
 		Pawn(Owner).JumpZ *= 1.1;
 		Pawn(Owner).GroundSpeed *= 1.3;
 		Pawn(Owner).WaterSpeed *= 1.3;
@@ -38,7 +38,7 @@ state Activated
 		Super.EndState();
 
 		if ( Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).bMegaSpeed )
-			SpeedScale = 1.3;
+			SpeedScale = 1.4; // B227 note: 1.3 was replaced with 1.4 according to the scaling defined in DMMutator.CheckReplacement
 		else
 			SpeedScale = 1.0;
 

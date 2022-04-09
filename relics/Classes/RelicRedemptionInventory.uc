@@ -13,10 +13,14 @@ function inventory PrioritizeArmor( int Damage, name DamageType, vector HitLocat
 		return Super.PrioritizeArmor(Damage, DamageType, HitLocation);
 
 	// Redeem this poor soul.
-	PointNumber = Rand(MyRelic.NumPoints);
+	if (MyRelic != none)
+		PointNumber = Rand(MyRelic.NumPoints);
+	else if (B227_Relics != none)
+		PointNumber = Rand(B227_Relics.NumPoints);
+
 	for (NP = Level.NavigationPointList; NP != None; NP = NP.NextNavigationPoint)
 	{
-		if (NP.IsA('PathNode'))
+		if (PathNode(NP) != none && (NP.bStatic || NP.bNoDelete))
 		{
 			if (PointCount == PointNumber)
 			{

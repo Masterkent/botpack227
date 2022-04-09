@@ -47,6 +47,44 @@ static function UTSF_ReceiveLocalizedMessage(
 			Message.default.bBeep);
 }
 
+static function B227_StaticReceiveLocalizedMessage(
+	Pawn this,
+	class<LocalMessage> Message,
+	optional int Switch,
+	optional string RelatedPawnInfo_1,
+	optional string RelatedPawnInfo_2,
+	optional class<Object> RelatedClass,
+	optional string RelatedInfo)
+{
+	if (UTC_PlayerPawn(this) != none)
+		UTC_PlayerPawn(this).B227_ReceiveLocalizedMessage(
+			Message,
+			Switch,
+			RelatedPawnInfo_1,
+			RelatedPawnInfo_2,
+			RelatedClass,
+			RelatedInfo);
+	else if (PlayerPawn(this) != none)
+	{
+		Message.default.B227_bHasRelatedContext = true;
+		Message.default.B227_RelatedPawnInfo_1 = RelatedPawnInfo_1;
+		Message.default.B227_RelatedPawnInfo_2 = RelatedPawnInfo_2;
+		Message.default.B227_RelatedClass = RelatedClass;
+		Message.default.B227_RelatedInfo = RelatedInfo;
+
+		this.ClientMessage(
+			Message.static.GetString(Switch),
+			Message.default.B227_MessageName,
+			Message.default.bBeep);
+
+		Message.default.B227_bHasRelatedContext = false;
+		Message.default.B227_RelatedPawnInfo_1 = "";
+		Message.default.B227_RelatedPawnInfo_2 = "";
+		Message.default.B227_RelatedClass = none;
+		Message.default.B227_RelatedInfo = "";
+	}
+}
+
 function SendGlobalMessage(PlayerReplicationInfo Recipient, name MessageType, byte MessageID, float Wait)
 {
 	SendVoiceMessage(PlayerReplicationInfo, Recipient, MessageType, MessageID, 'GLOBAL');

@@ -20,7 +20,8 @@ replication
 	unreliable if (Role == ROLE_Authority && !bDemoRecording)
 		UTF_ClientPlaySound;
 	reliable if (Role == ROLE_Authority && !bDemoRecording)
-		ReceiveLocalizedMessage;
+		ReceiveLocalizedMessage,
+		B227_ReceiveLocalizedMessage;
 	reliable if (Role < ROLE_Authority)
 		Mutate,
 		B227_GetWeapon;
@@ -155,6 +156,29 @@ function ReceiveLocalizedMessage(
 	optional Object OptionalObject)
 {
 	Message.Static.ClientReceive( Self, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject );
+}
+
+function B227_ReceiveLocalizedMessage(
+	class<LocalMessage> Message,
+	optional int Switch,
+	optional string RelatedPawnInfo_1,
+	optional string RelatedPawnInfo_2,
+	optional class<Object> RelatedClass,
+	optional string RelatedInfo)
+{
+	Message.default.B227_bHasRelatedContext = true;
+	Message.default.B227_RelatedPawnInfo_1 = RelatedPawnInfo_1;
+	Message.default.B227_RelatedPawnInfo_2 = RelatedPawnInfo_2;
+	Message.default.B227_RelatedClass = RelatedClass;
+	Message.default.B227_RelatedInfo = RelatedInfo;
+
+	ReceiveLocalizedMessage(Message, Switch);
+
+	Message.default.B227_bHasRelatedContext = false;
+	Message.default.B227_RelatedPawnInfo_1 = "";
+	Message.default.B227_RelatedPawnInfo_2 = "";
+	Message.default.B227_RelatedClass = none;
+	Message.default.B227_RelatedInfo = "";
 }
 
 function SendGlobalMessage(PlayerReplicationInfo Recipient, name MessageType, byte MessageID, float Wait)
