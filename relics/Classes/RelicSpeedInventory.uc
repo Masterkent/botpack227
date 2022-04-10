@@ -5,8 +5,6 @@ class RelicSpeedInventory expands RelicInventory;
 function PickupFunction(Pawn Other)
 {
 	Super.PickupFunction(Other);
-
-	ShellEffect = Spawn(ShellType, Owner,,Owner.Location, Owner.Rotation);
 }
 
 state Activated
@@ -28,6 +26,8 @@ state Activated
 		// Add wind blowing.
 		Pawn(Owner).AmbientSound = sound'SpeedWind';
 		Pawn(Owner).SoundRadius = 64;
+
+		ShellEffect = Spawn(ShellType, Owner,,Owner.Location, Owner.Rotation);
 	}
 
 	function EndState()
@@ -52,6 +52,10 @@ state Activated
 
 		// Remove sound.
 		Pawn(Owner).AmbientSound = None;
+
+		if (ShellEffect != none)
+			ShellEffect.Destroy();
+		ShellEffect = none;
 	}
 }
 

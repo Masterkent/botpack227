@@ -26,8 +26,14 @@ simulated function PostBeginPlay()
 simulated function Tick(float Delta)
 {
 	ScaleGlow -= 3*Delta;
-	if (ScaleGlow <= 0)
+	if (ScaleGlow <= 0 || Owner == none || Owner.bDeleteMe)
+	{
 		Destroy();
+		return;
+	}
+	bHidden = Owner.bHidden;
+	bMeshEnviroMap = Owner.bMeshEnviroMap;
+	Texture = Owner.Texture;
 }
 
 defaultproperties

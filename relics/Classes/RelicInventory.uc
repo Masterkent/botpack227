@@ -199,8 +199,9 @@ function FlashShell(float Duration)
 	{
 		ShellEffect = Spawn(ShellType, Owner,,Owner.Location, Owner.Rotation);
 	}
-	if ( ShellEffect != None )
+	if ( ShellEffect != None && !Owner.bHidden )
 	{
+		ShellEffect.DrawType = ShellEffect.default.DrawType;
 		ShellEffect.Mesh = Owner.Mesh;
 		ShellEffect.DrawScale = Owner.Drawscale;
 		ShellEffect.Texture = ShellSkin;

@@ -2,6 +2,7 @@ class RelicShell expands Effects;
 
 function Timer()
 {
+	DrawType = DT_None;
 	Texture = None;
 }
 

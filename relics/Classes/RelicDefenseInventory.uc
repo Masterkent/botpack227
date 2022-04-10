@@ -37,6 +37,8 @@ function ArmorImpactEffect(vector HitLocation)
 //
 function int ArmorAbsorbDamage(int Damage, name DamageType, vector HitLocation)
 {
+	if (!bActive)
+		return Damage;
 	ArmorImpactEffect(HitLocation);
 	return 0.4 * Damage;
 }
