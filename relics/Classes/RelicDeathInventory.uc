@@ -53,4 +53,5 @@ defaultproperties
      CollisionHeight=55.000000
      RotationRate=(Yaw=5000,Roll=0)
      DesiredRotation=(Roll=0)
+     ItemName="Relic of Vengeance"
 }

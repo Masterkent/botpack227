@@ -24,10 +24,16 @@ state Activated
 		Pawn(Owner).Acceleration *= 1.3;
 
 		// Add wind blowing.
-		Pawn(Owner).AmbientSound = sound'SpeedWind';
-		Pawn(Owner).SoundRadius = 64;
+		//-Pawn(Owner).AmbientSound = sound'SpeedWind';
+		//-Pawn(Owner).SoundRadius = 64;
 
 		ShellEffect = Spawn(ShellType, Owner,,Owner.Location, Owner.Rotation);
+		if (ShellEffect != none)
+		{
+			ShellEffect.AmbientSound = sound'SpeedWind';
+			ShellEffect.SoundRadius = 64;
+			ShellEffect.SoundVolume = Pawn(Owner).default.SoundVolume;
+		}
 	}
 
 	function EndState()
@@ -37,13 +43,16 @@ state Activated
 
 		Super.EndState();
 
-		if ( Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).bMegaSpeed )
+		if (DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).bMegaSpeed)
 			SpeedScale = 1.4; // B227 note: 1.3 was replaced with 1.4 according to the scaling defined in DMMutator.CheckReplacement
 		else
 			SpeedScale = 1.0;
 
 		// Restore player's stats.
-		Pawn(Owner).AirControl = DeathMatchPlus(Level.Game).AirControl;
+		if (DeathMatchPlus(Level.Game) != none)
+			Pawn(Owner).AirControl = DeathMatchPlus(Level.Game).AirControl;
+		else
+			Pawn(Owner).AirControl = Pawn(Owner).default.AirControl;
 		Pawn(Owner).JumpZ = Pawn(Owner).Default.JumpZ * Level.Game.PlayerJumpZScaling();
 		Pawn(Owner).GroundSpeed = Pawn(Owner).Default.GroundSpeed * SpeedScale;
 		Pawn(Owner).WaterSpeed = Pawn(Owner).Default.WaterSpeed * SpeedScale;
@@ -51,7 +60,7 @@ state Activated
 		Pawn(Owner).Acceleration = Pawn(Owner).Default.Acceleration * SpeedScale;
 
 		// Remove sound.
-		Pawn(Owner).AmbientSound = None;
+		//-Pawn(Owner).AmbientSound = None;
 
 		if (ShellEffect != none)
 			ShellEffect.Destroy();
@@ -69,4 +78,5 @@ defaultproperties
      Physics=PHYS_Rotating
      Skin=Texture'relics.Skins.JRelicHourglass_01'
      CollisionHeight=40.000000
+     ItemName="Relic of Speed"
 }

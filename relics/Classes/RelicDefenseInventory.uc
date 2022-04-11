@@ -67,4 +67,5 @@ defaultproperties
      LightSaturation=0
      RotationRate=(Yaw=6000,Roll=0)
      DesiredRotation=(Roll=0)
+     ItemName="Relic of Defense"
 }

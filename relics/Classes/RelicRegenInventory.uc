@@ -56,4 +56,5 @@ defaultproperties
      Skin=Texture'relics.Skins.JRelicRegen_01'
      CollisionHeight=40.000000
      LightSaturation=0
+     ItemName="Relic of Regeneration"
 }

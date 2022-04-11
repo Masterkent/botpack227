@@ -91,4 +91,5 @@ defaultproperties
      CollisionHeight=40.000000
      LightHue=185
      LightSaturation=0
+     ItemName="Relic of Strength"
 }

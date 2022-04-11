@@ -9,7 +9,7 @@ function inventory PrioritizeArmor( int Damage, name DamageType, vector HitLocat
 	local NavigationPoint NP;
 
 	Victim = Pawn(Owner);
-	if ( (Victim == None) || (Victim.Health - Damage > 0) )
+	if ( (Victim == None) || (Victim.Health - Damage > 0) || !bActive )
 		return Super.PrioritizeArmor(Damage, DamageType, HitLocation);
 
 	// Redeem this poor soul.
@@ -33,7 +33,7 @@ function inventory PrioritizeArmor( int Damage, name DamageType, vector HitLocat
 				if ( Victim.IsA('PlayerPawn') )
 					PlayerPawn(Victim).SetFOVAngle(170);
 
-				Victim.Health = 100;
+				Victim.Health = Victim.default.Health;
 				Victim.AddVelocity(vect(0,0,-1000));
 			}
 			PointCount++;
@@ -53,7 +53,7 @@ function inventory PrioritizeArmor( int Damage, name DamageType, vector HitLocat
 function int ArmorAbsorbDamage(int Damage, name DamageType, vector HitLocation)
 {
 	if ( Pawn(Owner) != None )
-		Pawn(Owner).Health = 100;
+		Pawn(Owner).Health = Pawn(Owner).default.Health;
 	return 0;
 }
 
@@ -66,4 +66,5 @@ defaultproperties
      Physics=PHYS_Rotating
      Skin=Texture'relics.Skins.JRelicRedemption'
      CollisionHeight=40.000000
+     ItemName="Relic of Redemption"
 }
