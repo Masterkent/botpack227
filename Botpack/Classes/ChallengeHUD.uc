@@ -98,7 +98,8 @@ var class<ServerInfo> ServerInfoClass;
 
 var globalconfig string FontInfoClass;
 
-var float B227_YScale;
+var globalconfig bool B227_bVerticalScaling;
+var float B227_XScale;
 
 function Destroyed()
 {
@@ -266,13 +267,9 @@ simulated function HUDSetup(canvas canvas)
 	Canvas.SpaceX=0;
 	Canvas.bNoSmooth = True;
 
-	FontSize = Min(3, HUDScale * Canvas.ClipX/500);
-	Scale = (HUDScale * Canvas.ClipX)/1280.0;
-
-	if (B227_bVerticalScaling)
-		B227_YScale = (HUDScale * Canvas.ClipY) / 960.0;
-	else
-		B227_YScale = Scale;
+	B227_XScale = (HUDScale * Canvas.SizeX) / 1280.0;
+	FontSize = Min(3, HUDScale * B227_ScaledScreenWidth(Canvas) / 500);
+	Scale = (HUDScale * B227_ScaledScreenWidth(Canvas)) / 1280.0;
 
 	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
 
@@ -434,7 +431,7 @@ simulated function DrawStatus(Canvas Canvas)
 		if ( bHasDoll )
 		{
 			Canvas.Style = ERenderStyle.STY_Translucent;
-			StatScale = B227_YScale * StatusScale;
+			StatScale = Scale * StatusScale;
 			X = Canvas.ClipX - 128 * StatScale;
 			Canvas.SetPos(X, 0);
 			if (PawnOwner.DamageScaling > 2.0)
@@ -549,7 +546,7 @@ simulated function DrawAmmo(Canvas Canvas)
 
 	Canvas.Style = Style;
 	Canvas.DrawColor = HUDColor;
-	if ( bHideAllWeapons || (HudScale * WeaponScale * Canvas.ClipX <= Canvas.ClipX - 256 * Scale) )
+	if ( bHideAllWeapons || (B227_WeaponBarScale() * Canvas.ClipX <= Canvas.ClipX - 256 * Scale) )
 		Y = Canvas.ClipY - 63.5 * Scale;
 	else
 		Y = Canvas.ClipY - 127.5 * Scale;
@@ -576,7 +573,7 @@ simulated function DrawFragCount(Canvas Canvas)
 		return;
 
 	Canvas.Style = Style;
-	if ( bHideAllWeapons || (HudScale * WeaponScale * Canvas.ClipX <= Canvas.ClipX - 256 * Scale) )
+	if ( bHideAllWeapons || (B227_WeaponBarScale() * Canvas.ClipX <= Canvas.ClipX - 256 * Scale) )
 		Y = Canvas.ClipY - 63.5 * Scale;
 	else
 		Y = Canvas.ClipY - 127.5 * Scale;
@@ -628,7 +625,7 @@ simulated function DrawGameSynopsis(Canvas Canvas)
 	Canvas.StrLen(RankString, XL, YL);
 	if ( bHideAllWeapons )
 		YOffset = Canvas.ClipY - YL*2;
-	else if ( HudScale * WeaponScale * Canvas.ClipX <= Canvas.ClipX - 256 * Scale )
+	else if ( B227_WeaponBarScale() * Canvas.ClipX <= Canvas.ClipX - 256 * Scale )
 		YOffset = Canvas.ClipY - 64*Scale - YL*2;
 	else
 		YOffset = Canvas.ClipY - 128*Scale - YL*2;
@@ -657,11 +654,11 @@ simulated function DrawWeapons(Canvas Canvas)
 	local int i, BaseY, BaseX, Pending, WeapX, WeapY;
 	local float AmmoScale, WeaponOffset, WeapScale, WeaponX, TexX, TexY;
 
-	BaseX = 0.5 * (Canvas.ClipX - HudScale * WeaponScale * Canvas.ClipX);
+	BaseX = 0.5 * (Canvas.ClipX - B227_WeaponBarScale() * Canvas.ClipX);
 	WeapScale = WeaponScale * Scale;
 	Canvas.Style = Style;
 	BaseY = Canvas.ClipY - 63.5 * WeapScale;
-	WeaponOffset = 0.1 * HUDScale * WeaponScale * Canvas.ClipX;
+	WeaponOffset = 0.1 * B227_WeaponBarScale() * Canvas.ClipX;
 
 	if ( PawnOwner.Weapon != None )
 	{
@@ -838,7 +835,7 @@ simulated function DisplayProgressMessage( canvas Canvas )
 	}
 	Canvas.DrawColor = WhiteColor;
 	Canvas.bCenter = False;
-	HUDSetup(Canvas);	
+	HUDSetup(Canvas);
 }
 
 function DrawTalkFace(Canvas Canvas, int i, float YPos)
@@ -982,7 +979,7 @@ simulated function PostRender( canvas Canvas )
 					ShortMessageQueue[i].RelatedPRI,
 					None,
 					ShortMessageQueue[i].OptionalObject
-					);				
+					);
 			} 
 			else
 			{
@@ -1409,7 +1406,7 @@ simulated function DrawCrossHair( canvas Canvas, int X, int Y)
 	if (Crosshair >= CrosshairCount)
 		return;
 
-	if (B227_bVerticalScaling)
+	if (default.B227_bVerticalCrosshairScaling)
 	{
 		if (Canvas.ClipY < 384)
 			XScale = 0.5;
@@ -1627,7 +1624,7 @@ simulated function DrawTwoColorID( canvas Canvas, string TitleString, string Val
 	Canvas.DrawColor = WhiteColor;
 	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
 }
-	
+
 simulated function bool DrawIdentifyInfo(canvas Canvas)
 {
 	if ( !TraceIdentify(Canvas))
@@ -1798,11 +1795,16 @@ function Color B227_WeaponNameColor(Weapon Weap)
 	return WhiteColor;
 }
 
-function B227_DrawYScaledBigNum(Canvas Canvas, int Value, int X, int Y, optional float ScaleFactor)
+static function float B227_ScaledScreenWidth(Canvas Canvas)
 {
-	if (ScaleFactor == 0)
-		ScaleFactor = 1;
-	DrawBigNum(Canvas, Value, X, Y, ScaleFactor * B227_YScale / Scale);
+	if (default.B227_bVerticalScaling)
+		return FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3);
+	return Canvas.SizeX;
+}
+
+function float B227_WeaponBarScale()
+{
+	return HUDScale * WeaponScale * (Scale / B227_XScale);
 }
 
 defaultproperties
@@ -1862,4 +1864,5 @@ defaultproperties
 	ServerInfoClass=Class'Botpack.ServerInfo'
 	FontInfoClass="Botpack.FontInfo"
 	HUDConfigWindowType="UTMenu.UTChallengeHUDConfig"
+	B227_bVerticalScaling=True
 }

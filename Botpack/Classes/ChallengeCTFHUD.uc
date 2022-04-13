@@ -35,8 +35,8 @@ simulated function PostRender( canvas Canvas )
 	Canvas.Style = Style;
 	if( !bHideHUD && !bHideTeamInfo )
 	{
-		X = Canvas.ClipX - 70 * B227_YScale;
-		Y = Canvas.ClipY - 350 * B227_YScale;
+		X = Canvas.ClipX - 70 * Scale;
+		Y = Canvas.ClipY - 350 * Scale;
 
 		for ( i=0; i<4; i++ )
 		{
@@ -49,13 +49,13 @@ simulated function PostRender( canvas Canvas )
 				if (Flag.Team == PawnOwner.PlayerReplicationInfo.Team)
 					MyFlag = Flag;
 				if ( Flag.bHome ) 
-					Canvas.DrawIcon(texture'I_Home', B227_YScale * 2);
+					Canvas.DrawIcon(texture'I_Home', Scale * 2);
 				else if ( Flag.bHeld )
-					Canvas.DrawIcon(texture'I_Capt', B227_YScale * 2);
+					Canvas.DrawIcon(texture'I_Capt', Scale * 2);
 				else
-					Canvas.DrawIcon(texture'I_Down', B227_YScale * 2);
+					Canvas.DrawIcon(texture'I_Down', Scale * 2);
 			}
-			Y -= 150 * B227_YScale;
+			Y -= 150 * Scale;
 		}
 	}
 }
@@ -65,7 +65,7 @@ simulated function DrawTeam(Canvas Canvas, TeamInfo TI)
 	if ( (TI != None) && (TI.Size > 0) )
 	{
 		Canvas.DrawColor = TeamColor[TI.TeamIndex];
-		B227_DrawYScaledBigNum(Canvas, int(TI.Score), Canvas.ClipX - 144 * B227_YScale, Canvas.ClipY - 336 * B227_YScale - (150 * B227_YScale * TI.TeamIndex), 1);
+		DrawBigNum(Canvas, int(TI.Score), Canvas.ClipX - 144 * Scale, Canvas.ClipY - 336 * Scale - (150 * Scale * TI.TeamIndex), 1);
 	}
 }
 

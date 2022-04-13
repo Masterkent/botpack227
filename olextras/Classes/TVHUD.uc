@@ -63,8 +63,9 @@ var bool NoZBufHack;
 //FPS saving variables (pre-multiplied on resolution change):
 var float M3, M4, M5, M9, M11, M64, M113, M128, M245;
 
+var globalconfig bool B227_bVerticalScaling;
+var float B227_CrosshairScale;
 var bool B227_bHandledGameEnd; // prevents counting end stats multiple times
-var float B227_YScale;
 
 /////////////////////////////////////////////////
 // Icon grabbing functions:
@@ -225,11 +226,16 @@ simulated function DrawONPIconValue(Canvas Canvas, int Amount)
 simulated function DrawWeaponIcon(Canvas Canvas, texture Icon, int Pos, byte Mode, float Ammo, optional bool Pending){
   local float Xl, Yl;
   local bool bCannotUse;
+  local float XOffset;
+
   if (Mode==1&&Pos>2)
     bSSLRaised=true;
   bCannotUse = (Ammo==0.0);
   Ammo=Fclamp(Ammo,0,1);
-   Canvas.SetPos(Pos*M128,canvas.clipy-M64*(Mode%2+1));
+
+  if (default.B227_bVerticalScaling)
+    XOffset = FMax(0, Canvas.SizeX - Canvas.SizeY * 4 / 3) / 2;
+  Canvas.SetPos(XOffset + Pos*M128,canvas.clipy-M64*(Mode%2+1));
   Xl=Canvas.CurX;
   Yl=Canvas.CurY;
    if (Mode==2){
@@ -360,9 +366,14 @@ simulated function DrawStatusBar (Canvas Canvas, float X, float Y, float BarLeng
   Canvas.Style=NormalStyle;
 }
 simulated function HudSetup (Canvas Canvas){
+  local float CurrentScale;
+
+  Canvas.Reset();
   Super.HudSetup(Canvas);
-  if (breschanged){  //cache multipliers here
-    Scale=Canvas.ClipX/1536;  //lower icons are 1536 pixels long
+
+  CurrentScale = B227_ScaledScreenWidth(Canvas) / 1536;  //lower icons are 1536 pixels long
+  if (Scale != CurrentScale){  //cache multipliers here
+    Scale = CurrentScale;
     M3=3*scale;
     M4=4*scale;
     M5=5*scale;
@@ -374,10 +385,7 @@ simulated function HudSetup (Canvas Canvas){
     M245=245*scale;
   }
   HudMode=0; //no HUD modes in ONP=force
-
-  B227_YScale = Canvas.ClipY / 1536 * 4 / 3;
-  if (!class'UTC_HUD'.default.B227_bVerticalScaling)
-    B227_YScale = Scale;
+  B227_CrosshairScale = class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 1536);
 }
 simulated function float GetAmmo(Weapon W){
   if (W.AmmoType==None)
@@ -1372,7 +1380,7 @@ simulated function DrawCrossHair( canvas Canvas, int StartX, int StartY )
      tvCrosshair=0;
 
   PickDiff = Level.TimeSeconds - PickupTime;
-  XLength = B227_YScale * 77;
+  XLength = B227_CrosshairScale * 77;
   if ( PickDiff < 0.4 )
   {
     if ( PickDiff < 0.2 )
@@ -1622,6 +1630,13 @@ function DrawTalkFace(Canvas Canvas, float YPos)
 //debug (z buffer hack):
 exec function ZBuffer(bool newb){
   NoZBufHack=!newb;
+}
+
+static function float B227_ScaledScreenWidth(Canvas Canvas)
+{
+	if (default.B227_bVerticalScaling)
+		return FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3);
+	return Canvas.SizeX;
 }
 
 defaultproperties

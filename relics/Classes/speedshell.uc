@@ -2,15 +2,17 @@ class SpeedShell expands RelicShell;
 
 simulated function PostBeginPlay()
 {
-	Super.PostBeginPlay();
-
-	if ( Level.bHighDetailMode )
+	if (Level.NetMode != NM_DedicatedServer && Level.bHighDetailMode)
+	{
+		DrawType = DT_None;
 		SetTimer(0.2, True);
+	}
 }
 
 simulated function Timer()
 {
-	Super.Timer();
+	if (Level.NetMode == NM_DedicatedServer)
+		return;
 
 	if ( !Level.bDropDetail && (Owner != None) && (Owner.Velocity != vect(0, 0, 0)) )
 		Spawn(class'SpeedShadow', Owner, , Owner.Location, Owner.Rotation);

@@ -23,7 +23,8 @@ simulated function PostRender( canvas Canvas )
 	if ( (P != None) && (P.DesiredFOV != P.DefaultFOV) )
 	{
 		bOwnsCrossHair = true;
-		Scale = Canvas.ClipX/640;
+		Canvas.Font = class'FontInfo'.static.GetStaticSmallFont(class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 1));
+		Scale = class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 640);
 		Canvas.SetPos(0.5 * Canvas.ClipX - 128 * Scale, 0.5 * Canvas.ClipY - 128 * Scale );
 		if ( Level.bHighDetailMode )
 			Canvas.Style = ERenderStyle.STY_Translucent;

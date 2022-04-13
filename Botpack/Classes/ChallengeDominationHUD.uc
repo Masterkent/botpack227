@@ -22,7 +22,7 @@ simulated function PostRender( canvas Canvas )
 		return;
 
 	X = 0;
-	Y = Canvas.ClipY - 384 * B227_YScale;
+	Y = Canvas.ClipY - 384 * Scale;
 	Canvas.Style = Style;
 	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
 
@@ -37,12 +37,12 @@ simulated function PostRender( canvas Canvas )
 
 			Canvas.DrawColor = BaseColor;
 			Canvas.SetPos(X,Y);
-			Canvas.DrawIcon(CPTexture, B227_YScale);
-			Y -= 140 * B227_YScale;
+			Canvas.DrawIcon(CPTexture, Scale);
+			Y -= 140 * Scale;
 		}
 
 	// separate name drawing to reduce texture changes
-	Y = Canvas.ClipY - 384 * B227_YScale;
+	Y = Canvas.ClipY - 384 * Scale;
 	for ( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
 		if ( N.IsA('ControlPoint') )
 		{
@@ -53,9 +53,9 @@ simulated function PostRender( canvas Canvas )
 				Canvas.DrawColor = WhiteColor;
 			Canvas.SetPos(0, 0);
 			Canvas.StrLen(CP.PointName, XL, YL);
-			Canvas.SetPos(4, Y + 96 * B227_YScale - YL);
+			Canvas.SetPos(4, Y + 96 * Scale - YL);
 			Canvas.DrawText(CP.PointName);
-			Y -= 140 * B227_YScale;
+			Y -= 140 * Scale;
 		}
 }
 

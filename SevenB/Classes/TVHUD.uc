@@ -76,7 +76,8 @@ var bool bShowHitZ;
 var float M3, M4, M5, M9, M11, M48, M64, M113, M128, M134, M156, M245, M256, M335, M15, M35;
 var texture WeapIcons[30];  //weapon icon array. 0-9=full, 10-19=empty, 20-29=missing   no.. this isn't very extendable ;p
 
-var float B227_YScale;
+var globalconfig bool B227_bVerticalScaling;
+var float B227_CrosshairScale;
 
 
 /////////////////////////////////////////////////
@@ -204,12 +205,15 @@ simulated function DrawChargeIcon(Canvas Canvas, float X, float Y, Inventory Ite
   Canvas.DrawColor=WhiteColor;
 }
 simulated function HudSetup (Canvas Canvas){
+  local float CurrentScale;
+
   Canvas.Reset();
   Super.HudSetup(Canvas);
 
-  if (breschanged){  //cache multipliers here
+  CurrentScale = B227_ScaledScreenWidth(Canvas) / 1536;
+  if (Scale != CurrentScale){  //cache multipliers here
 //    Scale=Canvas.ClipX/1950;  //lower icons are 1950 pixels long
-    Scale=Canvas.ClipX/1536;
+    Scale = CurrentScale;
     M3=3*scale;
     M4=4*scale;
     M5=5*scale;
@@ -229,9 +233,7 @@ simulated function HudSetup (Canvas Canvas){
   }
   HudMode=0; //no HUD modes in ONP=force
 
-  B227_YScale = Canvas.ClipY / 1536 * 4 / 3;
-  if (!class'UTC_HUD'.default.B227_bVerticalScaling)
-    B227_YScale = Scale;
+  B227_CrosshairScale = class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 1536);
 }
 simulated function float GetAmmo(Weapon W){
   if (W.AmmoType==None)
@@ -248,6 +250,7 @@ local byte taken[10];
 local int i;
 //hacks for 2 weapons in slot 5:
 local weapon Sl5;
+local float PaddingRight;
 
   if (PawnOwner.Weapon!=none){
     DrawWeaponIcon(Canvas,PawnOwner.Weapon.InventoryGroup,2,GetAmmo(PawnOwner.Weapon));
@@ -289,9 +292,10 @@ local weapon Sl5;
 	for (i=0;i<10;i++) //fill in empty weapons
     if (taken[i]==0)
       DrawWeaponIcon(Canvas,i+1,0,-2.0);
-  Canvas.SetPos(Canvas.clipx-M64*weapmult,canvas.clipy-M134);
+  PaddingRight = Canvas.SizeX - B227_ScaledScreenWidth(Canvas);
+  Canvas.SetPos(Canvas.SizeX - M64 * weapmult - PaddingRight, Canvas.SizeY - M134);
   Canvas.Style=1;
-  Canvas.DrawRect(Texture'bgpad',M64,M134);
+  Canvas.DrawRect(Texture'bgpad', M64 + PaddingRight, M134);
   if (ArmorAmount>0){
     Canvas.SetPos(Canvas.clipx-235*scale,67*scale);
     Canvas.Font=MyFonts.GetBigFont(Canvas.ClipX);
@@ -1085,7 +1089,7 @@ simulated function DrawCrossHair( canvas Canvas, int StartX, int StartY )
      class'HUD'.default.Crosshair=0;
 
   PickDiff = Level.TimeSeconds - PickupTime;
-  XLength = B227_YScale * 77;
+  XLength = B227_CrosshairScale * 77;
   if ( PickDiff < 0.4 )
   {
     if ( PickDiff < 0.2 )
@@ -1344,6 +1348,13 @@ exec function PixelFix(bool bHack){
 	bPixelHack=bhack;
 }
 
+static function float B227_ScaledScreenWidth(Canvas Canvas)
+{
+	if (default.B227_bVerticalScaling)
+		return FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3);
+	return Canvas.SizeX;
+}
+
 defaultproperties
 {
      NormalStyle=STY_Normal
@@ -1379,4 +1390,5 @@ defaultproperties
      WeapIcons(29)=Texture'SevenB.Icons.EballN'
      HUDConfigWindowType="SevenB.tvhudconfig"
      Texture=None
+     B227_bVerticalScaling=True
 }

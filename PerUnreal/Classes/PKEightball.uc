@@ -70,10 +70,7 @@ simulated function PostRender( canvas Canvas )
 	if ( bOwnsCrossHair )
 	{
 		// if locked on, draw special crosshair
-		if (class'UTC_HUD'.default.B227_bVerticalScaling)
-			Scale = FMax(1.0, Canvas.ClipY/480.0);
-		else
-			Scale = FMax(1.0, Canvas.ClipX/640.0);
+		Scale = FMax(1.0, class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 640.0));
 		Canvas.SetPos(0.5 * (Canvas.ClipX - Texture'Crosshair6'.USize * Scale), 0.5 * (Canvas.ClipY - Texture'Crosshair6'.VSize * Scale));
 		Canvas.Style = ERenderStyle.STY_Normal;
 		Canvas.DrawIcon(Texture'Crosshair6', Scale);

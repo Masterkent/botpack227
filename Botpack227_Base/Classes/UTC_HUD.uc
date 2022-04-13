@@ -22,7 +22,7 @@ struct HUDLocalizedMessage
 	var float YPos;
 };
 
-var globalconfig bool B227_bVerticalScaling;
+var globalconfig bool B227_bVerticalCrosshairScaling;
 
 event Destroyed()
 {
@@ -174,6 +174,13 @@ function UTC_Mutator B227_AddHUDMutator(class<UTC_Mutator> MutatorClass)
 	return none;
 }
 
+static function float B227_CrosshairSize(Canvas Canvas, float Divider)
+{
+	if (default.B227_bVerticalCrosshairScaling)
+		return FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3) / Divider;
+	return Canvas.SizeX / Divider;
+}
+
 static function color B227_MultiplyColor(color Color, float Factor)
 {
 	if (Factor < 0)
@@ -210,5 +217,5 @@ defaultproperties
      WhiteColor=(G=128,B=255)
      bHidden=True
      RemoteRole=ROLE_SimulatedProxy
-     B227_bVerticalScaling=True
+     B227_bVerticalCrosshairScaling=True
 }

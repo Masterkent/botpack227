@@ -42,12 +42,12 @@ simulated function DrawTeam(Canvas Canvas, TeamInfo TI)
 
 	if ( (TI != None) && (TI.Size > 0) )
 	{
-		Canvas.Font = MyFonts.GetHugeFont( Canvas.ClipX * B227_YScale / Scale );
+		Canvas.Font = MyFonts.GetHugeFont( Canvas.ClipX );
 		Canvas.DrawColor = TeamColor[TI.TeamIndex];
-		Canvas.SetPos(Canvas.ClipX - 64 * B227_YScale, Canvas.ClipY - (336 + 128 * TI.TeamIndex) * B227_YScale);
-		Canvas.DrawIcon(TeamIcon[TI.TeamIndex], B227_YScale);
+		Canvas.SetPos(Canvas.ClipX - 64 * Scale, Canvas.ClipY - (336 + 128 * TI.TeamIndex) * Scale);
+		Canvas.DrawIcon(TeamIcon[TI.TeamIndex], Scale);
 		Canvas.StrLen(int(TI.Score), XL, YL);
-		Canvas.SetPos(Canvas.ClipX - XL - 66 * B227_YScale, Canvas.ClipY - (336 + 128 * TI.TeamIndex) * B227_YScale + ((64 * B227_YScale) - YL)/2 );
+		Canvas.SetPos(Canvas.ClipX - XL - 66 * Scale, Canvas.ClipY - (336 + 128 * TI.TeamIndex) * Scale + ((64 * Scale) - YL)/2 );
 		Canvas.DrawText(int(TI.Score), false);
 	}
 }

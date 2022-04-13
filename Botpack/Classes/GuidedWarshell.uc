@@ -451,13 +451,10 @@ simulated function PostRender( canvas Canvas )
 		if ( ((Dir / Dist) Dot X) > 0.7 * FovScale)
 		{
 			Dir = Dir / (Dir Dot X);
-			XPos = 0.5 * (Canvas.ClipX + Canvas.ClipX * (Dir Dot Y) * FovScale);
-			YPos = 0.5 * (Canvas.ClipY - Canvas.ClipX * (Dir Dot Z) * FovScale);
+			XPos = 0.5 * (Canvas.SizeX + Canvas.SizeX * (Dir Dot Y) * FovScale);
+			YPos = 0.5 * (Canvas.SizeY - Canvas.SizeX * (Dir Dot Z) * FovScale);
 
-			if (class'UTC_HUD'.default.B227_bVerticalScaling)
-				Scale = FMax(1.0, Canvas.ClipY/480.0);
-			else
-				Scale = FMax(1.0, Canvas.ClipX/640.0);
+			Scale = FMax(1.0, class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 640.0));
 
 			Canvas.SetPos(XPos - 0.5 * Texture'Crosshair6'.USize * Scale, YPos - 0.5 * Texture'Crosshair6'.VSize * Scale);
 			Canvas.DrawIcon(texture'CrossHair6', Scale);

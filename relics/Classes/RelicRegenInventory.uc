@@ -17,10 +17,7 @@ state Activated
 				FlashShell(0.3);
 				if (PlayerPawn(Owner) != none)
 				{
-					if (UTC_PlayerPawn(Owner) != none)
-						UTC_PlayerPawn(Owner).UTF_ClientPlaySound(sound'RegenHiss', false);
-					else
-						PlayerPawn(Owner).ClientPlaySound(sound'RegenHiss');
+					class'UTC_PlayerPawn'.static.UTSF_ClientPlaySound(PlayerPawn(Owner), sound'RegenHiss', false);
 					PlayerPawn(Owner).ClientInstantFlash(InstFlash, InstFog);
 				}
 			}

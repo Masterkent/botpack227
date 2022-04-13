@@ -49,10 +49,7 @@ simulated function PostRender( canvas Canvas )
 
 	OldClipX = Canvas.ClipX;
 	OldClipY = Canvas.ClipY;
-	if (class'UTC_HUD'.default.B227_bVerticalScaling)
-		XScale = FMax(0.5, int(Canvas.ClipY/480.0));
-	else
-		XScale = FMax(0.5, int(Canvas.ClipX/640.0));
+	XScale = FMax(0.5, class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 640.0));
 	Canvas.SetPos( 0.5 * OldClipX - 128 * XScale, 0.5 * OldClipY - 128 * XScale );
 	if ( Level.bHighDetailMode )
 		Canvas.Style = ERenderStyle.STY_Translucent;
