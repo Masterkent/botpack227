@@ -644,6 +644,8 @@ simulated event RenderOverlays(canvas Canvas)
 	local PlayerPawn PlayerOwner;
 	local int realhand;
 
+	B227_AdjustSlaveDisplayProperties();
+
 	if ( (bMuzzleFlash > 0) && !Level.bDropDetail )
 		MFTexture = MuzzleFlashVariations[Rand(5)];
 	PlayerOwner = PlayerPawn(Owner);
@@ -845,6 +847,37 @@ function B227_DropSlaveEnforcer()
 	{
 		SlaveEnforcer.PickupAmmoCount = AmmoAmount - AmmoAmount / 2;
 		AmmoType.AmmoAmount = AmmoAmount / 2;
+	}
+}
+
+simulated function B227_AdjustSlaveDisplayProperties()
+{
+	if (SlaveEnforcer != none)
+	{
+		if (bMeshEnviroMap == default.bMeshEnviroMap)
+			SlaveEnforcer.bMeshEnviroMap = SlaveEnforcer.default.bMeshEnviroMap;
+		else
+			SlaveEnforcer.bMeshEnviroMap = bMeshEnviroMap;
+
+		if (bUnlit == default.bUnlit)
+			SlaveEnforcer.bUnlit = SlaveEnforcer.default.bUnlit;
+		else
+			SlaveEnforcer.bUnlit = bUnlit;
+
+		if (ScaleGlow == default.ScaleGlow)
+			SlaveEnforcer.ScaleGlow = SlaveEnforcer.default.ScaleGlow;
+		else
+			SlaveEnforcer.ScaleGlow = ScaleGlow;
+
+		if (Style == default.Style)
+			SlaveEnforcer.Style = SlaveEnforcer.default.Style;
+		else
+			SlaveEnforcer.Style = Style;
+
+		if (Texture == default.Texture)
+			SlaveEnforcer.Texture = SlaveEnforcer.default.Texture;
+		else
+			SlaveEnforcer.Texture = Texture;
 	}
 }
 

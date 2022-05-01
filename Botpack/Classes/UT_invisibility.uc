@@ -15,9 +15,12 @@ state Activated
 		{
 			Owner.PlaySound(DeActivateSound);
 
-			Owner.SetDefaultDisplayProperties();
-			if (Pawn(Owner) != none)
-				Pawn(Owner).Visibility = Pawn(Owner).default.Visibility;
+			if (Owner.Texture == FireTexture'Botpack227_Base.Belt_fx.Invis.Invis')
+			{
+				Owner.SetDefaultDisplayProperties();
+				if (Pawn(Owner) != none)
+					Pawn(Owner).Visibility = Pawn(Owner).default.Visibility;
+			}
 			B227_SetShieldBeltEffectsVisibility(true);
 		}
 	}

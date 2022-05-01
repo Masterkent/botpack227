@@ -16,7 +16,6 @@ simulated function Tick( float DeltaTime )
 
 simulated function Timer()
 {
-
 	local actor Victims;
 	local float dist, MoScale;
 	local vector dir;
@@ -27,7 +26,7 @@ simulated function Timer()
 		SetTimer(0.1, True);
 		if ( Level.NetMode != NM_DedicatedServer )
 			SpawnEffects();
-	    Mesh = Mesh'Botpack.ShockWavem';
+		Mesh = Mesh'Botpack.ShockWavem';
 		Skin = texture'RelicOrange';
 		return;
 	}
@@ -113,14 +112,13 @@ simulated function SpawnEffects()
 {
 	local vector TraceLoc, TraceNorm;
 	local WarExplosion W;
-	local NuclearMark M;
 
-	 PlaySound(Sound'Expl03',,6.0);
-	 W = spawn(class'WarExplosion',,,Location);
-	 W.RemoteRole = ROLE_None;
-	 Trace(TraceLoc, TraceNorm, Location + vect(0,0,-400));
-	 M = Spawn(class'NuclearMark', Self, , TraceLoc, rotator(TraceNorm));
-	 M.RemoteRole = ROLE_None;
+	PlaySound(Sound'Expl03',,6.0);
+	W = spawn(class'WarExplosion',,,Location);
+	if (W != none)
+		W.RemoteRole = ROLE_None;
+	Trace(TraceLoc, TraceNorm, Location + vect(0,0,-400));
+	Spawn(class'NuclearMark', Self, , TraceLoc, rotator(TraceNorm));
 }
 
 defaultproperties
