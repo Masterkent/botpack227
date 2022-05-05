@@ -438,11 +438,17 @@ function B227_EmitBeam()
 	PlasmaBeam.B227_bLimitWallEffect = B227_ShouldLimitWallEffect();
 }
 
-simulated function vector B227_CalcDrawOffset()
+simulated function vector B227_PlayerViewOffset()
 {
+	local vector ViewOffset;
+
 	if (B227_Handedness != 0)
-		return CalcDrawOffset();
-	return B227_CalcCenterDrawOffset();
+		return PlayerViewOffset;
+
+	ViewOffset.X = Default.PlayerViewOffset.X * 0.88;
+	ViewOffset.Y = -1.81;
+	ViewOffset.Z = Default.PlayerViewOffset.Z * 1.3;
+	return ViewOffset * 100;
 }
 
 simulated function B227_GuidePlasmaBeam(PBolt Beam)
@@ -532,28 +538,6 @@ function B227_AdjustNPCFirePosition()
 		SetHand(1);
 		PlayerViewOffset.Z = -700 * Instigator.DrawScale;
 	}
-}
-
-// Auxiliary
-simulated function vector B227_CalcCenterDrawOffset()
-{
-	local vector DrawOffset, WeaponBob;
-	local Pawn PawnOwner;
-
-	PawnOwner = Pawn(Owner);
-	if (PawnOwner == none)
-		return Location;
-
-	DrawOffset.X = Default.PlayerViewOffset.X * 0.88;
-	DrawOffset.Y = -1.81;
-	DrawOffset.Z = Default.PlayerViewOffset.Z * 1.3;
-
-	DrawOffset = (DrawOffset >> PawnOwner.ViewRotation);
-	DrawOffset += (PawnOwner.EyeHeight * vect(0,0,1));
-	WeaponBob = BobDamping * PawnOwner.WalkBob;
-	WeaponBob.Z = (0.45 + 0.55 * BobDamping) * PawnOwner.WalkBob.Z;
-	DrawOffset += WeaponBob;
-	return DrawOffset;
 }
 
 defaultproperties

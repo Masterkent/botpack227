@@ -230,6 +230,13 @@ function SetHand(float Hand)
 	super.SetHand(Hand);
 }
 
+simulated function vector B227_PlayerViewOffset()
+{
+	if (B227_ViewOffsetMode == 2 && PlayerPawn(Owner) != none && PlayerPawn(Owner).Handedness == 0)
+		return PlayerViewOffset * PlayerPawn(Owner).FOVAngle / 90;
+	return PlayerViewOffset;
+}
+
 defaultproperties
 {
      WeaponDescription="Classification: Redeemer"

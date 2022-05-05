@@ -178,36 +178,26 @@ function SetHand(float Hand)
 	B227_Handedness = Hand;
 }
 
-simulated function vector B227_CalcDrawOffset()
+simulated function vector B227_PlayerViewOffset()
 {
-	local vector DrawOffset, WeaponBob;
-	local Pawn PawnOwner;
-
-	PawnOwner = Pawn(Owner);
-	if (PawnOwner == none)
-		return Location;
+	local vector ViewOffset;
 
 	switch (B227_Handedness)
 	{
 		case -1:
-			DrawOffset.X = 0;
-			DrawOffset.Y = -0.7;
-			DrawOffset.Z = -1.4;
+			ViewOffset.X = 0;
+			ViewOffset.Y = -0.7;
+			ViewOffset.Z = -1.4;
 			break;
 
 		default:
-			DrawOffset.X = 0;
-			DrawOffset.Y = -3.33;
-			DrawOffset.Z = -1.4;
+			ViewOffset.X = 0;
+			ViewOffset.Y = -3.33;
+			ViewOffset.Z = -1.4;
 			break;
 	}
 
-	DrawOffset = (DrawOffset >> PawnOwner.ViewRotation);
-	DrawOffset += (PawnOwner.EyeHeight * vect(0,0,1));
-	WeaponBob = BobDamping * PawnOwner.WalkBob;
-	WeaponBob.Z = (0.45 + 0.55 * BobDamping) * PawnOwner.WalkBob.Z;
-	DrawOffset += WeaponBob;
-	return DrawOffset;
+	return ViewOffset * 100;
 }
 
 defaultproperties

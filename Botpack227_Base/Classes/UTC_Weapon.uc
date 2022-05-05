@@ -1,10 +1,16 @@
 class UTC_Weapon expands Weapon
-	abstract;
+	abstract
+	config(Botpack);
 
 var(WeaponAI) bool bRecommendAltSplashDamage; //if true, bot preferentially tries to use splash damage
 var bool bSpecialIcon;
 var() Color NameColor;	// used when drawing name on HUD
 var() class<LocalMessage> PickupMessageClass;
+
+// 0 - no scaling (U227 behavior)
+// 1 - scaling PlayerViewOffset.X by FOV angle
+// 2 - scaling PlayerViewOffset by FOV angle (UT436 behavior)
+var() globalconfig int B227_ViewOffsetMode;
 
 var vector B227_FireStartTrace, B227_FireEndTrace;
 
@@ -64,7 +70,7 @@ simulated event RenderOverlays(Canvas Canvas)
 
 	if ( (bMuzzleFlash > 0) && bDrawMuzzleFlash && Level.bHighDetailMode && (MFTexture != None) )
 	{
-		FovScale = 1 / Tan(FClamp(PlayerOwner.DesiredFOV, 1, 170) / 360 * Pi);
+		FovScale = 1 / Tan(FClamp(PlayerOwner.FOVAngle, 1, 179) / 360 * Pi);
 		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FovScale;
 		if ( !bSetFlashTime )
 		{
@@ -92,7 +98,7 @@ simulated event RenderOverlays(Canvas Canvas)
 	else
 		bSetFlashTime = false;
 
-	SetLocation(Owner.Location + B227_CalcDrawOffset());
+	SetLocation(Owner.Location + B227_CalcDrawOffset(Canvas));
 	NewRot = Pawn(Owner).ViewRotation;
 
 	if ( Hand == 0 )
@@ -201,9 +207,39 @@ function TraceFire(float Accuracy)
 	ProcessTraceHit(Other, HitLocation, HitNormal, X, Y, Z);
 }
 
-simulated function vector B227_CalcDrawOffset()
+simulated function vector B227_PlayerViewOffset()
 {
-	return CalcDrawOffset();
+	return PlayerViewOffset;
+}
+
+simulated function vector B227_CalcDrawOffset(Canvas Canvas)
+{
+	local vector DrawOffset, WeaponBob;
+	local Pawn PawnOwner;
+	local vector ViewOffset;
+
+	PawnOwner = Pawn(Owner);
+
+	switch (B227_ViewOffsetMode)
+	{
+		case 1:
+			ViewOffset = 0.01 * B227_PlayerViewOffset();
+			ViewOffset.X *= FMin(1.0, 0.75 / (Tan(FClamp(PawnOwner.FOVAngle, 1, 179) / 360 * Pi) * Canvas.SizeY / Canvas.SizeX));
+			break;
+		case 2:
+			ViewOffset = 0.9 / PawnOwner.FOVAngle * B227_PlayerViewOffset();
+			break;
+		default:
+			ViewOffset = 0.01 * B227_PlayerViewOffset();
+	}
+
+	DrawOffset = ViewOffset >> PawnOwner.ViewRotation;
+	DrawOffset += (PawnOwner.EyeHeight * vect(0,0,1));
+	WeaponBob = BobDamping * PawnOwner.WalkBob;
+	WeaponBob.Z = (0.45 + 0.55 * BobDamping) * PawnOwner.WalkBob.Z;
+	DrawOffset += WeaponBob;
+
+	return DrawOffset;
 }
 
 static function bool B227_AdjustTraceResult(
@@ -317,4 +353,9 @@ static function vector B227_WarpZoneHitLocation(WarpZoneInfo WarpZone, vector Hi
 			MaxDist = NextDist;
 	}
 	return HitLocation - Dir * Dist;
+}
+
+defaultproperties
+{
+	B227_ViewOffsetMode=1
 }
