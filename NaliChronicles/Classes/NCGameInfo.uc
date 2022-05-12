@@ -12,7 +12,7 @@ function playerpawn Login
 )
 {
 	if (SpawnClass != class'NaliMage')
-  		SpawnClass=class'NaliMage';
+		SpawnClass=class'NaliMage';
 	// make sure the difficulty level is set at medium
 	// difficulty = 1;
 	return Super.Login(Portal, Options, Error, SpawnClass);
@@ -26,6 +26,14 @@ function playerpawn Login
 	else
 		Super.PostLogin(NewPlayer);
 }*/
+
+event InitGame(string Options, out string Error)
+{
+	MutatorClass = class<Mutator>(DynamicLoadObject("NCGameFix.NCGameFix", class'Class', true));
+	if (MutatorClass == none)
+		MutatorClass = default.MutatorClass;
+	super.InitGame(Options, Error);
+}
 
 defaultproperties
 {

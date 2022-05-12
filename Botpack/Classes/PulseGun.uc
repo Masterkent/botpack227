@@ -445,10 +445,19 @@ simulated function vector B227_PlayerViewOffset()
 	if (B227_Handedness != 0)
 		return PlayerViewOffset;
 
-	ViewOffset.X = Default.PlayerViewOffset.X * 0.88;
+	ViewOffset = default.PlayerViewOffset;
 	ViewOffset.Y = -1.81;
-	ViewOffset.Z = Default.PlayerViewOffset.Z * 1.3;
+
+	if (B227_ViewOffsetMode == 2 && Pawn(Owner) != none)
+		ViewOffset.Y *= Pawn(Owner).FOVAngle / 90.0;
 	return ViewOffset * 100;
+}
+
+simulated function int B227_ViewRotationRoll(int Hand)
+{
+	if (Hand == 0)
+		return 1536 * 2;
+	return super.B227_ViewRotationRoll(Hand);
 }
 
 simulated function B227_GuidePlasmaBeam(PBolt Beam)

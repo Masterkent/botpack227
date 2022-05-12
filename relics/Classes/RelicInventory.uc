@@ -250,4 +250,5 @@ defaultproperties
      Mass=10.000000
      RotationRate=(Yaw=30000,Roll=20000)
      DesiredRotation=(Roll=20000)
+     bTravel=False
 }

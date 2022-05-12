@@ -6,12 +6,16 @@ class NCLantern extends NCPickup;
 #exec OBJ LOAD FILE="NaliChroniclesResources.u" PACKAGE=NaliChronicles
 
 var float TimeChange;
+var B227_NCLanternLight B227_Light;
 
 state Activated
 {
-	function endstate()
+	function EndState()
 	{
 		bActive = false;
+		if (B227_Light != none)
+			B227_Light.Destroy();
+		B227_Light = none;
 	}
 
 	function Tick( float DeltaTime )
@@ -27,21 +31,32 @@ state Activated
 			UsedUp();
 			return;
 		}
-		if (Charge<-0) {
+		if (Charge <= 0)
+		{
 			Pawn(Owner).ClientMessage(ExpireMessage);
 			UsedUp();
 		}
 
-		if (Charge<400) LightBrightness=byte(Charge*0.6+10);
-		setLocation(owner.location);
+		if (B227_Light != none)
+		{
+			if (Charge < 400)
+				B227_Light.LightBrightness = byte((Charge / 400.0) * (B227_Light.default.LightBrightness - 10) + 10);
+			else
+				B227_Light.LightBrightness = B227_Light.default.LightBrightness;
+		}
+		//-setLocation(owner.location);
 	}
 
 	function BeginState()
 	{
+		bActive = true;
 		TimeChange = 0;
 		Owner.PlaySound(ActivateSound);
-            LightType = LT_Steady;
-		if (Charge<400) LightBrightness=byte(Charge*0.6+10);
+		//-LightType = LT_Steady;
+
+		B227_Light = Spawn(class'B227_NCLanternLight', Owner);
+		if (B227_Light != none && Charge < 400)
+			B227_Light.LightBrightness = byte((Charge / 400.0) * (B227_Light.default.LightBrightness - 10) + 10);
 	}
 
 Begin:
@@ -50,7 +65,7 @@ Begin:
 state DeActivated
 {
 Begin:
-	lightType = LT_None;
+	//-lightType = LT_None;
 	Owner.PlaySound(DeActivateSound);
 }
 

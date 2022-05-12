@@ -100,11 +100,7 @@ simulated event RenderOverlays(Canvas Canvas)
 
 	SetLocation(Owner.Location + B227_CalcDrawOffset(Canvas));
 	NewRot = Pawn(Owner).ViewRotation;
-
-	if ( Hand == 0 )
-		newRot.Roll = -2 * Default.Rotation.Roll;
-	else
-		newRot.Roll = Default.Rotation.Roll * Hand;
+	NewRot.Roll = B227_ViewRotationRoll(Hand);
 
 	setRotation(newRot);
 	Canvas.DrawActor(self, false);
@@ -240,6 +236,13 @@ simulated function vector B227_CalcDrawOffset(Canvas Canvas)
 	DrawOffset += WeaponBob;
 
 	return DrawOffset;
+}
+
+simulated function int B227_ViewRotationRoll(int Hand)
+{
+	if (Hand == 0)
+		return -2 * default.Rotation.Roll;
+	return default.Rotation.Roll * Hand;
 }
 
 static function bool B227_AdjustTraceResult(
