@@ -177,7 +177,7 @@ function Tick(float DeltaTime) {
 	if ( AnimSequence == 'Idle1' || AnimSequence == 'Idle2' || AnimSequence == 'Idle3') {
 		TwirlTime += DeltaTime;
 		if (TwirlTime >= 3.0) {
-			if (FRand() > 0.5)
+			if (HasAnim('Idle4') && FRand() > 0.5)
 				PlayAnim('Idle4');
 			TwirlTime = 0;
 		}

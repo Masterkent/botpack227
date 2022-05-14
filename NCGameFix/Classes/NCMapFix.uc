@@ -319,9 +319,11 @@ function ServerFixMap_NCLevel017()
 	{
 		MakeMoverTriggerableOnceOnly("Mover22");
 		MakeMoverTriggerableOnceOnly("Mover23");
+		LoadLevelTrigger("Trigger9").bInitiallyActive = true;
 		LoadLevelTrigger("Trigger34").bInitiallyActive = true;
 		LoadLevelTrigger("Trigger0").Tag = 'contactenabled';
 		LoadLevelTrigger("Trigger35").Tag = 'contactenabled';
+		LoadLevelActor("NCTalkerNali3").bNet = false;
 		ChangeNextMap("NCLevel017c", "NCLevel018");
 	}
 }
@@ -329,12 +331,19 @@ function ServerFixMap_NCLevel017()
 function ServerFixMap_NCLevel018()
 {
 	local Teleporter ExitTelep;
+	local Trigger Trigger;
+	local Counter Counter;
 
 	if (Level.NetMode != NM_Standalone && NCGameFix.bCoopUnlockPaths)
 	{
 		ExitTelep = LoadLevelTeleporter("Teleporter0");
-		ExitTelep.bEnabled = true;
-		ExitTelep.Tag = '';
+		ExitTelep.Tag = 'enable_exit';
+		Trigger = LoadLevelActor("WaterZone1").Spawn(class'Trigger');
+		Trigger.SetCollisionSize(256, 256);
+		Trigger.Event = 'Exit';
+		Counter = Spawn(class'Counter',, 'Exit');
+		Counter.Event = 'enable_exit';
+		Counter.NumToCount = 1;
 
 		LoadLevelTrigger("Trigger2").bInitiallyActive = true;
 	}
@@ -345,13 +354,27 @@ function ServerFixMap_NCLevel019()
 	local Trigger Trigger;
 	local Counter Counter;
 	local Teleporter ExitTelep;
+	local Dispatcher Disp;
 
 	if (Level.NetMode != NM_Standalone)
 	{
 		LoadLevelMover("Mover12").Tag = '';
+
+		Disp = Dispatcher(LoadLevelActor("Dispatcher2"));
+		Disp.OutDelays[0] = 1;
+		Disp.OutDelays[3] = 1;
+		Disp.OutEvents[3] = 'captainsafe';
+
+		Disp = Dispatcher(LoadLevelActor("Dispatcher4"));
+		Disp.OutDelays[6] = 45;
+
+		Disp = Dispatcher(LoadLevelActor("Dispatcher6"));
+		Disp.OutDelays[2] = 45;
+
 		if (NCGameFix.bCoopUnlockPaths)
 		{
 			Trigger = LoadLevelActor("AlarmPoint2").Spawn(class'Trigger');
+			Trigger.bTriggerOnceOnly = true;
 			Trigger.SetCollisionSize(120, 40);
 			Trigger.Event = 'lettheasswhoopingbegin';
 			LoadLevelActor("Counter0").Event = '';

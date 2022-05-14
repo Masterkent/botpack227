@@ -48,7 +48,8 @@ function Timer()
 
 function Touch( actor Other )
 {
-	local inventory Inv;
+	local Inventory Inv;
+	local Translator Trans;
 
 	if (PlayerPawn(Other)==None || bHitDelay) Return;
 
@@ -61,7 +62,7 @@ function Touch( actor Other )
 		TriggerTime = Level.TimeSeconds;
 	}
 
-	if ((!bHitOnce) && (!bDoNotLog)) {
+	if (Level.NetMode == NM_Standalone && (!bHitOnce) && (!bDoNotLog)) {
 		for( Inv=Other.Inventory; Inv!=None; Inv=Inv.Inventory ) {
 			if (NCLogbook(Inv)!=None) {
 				if ((Message=="") && (DiaryEntry=="")) Return;
@@ -78,6 +79,36 @@ function Touch( actor Other )
 			}
 		}
 	}
+
+	if (Level.NetMode != NM_Standalone && Len(Message) > 0) {
+		for (Inv = Other.Inventory; Inv != none; Inv = Inv.Inventory)
+			if (Translator(Inv) != none) {
+				Trans = Translator(Inv);
+				Trans.bShowHint = false;
+				PlaySound(class'TranslatorEvent'.default.NewMessageSound, SLOT_Misc);
+
+				if (!bHitOnce)
+					Trans.bNewMessage = true;
+				else
+					Trans.bNotNewMessage = true;
+
+				if (Len(Title) > 0)
+					class'B227_TranslatorEventRepInfo'.static.SendTranslatorMessageTo(Trans, Title $ ": " $ Message);
+				else
+					class'B227_TranslatorEventRepInfo'.static.SendTranslatorMessageTo(Trans, Message);
+
+				if (!bHitOnce)
+					Pawn(Other).ClientMessage(class'TranslatorEvent'.default.M_NewMessage);
+				else
+					Pawn(Other).ClientMessage(class'TranslatorEvent'.default.M_TransMessage);
+
+				bHitOnce = true;
+				SetTimer(0.3, false);
+				bHitDelay = true;
+				break;
+			}
+	}
+
 	if ((!bDiaryOnce) && (bNewDiaryEntry)) {
 		for( Inv=Other.Inventory; Inv!=None; Inv=Inv.Inventory ) {
 			if (NCDiary(Inv)!=None) {
@@ -106,11 +137,27 @@ function Touch( actor Other )
 
 function UnTouch( actor Other )
 {
+	local Inventory Inv;
+	local Translator Trans;
+
 	if ((NaliMage(Other) != none) && (NaliMage(Other).ReadableEntry == message) && (VSize(location-other.location) > fMax(CollisionHeight,CollisionRadius)+fMax(other.CollisionHeight,other.CollisionRadius))) {
 		NaliMage(Other).ReadableEntry = "";
 		NaliMage(Other).ReadableTitle = "";
 		NaliMage(Other).logbookevent = none;
 	}
+
+	if (Level.NetMode != NM_Standalone && Len(Message) > 0) {
+		for (Inv = Other.Inventory; Inv != none; Inv = Inv.Inventory)
+			if (Translator(Inv) != none) {
+				Trans = Translator(Inv);
+				Trans.bNewMessage = false;
+				Trans.bNotNewMessage = false;
+				if (Trans.IsInState('Activated'))
+					Trans.GoToState('Deactivated');
+				// not breaking here, deactivating other translators if any
+			}
+	}
+
 	bHitDelay=False;
 }
 
