@@ -18,4 +18,5 @@ defaultproperties
      CollisionRadius=20.000000
      CollisionHeight=4.000000
      bCollideActors=True
+     UsedInWeaponSlot(3)=1
 }

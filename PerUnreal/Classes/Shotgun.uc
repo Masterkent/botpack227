@@ -10,7 +10,7 @@ var bool bOutOfAmmo, bFiredShot;
 var float ShotAccuracy;
 var(Sounds) sound 	ShotgunFire[6];
 
-simulated function PostBeginPlay()
+function PostBeginPlay()
 {
 local int rnd;
 
@@ -200,14 +200,14 @@ function AltFire( float Value )
 	else GoToState('Idle');
 }
 
-simulated function PlayFiring()
+function PlayFiring()
 {
 	PlaySound(FireSound,SLOT_None,,,, Level.TimeDilation-0.2*FRand());
 	PlayAnim( 'Fire', 0.5, 0.05);
 	bMuzzleFlash++;
 }
 
-simulated function PlayAltFiring()
+function PlayAltFiring()
 {
 	PlaySound(FireSound,SLOT_None,,,, Level.TimeDilation-0.2*FRand());
 	PlayAnim('Fire', 0.5, 0.05);
@@ -230,97 +230,12 @@ function Reload()
 	PlaySound(CockingSound,, 0.7 + 0.3*FRand(),,, Level.TimeDilation-0.2*FRand());
 }
 
-simulated function PlayReloading()
+function PlayReloading()
 {
 	PlayAnim('Loading',0.6, 0.05);
 }
 
 /////////////////////////////////////////////////////////////
-
-state ClientReload
-{
-	simulated function bool ClientFire(float Value)
-	{
-		bForceFire = bForceFire || ( bCanClientFire && (Pawn(Owner) != None) && (AmmoType.AmmoAmount > 0) );
-		return bForceFire;
-	}
-
-	simulated function bool ClientAltFire(float Value)
-	{
-		bForceAltFire = bForceAltFire || ( bCanClientFire && (Pawn(Owner) != None) && (AmmoType.AmmoAmount > 0) );
-		return bForceAltFire;
-	}
-
-	simulated function AnimEnd()
-	{
-		if ( bCanClientFire && (PlayerPawn(Owner) != None) && (AmmoType.AmmoAmount > 0) )
-		{
-			if ( bForceFire || (Pawn(Owner).bFire != 0) )
-			{
-				Global.ClientFire(0);
-				return;
-			}
-			else if ( bForceAltFire || (Pawn(Owner).bAltFire != 0) )
-			{
-				Global.ClientAltFire(0);
-				return;
-			}
-		}
-		GotoState('');
-		Global.AnimEnd();
-	}
-
-	simulated function EndState()
-	{
-		bForceFire = false;
-		bForceAltFire = false;
-	}
-
-	simulated function BeginState()
-	{
-		bForceFire = false;
-		bForceAltFire = false;
-	}
-}
-
-state ClientFiring
-{
-	simulated function AnimEnd()
-	{
-		if ( (Pawn(Owner) == None) || (Ammotype.AmmoAmount <= 0) )
-		{
-			PlayIdleAnim();
-			GotoState('');
-		}
-		else if ( !bCanClientFire )
-			GotoState('');
-		else
-		{
-			PlayReloading();
-			GotoState('ClientReload');
-		}
-	}
-}
-
-state ClientAltFiring
-{
-	simulated function AnimEnd()
-	{
-		if ( (Pawn(Owner) == None) || (Ammotype.AmmoAmount <= 0) )
-		{
-			PlayIdleAnim();
-			GotoState('');
-		}
-		else if ( !bCanClientFire )
-			GotoState('');
-		else
-		{
-			PlayReloading();
-			GotoState('ClientReload');
-		}
-
-	}
-}
 
 state NormalFire
 {
@@ -365,7 +280,7 @@ Begin:
 }
 
 ///////////////////////////////////////////////////////////
-simulated function TweenDown()
+function TweenDown()
 {
 	if ( IsAnimating() && (AnimSequence != '') && (GetAnimGroup(AnimSequence) == 'Select') )
 		TweenAnim( AnimSequence, AnimFrame * 0.4 );
@@ -381,19 +296,19 @@ state Idle
 Begin:
 	if (Pawn(Owner).bFire!=0 && AmmoType.AmmoAmount>0) Fire(0.0);
 	if (Pawn(Owner).bAltFire!=0 && AmmoType.AmmoAmount>0) AltFire(0.0);
-	LoopAnim('ldle');
+	LoopAnim('Idle');
 	bPointing=False;
 	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) )
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
 	Disable('AnimEnd');
 }
 
-simulated function PlayIdleAnim()
+function PlayIdleAnim()
 {
 	LoopAnim('Idle');
 }
 
-simulated function PlaySelect()
+function PlaySelect()
 {
 	bForceFire = false;
 	bForceAltFire = false;

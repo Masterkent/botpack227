@@ -251,13 +251,17 @@ function ServerFixMap_NCLevel012b()
 function ServerFixMap_NCLevel014()
 {
 	local Mover Mover;
+	local Actor SteelBox;
 
 	foreach AllActors(class'Mover', Mover, 'Reactor')
 		Mover.MoverEncroachType = ME_IgnoreWhenEncroach;
 
+	SteelBox = LoadLevelActor("SteelBox13");
+	SteelBox.SetCollisionSize(class'SteelBox'.default.CollisionRadius * SteelBox.DrawScale, SteelBox.CollisionHeight);
+
 	if (Level.NetMode != NM_Standalone)
 	{
-		LoadLevelActor("SteelBox13").bMovable = false;
+		SteelBox.bMovable = false;
 		if (NCGameFix.bCoopUnlockPaths)
 			LoadLevelTrigger("Trigger50").bInitiallyActive = true;
 	}
@@ -270,14 +274,14 @@ function ServerFixMap_NCLevel015()
 	if (Level.NetMode != NM_Standalone)
 	{
 		ExitTelep = LoadLevelTeleporter("Teleporter5");
-		ExitTelep.bEnabled = true;
-		ExitTelep.Tag = '';
+		ExitTelep.Tag = 'LowerBuildingAttack';
 	}
 }
 
 function ServerFixMap_NCLevel016()
 {
 	local PlayerStart PlayerStart;
+	local Mover Mover;
 	local NCSpawnableTeleporter Telep;
 
 	if (Level.NetMode == NM_Standalone)
@@ -307,6 +311,9 @@ function ServerFixMap_NCLevel016()
 		Telep.bChangesYaw = true;
 		Telep.B227_bChangesYawAbsolutely = true;
 		Telep.SetCollision(false);
+
+		foreach AllActors(class'Mover', Mover, 'Listen25')
+			SetMoverTriggerableOnceOnly(Mover);
 
 		LoadLevelTrigger("Trigger4").bTriggerOnceOnly = false;
 		LoadLevelMover("Mover7").InitialState = 'TriggerOpenTimed';

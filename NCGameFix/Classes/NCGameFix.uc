@@ -27,9 +27,23 @@ function ReplaceSpawnPoints()
 		}
 }
 
+function bool CheckReplacement(Actor A, out byte bSuperRelevant)
+{
+	if (NCPickup(A) != none)
+		return
+			NCLantern(A) != none ||
+			NCSeeds(A) != none ||
+			NCSkaarjLight(A) != none;
+
+	if (NCSpell(A) != none)
+		return false;
+
+	return true;
+}
+
 defaultproperties
 {
-	VersionInfo="NCGameFix v1.1 [2022-05-14]"
-	Version="1.1"
+	VersionInfo="NCGameFix v1.2 [2022-05-15]"
+	Version="1.2"
 	bCoopUnlockPaths=True
 }

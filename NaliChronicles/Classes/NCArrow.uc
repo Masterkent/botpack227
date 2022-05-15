@@ -15,7 +15,7 @@ function PostBeginPlay() {
 	PlaySound(SpawnSound, SLOT_Misc, 2.0);
 }
 
-simulated function ProcessTouch( Actor Other, Vector HitLocation ) {
+function ProcessTouch( Actor Other, Vector HitLocation ) {
 	local int hitdamage;
 
 	if (Arrow(Other) == none && Other != instigator) {
@@ -26,7 +26,7 @@ simulated function ProcessTouch( Actor Other, Vector HitLocation ) {
 	}
 }
 
-simulated function HitWall( vector HitNormal, actor Wall )
+event HitWall( vector HitNormal, actor Wall )
 {
 	Super.HitWall(HitNormal, Wall);
 	PlaySound(ImpactSound, SLOT_Misc, 0.5);
@@ -58,4 +58,5 @@ defaultproperties
      ImpactSound=Sound'UnrealShare.Razorjack.BladeHit'
      RemoteRole=ROLE_SimulatedProxy
      Mesh=LodMesh'UnrealShare.ArrowM'
+     bNetTemporary=False
 }

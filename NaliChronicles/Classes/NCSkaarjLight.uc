@@ -38,13 +38,16 @@ state Activated
 			UsedUp();
 			return;
 		}
-		if (Charge<-0) {
+		if (Charge <= 0) {
 			s.Destroy();
 			Pawn(Owner).ClientMessage(ExpireMessage);
 			UsedUp();
 		}
 
-		if (Charge<400) s.LightBrightness=byte(Charge*0.6+10);
+		if (Charge < 400)
+			s.LightBrightness = byte((Charge / 400.0) * (s.default.LightBrightness - 10) + 10);
+		else
+			s.LightBrightness = s.default.LightBrightness;
 
 		GetAxes(Pawn(Owner).ViewRotation,X,Y,Z);
 		EndTrace = Pawn(Owner).Location + 10000* Vector(Pawn(Owner).ViewRotation);
@@ -60,11 +63,17 @@ state Activated
 		GetAxes(Pawn(Owner).ViewRotation,X,Y,Z);
 		EndTrace = Pawn(Owner).Location + 10000* Vector(Pawn(Owner).ViewRotation);
 		Trace(HitLocation,HitNormal,EndTrace,Pawn(Owner).Location+Y*17);
-		s = Spawn(class'FlashLightBeam',Owner, '', HitLocation+HitNormal*40);
+		s = Spawn(class'B227_NCFlashLightBeam',Owner, '', HitLocation+HitNormal*40);
+		if (s == none)
+		{
+			GoToState('DeActivated');
+			return;
+		}
 		s.LightHue = LightHue;
 		s.LightRadius = LightRadius;
-		if (Charge<400) s.LightBrightness=byte(Charge*0.6+10);
-		if (s==None) GoToState('DeActivated');
+		if (Charge<400)
+			s.LightBrightness = byte((Charge / 400.0) * (s.default.LightBrightness - 10) + 10);
+		bActive = true;
 	}
 
 Begin:

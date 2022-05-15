@@ -36,10 +36,7 @@ simulated event RenderOverlays( canvas Canvas )
 		bMuzzleFlash = 0;
 	FlashY = Default.FlashY * (1.08 - 0.16 * FRand());
 	Default.MuzzleScale = 1.0 + 4.0 * FRand();
-	if ( !Owner.IsA('PlayerPawn') || (PlayerPawn(Owner).Handedness == 0) )
-		FlashO = Default.FlashO * (4 + 0.15 * FRand());
-	else
-		FlashO = Default.FlashO * (1 +  0.15 * FRand());
+	FlashO = Default.FlashO * (1 +  0.15 * FRand());
 	Texture'MiniAmmoled'.NotifyActor = Self;
 	Super.RenderOverlays(Canvas);
 	Texture'MiniAmmoled'.NotifyActor = None;
