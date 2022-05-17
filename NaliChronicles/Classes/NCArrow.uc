@@ -28,11 +28,18 @@ function ProcessTouch( Actor Other, Vector HitLocation ) {
 
 event HitWall( vector HitNormal, actor Wall )
 {
+	local NCNaliArrow NCNaliArrow;
+
 	Super.HitWall(HitNormal, Wall);
 	PlaySound(ImpactSound, SLOT_Misc, 0.5);
 	//mesh = mesh'Burst';
 	//Skin = Texture'JArrow1';
-	Spawn(Class'NaliChronicles.NCNaliArrow',,,location,rotation);
+	NCNaliArrow = Spawn(Class'NaliChronicles.NCNaliArrow',,,location,rotation);
+	if (NCNaliArrow != none)
+	{
+		NCNaliArrow.bHeldItem = true;
+		NCNaliArrow.RespawnTime = 0;
+	}
 	Destroy();
 	/*SetPhysics(PHYS_None);
 	SetCollision(false,false,false);

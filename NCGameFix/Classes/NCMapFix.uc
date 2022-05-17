@@ -26,6 +26,8 @@ function ServerFixCurrentMap()
 		ServerFixMap_NCLevel005();
 	else if (CurrentMap ~= "NCLevel006")
 		ServerFixMap_NCLevel006();
+	else if (CurrentMap ~= "NCLevel008a")
+		ServerFixMap_NCLevel008a();
 	else if (CurrentMap ~= "NCLevel008b")
 		ServerFixMap_NCLevel008b();
 	else if (CurrentMap ~= "NCLevel009")
@@ -56,6 +58,7 @@ function ServerFixCurrentMap()
 function ServerFixMap_NCLevel001()
 {
 	local Skaarj Skaarj;
+	local Trigger Trigger;
 
 	foreach AllActors(class'Skaarj', Skaarj)
 		Skaarj.Health = Skaarj.default.Health;
@@ -65,8 +68,9 @@ function ServerFixMap_NCLevel001()
 
 	if (Level.NetMode != NM_Standalone && NCGameFix.bCoopUnlockPaths)
 	{
-		LoadLevelMover("Mover3").PlayerBumpEvent = 'OpenDoors';
-		LoadLevelMover("Mover4").PlayerBumpEvent = 'OpenDoors';
+		Trigger = LoadLevelActor("PathNode22").Spawn(class'Trigger');
+		Trigger.Event = 'OpenDoors';
+		Trigger.SetCollisionSize(128, 40);
 		LoadLevelTrigger("Trigger1").bInitiallyActive = true;
 	}
 }
@@ -163,6 +167,21 @@ function ServerFixMap_NCLevel006()
 	Lift.MoverEncroachType = ME_IgnoreWhenEncroach;
 }
 
+function ServerFixMap_NCLevel008a()
+{
+	if (Level.NetMode != NM_Standalone)
+	{
+		MakeMoverPlayerBumpEventTriggered("Mover1");
+		DisableTrigger("Trigger26");
+		MakeMoverPlayerBumpEventTriggered("Mover2");
+		DisableTrigger("Trigger11");
+		MakeMoverPlayerBumpEventTriggered("Mover3");
+		DisableTrigger("Trigger9");
+		MakeMoverPlayerBumpEventTriggered("Mover4");
+		DisableTrigger("Trigger7");
+	}
+}
+
 function ServerFixMap_NCLevel008b()
 {
 	local Trigger Trigger;
@@ -171,6 +190,17 @@ function ServerFixMap_NCLevel008b()
 
 	if (Level.NetMode != NM_Standalone)
 	{
+		MakeMoverPlayerBumpEventTriggered("ElevatorMover2");
+		DisableTrigger("Trigger3");
+		MakeMoverPlayerBumpEventTriggered("ElevatorMover3");
+		DisableTrigger("Trigger6");
+		MakeMoverPlayerBumpEventTriggered("ElevatorMover5");
+		DisableTrigger("Trigger10");
+		MakeMoverPlayerBumpEventTriggered("ElevatorMover7");
+		DisableTrigger("Trigger35");
+		DisableTrigger("Trigger37");
+		DisableTrigger("Trigger38");
+
 		Trigger = LoadLevelTrigger("Trigger74");
 		Trigger.bInitiallyActive = true;
 		Trigger.SetCollisionSize(140, Trigger.CollisionHeight);
@@ -203,7 +233,7 @@ function ServerFixMap_NCLevel009()
 		foreach AllActors(class'Mover', Mover, 'hahayourescrewed')
 			Mover.Tag = '';
 
-		LoadLevelTeleporter("Teleporter0").SetCollisionSize(1000, 1000);
+		LoadLevelTeleporter("Teleporter0").SetCollisionSize(160, 128);
 		LoadLevelActor("TriggerLight2").Tag = '';
 	}
 }
@@ -211,13 +241,21 @@ function ServerFixMap_NCLevel009()
 function ServerFixMap_NCLevel012()
 {
 	local PlayerStart PlayerStart;
+	local Mover Mover;
+	local vector StartLocation;
 
 	if (Level.NetMode != NM_Standalone)
 	{
 		DisablePlayerStart("PlayerStart0");
 		PlayerStart = PlayerStart(LoadLevelActor("PlayerStart0"));
-		PlayerStart = PlayerStart.Spawn(class'NCSpawnablePlayerStart');
-		PlayerStart.SetBase(LoadLevelActor("AttachMover0"));
+		Mover = LoadLevelMover("AttachMover0"); // Sky lift
+		Mover.KeyNum = 1;
+		Mover.Tag = '';
+		StartLocation = PlayerStart.Location + (Mover.KeyPos[1] - Mover.KeyPos[0]);
+		PlayerStart.Spawn(class'NCSpawnablePlayerStart',,, StartLocation);
+		Mover = LoadLevelMover("AttachMover2"); // Sky lift door
+		Mover.KeyNum = 2;
+		Mover.Tag = '';
 	}
 }
 
@@ -236,7 +274,7 @@ function ServerFixMap_NCLevel012b()
 
 	if (Level.NetMode != NM_Standalone)
 	{
-		Deco = Spawn(class'SmallSteelBox',,, vect(3825, -14454, -307)); // let players with low JumpZ get on the top
+		Deco = Spawn(class'SmallSteelBox',,, vect(3820, -14464, -307)); // let players with low JumpZ get on the top
 		Deco.bMovable = false;
 		Deco.bPushable = false;
 
@@ -322,9 +360,12 @@ function ServerFixMap_NCLevel016()
 
 function ServerFixMap_NCLevel017()
 {
+	local Mover Mover;
+
 	if (Level.NetMode != NM_Standalone)
 	{
-		MakeMoverTriggerableOnceOnly("Mover22");
+		foreach AllActors(class'Mover', Mover, 'cogs')
+			SetMoverTriggerableOnceOnly(Mover);
 		MakeMoverTriggerableOnceOnly("Mover23");
 		LoadLevelTrigger("Trigger9").bInitiallyActive = true;
 		LoadLevelTrigger("Trigger34").bInitiallyActive = true;
@@ -358,10 +399,14 @@ function ServerFixMap_NCLevel018()
 
 function ServerFixMap_NCLevel019()
 {
+	local Mover Mover;
 	local Trigger Trigger;
 	local Counter Counter;
 	local Teleporter ExitTelep;
 	local Dispatcher Disp;
+
+	Mover = LoadLevelMover("Mover5");
+	Mover.SetCollision(Mover.bCollideActors, false, Mover.bBlockPlayers);
 
 	if (Level.NetMode != NM_Standalone)
 	{
@@ -377,6 +422,9 @@ function ServerFixMap_NCLevel019()
 
 		Disp = Dispatcher(LoadLevelActor("Dispatcher6"));
 		Disp.OutDelays[2] = 45;
+
+		Disp = Dispatcher(LoadLevelActor("Dispatcher17"));
+		Disp.OutDelays[2] = 1;
 
 		if (NCGameFix.bCoopUnlockPaths)
 		{
@@ -472,6 +520,13 @@ function SetMoverTriggerableOnceOnly(Mover M)
 {
 	M.bTriggerOnceOnly = True;
 	AssignInitialState(M, 'TriggerOpenTimed');
+}
+
+function MakeMoverPlayerBumpEventTriggered(string MoverName)
+{
+	local Mover M;
+	M = LoadLevelMover(MoverName);
+	M.PlayerBumpEvent = M.Tag;
 }
 
 function AssignInitialState(Actor A, name StateName)

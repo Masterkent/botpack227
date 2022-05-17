@@ -11,7 +11,17 @@ event BeginPlay()
 	Spawn(class'NCGameRules', self);
 	AddToPackagesMap(string(Class.Outer.Name));
 
+	AdjustScriptedPawnStyle();
 	ReplaceSpawnPoints();
+}
+
+function AdjustScriptedPawnStyle()
+{
+	local ScriptedPawn ScriptedPawn;
+
+	foreach AllActors(class'ScriptedPawn', ScriptedPawn)
+		if (ScriptedPawn.Style == STY_Masked)
+			ScriptedPawn.Style = STY_Normal;
 }
 
 function ReplaceSpawnPoints()
@@ -43,7 +53,7 @@ function bool CheckReplacement(Actor A, out byte bSuperRelevant)
 
 defaultproperties
 {
-	VersionInfo="NCGameFix v1.2 [2022-05-15]"
-	Version="1.2"
+	VersionInfo="NCGameFix v1.3 [2022-05-16]"
+	Version="1.3"
 	bCoopUnlockPaths=True
 }

@@ -395,7 +395,7 @@ function PlayChallenge()
 	}
 	if ( TryToCrouch() )
 	{
-		TweenAnim('DuckWalkS', 0.12);
+		TweenAnim('DuckwlkS', 0.12);
 		return;
 	}
 	PlayThreateningSound();
@@ -1138,10 +1138,11 @@ function PlayTakeHitSound(int Damage, name damageType, int Mult)
 
 function TweenToFalling()
 {
-	if ( FRand() < 0.5 )
-		TweenAnim('Jog', 0.2);
-	else
-		PlayAnim('Jump',0.7,0.1);
+	// B227 note: tnalimesh has no such animations
+	//-if ( FRand() < 0.5 )
+	//-	TweenAnim('Jog', 0.2);
+	//-else
+	//-	PlayAnim('Jump',0.7,0.1);
 }
 
 function PlayInAir()
