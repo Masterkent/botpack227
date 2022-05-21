@@ -30,10 +30,7 @@ function bool Create()
 
 	pawnFactory = CreatureFactory(factory);
 	if (pawnFactory == None)
-	{
-		log("Error - use creature factory to spawn pawns");
 		return true;
-	}
 	if (ScriptedPawn(newcreature) != None)
 	{
 		ScriptedPawn(newcreature).Orders = pawnFactory.Orders;
@@ -53,5 +50,6 @@ function bool Create()
 
 defaultproperties
 {
+	bCollideWhenPlacing=False
 	bStatic=False
 }

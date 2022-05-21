@@ -18,9 +18,12 @@ function SetViewOfPlayer()
 {
   if (oInst.ViewTarget != Self)
   {
+    if (NonBuggyViewSpot(oInst.ViewTarget) != none)
+      NonBuggyViewSpot(oInst.ViewTarget).ResetViewOfPlayer();
     oInst.ViewTarget = Self;
     oFOV = oInst.DesiredFOV;
-    oInst.DesiredFOV = ViewFOV;
+    if (Level.NetMode == NM_Standalone)
+      oInst.DesiredFOV = ViewFOV;
     oInst.bBehindView = bSwitchToBehindView;
   }
 }
@@ -29,7 +32,8 @@ function ResetViewOfPlayer()
 {
   if (oInst.ViewTarget == Self)
   {
-    oInst.DesiredFOV = oFOV;
+    if (Level.NetMode == NM_Standalone)
+      oInst.DesiredFOV = oFOV;
     oInst.bBehindView = False;
     oInst.ViewTarget = None;
   }

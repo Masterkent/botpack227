@@ -515,13 +515,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "SevenBCoopMutator v2.5";
+	return "SevenBCoopMutator v2.6";
 }
 
 defaultproperties
 {
-	VersionInfo="SevenBCoopMutator v2.5 [2022-02-09]"
-	Version="2.5"
+	VersionInfo="SevenBCoopMutator v2.6 [2022-05-18]"
+	Version="2.6"
 	bUseSpeech=False
 	bUseSpeechMenuForU1Players=True
 }

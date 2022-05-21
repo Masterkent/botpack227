@@ -19,6 +19,8 @@ var() int MyTeam;
 var Actor GunBase;
 var() localized string PreKillMessage, PostKillMessage;
 
+var bool B227_bRotatedToDesired;
+
 function PostBeginPlay()
 {
 	SpawnBase();
@@ -146,24 +148,28 @@ function Name PickAnim()
 function Shoot()
 {
 	local Vector FireSpot, ProjStart;
-	local Projectile p;
+	local Projectile P;
+	local rotator FireRotation;
 
 	if (DesiredRotation.Pitch < -20000 || ProjectileType == none)
 		return;
 	PlaySound(FireSound, SLOT_None,5.0);
 	PlayAnim(PickAnim());
 
-	ProjStart = Location+Vector(DesiredRotation)*100 - Vect(0,0,1)*Drop;
+	ProjStart = Location+Vector(Rotation)*100 - Vect(0,0,1)*Drop;
 	if ( bLeadTarget )
 	{
 		FireSpot = Target.Location + FMin(1, 0.7 + 0.6 * FRand()) * (Target.Velocity * VSize(Target.Location - ProjStart)/ProjectileType.Default.Speed);
 		if ( !FastTrace(FireSpot, ProjStart) )
 			FireSpot = 0.5 * (FireSpot + Target.Location);
-		DesiredRotation = Rotator(FireSpot - ProjStart);
+		FireRotation = Rotator(FireSpot - ProjStart);
+		if (!B227_bRotatedToDesired)
+			FireRotation.Yaw = Rotation.Yaw;
 	}
-	p = Spawn (ProjectileType,,,ProjStart,DesiredRotation);
-	if (DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).bNoviceMode)
-		P.Damage *= (0.4 + 0.15 * Level.game.Difficulty);
+	else
+		FireRotation = DesiredRotation;
+	P = Spawn(ProjectileType,,, ProjStart, FireRotation);
+	B227_ModifyProjectileDamage(P);
 	//-if ( Target.IsA('WarShell') )
 	//-	p.speed *= 2;
 	bShoot=False;
@@ -261,9 +267,7 @@ state ActiveCannon
 
 		DesiredRotation = rotator(Enemy.Location - Location);
 		DesiredRotation.Yaw = DesiredRotation.Yaw & 65535;
-		if ( bShoot && (DesiredRotation.Pitch < 2000)
-			&& ((Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < 1000)
-			|| (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 64535)) )
+		if (B227_CanShoot(1000))
 			Shoot();
 		else 
 		{
@@ -316,9 +320,7 @@ state TrackWarhead
 
 		DesiredRotation = rotator(Target.Location - Location);
 		DesiredRotation.Yaw = DesiredRotation.Yaw & 65535;
-		if ( bShoot && (DesiredRotation.Pitch < 2000)
-			&& ((Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < 2000)
-			|| (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 63535)) )
+		if (B227_CanShoot(2000))
 			Shoot();
 		else 
 		{
@@ -425,15 +427,65 @@ function bool B227_LostTarget()
 	return Target == none || Target.bDeleteme || VSize(Location - Target.Location) > SightRadius + default.SightRadius;
 }
 
+function vector B227_CalcFireStart()
+{
+	return Location - vect(0, 0, 1) * Drop;
+}
+
 function vector B227_CalcFireSpot()
 {
 	local vector FireSpot, ProjStart;
 
-	ProjStart = Location + vector(DesiredRotation) * 100 - vect(0, 0, 1) * Drop;
-	FireSpot = Target.Location + FMin(1, 0.7 + 0.6 * FRand()) * (Target.Velocity * VSize(Target.Location - ProjStart)/ProjectileType.Default.Speed);
+	ProjStart = B227_CalcFireStart();
+	FireSpot = Target.Location + FMin(1, 0.7 + 0.6 * FRand()) * (Target.Velocity * (VSize(Target.Location - ProjStart) - 100)/ProjectileType.Default.Speed);
 	if (!FastTrace(FireSpot, ProjStart))
 		FireSpot = 0.5 * (FireSpot + Target.Location);
 	return FireSpot;
+}
+
+function bool B227_CanShoot(int MaxDesiredDeltaYaw)
+{
+	local rotator TargetDeltaRot;
+	local int DesiredDeltaYaw;
+
+	if (bShoot && DesiredRotation.Pitch < 2000)
+	{
+		if (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < MaxDesiredDeltaYaw ||
+			Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 65535 - MaxDesiredDeltaYaw)
+		{
+			B227_bRotatedToDesired = true;
+			return true;
+		}
+
+		B227_bRotatedToDesired = false;
+
+		if (bLeadTarget && Target != none)
+		{
+			DesiredRotation = rotator(B227_CalcFireSpot() - B227_CalcFireStart());
+
+			TargetDeltaRot = rotator(Target.Location - B227_CalcFireStart());
+			TargetDeltaRot.Yaw = (TargetDeltaRot.Yaw - Rotation.Yaw + 65536) & 65535;
+			if (TargetDeltaRot.Yaw >= 32768)
+				TargetDeltaRot.Yaw -= 65536;
+			if (Abs(TargetDeltaRot.Yaw) >= 16384)
+				return false;
+
+			DesiredDeltaYaw = (DesiredRotation.Yaw - Rotation.Yaw + 65536) & 65535;
+			if (DesiredDeltaYaw >= 32768)
+				DesiredDeltaYaw -= 65536;
+			if (Abs(DesiredDeltaYaw) >= 16384)
+				return false;
+
+			return TargetDeltaRot.Yaw * DesiredDeltaYaw <= 0;
+		}
+	}
+	return false;
+}
+
+function B227_ModifyProjectileDamage(Projectile Proj)
+{
+	if (DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).bNoviceMode)
+		Proj.Damage *= 0.4 + 0.15 * Level.Game.Difficulty;
 }
 
 defaultproperties

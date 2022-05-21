@@ -32,6 +32,9 @@ simulated event Tick(float DeltaTime)
 		Level.bSupportsRealCrouching = bRealCrouching;
 	else
 		bRealCrouching = Level.bSupportsRealCrouching;
+
+	if (Owner == none && Role == ROLE_Authority)
+		Destroy();
 }
 
 static function ONPPlayerInteraction FindFor(PlayerPawn Player)

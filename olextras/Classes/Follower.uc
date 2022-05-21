@@ -218,7 +218,8 @@ function damageAttitudeTo(pawn Other)       //slight override for can anger bool
   super.damageattitudeto(other);
 }
 function PlayGreetAnim(){ //anim and sound on greet.
-  PlayAnim(greetanim, 0.4 + 0.6 * FRand(), 0.5);
+  if (GreetAnim != '')
+    PlayAnim(GreetAnim, 0.4 + 0.6 * FRand(), 0.5);
 }
 function PreGreeting(){ //called before greeting
   SetMovementPhysics();

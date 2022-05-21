@@ -25,6 +25,9 @@ simulated function Tick(float DeltaTime)
 		Level.bSupportsRealCrouching = bRealCrouching;
 	else
 		bRealCrouching = Level.bSupportsRealCrouching;
+
+	if (Owner == none && Role == ROLE_Authority)
+		Destroy();
 }
 
 static function XidiaPlayerInteraction FindFor(PlayerPawn Player)

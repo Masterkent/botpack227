@@ -95,30 +95,7 @@ function skinnedFrag(class<fragment> FragType, texture FragSkin, vector Momentum
 }
 function Shoot()   //wiped deathmatch plus check
 {
-  local Vector FireSpot, ProjStart;
-  local Projectile P;
-
-  if (DesiredRotation.Pitch < -20000) Return;
-  PlaySound(FireSound, SLOT_None,5.0);
-  PlayAnim(PickAnim());
-
-  ProjStart = Location+Vector(DesiredRotation)*100 - Vect(0,0,1)*Drop;
-  if ( bLeadTarget )
-  {
-    FireSpot = Target.Location + FMin(1, 0.7 + 0.6 * FRand()) * (Target.Velocity * VSize(Target.Location - ProjStart)/ProjectileType.Default.Speed);
-    if ( !FastTrace(FireSpot, ProjStart) )
-      FireSpot = 0.5 * (FireSpot + Target.Location);
-    DesiredRotation = Rotator(FireSpot - ProjStart);
-  }
-  P = Spawn(ProjectileType,,, ProjStart, DesiredRotation);
-  if (P != none)
-  {
-    P.Damage *= (0.4 + 0.3 * Level.Game.Difficulty);
-    if (Target.IsA('WarShell'))
-      P.speed *= 2;
-  }
-  bShoot=False;
-  SetTimer(0.05,True);
+	super.Shoot(); // see B227_ModifyProjectileDamage
 }
 
 // B227 fix:
@@ -143,6 +120,11 @@ state ActiveCannon
 		}
 		GotoState('Idle');
 	}
+}
+
+function B227_ModifyProjectileDamage(Projectile Proj)
+{
+	Proj.Damage *= 0.4 + 0.3 * Level.Game.Difficulty;
 }
 
 defaultproperties

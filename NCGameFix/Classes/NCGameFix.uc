@@ -27,12 +27,11 @@ function AdjustScriptedPawnStyle()
 function ReplaceSpawnPoints()
 {
 	local SpawnPoint SpawnPoint;
-	local NCSpawnPoint NCSpawnPoint;
 
 	foreach AllActors(class'SpawnPoint', SpawnPoint)
 		if (SpawnPoint.Class == class'SpawnPoint')
 		{
-			NCSpawnPoint = SpawnPoint.Spawn(class'NCSpawnPoint',, SpawnPoint.Tag);
+			SpawnPoint.Spawn(class'NCSpawnPoint',, SpawnPoint.Tag);
 			SpawnPoint.Tag = '';
 		}
 }
@@ -53,7 +52,7 @@ function bool CheckReplacement(Actor A, out byte bSuperRelevant)
 
 defaultproperties
 {
-	VersionInfo="NCGameFix v1.3 [2022-05-16]"
-	Version="1.3"
+	VersionInfo="NCGameFix v1.4 [2022-05-20]"
+	Version="1.4"
 	bCoopUnlockPaths=True
 }

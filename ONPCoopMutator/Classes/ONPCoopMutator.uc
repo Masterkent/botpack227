@@ -1,6 +1,6 @@
 //=============================================================================
-// ONPCoopMutator v5.8                                       Author: Masterkent
-//                                                             Date: 2022-02-20
+// ONPCoopMutator v5.9                                       Author: Masterkent
+//                                                             Date: 2022-05-19
 //=============================================================================
 
 class ONPCoopMutator expands Mutator
@@ -1052,13 +1052,13 @@ function AdjustRealCrouchInfo(Actor A)
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.8";
+	return "ONPCoopMutator v5.9";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.8 [2022-02-20]"
-	Version="5.8"
+	VersionInfo="ONPCoopMutator v5.9 [2022-05-19]"
+	Version="5.9"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True

@@ -247,7 +247,10 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 					if (Killer.Weapon != none)
 						BroadcastRegularDeathMessage(Killer, Other, damageType);
 					else
+					{
 						super.Killed(Killer, Other, damageType);
+						return;
+					}
 				}
 			}
 		}
