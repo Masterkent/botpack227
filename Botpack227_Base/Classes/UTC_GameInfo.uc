@@ -117,9 +117,11 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 	local string Message, KillerWeapon, OtherWeapon;
 	local bool bSpecialDamage;
 
-	if (Other.bIsPlayer)
+	if (Other.PlayerReplicationInfo != none)
 	{
-		if ( (Killer != None) && (!Killer.bIsPlayer) )
+		if (UTC_PlayerReplicationInfo(Other.PlayerReplicationInfo) != none)
+			UTC_PlayerReplicationInfo(Other.PlayerReplicationInfo).Deaths += 1;
+		if (Killer != none && Killer.PlayerReplicationInfo == none)
 		{
 			Message = Killer.KillMessage(damageType, Other);
 			BroadcastMessage(Other.GetHumanName() $ Message, false, 'DeathMessage');
@@ -153,8 +155,6 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 			}
 			bSpecialDamage = True;
 		}
-		if (UTC_PlayerReplicationInfo(Other.PlayerReplicationInfo) != none)
-			UTC_PlayerReplicationInfo(Other.PlayerReplicationInfo).Deaths += 1;
 		if ( (Killer == Other) || (Killer == None) )
 		{
 			// Suicide
@@ -198,7 +198,7 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 		} 
 		else
 		{
-			if ( Killer.bIsPlayer )
+			if (Killer.PlayerReplicationInfo != none)
 			{
 				KillerWeapon = "None";
 				if (Killer.Weapon != None)

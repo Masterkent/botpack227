@@ -52,7 +52,7 @@ function bool CheckReplacement(Actor A, out byte bSuperRelevant)
 
 defaultproperties
 {
-	VersionInfo="NCGameFix v1.4 [2022-05-20]"
-	Version="1.4"
+	VersionInfo="NCGameFix v1.5 [2022-05-23]"
+	Version="1.5"
 	bCoopUnlockPaths=True
 }

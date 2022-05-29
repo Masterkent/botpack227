@@ -2,13 +2,17 @@
 // DMMutator.
 //=============================================================================
 
-class DMMutator expands UTC_Mutator;
+class DMMutator expands UTC_Mutator
+	config(Botpack);
 
 var DeathMatchPlus MyGame;
+
+var config bool B227_bAutoActivatePickups;
 
 function PostBeginPlay()
 {
 	MyGame = DeathMatchPlus(Level.Game);
+	B227_ModifyDefaultWeapon();
 	Super.PostBeginPlay();
 }
 
@@ -31,7 +35,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	// to check on relevancy of this actor.
 
 	bSuperRelevant = 1;
-	if ( MyGame.bMegaSpeed && Other.bIsPawn && Pawn(Other).bIsPlayer )
+	if ( MyGame != none && MyGame.bMegaSpeed && Other.bIsPawn && Pawn(Other).PlayerReplicationInfo != none )
 	{
 		Pawn(Other).GroundSpeed *= 1.4;
 		Pawn(Other).WaterSpeed *= 1.4;
@@ -51,7 +55,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		return true;
 	}
 
-	if ( MyGame.bNoviceMode && MyGame.bRatedGame && (Level.NetMode == NM_Standalone) )
+	if ( MyGame != none && MyGame.bNoviceMode && MyGame.bRatedGame && (Level.NetMode == NM_Standalone) )
 		Inv.RespawnTime *= (0.5 + 0.1 * MyGame.Difficulty);
 
 	if ( Other.IsA('Weapon') )
@@ -71,7 +75,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 			ReplaceWith( Other, "Botpack.SniperRifle" );
 			return false;
 		}
-		if ( Other.IsA('Razorjack') )
+		if ( Other.IsA('RazorJack') )
 		{
 			ReplaceWith( Other, "Botpack.Ripper" );
 			return false;
@@ -101,7 +105,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 			ReplaceWith( Other, "Botpack.ShockRifle" );
 			return false;
 		}
-		if ( Other.IsA('GesBioRifle') )
+		if ( Other.IsA('GESBioRifle') )
 		{
 			ReplaceWith( Other, "Botpack.UT_BioRifle" );
 			return false;
@@ -183,7 +187,12 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 
 	if ( Other.IsA('Pickup') )
 	{
-		Pickup(Other).bAutoActivate = true;
+		if (B227_bAutoActivatePickups &&
+			!Other.IsA('SCUBAGear') &&
+			!Other.IsA('UPakScubaGear'))
+		{
+			Pickup(Other).bAutoActivate = true;
+		}
 		if ( Other.IsA('TournamentPickup') )
 			return true;
 	}
@@ -197,7 +206,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	{
 		if ( Other.IsA('JumpBoots') )
 		{
-			if ( MyGame.bJumpMatch )
+			if (MyGame != none && MyGame.bJumpMatch)
 				return false;
 			if (ReplaceWith( Other, "Botpack.UT_JumpBoots" ) && UT_JumpBoots(B227_ReplacingActor) != none && Inventory(Other) != none)
 				UT_JumpBoots(B227_ReplacingActor).Charge = Inventory(Other).Charge;
@@ -254,6 +263,33 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	return true;
 }
 
+function B227_ModifyDefaultWeapon()
+{
+	if (Level.Game.DefaultWeapon == none)
+		return;
+	if (ClassIsChildOf(Level.Game.DefaultWeapon, class'DispersionPistol'))
+		Level.Game.DefaultWeapon = class'ImpactHammer';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'AutoMag'))
+		Level.Game.DefaultWeapon = class'Enforcer';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'Stinger'))
+		Level.Game.DefaultWeapon = class'PulseGun';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'ASMD'))
+		Level.Game.DefaultWeapon = class'ShockRifle';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'EightBall'))
+		Level.Game.DefaultWeapon = class'UT_EightBall';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'FlakCannon'))
+		Level.Game.DefaultWeapon = class'UT_FlakCannon';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'RazorJack'))
+		Level.Game.DefaultWeapon = class'Ripper';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'GESBioRifle'))
+		Level.Game.DefaultWeapon = class'UT_BioRifle';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'Rifle'))
+		Level.Game.DefaultWeapon = class'SniperRifle';
+	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'Minigun'))
+		Level.Game.DefaultWeapon = class'Minigun2';
+}
+
 defaultproperties
 {
+	B227_bAutoActivatePickups=True
 }

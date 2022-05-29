@@ -18,8 +18,12 @@ state CostEnabled
 {
 	event int SpecialCost(Pawn Seeker)
 	{
-		if ( !Seeker.bIsPlayer || (Seeker.PlayerReplicationInfo.Team == Assault(Level.Game).Defender.TeamIndex) )
+		if (Seeker.PlayerReplicationInfo == none ||
+			Assault(Level.Game) == none ||
+			Seeker.PlayerReplicationInfo.Team == Assault(Level.Game).Defender.TeamIndex)
+		{
 			return 0;
+		}
 
 		return ToggledCost;
 	}

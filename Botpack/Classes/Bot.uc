@@ -269,15 +269,19 @@ function YellAt(Pawn Moron)
 		return;
 
 	SendTeamMessage(None, 'FRIENDLYFIRE', Rand(class<ChallengeVoicePack>(PlayerReplicationInfo.VoiceType).Default.NumFFires), 5);
-}	
+}
 
-function bool AddInventory(inventory NewItem)
+function bool AddInventory(Inventory NewItem)
 {
 	if (!super.AddInventory(NewItem))
 		return false;
 
 	if (Translocator(NewItem) != none)
 		MyTranslocator = Translocator(NewItem);
+
+	if (Pickup(NewItem) != none && NewItem.IsA('Cloak'))
+		Pickup(NewItem).bAutoActivate = true;
+
 	return true;
 }
 
@@ -7487,6 +7491,9 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 			Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = None;
 	}
 }
+
+
+// B227 additions:
 
 function bool B227_PickWallAdjust()
 {

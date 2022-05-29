@@ -79,6 +79,8 @@ var LadderInventory RatedGameLadderObj;
 
 var globalconfig bool B227_bFixedBotCount;
 
+var int B227_ElapsedTime; // Actual match time without waiting at startup phase
+
 function PostBeginPlay()
 {
 	if ( bAlternateMode )
@@ -145,7 +147,7 @@ function SetGameSpeed( Float T )
 
 function PlayTeleportEffect( actor Incoming, bool bOut, bool bSound)
 {
- 	local UTTeleportEffect PTE;
+	local UTTeleportEffect PTE;
 
 	if ( bRequireReady && (Countdown > 0) )
 		return;
@@ -154,8 +156,8 @@ function PlayTeleportEffect( actor Incoming, bool bOut, bool bSound)
 	{
 		if ( bSound )
 		{
- 			PTE = Spawn(class'UTTeleportEffect',Incoming,, Incoming.Location, Incoming.Rotation);
- 			PTE.Initialize(Pawn(Incoming), bOut);
+			PTE = Spawn(class'UTTeleportEffect',Incoming,, Incoming.Location, Incoming.Rotation);
+			PTE.Initialize(Pawn(Incoming), bOut);
 			PTE.PlaySound(sound'Resp2A',, 10.0);
 		}
 	}
@@ -651,6 +653,8 @@ function Timer()
 	if (B227_GRI() == none)
 		return;
 
+	B227_UpdateGRILimits();
+
 	if ( bNetReady )
 	{
 		if ( NumPlayers > 0 )
@@ -670,6 +674,7 @@ function Timer()
 			for (P=Level.PawnList; P!=None; P=P.NextPawn )
 				if ( P.IsA('PlayerPawn') )
 					PlayerPawn(P).SetProgressTime(2);
+			B227_UpdateGRIRemainingTime();
 			return;
 		}
 		else
@@ -690,15 +695,15 @@ function Timer()
 				PlayerPawn(P).SetProgressTime(2);
 		if ( ((NumPlayers == MaxPlayers) || (Level.NetMode == NM_Standalone)) 
 				&& (RemainingBots <= 0) )
-		{	
+		{
 			bReady = true;
 			for (P=Level.PawnList; P!=None; P=P.NextPawn )
 				if ( P.IsA('PlayerPawn') && !P.IsA('Spectator')
 					&& !PlayerPawn(P).bReadyToPlay )
 					bReady = false;
-			
+
 			if ( bReady )
-			{	
+			{
 				StartCount = 30;
 				CountDown--;
 				if ( CountDown <= 0 )
@@ -744,7 +749,7 @@ function Timer()
 				if ( P.IsA('PlayerPawn') )
 					PlayStartupMessage(PlayerPawn(P));
 		}
-	}	
+	}
 	else
 	{
 		if ( bAlwaysForceRespawn || (bForceRespawn && (Level.NetMode != NM_Standalone)) )
@@ -766,22 +771,29 @@ function Timer()
 			if ( Level.TimeSeconds > EndTime + RestartWait )
 				RestartGame();
 		}
-		else if ( !bOverTime && (TimeLimit > 0) )
-		{
-			B227_GRI().bStopCountDown = false;
-			RemainingTime--;
-			B227_GRI().RemainingTime = RemainingTime;
-			if ( RemainingTime % 60 == 0 )
-				B227_GRI().RemainingMinute = RemainingTime;
-			if ( RemainingTime <= 0 )
-				EndGame("timelimit");
-		}
 		else
 		{
-			ElapsedTime++;
-			B227_GRI().ElapsedTime = ElapsedTime;
+			B227_ElapsedTime++;
+			if ( !bOverTime && (TimeLimit > 0) )
+			{
+				B227_GRI().bStopCountDown = false;
+				RemainingTime = TimeLimit * 60 - B227_ElapsedTime;
+				if ( RemainingTime % 60 == 0 )
+					B227_GRI().RemainingMinute = RemainingTime;
+				if ( RemainingTime <= 0 )
+					EndGame("timelimit");
+			}
+			else
+			{
+				ElapsedTime++;
+				B227_GRI().ElapsedTime = B227_ElapsedTime;
+				if (TimeLimit > 0)
+					RemainingTime = 0;
+			}
 		}
 	}
+
+	B227_UpdateGRIRemainingTime();
 }
 
 function bool TooManyBots()
@@ -916,7 +928,7 @@ function Bot SpawnRatedBot(out NavigationPoint StartSpot)
 		bEnemy = True;
 
 	BotN = RatedMatchConfig.ChooseBotInfo(bTeamGame, bEnemy);
-	
+
 	// Find a start spot.
 	StartSpot = UTF_FindPlayerStart(None, 255);
 	if( StartSpot == None )
@@ -939,7 +951,7 @@ function Bot SpawnRatedBot(out NavigationPoint StartSpot)
 	{
 		// Set the player's ID.
 		NewBot.PlayerReplicationInfo.PlayerID = CurrentID++;
-	
+
 		RatedMatchConfig.Individualize(NewBot, BotN, NumBots, bTeamGame, bEnemy);
 		NewBot.ViewRotation = StartSpot.Rotation;
 		// broadcast a welcome message.
@@ -1062,7 +1074,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 	B = Bot(PlayerPawn);
 	if ( B != None )
 		B.bHasImpactHammer = (B.FindInventoryType(class'ImpactHammer') != None);
-}	
+}
 
 function GiveWeapon(Pawn PlayerPawn, string aClassName )
 {
@@ -1092,7 +1104,7 @@ function GiveWeapon(Pawn PlayerPawn, string aClassName )
 		PlayerPawn.Weapon = newWeapon;
 	}
 }
-	
+
 function byte AssessBotAttitude(Bot aBot, Pawn Other)
 {
 	local float skillmod;
@@ -1178,7 +1190,7 @@ function RateVs(Pawn Other, Pawn Killer)
 	{
 		if ( oppRating < PlayerRating - 400 )
 			return;
-		
+
 		if ( PlayerRating < 2100 )
 			K = 32;
 		else if ( PlayerRating < 2400 )
@@ -1390,7 +1402,7 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 						Score[i] -= 10000;
 				}
 			}
-	
+
 	BestScore = Score[0];
 	Best = Candidate[0];
 	for (i=1;i<num;i++)
@@ -1542,9 +1554,7 @@ function string GetRules()
 function InitGameReplicationInfo()
 {
 	Super.InitGameReplicationInfo();
-
-	TournamentGameReplicationInfo(GameReplicationInfo).FragLimit = FragLimit;
-	TournamentGameReplicationInfo(GameReplicationInfo).TimeLimit = TimeLimit;
+	B227_UpdateGRILimits();
 }
 
 function bool CheckThisTranslocator(Bot aBot, TranslocatorTarget T)
@@ -1569,6 +1579,28 @@ function float SpawnWait(bot B)
 function bool NeverStakeOut(bot Other)
 {
 	return false;
+}
+
+function B227_UpdateGRILimits()
+{
+	if (TournamentGameReplicationInfo(GameReplicationInfo) == none)
+		return;
+	TournamentGameReplicationInfo(GameReplicationInfo).FragLimit = FragLimit;
+	TournamentGameReplicationInfo(GameReplicationInfo).TimeLimit = TimeLimit;
+}
+
+function B227_UpdateGRIRemainingTime()
+{
+	if (TimeLimit > 0)
+	{
+		B227_GRI().RemainingTime = RemainingTime;
+		B227_GRI().B227_RemainingTime = RemainingTime;
+	}
+	else
+	{
+		B227_GRI().RemainingTime = 0;
+		B227_GRI().B227_RemainingTime = 0;
+	}
 }
 
 defaultproperties

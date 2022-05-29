@@ -13,13 +13,17 @@ var float UpdateTimer;
 var UTC_PlayerReplicationInfo PRIArray[32];
 
 var private string B227_GameEndedComments;
+var int B227_RemainingTime;
+var bool B227_bSyncRemainingTime;
 
 replication
 {
 	reliable if (Role == ROLE_Authority)
 		RemainingMinute, bStopCountDown, NumPlayers;
+
 	reliable if (Role == ROLE_Authority)
-		B227_GameEndedComments;
+		B227_GameEndedComments,
+		B227_RemainingTime;
 }
 
 simulated event PostBeginPlay()
@@ -36,15 +40,22 @@ simulated event Timer()
 
 	if ( Level.NetMode == NM_Client )
 	{
+		if (B227_RemainingTime >= 0)
+		{
+			RemainingTime = B227_RemainingTime;
+			B227_RemainingTime = -1;
+			B227_bSyncRemainingTime = true;
+		}
 		if (Level.TimeSeconds - SecondCount >= Level.TimeDilation)
 		{
 			ElapsedTime++;
 			if ( RemainingMinute != 0 )
 			{
-				RemainingTime = RemainingMinute;
+				if (!B227_bSyncRemainingTime)
+					RemainingTime = RemainingMinute;
 				RemainingMinute = 0;
 			}
-			if ( (RemainingTime > 0) && !bStopCountDown )
+			if ( !B227_bSyncRemainingTime && (RemainingTime > 0) && !bStopCountDown )
 				RemainingTime--;
 			SecondCount += Level.TimeDilation;
 		}
@@ -85,4 +96,10 @@ simulated event PostNetReceive()
 	super.PostNetReceive();
 	if (GameEndedComments != B227_GameEndedComments)
 		GameEndedComments = B227_GameEndedComments;
+}
+
+defaultproperties
+{
+	NetUpdateFrequency=20
+	B227_RemainingTime=-1
 }

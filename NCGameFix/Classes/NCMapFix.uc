@@ -26,6 +26,8 @@ function ServerFixCurrentMap()
 		ServerFixMap_NCLevel005();
 	else if (CurrentMap ~= "NCLevel006")
 		ServerFixMap_NCLevel006();
+	else if (CurrentMap ~= "NCLevel007")
+		ServerFixMap_NCLevel007();
 	else if (CurrentMap ~= "NCLevel008a")
 		ServerFixMap_NCLevel008a();
 	else if (CurrentMap ~= "NCLevel008b")
@@ -165,6 +167,18 @@ function ServerFixMap_NCLevel006()
 	Lift = LoadLevelMover("Mover7");
 	Lift.InitialState = 'TriggerOpenTimed';
 	Lift.MoverEncroachType = ME_IgnoreWhenEncroach;
+}
+
+function ServerFixMap_NCLevel007()
+{
+	local Mover Boat;
+
+	if (Level.NetMode != NM_Standalone)
+	{
+		Boat = LoadLevelMover("Mover8");
+		Boat.bTriggerOnceOnly = false;
+		Boat.StayOpenTime = Boat.default.StayOpenTime;
+	}
 }
 
 function ServerFixMap_NCLevel008a()
