@@ -1,6 +1,6 @@
 //=============================================================================
-// ONPSPFix v1.5                                             Author: Masterkent
-//                                                             Date: 2022-05-19
+// ONPSPFix v1.6                                             Author: Masterkent
+//                                                             Date: 2022-06-06
 //=============================================================================
 
 class ONPSPFix expands Mutator;
@@ -15,6 +15,7 @@ function PostBeginPlay()
 
 function LevelStartupAdjustments()
 {
+	Level.Game.bAlwaysEnhancedSightCheck = false;
 	AdjustDecorations();
 	AdjustExplodingEffects();
 	AdjustMusicEvents();
@@ -105,11 +106,11 @@ function FixCurrentMap()
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.5";
+	return "ONPSPFix v1.6";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.5 [2022-05-19]"
-	Version="1.5"
+	VersionInfo="ONPSPFix v1.6 [2022-06-06]"
+	Version="1.6"
 }

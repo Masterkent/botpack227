@@ -127,6 +127,13 @@ simulated function FixLightEffects()
 
 function Server_FixCurrentMap_NP02DavidM()
 {
+	local Trigger Trigger;
+	local ONPPlayerMoveTrigger MoveTrigger;
+
+	Trigger = LoadLevelTrigger("Trigger3");
+	MoveTrigger = class'ONPPlayerMoveTrigger'.static.StaticReplaceTrigger(Trigger);
+	MoveTrigger.bNoReenter = true;
+
 	LoadLevelMover("Mover48").MoverEncroachType = ME_IgnoreWhenEncroach;
 }
 

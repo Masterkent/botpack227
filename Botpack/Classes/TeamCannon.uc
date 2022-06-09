@@ -19,8 +19,6 @@ var() int MyTeam;
 var Actor GunBase;
 var() localized string PreKillMessage, PostKillMessage;
 
-var bool B227_bRotatedToDesired;
-
 function PostBeginPlay()
 {
 	SpawnBase();
@@ -156,15 +154,13 @@ function Shoot()
 	PlaySound(FireSound, SLOT_None,5.0);
 	PlayAnim(PickAnim());
 
-	ProjStart = Location+Vector(Rotation)*100 - Vect(0,0,1)*Drop;
+	ProjStart = Location+Vector(DesiredRotation)*100 - Vect(0,0,1)*Drop;
 	if ( bLeadTarget )
 	{
 		FireSpot = Target.Location + FMin(1, 0.7 + 0.6 * FRand()) * (Target.Velocity * VSize(Target.Location - ProjStart)/ProjectileType.Default.Speed);
 		if ( !FastTrace(FireSpot, ProjStart) )
 			FireSpot = 0.5 * (FireSpot + Target.Location);
 		FireRotation = Rotator(FireSpot - ProjStart);
-		if (!B227_bRotatedToDesired)
-			FireRotation.Yaw = Rotation.Yaw;
 	}
 	else
 		FireRotation = DesiredRotation;
@@ -267,7 +263,9 @@ state ActiveCannon
 
 		DesiredRotation = rotator(Enemy.Location - Location);
 		DesiredRotation.Yaw = DesiredRotation.Yaw & 65535;
-		if (B227_CanShoot(1000))
+		if ( bShoot && (DesiredRotation.Pitch < 2000)
+			&& ((Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < 1000)
+			|| (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 64535)) )
 			Shoot();
 		else 
 		{
@@ -296,12 +294,7 @@ Begin:
 
 FaceEnemy:
 	B227_EnemyNotVisible(); // Calls EnemyNotVisible if there is no enemy in line of sight
-
-	if (bLeadTarget)
-		TurnTo(B227_CalcFireSpot());
-	else
-		TurnToward(Enemy);
-
+	TurnToward(Enemy);
 	Goto('FaceEnemy');
 }
 
@@ -320,7 +313,9 @@ state TrackWarhead
 
 		DesiredRotation = rotator(Target.Location - Location);
 		DesiredRotation.Yaw = DesiredRotation.Yaw & 65535;
-		if (B227_CanShoot(2000))
+		if ( bShoot && (DesiredRotation.Pitch < 2000)
+			&& ((Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < 2000)
+			|| (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 63535)) )
 			Shoot();
 		else 
 		{
@@ -355,12 +350,7 @@ Begin:
 FaceEnemy:
 	if (B227_LostTarget())
 		FindEnemy();
-
-	if (bLeadTarget)
-		TurnTo(B227_CalcFireSpot());
-	else
-		TurnToward(Target);
-
+	TurnToward(Target);
 	Goto('FaceEnemy');
 }
 
@@ -425,61 +415,6 @@ function B227_WarnAboutWarShell(Projectile Proj)
 function bool B227_LostTarget()
 {
 	return Target == none || Target.bDeleteme || VSize(Location - Target.Location) > SightRadius + default.SightRadius;
-}
-
-function vector B227_CalcFireStart()
-{
-	return Location - vect(0, 0, 1) * Drop;
-}
-
-function vector B227_CalcFireSpot()
-{
-	local vector FireSpot, ProjStart;
-
-	ProjStart = B227_CalcFireStart();
-	FireSpot = Target.Location + FMin(1, 0.7 + 0.6 * FRand()) * (Target.Velocity * (VSize(Target.Location - ProjStart) - 100)/ProjectileType.Default.Speed);
-	if (!FastTrace(FireSpot, ProjStart))
-		FireSpot = 0.5 * (FireSpot + Target.Location);
-	return FireSpot;
-}
-
-function bool B227_CanShoot(int MaxDesiredDeltaYaw)
-{
-	local rotator TargetDeltaRot;
-	local int DesiredDeltaYaw;
-
-	if (bShoot && DesiredRotation.Pitch < 2000)
-	{
-		if (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < MaxDesiredDeltaYaw ||
-			Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 65535 - MaxDesiredDeltaYaw)
-		{
-			B227_bRotatedToDesired = true;
-			return true;
-		}
-
-		B227_bRotatedToDesired = false;
-
-		if (bLeadTarget && Target != none)
-		{
-			DesiredRotation = rotator(B227_CalcFireSpot() - B227_CalcFireStart());
-
-			TargetDeltaRot = rotator(Target.Location - B227_CalcFireStart());
-			TargetDeltaRot.Yaw = (TargetDeltaRot.Yaw - Rotation.Yaw + 65536) & 65535;
-			if (TargetDeltaRot.Yaw >= 32768)
-				TargetDeltaRot.Yaw -= 65536;
-			if (Abs(TargetDeltaRot.Yaw) >= 16384)
-				return false;
-
-			DesiredDeltaYaw = (DesiredRotation.Yaw - Rotation.Yaw + 65536) & 65535;
-			if (DesiredDeltaYaw >= 32768)
-				DesiredDeltaYaw -= 65536;
-			if (Abs(DesiredDeltaYaw) >= 16384)
-				return false;
-
-			return TargetDeltaRot.Yaw * DesiredDeltaYaw <= 0;
-		}
-	}
-	return false;
 }
 
 function B227_ModifyProjectileDamage(Projectile Proj)
