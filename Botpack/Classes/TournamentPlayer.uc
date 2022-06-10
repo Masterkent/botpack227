@@ -129,7 +129,7 @@ simulated function UTF_ClientPlaySound(
 	sound ASound,
 	optional bool bInterrupt,
 	optional bool bVolumeControl)
-{	
+{
 	local actor SoundPlayer;
 	local int Volume;
 
@@ -274,7 +274,7 @@ function ReplicateMove
 	OldClientWeapon = Weapon;
 }
 */
-	
+
 function TimeMessage(int Num)
 {
 	if ( TimeMessageClass == None )
@@ -647,6 +647,9 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 	local string MeshName, FacePackage, SkinItem, FaceItem, SkinPackage;
 
 	MeshName = SkinActor.GetItemName(string(SkinActor.Mesh));
+
+	if (SkinName == "")
+		SkinName = default.DefaultSkinName;
 
 	SkinItem = SkinActor.GetItemName(SkinName);
 	FaceItem = SkinActor.GetItemName(FaceName);

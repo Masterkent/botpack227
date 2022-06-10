@@ -26,6 +26,16 @@ function bool IsRelevant(Actor Other)
 	return super.IsRelevant(Other);
 }
 
+function InitGameReplicationInfo()
+{
+	super.InitGameReplicationInfo();
+	if (B227_GRI() != none)
+	{
+		B227_GRI().GameClass = string(Class);
+		B227_GRI().bClassicDeathmessages = bClassicDeathmessages;
+	}
+}
+
 function string KillMessage(name damageType, pawn Other)
 {
 	return UTF_KillMessage(damageType, Other);

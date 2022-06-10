@@ -65,6 +65,8 @@ event playerpawn Login
 	local string OverrideClass;
 	local class<PlayerPawn> SpecClass;
 	local string InVoice;
+	local string InSkin, InFace;
+	local byte InTeam;
 
 	if ( !bRatedGame )
 	{
@@ -102,6 +104,16 @@ event playerpawn Login
 				NewPlayer.PlayerReplicationInfo.VoiceType = class'UTC_PlayerPawn'.static.B227_GetVoiceType(NewPlayer);
 			if (NewPlayer.PlayerReplicationInfo.VoiceType == none)
 				NewPlayer.PlayerReplicationInfo.VoiceType = class<VoicePack>(DynamicLoadObject("Botpack.VoiceMaleOne", class'Class'));
+
+			InSkin = ParseOption(Options, "Skin");
+			if (InSkin == "")
+			{
+				InTeam = GetIntOption(Options, "Team", 255 );
+				InFace = ParseOption(Options, "Face");
+				// super.Login skips calling SetMultiSkin when InSkin is empty,
+				// but the skin must be set properly anyway
+				NewPlayer.static.SetMultiSkin(NewPlayer, InSkin, InFace, InTeam);
+			}
 		}
 	}
 

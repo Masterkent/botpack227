@@ -21,6 +21,9 @@ replication
 	reliable if (Role == ROLE_Authority)
 		RemainingMinute, bStopCountDown, NumPlayers;
 
+	reliable if (bNetInitial && Role == ROLE_Authority)
+		GameClass;
+
 	reliable if (Role == ROLE_Authority)
 		B227_GameEndedComments,
 		B227_RemainingTime;
