@@ -92,6 +92,10 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map05FriendlyFire();
 	else if (CurrentMap ~= "ONP-map14Mine")
 		Server_FixCurrentMap_ONP_map14Mine();
+	else if (CurrentMap ~= "ONP-map16Dam")
+		Server_FixCurrentMap_ONP_map16Dam();
+	else if (CurrentMap ~= "ONP-map19Teleporter")
+		Server_FixCurrentMap_ONP_map19Teleporter();
 	else if (CurrentMap ~= "ONP-map21Welcome")
 		Server_FixCurrentMap_ONP_map21Welcome();
 	else if (CurrentMap ~= "ONP-map22Disposal")
@@ -352,6 +356,25 @@ function Server_FixCurrentMap_ONP_map05FriendlyFire()
 function Server_FixCurrentMap_ONP_map14Mine()
 {
 	LoadLevelMover("Mover1").StayOpenTime = 4;
+}
+
+function Server_FixCurrentMap_ONP_map16Dam()
+{
+	local Counter BlockerDoor;
+	local ONPCameraSpot Cam;
+
+	foreach AllActors(class'ONPCameraSpot', Cam, 'blockerdoor')
+		Cam.Tag = 'blockerdoor_trigger';
+
+	LoadLevelTrigger("Trigger10").Event = 'blockerdoor_trigger';
+	BlockerDoor = Spawn(class'Counter',, 'blockerdoor_trigger');
+	BlockerDoor.Event = 'blockerdoor';
+	BlockerDoor.NumToCount = 1;
+}
+
+function Server_FixCurrentMap_ONP_map19Teleporter()
+{
+	LoadLevelTrigger("Trigger32").bTriggerOnceOnly = true;
 }
 
 function Server_FixCurrentMap_ONP_map21Welcome()

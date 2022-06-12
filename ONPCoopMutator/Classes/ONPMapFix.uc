@@ -206,6 +206,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map14Mine();
 	else if (CurrentMap ~= "ONP-map15CrossCountry")
 		Server_FixCurrentMap_ONP_map15CrossCountry();
+	else if (CurrentMap ~= "ONP-map16Dam")
+		Server_FixCurrentMap_ONP_map16Dam();
 	else if (CurrentMap ~= "ONP-map17watersport")
 		Server_FixCurrentMap_ONP_map17watersport();
 	else if (CurrentMap ~= "ONP-map19Teleporter")
@@ -903,6 +905,20 @@ function Server_FixCurrentMap_ONP_map15CrossCountry()
 	MakeMessageEventFor("SpecialEvent0");
 }
 
+function Server_FixCurrentMap_ONP_map16Dam()
+{
+	local Counter BlockerDoor;
+	local ONPCameraSpot Cam;
+
+	foreach AllActors(class'ONPCameraSpot', Cam, 'blockerdoor')
+		Cam.Tag = 'blockerdoor_trigger';
+
+	LoadLevelTrigger("Trigger10").Event = 'blockerdoor_trigger';
+	BlockerDoor = Spawn(class'Counter',, 'blockerdoor_trigger');
+	BlockerDoor.Event = 'blockerdoor';
+	BlockerDoor.NumToCount = 1;
+}
+
 function Server_FixCurrentMap_ONP_map17watersport()
 {
 	local ONPPlayerRelocation PlayerRelocation;
@@ -920,6 +936,7 @@ function Server_FixCurrentMap_ONP_map17watersport()
 
 function Server_FixCurrentMap_ONP_map19Teleporter()
 {
+	LoadLevelTrigger("Trigger32").bTriggerOnceOnly = true;
 	MakeMessageEventFor("SpecialEvent13");
 	MakeMessageEventFor("SpecialEvent16");
 	MakeMessageEventFor("SpecialEvent22");

@@ -1,6 +1,6 @@
 //=============================================================================
-// ONPSPFix v1.6                                             Author: Masterkent
-//                                                             Date: 2022-06-06
+// ONPSPFix v1.7                                             Author: Masterkent
+//                                                             Date: 2022-06-12
 //=============================================================================
 
 class ONPSPFix expands Mutator;
@@ -106,11 +106,11 @@ function FixCurrentMap()
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.6";
+	return "ONPSPFix v1.7";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.6 [2022-06-06]"
-	Version="1.6"
+	VersionInfo="ONPSPFix v1.7 [2022-06-12]"
+	Version="1.7"
 }
