@@ -1,5 +1,5 @@
 //=============================================================================
-// ONPCoopMutator v5.10                                      Author: Masterkent
+// ONPCoopMutator v5.11                                      Author: Masterkent
 //                                                             Date: 2022-06-12
 //=============================================================================
 
@@ -1052,13 +1052,13 @@ function AdjustRealCrouchInfo(Actor A)
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.10";
+	return "ONPCoopMutator v5.11";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.10 [2022-06-12]"
-	Version="5.10"
+	VersionInfo="ONPCoopMutator v5.11 [2022-06-12]"
+	Version="5.11"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True

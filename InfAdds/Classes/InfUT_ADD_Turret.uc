@@ -151,22 +151,7 @@ function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 			PlaySound(Sound_Exploding, SLOT_None, SoundVol_Exploding);
 		skinnedFrag(DetFragmentClass, DetFragmentTexture, Momentum,1.0,17);
 		if (FakeWeapon != None)
-		{
-			if (FakeWeapon.Owner != None && FakeWeapon.Owner.IsA('Pawn'))
-			{
-				if (FakeWeapon != None && FakeWeapon.AmmoName != None)
-				{
-					Inv = Pawn(FakeWeapon.Owner).FindInventoryType(FakeWeapon.AmmoName);
-					if (Inv != None)
-						Pawn(FakeWeapon.Owner).DeleteInventory( Inv );
-					Inv = Pawn(FakeWeapon.Owner).FindInventoryType(FakeWeapon.class);
-					if (Inv != None)
-						Pawn(FakeWeapon.Owner).DeleteInventory( Inv );
-				}
-				Pawn(FakeWeapon.Owner).SwitchToBestWeapon();
-			}
-			FakeWeapon.Destroy();
-		}
+			B227_DeleteFakeWeapon(Pawn(FakeWeapon.Owner));
 		if (!bReactivate)
 		{
 			if (DestroyEvent!='')
@@ -194,12 +179,12 @@ function ControlWeaponStart()
 	// put pawns weapon down and replace it with FakeWeapon
 	if (TurretWeaponClass != None && TurretWeaponClass.default.AmmoName != None)
 	{
-		Inv = cControler.FindInventoryType(TurretWeaponClass.default.AmmoName);
-		if (Inv != None)
-			cControler.DeleteInventory( Inv );
-		Inv = cControler.FindInventoryType(TurretWeaponClass);
-		if (Inv != None)
-			cControler.DeleteInventory( Inv );
+		for (Inv = cControler.Inventory; Inv != none; Inv = Inv.Inventory)
+			if (Inv.Class == TurretWeaponClass.default.AmmoName)
+				Inv.Destroy();
+		for (Inv = cControler.Inventory; Inv != none; Inv = Inv.Inventory)
+			if (Inv.Class == TurretWeaponClass)
+				Inv.Destroy();
 	}
 
 //	cControler.SetBase(Self);
@@ -244,31 +229,16 @@ simulated function ControlWeaponEnd()
 		if (cControler.PendingWeapon != None)
 			cControler.PendingWeapon = None;
 		Instigator = None;
-		if (FakeWeapon != None)
-			FakeWeapon.Destroy();
+		B227_DeleteFakeWeapon(cControler);
 		return;
 	}
 
-	if (TurretWeaponClass != None && TurretWeaponClass.default.AmmoName != None)
-	{
-		Inv = cControler.FindInventoryType(TurretWeaponClass.default.AmmoName);
-		if (Inv != None)
-			cControler.DeleteInventory( Inv );
-		Inv = cControler.FindInventoryType(TurretWeaponClass);
-		if (Inv != None)
-			cControler.DeleteInventory( Inv );
-	}
-
-	// reactivate pawns weapons if still holding
-	if (cControler.Weapon == None)
-		cControler.SwitchToBestWeapon();
+	B227_DeleteFakeWeapon(cControler);
 
 	// if the tActor is firing stop firing
 	cControler.bFire = 0;
 	cControler.bAltFire = 0;
 	Instigator = None;
-	if (FakeWeapon != None)
-		FakeWeapon.Destroy();
 }
 
 function Trigger( actor Other, pawn EventInstigator )
@@ -760,6 +730,26 @@ ignores Trigger, Untrigger;
 		bMessageSend = False;
 		bShoot = False;
 	}
+}
+
+
+function B227_DeleteFakeWeapon(Pawn WeaponOwner)
+{
+	local Actor Ammo;
+
+	if (FakeWeapon == none)
+		return;
+	if (FakeWeapon.AmmoName != none && WeaponOwner != none)
+	{
+		// B227 note: mods may allow ammo to be owned by a dead player with cleared inventory list
+		foreach WeaponOwner.ChildActors(FakeWeapon.AmmoName, Ammo)
+			if (Ammo.Class == FakeWeapon.AmmoName)
+				Ammo.Destroy();
+	}
+	FakeWeapon.Destroy();
+	FakeWeapon = none;
+	if (WeaponOwner != none)
+		WeaponOwner.SwitchToBestWeapon();
 }
 
 //	 RemoteRole=Dump_Proxy

@@ -1,10 +1,14 @@
 class ONPTranslatorEvent expands TranslatorEvent;
 
+var bool bHadBroadcast;
+
 function Trigger(Actor A, Pawn EventInstigator)
 {
 	local PlayerPawn PP;
-	local Actor Targets;
 	local string Temp;
+
+	if (bHitDelay || ReTriggerDelay > 0 && Level.TimeSeconds - TriggerTime < ReTriggerDelay)
+		return;
 
 	if (bTriggerAltMessage)
 	{
@@ -12,25 +16,25 @@ function Trigger(Actor A, Pawn EventInstigator)
 		Message = AltMessage;
 		AltMessage = Temp;
 		bHitOnce = False;
-		if (A != none && !A.bDeleteMe && PlayerPawn(A) == none)
+		foreach TouchingActors(class'PlayerPawn', PP)
 		{
-			foreach AllActors(class'PlayerPawn', PP)
-				Touch(PP);
-		}
-		else
-		{
-			foreach TouchingActors(class'Actor', Targets)
-				if (Targets == A)
-					Touch(A);
+			bHitDelay = false;
+			TriggerTime = 0;
+			Touch(PP);
 		}
 	}
-	else if (A != none && !A.bDeleteMe && PlayerPawn(A) == none)
+	else if (!bHadBroadcast && A != none && !A.bDeleteMe && PlayerPawn(A) == none)
 	{
 		foreach AllActors(class'PlayerPawn', PP)
+		{
+			bHadBroadcast = true;
+			bHitDelay = false;
+			TriggerTime = 0;
 			Touch(PP);
+		}
 	}
 	else
-		Touch(A);
+		Touch(EventInstigator);
 }
 
 event Touch(Actor Other)

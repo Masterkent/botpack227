@@ -115,6 +115,7 @@ state ActiveCannon
 					LineOfSightTo(P))
 				{
 					Enemy = P;
+					Target = Enemy;
 					return;
 				}
 		}
