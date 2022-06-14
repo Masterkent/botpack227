@@ -82,6 +82,8 @@ var bool			bReactivate;				// For Infiltration type games for reactivating the t
 var int				cAmmoAmount;				// curent AmmoAmount left
 var Inventory		Inv;						// used for deleteinventory
 
+var class<Weapon> B227_LastControllerWeaponClass;
+
 replication
 {
 	reliable if ( Role == Role_Authority && bNetOwner)
@@ -194,14 +196,23 @@ function ControlWeaponStart()
 	if ( FakeWeapon.AmmoType == None || FakeWeapon.AmmoType.AmmoAmount <= 0)
 		FakeWeapon.GiveAmmo( cControler );
 
-	if (cControler.Weapon == None)
+	if (cControler.Weapon != none)
 	{
-		cControler.SwitchToBestWeapon();
+		B227_LastControllerWeaponClass = cControler.Weapon.Class;
+		if (cControler.Weapon.PutDown())
+			cControler.PendingWeapon = FakeWeapon;
+		else
+		{
+			B227_LastControllerWeaponClass = none;
+			ResetVarsAndEnd();
+			return;
+		}
 	}
 	else
 	{
+		B227_LastControllerWeaponClass = none;
 		cControler.PendingWeapon = FakeWeapon;
-		cControler.Weapon.PutDown();
+		cControler.ChangedWeapon();
 	}
 
 	// if the tActor is firing stop firing
@@ -214,20 +225,18 @@ function ControlWeaponStart()
 		PlayerPawn(cControler).EndZoom();
 }
 
-simulated function ControlWeaponEnd()
+function ControlWeaponEnd()
 {
 	if (cControler == None)
 	{
 		if (FakeWeapon != None)
 			FakeWeapon.Destroy();
+		FakeWeapon = none;
+		B227_LastControllerWeaponClass = none;
 		return;
 	}
 	if (cControler.Health <= 0)
 	{
-		if (cControler.Weapon != None)
-			cControler.Weapon = None;
-		if (cControler.PendingWeapon != None)
-			cControler.PendingWeapon = None;
 		Instigator = None;
 		B227_DeleteFakeWeapon(cControler);
 		return;
@@ -412,7 +421,7 @@ state ActivateCannon
 
 		Disable('Tick');
 		bShoot = True;
-		PlayActivate();
+		//-PlayActivate();
 		SetTimer(SampleRate,True);
 		RotationRate.Yaw = TrackingRate;
 //		SetPhysics(PHYS_Rotating);
@@ -426,8 +435,12 @@ state ActivateCannon
 
 		ControlWeaponStart();
 
-		if ( cControler.bIsPlayer && !bMessageSend )
+		if (cControler != none &&
+			cControler.bIsPlayer &&
+			FakeWeapon != none &&
+			!bMessageSend)
 		{
+			PlayActivate();
 			bMessageSend = True;
 			if ( ActivateMessageClass == None )
 				cControler.ClientMessage( ActivateMessage, 'Pickup' );
@@ -736,9 +749,17 @@ ignores Trigger, Untrigger;
 function B227_DeleteFakeWeapon(Pawn WeaponOwner)
 {
 	local Actor Ammo;
+	local bool bSwitchToLastWeapon;
 
 	if (FakeWeapon == none)
 		return;
+
+	bSwitchToLastWeapon =
+		WeaponOwner != none &&
+		!WeaponOwner.bDeleteMe &&
+		WeaponOwner.Health >= 0 &&
+		(WeaponOwner.Weapon == FakeWeapon || WeaponOwner.PendingWeapon == FakeWeapon);
+
 	if (FakeWeapon.AmmoName != none && WeaponOwner != none)
 	{
 		// B227 note: mods may allow ammo to be owned by a dead player with cleared inventory list
@@ -746,10 +767,27 @@ function B227_DeleteFakeWeapon(Pawn WeaponOwner)
 			if (Ammo.Class == FakeWeapon.AmmoName)
 				Ammo.Destroy();
 	}
+
+	if (WeaponOwner.PendingWeapon == FakeWeapon)
+		WeaponOwner.PendingWeapon = none;
+
 	FakeWeapon.Destroy();
 	FakeWeapon = none;
-	if (WeaponOwner != none)
-		WeaponOwner.SwitchToBestWeapon();
+
+	if (bSwitchToLastWeapon)
+	{
+		if (B227_LastControllerWeaponClass != none && PlayerPawn(WeaponOwner) != none)
+		{
+			PlayerPawn(WeaponOwner).GetWeapon(B227_LastControllerWeaponClass);
+			if (WeaponOwner.PendingWeapon != none && WeaponOwner.Weapon == none) // fix for 227i
+				WeaponOwner.ChangedWeapon();
+		}
+
+		if (WeaponOwner.Weapon == none)
+			WeaponOwner.SwitchToBestWeapon();
+	}
+
+	B227_LastControllerWeaponClass = none;
 }
 
 //	 RemoteRole=Dump_Proxy
