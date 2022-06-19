@@ -37,6 +37,9 @@ function PostBeginPlay()
 		B227_SpawnRelic(Relics[i].RelicClass);
 
 	SetTimer(5.0, True);
+
+	if (Level.NetMode != NM_Standalone)
+		AddToPackagesMap(string(Class.Outer.Name));
 }
 
 event Timer()

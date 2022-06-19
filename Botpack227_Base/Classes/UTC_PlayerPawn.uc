@@ -13,6 +13,8 @@ var SavedMove PendingMove;
 
 // NOTE: Ported code should use bPressedJump instead of bJumpStatus (according to the meaning of ServerMove's NewbPressedJump)
 
+var float B227_LastAdminLoginTimestamp;
+
 replication
 {
 	reliable if (Role == ROLE_Authority)
@@ -23,6 +25,8 @@ replication
 		ReceiveLocalizedMessage,
 		B227_ReceiveLocalizedMessage;
 	reliable if (Role < ROLE_Authority)
+		UTF_AdminLogin,
+		UTF_AdminLogout,
 		Mutate,
 		B227_GetWeapon;
 }
@@ -257,6 +261,18 @@ exec function Speech(int Type, int Index, int Callsign)
 		V.PlayerSpeech(Type, Index, Callsign);
 		V.Destroy();
 	}
+}
+
+exec function UTF_AdminLogin(string Password)
+{
+	if (UTC_GameInfo(Level.Game) != none)
+		UTC_GameInfo(Level.Game).AdminLogin(self, Password);
+}
+
+exec function UTF_AdminLogout()
+{
+	if (UTC_GameInfo(Level.Game) != none)
+		UTC_GameInfo(Level.Game).AdminLogout(self);
 }
 
 exec function Mutate(string MutateString)

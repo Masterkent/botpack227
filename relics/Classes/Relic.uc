@@ -26,6 +26,9 @@ function PostBeginPlay()
 
 	SpawnRelic(0);
 	SetTimer(5.0, True);
+
+	if (Level.NetMode != NM_Standalone)
+		AddToPackagesMap(string(Class.Outer.Name));
 }
 
 function SpawnRelic(int RecurseCount)

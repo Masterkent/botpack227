@@ -36,6 +36,62 @@ function InitGameReplicationInfo()
 	}
 }
 
+function AdminLogin(UTC_PlayerPawn P, string Password)
+{
+	local string AdminPassword;
+	local string LoginMessage;
+
+	if (P == none || P.PlayerReplicationInfo == none)
+		return;
+
+	if (P.B227_LastAdminLoginTimestamp > 0 && Level.TimeSeconds - P.B227_LastAdminLoginTimestamp < 1)
+	{
+		P.ClientMessage("You couldn't log in, because not enough time passed since the last login attempt.");
+		return;
+	}
+
+	AdminPassword = ConsoleCommand("get Engine.GameInfo AdminPassword");
+	if (AdminPassword == "")
+	{
+		P.ClientMessage("Admin password is not available on this server.");
+		return;
+	}
+
+	if (Password == AdminPassword)
+	{
+		P.bAdmin = True;
+		if (B227_PRI(P) != none)
+			B227_PRI(P).bAdmin = P.bAdmin;
+		LoginMessage = P.PlayerReplicationInfo.PlayerName @ "became a server administrator.";
+		Log(LoginMessage);
+		BroadcastMessage(LoginMessage);
+	}
+	else
+	{
+		P.ClientMessage("Invalid password");
+		P.B227_LastAdminLoginTimestamp = Level.TimeSeconds;
+	}
+}
+
+function AdminLogout(UTC_PlayerPawn P)
+{
+	local string LogoutMessage;
+
+	if (P.bAdmin)
+	{
+		P.bAdmin = False;
+		if (B227_PRI(P) != none)
+			B227_PRI(P).bAdmin = P.bAdmin;
+		if ( P.ReducedDamageType == 'All' )
+			P.ReducedDamageType = '';
+		if (P.IsInState('CheatFlying'))
+			P.StartWalk();
+		LogoutMessage = P.PlayerReplicationInfo.PlayerName @ "gave up administrator abilities.";
+		Log(LogoutMessage);
+		BroadcastMessage(LogoutMessage);
+	}
+}
+
 function string KillMessage(name damageType, pawn Other)
 {
 	return UTF_KillMessage(damageType, Other);
@@ -334,6 +390,11 @@ function EndGame(string Reason)
 function UTC_GameReplicationInfo B227_GRI()
 {
 	return UTC_GameReplicationInfo(GameReplicationInfo);
+}
+
+function UTC_PlayerReplicationInfo B227_PRI(Pawn P)
+{
+	return UTC_PlayerReplicationInfo(P.PlayerReplicationInfo);
 }
 
 function string B227_ZoneDeathMessage(Pawn Victim)

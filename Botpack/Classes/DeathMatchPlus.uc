@@ -483,7 +483,7 @@ function Killed(pawn killer, pawn Other, name damageType)
 	} 
 
 	bAutoTaunt = ((TournamentPlayer(Killer) != None) && TournamentPlayer(Killer).bAutoTaunt);
-	if ( ((Bot(Killer) != None) || bAutoTaunt)
+	if ( ((Bot(Killer) != None && !class'TournamentPlayer'.default.bNoAutoTaunts) || bAutoTaunt)
 		&& (Killer != Other) && (DamageType != 'gibbed') && (Killer.Health > 0)
 		&& Killer.PlayerReplicationInfo != none
 		&& (Level.TimeSeconds - LastTauntTime > 3) )
