@@ -27,13 +27,7 @@ state Activated
 		//-Pawn(Owner).AmbientSound = sound'SpeedWind';
 		//-Pawn(Owner).SoundRadius = 64;
 
-		ShellEffect = Spawn(ShellType, Owner,,Owner.Location, Owner.Rotation);
-		if (ShellEffect != none)
-		{
-			ShellEffect.AmbientSound = sound'SpeedWind';
-			ShellEffect.SoundRadius = 64;
-			ShellEffect.SoundVolume = Pawn(Owner).default.SoundVolume;
-		}
+		ShellEffect = Spawn(ShellType, Owner);
 	}
 
 	function EndState()
