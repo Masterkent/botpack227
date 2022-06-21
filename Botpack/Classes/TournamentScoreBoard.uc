@@ -252,7 +252,7 @@ function SortScores(int N)
 			else if ((Ordered[J].Score == Ordered[Max].Score) && (Ordered[J].Deaths < Ordered[Max].Deaths))
 				Max = J;
 			else if ((Ordered[J].Score == Ordered[Max].Score) && (Ordered[J].Deaths == Ordered[Max].Deaths) &&
-					 (Ordered[J].PlayerID < Ordered[Max].Score))
+					 (Ordered[J].PlayerID < Ordered[Max].PlayerID))
 				Max = J;
 		}
 

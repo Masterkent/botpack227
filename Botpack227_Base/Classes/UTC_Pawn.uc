@@ -222,6 +222,11 @@ function bool B227_EnemyNotVisible()
 	return false;
 }
 
+static function UTC_PlayerReplicationInfo B227_GetPRI(Pawn this)
+{
+	return UTC_PlayerReplicationInfo(this.PlayerReplicationInfo);
+}
+
 defaultproperties
 {
 	PlayerReplicationInfoClass=Class'Botpack227_Base.UTC_PlayerReplicationInfo'

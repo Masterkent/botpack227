@@ -35,7 +35,7 @@ static function string GetString(
 		{
 			if (RelatedPRI_2.PlayerName != "")
 			{
-				if ( RelatedPRI_2.bIsFemale )
+				if (class'UTC_PlayerReplicationInfo'.static.B227_IsFemale(RelatedPRI_2))
 					return RelatedPRI_2.PlayerName@Default.EndFemaleSpree;
 				else
 					return RelatedPRI_2.PlayerName@Default.EndSelfSpree;

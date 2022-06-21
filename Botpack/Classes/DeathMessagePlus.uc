@@ -45,7 +45,7 @@ static function string GetString(
 		case 1: // Suicided
 			if (RelatedPRI_1 == None)
 				return "";
-			if (RelatedPRI_1.bIsFemale)
+			if (class'UTC_PlayerReplicationInfo'.static.B227_IsFemale(RelatedPRI_1))
 				return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.FemaleSuicideMessage;
 			else
 				return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.MaleSuicideMessage;

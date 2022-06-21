@@ -36,6 +36,23 @@ function InitGameReplicationInfo()
 	}
 }
 
+event PlayerPawn Login
+(
+	string Portal,
+	string Options,
+	out string Error,
+	class<PlayerPawn> SpawnClass)
+{
+	local PlayerPawn NewPlayer;
+
+	NewPlayer = super.Login(Portal, Options, Error, SpawnClass);
+
+	if (NewPlayer != none && class'UTC_Pawn'.static.B227_GetPRI(NewPlayer) != none)
+		class'UTC_Pawn'.static.B227_GetPRI(NewPlayer).PlayerID = NewPlayer.PlayerReplicationInfo.PlayerID;
+
+	return NewPlayer;
+}
+
 function AdminLogin(UTC_PlayerPawn P, string Password)
 {
 	local string AdminPassword;

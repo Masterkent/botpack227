@@ -61,6 +61,8 @@ var class<CriticalEventPlus> TimeMessageClass;
 
 var class<Actor> BossRef;
 
+var globalconfig bool B227_bUnrealBeepSound;
+
 var transient B227_SpeechMenu B227_SpeechMenu;
 
 replication
@@ -477,7 +479,17 @@ function PlayDyingSound()
 
 simulated function PlayBeepSound()
 {
-	PlaySound(sound'NewBeep',SLOT_Interface, 2.0);
+	local sound BeepSound;
+
+	if (B227_bUnrealBeepSound)
+		BeepSound = sound'Beep';
+	else
+		BeepSound = sound'NewBeep';
+
+	if (ViewTarget != none)
+		ViewTarget.PlaySound(BeepSound, SLOT_Interface, 2.0);
+	else
+		PlaySound(BeepSound, SLOT_Interface, 2.0);
 }
 
 function PlayChatting()

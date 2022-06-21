@@ -857,7 +857,7 @@ function Bot SpawnBot(out NavigationPoint StartSpot)
 		bNoviceMode = true;
 	}
 	BotN = BotConfig.ChooseBotInfo();
-	
+
 	// Find a start spot.
 	StartSpot = UTF_FindPlayerStart(None, 255);
 	if( StartSpot == None )
@@ -883,8 +883,13 @@ function Bot SpawnBot(out NavigationPoint StartSpot)
 
 	if ( NewBot != None )
 	{
+		if (class'UTC_Pawn'.static.B227_GetPRI(NewBot) == none)
+		{
+			NewBot.Destroy();
+			return none;
+		}
 		// Set the player's ID.
-		NewBot.PlayerReplicationInfo.PlayerID = CurrentID++;
+		class'UTC_Pawn'.static.B227_GetPRI(NewBot).B227_SetPlayerID(CurrentID++);
 
 		NewBot.PlayerReplicationInfo.Team = BotConfig.GetBotTeam(BotN);
 		BotConfig.CHIndividualize(NewBot, BotN, NumBots);
