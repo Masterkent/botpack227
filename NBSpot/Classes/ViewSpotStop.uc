@@ -19,12 +19,15 @@ var float shakevert; // max vertical shake magnitude
 var float maxshake;
 var float verttimer;
 
+var name B227_LastPlayerState;
+
 function StopPlayer(Pawn pPawn)
 {
 	if (pPawn.Physics != PHYS_None)
 	{
 		pPawn.Velocity = Vect(0,0,0);
 		pPawn.SetPhysics(PHYS_Falling);
+		B227_LastPlayerState = pPawn.GetStateName();
 		pPawn.GotoState('');
 	}
 }
@@ -33,9 +36,11 @@ function SetViewOfPlayer()
 {
 	if (oInst.ViewTarget != Self)
 	{
+		if (oInst.ViewTarget != none)
+			oInst.EndZoom();
 		oInst.ViewTarget = Self;
 		oFOV = oInst.DesiredFOV;
-		oInst.DesiredFOV = ViewFOV;
+		oInst.DesiredFOV = B227_ScaleFOV(ViewFOV, oInst.MainFOV);
 		oInst.bBehindView = bSwitchToBehindView;
 		if (bStopPlayer)
 			StopPlayer(oInst);
@@ -50,7 +55,7 @@ function ResetViewOfPlayer()
 		oInst.bBehindView = False;
 		oInst.ViewTarget = None;
 		if (bStopPlayer)
-			oInst.GotoState(oInst.PlayerReStartState);
+			oInst.GotoState(B227_LastPlayerState);
 	}
 	oInst = None;
 }
@@ -123,6 +128,11 @@ function ShakeView( float shaketime, float RollMag, float vertmag)
 	shake.Y = 100 * shaketime;
 	shake.Z = 100 * vertmag;
 	ClientShake(shake);
+}
+
+static function float B227_ScaleFOV(float FOV, float MainFOV)
+{
+	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * Tan(FClamp(MainFOV, 90, 179) * Pi / 360)) * 360 / Pi;
 }
 
 defaultproperties

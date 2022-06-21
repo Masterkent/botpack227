@@ -23,9 +23,11 @@ function SetViewOfPlayer()
 {
 	if (oInst.ViewTarget != Self)
 	{
+		if (oInst.ViewTarget != none)
+			oInst.EndZoom();
 		oInst.ViewTarget = Self;
 		oFOV = oInst.DesiredFOV;
-		oInst.DesiredFOV = ViewFOV;
+		oInst.DesiredFOV = B227_ScaleFOV(ViewFOV, oInst.MainFOV);
 		oInst.bBehindView = bSwitchToBehindView;
 	}
 }
@@ -111,6 +113,11 @@ function ShakeView( float shaketime, float RollMag, float vertmag)
 	shake.Y = 100 * shaketime;
 	shake.Z = 100 * vertmag;
 	ClientShake(shake);
+}
+
+static function float B227_ScaleFOV(float FOV, float MainFOV)
+{
+	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * Tan(FClamp(MainFOV, 90, 179) * Pi / 360)) * 360 / Pi;
 }
 
 defaultproperties

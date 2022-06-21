@@ -17,12 +17,12 @@ function SetViewOfPlayer()
 {
   if (oInst.ViewTarget != Self)
   {
-    if (NonBuggyViewSpot(oInst.ViewTarget) != none)
-      NonBuggyViewSpot(oInst.ViewTarget).ResetViewOfPlayer();
+    if (oInst.ViewTarget != none)
+      oInst.EndZoom();
     oInst.ViewTarget = Self;
     oFOV = oInst.DesiredFOV;
     if (Level.NetMode == NM_Standalone)
-      oInst.DesiredFOV = ViewFOV;
+      oInst.DesiredFOV = B227_ScaleFOV(ViewFOV, oInst.MainFOV);
     oInst.bBehindView = bSwitchToBehindView;
   }
 }
@@ -82,6 +82,11 @@ function UnTrigger( Actor other, Pawn EventInstigator )
 
 function PostBeginPlay(){
   Disable('Tick');
+}
+
+static function float B227_ScaleFOV(float FOV, float MainFOV)
+{
+	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * Tan(FClamp(MainFOV, 90, 179) * Pi / 360)) * 360 / Pi;
 }
 
 defaultproperties

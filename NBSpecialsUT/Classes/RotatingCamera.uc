@@ -42,9 +42,11 @@ function SetViewOfPlayer()
 {
 	if (oInst.ViewTarget != Self)
 	{
+		if (oInst.ViewTarget != none)
+			oInst.EndZoom();
 		oInst.ViewTarget = Self;
 		oFOV = oInst.DesiredFOV;
-		oInst.DesiredFOV = CameraFOV;
+		oInst.DesiredFOV = B227_ScaleFOV(CameraFOV, oInst.MainFOV);
 		oInst.bBehindView = False;
 	}
 }
@@ -114,6 +116,11 @@ Begin:
 	Disable('Tick');
 	bActive = False;
 	oInst = None;
+}
+
+static function float B227_ScaleFOV(float FOV, float MainFOV)
+{
+	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * Tan(FClamp(MainFOV, 90, 179) * Pi / 360)) * 360 / Pi;
 }
 
 defaultproperties
