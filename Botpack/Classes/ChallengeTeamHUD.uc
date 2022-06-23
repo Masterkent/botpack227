@@ -42,7 +42,7 @@ simulated function DrawTeam(Canvas Canvas, TeamInfo TI)
 
 	if ( (TI != None) && (TI.Size > 0) )
 	{
-		Canvas.Font = MyFonts.GetHugeFont( Canvas.ClipX );
+		Canvas.Font = MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(Canvas));
 		Canvas.DrawColor = TeamColor[TI.TeamIndex];
 		Canvas.SetPos(Canvas.ClipX - 64 * Scale, Canvas.ClipY - (336 + 128 * TI.TeamIndex) * Scale);
 		Canvas.DrawIcon(TeamIcon[TI.TeamIndex], Scale);
@@ -138,7 +138,7 @@ simulated function bool DrawIdentifyInfo(canvas Canvas)
 	if( PawnOwner.PlayerReplicationInfo.Team == IdentifyTarget.Team )
 	{
 		P = Pawn(IdentifyTarget.Owner);
-		Canvas.Font = MyFonts.GetSmallFont(Canvas.ClipX);
+		Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 		if ( P != None )
 			DrawTwoColorID(Canvas,IdentifyHealth,string(P.Health), (Canvas.ClipY - 256 * Scale) + 1.5 * YL);
 	}

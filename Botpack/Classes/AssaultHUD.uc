@@ -87,7 +87,7 @@ simulated function bool SpecialIdentify(Canvas Canvas, Actor Other )
 	if ( !Other.IsA('FortStandard') )
 		return false;
 
-	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledScreenWidth(Canvas));
 	Canvas.DrawColor = B227_MultiplyColor(RedColor, IdentifyFadeTime * 0.333);
 	Canvas.StrLen(IdentifyAssault, XL, YL);
 	Canvas.SetPos(Canvas.ClipX/2 - XL/2, Canvas.ClipY - 74);

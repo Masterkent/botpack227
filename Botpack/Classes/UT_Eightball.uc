@@ -446,15 +446,20 @@ state NormalFire
 
 	function Tick( float DeltaTime )
 	{
-		if ( (PlayerPawn(Owner) == None) 
-			&& ((Pawn(Owner).MoveTarget != Pawn(Owner).Target) 
+		if (Pawn(Owner) != none && PlayerPawn(Owner) == None)
+		{
+			if (Pawn(Owner).Target == none
+				||(Pawn(Owner).MoveTarget != Pawn(Owner).Target) 
 				|| (LockedTarget != None)
 				|| (Pawn(Owner).Enemy == None)
 				|| ( Mover(Owner.Base) != None )
 				|| ((Owner.Physics == PHYS_Falling) && (Owner.Velocity.Z < 5))
 				|| (VSize(Owner.Location - Pawn(Owner).Target.Location) < 400)
-				|| !Pawn(Owner).CheckFutureSight(0.15)) )
-			Pawn(Owner).bFire = 0;
+				|| !Pawn(Owner).CheckFutureSight(0.15))
+			{
+				Pawn(Owner).bFire = 0;
+			}
+		}
 
 		if( pawn(Owner).bFire==0 || RocketsLoaded > 5)  // If Fire button down, load up another
 			GoToState('FireRockets');

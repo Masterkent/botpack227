@@ -67,9 +67,9 @@ function PrintActionMessage( Canvas C, string BigMessage )
 	FC = Class<FontInfo>(DynamicLoadObject(class'ChallengeHUD'.default.FontInfoClass, class'Class'));
 
 	if ( Len(BigMessage) > 10 )
-		C.Font = FC.Static.GetStaticBigFont(C.ClipX);
+		C.Font = FC.Static.GetStaticBigFont(class'UTC_HUD'.static.B227_ScaledFontScreenWidth(C));
 	else
-		C.Font = FC.Static.GetStaticHugeFont(C.ClipX);
+		C.Font = FC.Static.GetStaticHugeFont(class'UTC_HUD'.static.B227_ScaledFontScreenWidth(C));
 	C.bCenter = false;
 	C.StrLen( BigMessage, XL, YL );
 	C.SetPos(FrameX/2 - XL/2 + 1, (FrameY/3)*2 - YL/2 + 1);

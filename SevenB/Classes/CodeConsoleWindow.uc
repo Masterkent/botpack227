@@ -14,10 +14,14 @@ function Paint(Canvas Canvas, float X, float Y)
 {
   local float tempx, tempy;
   local byte oldstyle;
+  local float XL, YL;
+  local float Scale;
+
   if (root.buwindowactive||!bAcceptsFocus)
     return;
+  Canvas.Reset();
   Canvas.bCenter = false;
-  Canvas.Font = Canvas.MedFont;
+  Canvas.Font = class'FontInfo'.static.GetStaticSmallFont(class'UTC_HUD'.static.B227_ScaledFontScreenWidth(Canvas));
   Canvas.SetClip(Root.RealWidth,Root.RealHeight);
   TempX = Canvas.CurX;
   TempY = Canvas.CurY;
@@ -26,16 +30,21 @@ function Paint(Canvas Canvas, float X, float Y)
   Canvas.DrawColor.g = 255;
   Canvas.DrawColor.r = 255;
   Canvas.DrawColor.b = 255;
-  Canvas.SetPos(Root.RealWidth/2-128, Root.RealHeight/2-68);
-  Canvas.DrawIcon(texture'TranslatorHUD3', 1.0);
-  Canvas.SetPos(Root.RealWidth/2-110,Root.RealHeight/2-52);
+  Scale = FMax(1.0, FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3) / 640);
+  Canvas.SetPos(Root.RealWidth/2 - 128 * Scale, Root.RealHeight/2 - 68 * Scale);
+  Canvas.DrawIcon(texture'TranslatorHUD3', Scale);
+  Canvas.SetPos(Root.RealWidth/2 - 110 * Scale, Root.RealHeight/2 - 52 * Scale);
   Canvas.Style = 1;
+  Canvas.DrawColor.R = 0;
+  Canvas.DrawColor.B = 0;
   Canvas.DrawText(CC.SecurityPrompt, False);
-  Canvas.SetPos(Root.RealWidth/2-110,Root.RealHeight/2-42);
+  Canvas.StrLen("T", XL, YL);
+  Canvas.SetPos(Root.RealWidth/2 - 110 * Scale, Root.RealHeight/2 - 52 * Scale + YL);
   Canvas.DrawText("(> "$TypedCode$"_", False);
   Canvas.CurX = TempX;
   Canvas.CurY = TempY;
   Canvas.Style=OldStyle;
+  Canvas.Reset();
 }
 
 function KeyDown( int Key, float MouseX, float MouseY )

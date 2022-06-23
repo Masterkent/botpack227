@@ -11,7 +11,7 @@ function DrawServerStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL, YL );
 
 	C.SetPos( (C.ClipX / 8)*5, (C.ClipY / 8)*3 );
@@ -21,7 +21,7 @@ function DrawServerStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 128;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.SetPos( (C.ClipX / 8)*5, (C.ClipY / 8)*3 + (YL+1) );
@@ -52,7 +52,7 @@ function DrawGameStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL, YL );
 
 	C.SetPos( (C.ClipX / 8), (C.ClipY / 8)*3 );
@@ -62,7 +62,7 @@ function DrawGameStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 128;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.SetPos( (C.ClipX / 8), (C.ClipY / 8)*3 + (YL+1) );

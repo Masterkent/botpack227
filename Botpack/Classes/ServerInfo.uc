@@ -63,7 +63,7 @@ function DrawTitle( canvas C )
 {
 	local float XL, YL;
 
-	C.Font = MyFonts.GetHugeFont( C.ClipX );
+	C.Font = MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(C));
 	C.DrawColor.R = 9;
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
@@ -81,7 +81,7 @@ function DrawContactInfo( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL, YL );
 
 	C.SetPos( C.ClipX / 8, (C.ClipY / 8) );
@@ -91,7 +91,7 @@ function DrawContactInfo( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 128;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.SetPos( C.ClipX / 8, (C.ClipY / 8) + (YL+1) );
@@ -131,7 +131,7 @@ function DrawMOTD( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL, YL );
 
 	C.SetPos( (C.ClipX / 8)*5, C.ClipY / 8 );
@@ -141,7 +141,7 @@ function DrawMOTD( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 255;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.StrLen( GRI.MOTDLine1, XL2, YL2 );
@@ -170,7 +170,7 @@ function DrawServerStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL, YL );
 
 	C.SetPos( (C.ClipX / 8)*5, (C.ClipY / 8)*3 );
@@ -180,7 +180,7 @@ function DrawServerStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 128;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.SetPos( (C.ClipX / 8)*5, (C.ClipY / 8)*3 + (YL+1) );
@@ -217,7 +217,7 @@ function DrawGameStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL, YL );
 
 	C.SetPos( (C.ClipX / 8), (C.ClipY / 8)*3 );
@@ -227,7 +227,7 @@ function DrawGameStats( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 128;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.SetPos( (C.ClipX / 8), (C.ClipY / 8)*3 + (YL+1) );
@@ -266,7 +266,7 @@ function DrawLeaderBoard( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( TopPlayersText, XL, YL );
 
 	C.SetPos( (C.ClipX - XL) / 2, (C.ClipY / 8)*5 );
@@ -276,7 +276,7 @@ function DrawLeaderBoard( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 128;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 
 	C.SetPos( C.ClipX / 8, (C.ClipY / 8)*5 + (YL+1) );
 	C.DrawText( BestNameText, True);
@@ -322,7 +322,7 @@ function DrawShortContactInfo( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( ContactInfoText, XL, YL );
 
 	C.SetPos( (C.ClipX-XL)/2, (C.ClipY / 4) );
@@ -332,7 +332,7 @@ function DrawShortContactInfo( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 128;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.SetPos( C.ClipX / 4, (C.ClipY / 4) + (YL+1) );
@@ -372,7 +372,7 @@ function DrawShortMOTD( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 151;
 	C.DrawColor.B = 247;
 
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( MOTD, XL, YL );
 
 	C.SetPos( (C.ClipX-XL)/2, C.ClipY/2 );
@@ -382,7 +382,7 @@ function DrawShortMOTD( canvas C, TournamentGameReplicationInfo GRI )
 	C.DrawColor.G = 255;
 	C.DrawColor.B = 255;
 
-	C.Font = MyFonts.GetSmallFont( C.ClipX );
+	C.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen( "TEMP", XL2, YL2 );
 
 	C.StrLen( GRI.MOTDLine1, XL2, YL2 );
@@ -400,6 +400,11 @@ function DrawShortMOTD( canvas C, TournamentGameReplicationInfo GRI )
 	C.StrLen( GRI.MOTDLine4, XL2, YL2 );
 	C.SetPos( (C.ClipX/8)*3, (C.ClipY/2) + (YL+1) + (YL2+1)*3 );
 	C.DrawText( GRI.MOTDLine4, True );
+}
+
+static function float B227_ScaledFontScreenWidth(Canvas Canvas)
+{
+	return class'UTC_HUD'.static.B227_ScaledFontScreenWidth(Canvas);
 }
 
 defaultproperties

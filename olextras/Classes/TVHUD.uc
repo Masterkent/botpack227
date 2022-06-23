@@ -211,7 +211,7 @@ simulated function DrawONPIconValue(Canvas Canvas, int Amount)
   TempX = Canvas.CurX;
   TempY = Canvas.CurY;
   Amount++;
-  Canvas.Font = MyFonts.GetSmallFont(Canvas.ClipX);
+  Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
   Canvas.StrLen(Amount,Xl,Yl);
   Canvas.SetPos(fmax(Canvas.CurX-Xl+60*scale,Canvas.CurX),Canvas.Cury-M4-Yl+M64);
   Canvas.DrawText(Amount,False);
@@ -260,7 +260,7 @@ simulated function DrawWeaponIcon(Canvas Canvas, texture Icon, int Pos, byte Mod
     Canvas.DrawRect(Icon,M128,M64);
    Pos=Pos%10;
    Canvas.Style=NormalStyle;
-   Canvas.Font=MyFonts.GetMediumFont(Canvas.ClipX);
+   Canvas.Font=MyFonts.GetMediumFont(B227_ScaledFontScreenWidth(Canvas));
    Canvas.SetPos(Xl+M9,Yl+M5);
    if (bCannotUse)
     Canvas.DrawColor=FaceColor;
@@ -489,7 +489,7 @@ local int loops;
     DrawWeaponIcon(Canvas,SSL.statusIcon,4,byte(bSSL==5),GetAmmo(SSL),(level.netmode!=nm_client&&SSL==PawnOwner.PendingWeapon));
   if (ArmorAmount>0){
     Canvas.SetPos(ArmorOffset,0);
-    Canvas.Font=MyFonts.GetHugeFont(Canvas.ClipX);
+    Canvas.Font=MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(Canvas));
     Canvas.StrLen(ArmorAmount,Xl,Yl);
     ArmorOffset+=Xl;
     Canvas.CurY+=(M64-Yl)/2;
@@ -504,7 +504,7 @@ simulated function DrawHealth(Canvas Canvas, int X, int Y)
   local float Xf, Yf;
   DrawONPIcon (Canvas,Texture'HealthCross',0
     ,canvas.clipy-M128,pawnowner.health>pawnowner.default.health);
-  Canvas.Font=Myfonts.GetBigFont(Canvas.ClipX);
+  Canvas.Font=Myfonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
   Canvas.StrLen(PawnOwner.Health,Xf,Yf);
   Canvas.SetPos(M64-Xf/2,
     Canvas.clipy-M64-Yf/2);
@@ -525,7 +525,7 @@ simulated function DrawAmmo(Canvas Canvas, int X, int Y)
    ,canvas.clipy-M128);
   if (PawnOwner.Weapon.AmmoType==none)
     return;
-  Canvas.Font=Myfonts.GetBigFont(Canvas.ClipX);
+  Canvas.Font=Myfonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
   Canvas.StrLen(PawnOwner.Weapon.AmmoType.AmmoAmount,Xf,Yf);
   Canvas.SetPos(Canvas.clipx-M64-Xf/2,
    Canvas.clipy-M64-Yf/2);
@@ -545,7 +545,7 @@ function DrawFollowers (Canvas Canvas)
   Canvas.Style=1;
   if (ArmorOffset>0)
     Y=M64;
-  Canvas.Font=Myfonts.GetSmallFont(Canvas.ClipX); //change?
+  Canvas.Font=Myfonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas)); //change?
   //draw info:
   for (i=0;i<8;i++){
     if (tvplayer(playerowner).FollowerInfo[i]=="")
@@ -745,7 +745,7 @@ local string tmp;
     if(TvTranslator.bActive )
     {
       Canvas.bCenter = false;
-      Canvas.Font = MyFonts.GetSmallFont(Canvas.ClipX);
+      Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
       TempX = Canvas.ClipX;
       TempY = Canvas.ClipY;
       CurrentMessage = TvTranslator.GetMessage();
@@ -819,7 +819,7 @@ simulated function DrawPickIcon(Canvas Canvas, float X, float Y, texture Icon, s
   DrawPipeIcon(Canvas,Icon,M64,M64);
   if (text=="")
     return;
-  Canvas.Font=Myfonts.GetSmallestFont(Canvas.ClipX);
+  Canvas.Font=Myfonts.GetSmallestFont(B227_ScaledFontScreenWidth(Canvas));
   Canvas.StrLen(text,Xl,Yl);
   lim=60*scale;
   if (Xl>lim){   //scale txt down
@@ -1080,7 +1080,7 @@ simulated function DrawMOTD(Canvas Canvas)
     super.DrawMOTD(canvas);
     return;
   }
-  Canvas.Font = MyFonts.GetHugeFont( Canvas.ClipX );          //use botpack fontinfo's
+  Canvas.Font = MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(Canvas));          //use botpack fontinfo's
 
 //  if ((MOTDFadeOutTime<=5.25)&&(MOTDFadeOutTime>0)){ //color stuff.....
   if ((MOTDFadeOutTime<0.95)&&(MOTDFadeOutTime>0)){
@@ -1112,7 +1112,7 @@ simulated function DrawMOTD(Canvas Canvas)
       Canvas.StrLen("testy", XL, YL);
       Canvas.SetPos(0.0, Canvas.ClipY/2 - 4*(YL/2));
       Canvas.DrawText(Level.Title, true);
-      Canvas.Font = MyFonts.GetBigFont( Canvas.ClipX );
+      Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
       Canvas.StrLen("testy", XL, YL);
       Canvas.SetPos(0.0, Canvas.Clipy/2 - (YL/2));
       Canvas.DrawText("By: "$Level.Author, true);
@@ -1151,7 +1151,7 @@ simulated function DrawIdentifyInfo(canvas Canvas, float PosX, float PosY)
   if (!TraceIdentify(Canvas)||(bSSLRaised&&currentpickup.lifetime>level.timeseconds))
     return;
 
-  Canvas.Font = MyFonts.GetSmallFont(Canvas.ClipX);
+  Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
   Canvas.Style = 3;
   if (Follower(identifytarget)!=none)
      IdentifyTarget.MenuName=Follower(IdentifyTarget).MyName;
@@ -1479,7 +1479,7 @@ simulated function drawunrealmessages(canvas canvas){
   Console = PlayerOwner.Player.Console;
   if (Console==none)
     return;
-  Canvas.Font = MyFonts.GetSmallFont(Canvas.ClipX);
+  Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 
   if ( !Console.Viewport.Actor.bShowMenu )
     DrawTypingPrompt(Canvas, Console);
@@ -1600,7 +1600,7 @@ simulated function DrawTypingPrompt( canvas Canvas, console Console )
 
   if ( Console.bTyping )
   {
-    Canvas.Font = MyFonts.GetSmallFont(Canvas.ClipX);
+    Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
     Canvas.DrawColor = default.GoldColor;
     TypingPrompt = "(> "$Console.TypedStr$"_";
     Canvas.StrLen( TypingPrompt, XL, YL );
@@ -1612,7 +1612,7 @@ simulated function DrawTypingPrompt( canvas Canvas, console Console )
 function DrawTalkFace(Canvas Canvas, float YPos)
 {
   local float Xl, Yl;
-  Canvas.Font = MyFonts.GetSmallFont(Canvas.ClipX);
+  Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
   Canvas.StrLen("TEST", XL, YL);
   YPos = FMax(YL*4 + 8, 70);
   facemsgset=Ypos+7+faceareaoffset;

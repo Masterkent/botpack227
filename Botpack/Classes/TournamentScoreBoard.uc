@@ -35,7 +35,7 @@ function DrawHeader( canvas Canvas )
 	Canvas.DrawColor = WhiteColor;
 	GRI = PlayerPawn(Owner).GameReplicationInfo;
 
-	Canvas.Font = MyFonts.GetHugeFont(Canvas.ClipX);
+	Canvas.Font = MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(Canvas));
 
 	Canvas.bCenter = True;
 	Canvas.StrLen("Test", XL, YL);
@@ -186,7 +186,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 		return;
 
 	bLocalPlayer = (PRI == B227_OwnerPRI());
-	Canvas.Font = MyFonts.GetBigFont(Canvas.ClipX);
+	Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 
 	// Draw Name
 	if ( PRI.bAdmin )
@@ -217,7 +217,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 	if ( (Canvas.ClipX > 512) && (Level.NetMode != NM_Standalone) )
 	{
 		Canvas.DrawColor = WhiteColor;
-		Canvas.Font = MyFonts.GetSmallestFont(Canvas.ClipX);
+		Canvas.Font = MyFonts.GetSmallestFont(B227_ScaledFontScreenWidth(Canvas));
 
 		// Draw Time
 		Time = Max(1, (Level.TimeSeconds + B227_OwnerPRI().StartTime - PRI.StartTime)/60);
@@ -292,7 +292,7 @@ function ShowScores( canvas Canvas )
 	SortScores(PlayerCount);
 	
 	CanvasFont = Canvas.Font;
-	Canvas.Font = MyFonts.GetBigFont(Canvas.ClipX);
+	Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 
 	Canvas.SetPos(0, 160.0/768.0 * Canvas.ClipY);
 	DrawCategoryHeaders(Canvas);
@@ -315,7 +315,7 @@ function ShowScores( canvas Canvas )
 	// Trailer
 	if (!B227_bLowRes(Canvas))
 	{
-		Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+		Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 		DrawTrailer(Canvas);
 	}
 	Canvas.DrawColor = WhiteColor;
@@ -335,7 +335,12 @@ function TournamentGameReplicationInfo B227_GRI()
 
 function bool B227_bLowRes(Canvas Canvas)
 {
-	return Canvas.ClipX < 400;
+	return Canvas.ClipX < 400 || Canvas.ClipY < 300;
+}
+
+static function float B227_ScaledFontScreenWidth(Canvas Canvas)
+{
+	return class'UTC_HUD'.static.B227_ScaledFontScreenWidth(Canvas);
 }
 
 defaultproperties

@@ -181,6 +181,11 @@ static function float B227_CrosshairSize(Canvas Canvas, float Divider)
 	return Canvas.SizeX / Divider;
 }
 
+static function float B227_ScaledFontScreenWidth(Canvas Canvas)
+{
+	return FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3);
+}
+
 static function color B227_MultiplyColor(color Color, float Factor)
 {
 	if (Factor < 0)

@@ -32,7 +32,7 @@ function ShowScores( canvas Canvas )
 
     // Display the scoreboard.
     if (OldSkoolBaseHUD(Canvas.viewport.actor.myhud)!=none&&OldSkoolBaseHUD(Canvas.viewport.actor.myhud).myfonts!=none)
-      Canvas.Font = OldSkoolBaseHUD(Canvas.viewport.actor.myhud).myfonts.GetSmallFont(Canvas.ClipX);
+      Canvas.Font = OldSkoolBaseHUD(Canvas.viewport.actor.myhud).myfonts.GetSmallFont(class'UTC_HUD'.static.B227_ScaledFontScreenWidth(Canvas));
     else
       Canvas.Font = Canvas.MedFont;
     Canvas.DrawColor = Red;

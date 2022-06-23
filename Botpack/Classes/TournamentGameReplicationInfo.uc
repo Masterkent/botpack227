@@ -23,7 +23,7 @@ replication
 {
 	reliable if ( Role == ROLE_Authority )
 		Teams, FragLimit, TimeLimit, GoalTeamScore;
-		
+
 	reliable if ( (Role == ROLE_Authority) && bNetInitial )
 		TotalGames, TotalFrags, TotalDeaths, BestPlayers, BestFPHs, BestRecordDate,
 		TotalFlags;

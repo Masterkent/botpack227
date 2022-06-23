@@ -271,7 +271,7 @@ simulated function HUDSetup(canvas canvas)
 	FontSize = Min(3, HUDScale * B227_ScaledScreenWidth(Canvas) / 500);
 	Scale = (HUDScale * B227_ScaledScreenWidth(Canvas)) / 1280.0;
 
-	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 
 	SolidHUDColor = B227_MultiplyColor(FavoriteHUDColor, 15.9);
 	if ( (Opacity == 16) || !Level.bHighDetailMode )
@@ -618,7 +618,7 @@ simulated function DrawGameSynopsis(Canvas Canvas)
 		|| (PlayerCount == 1) )
 		return;
 
-	Canvas.Font = MyFonts.GetBigFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 	Canvas.DrawColor = WhiteColor;
 
 	// Rank String
@@ -803,7 +803,7 @@ simulated function DisplayProgressMessage( canvas Canvas )
 	Canvas.Style = ERenderStyle.STY_Normal;	
 
 	Canvas.bCenter = True;
-	Canvas.Font = MyFonts.GetBigFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 	Canvas.StrLen("TEST", XL, YL);
 	if ( UTIntro(Level.Game) != None )
 		YOffset = 64 * scale + 2 * YL;
@@ -913,10 +913,9 @@ simulated function PostRender( canvas Canvas )
 		return;
 	}
 
-	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 	OldOriginX = Canvas.OrgX;
 	// Master message short queue control loop.
-	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
 	Canvas.StrLen("TEST", XL, YL);
 	Canvas.SetClip(768*Scale - 10, Canvas.ClipY);
 	bDrawFaceArea = false;
@@ -1034,9 +1033,9 @@ simulated function PostRender( canvas Canvas )
 						if ( bResChanged || (LocalMessages[i].XL == 0) )
 						{
 							if ( LocalMessages[i].Message.Static.GetFontSize(LocalMessages[i].Switch) == 1 )
-								LocalMessages[i].StringFont = MyFonts.GetBigFont( Canvas.ClipX );
+								LocalMessages[i].StringFont = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 							else // ==2
-								LocalMessages[i].StringFont = MyFonts.GetHugeFont( Canvas.ClipX );
+								LocalMessages[i].StringFont = MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(Canvas));
 							Canvas.Font = LocalMessages[i].StringFont;
 							Canvas.StrLen(LocalMessages[i].StringMessage, LocalMessages[i].XL, LocalMessages[i].YL);
 							LocalMessages[i].YPos = LocalMessages[i].Message.Static.GetOffset(LocalMessages[i].Switch, LocalMessages[i].YL, Canvas.ClipY);
@@ -1052,9 +1051,9 @@ simulated function PostRender( canvas Canvas )
 					if ( bResChanged || (LocalMessages[i].XL == 0) )
 					{
 						if ( LocalMessages[i].Message.Static.GetFontSize(LocalMessages[i].Switch) == 1 )
-							LocalMessages[i].StringFont = MyFonts.GetBigFont( Canvas.ClipX );
+							LocalMessages[i].StringFont = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 						else // == 2
-							LocalMessages[i].StringFont = MyFonts.GetHugeFont( Canvas.ClipX );
+							LocalMessages[i].StringFont = MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(Canvas));
 						Canvas.Font = LocalMessages[i].StringFont;
 						Canvas.StrLen(LocalMessages[i].StringMessage, LocalMessages[i].XL, LocalMessages[i].YL);
 						LocalMessages[i].YPos = LocalMessages[i].Message.Static.GetOffset(LocalMessages[i].Switch, LocalMessages[i].YL, Canvas.ClipY);
@@ -1080,7 +1079,7 @@ simulated function PostRender( canvas Canvas )
 
 	if ( (PawnOwner != Owner) && PawnOwner.bIsPlayer )
 	{
-		Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+		Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 		Canvas.bCenter = true;
 		Canvas.Style = ERenderStyle.STY_Normal;
 		Canvas.DrawColor = B227_MultiplyColor(CyanColor, TutIconBlink);
@@ -1126,7 +1125,7 @@ simulated function PostRender( canvas Canvas )
 				if ( PawnOwner.PendingWeapon != None )
 				{
 					WeaponNameFade = 1.0;
-					Canvas.Font = MyFonts.GetBigFont( Canvas.ClipX );
+					Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 					Canvas.DrawColor = B227_WeaponNameColor(PawnOwner.PendingWeapon);
 					Canvas.SetPos(Canvas.ClipX - 360 * Scale, Canvas.ClipY - 64 * Scale);
 					Canvas.DrawText(PawnOwner.PendingWeapon.ItemName, False);
@@ -1136,14 +1135,14 @@ simulated function PostRender( canvas Canvas )
 					TournamentPlayer(PawnOwner).PendingWeapon != none)
 				{
 					WeaponNameFade = 1.0;
-					Canvas.Font = MyFonts.GetBigFont( Canvas.ClipX );
+					Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 					Canvas.DrawColor = B227_WeaponNameColor(TournamentPlayer(PawnOwner).PendingWeapon);
 					Canvas.SetPos(Canvas.ClipX - 360 * Scale, Canvas.ClipY - 64 * Scale);
 					Canvas.DrawText(TournamentPlayer(PawnOwner).PendingWeapon.ItemName, False);
 				}
 				else if ( (WeaponNameFade > 0) && (PawnOwner.Weapon != None) )
 				{
-					Canvas.Font = MyFonts.GetBigFont( Canvas.ClipX );
+					Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 					Canvas.DrawColor = B227_WeaponNameColor(PawnOwner.Weapon);
 					if ( WeaponNameFade < 1 )
 						Canvas.DrawColor = B227_MultiplyColor(Canvas.DrawColor, WeaponNameFade);
@@ -1357,7 +1356,7 @@ simulated function DrawMOTD(Canvas Canvas)
 	if ( (GRI == None) || (GRI.GameName == "Game") || (MOTDFadeOutTime <= 0) ) 
 		return;
 
-	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 	Canvas.Style = Style;
 	Canvas.bCenter = true;
 	Canvas.DrawColor = B227_MultiplyColor(UnitColor, MOTDFadeOutTime * 0.5);
@@ -1463,7 +1462,7 @@ simulated function DrawTypingPrompt( canvas Canvas, console Console )
 
 	Canvas.DrawColor = GreenColor;
 	TypingPrompt = "(>"@Console.TypedStr$"_";
-	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 	Canvas.StrLen( "TEST", XL, YL );
 	YPos = YL*4 + 8;
 	if (PawnOwner.PlayerReplicationInfo.bIsSpectator || bHideHUD || bHideFaces)
@@ -1622,7 +1621,7 @@ simulated function DrawTwoColorID( canvas Canvas, string TitleString, string Val
 	SetIDColor(Canvas,1);
 	Canvas.DrawText(ValueString);
 	Canvas.DrawColor = WhiteColor;
-	Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 }
 
 simulated function bool DrawIdentifyInfo(canvas Canvas)
@@ -1632,7 +1631,7 @@ simulated function bool DrawIdentifyInfo(canvas Canvas)
 
 	if( IdentifyTarget.PlayerName != "" )
 	{
-		Canvas.Font = MyFonts.GetBigFont(Canvas.ClipX);
+		Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 		DrawTwoColorID(Canvas,IdentifyName, IdentifyTarget.PlayerName, Canvas.ClipY - 256 * Scale);
 	}
 	return true;

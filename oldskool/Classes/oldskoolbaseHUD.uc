@@ -189,9 +189,9 @@ simulated function postrender(canvas canvas){
             if ( bResChanged || (LocalMessages[i].XL == 0) )
             {
               if ( LocalMessages[i].Message.Static.GetFontSize(LocalMessages[i].Switch) == 1 )
-                LocalMessages[i].StringFont = MyFonts.GetBigFont( Canvas.ClipX );
+                LocalMessages[i].StringFont = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
               else // ==2
-                LocalMessages[i].StringFont = MyFonts.GetHugeFont( Canvas.ClipX );
+                LocalMessages[i].StringFont = MyFonts.GetHugeFont(B227_ScaledFontScreenWidth(Canvas));
               Canvas.Font = LocalMessages[i].StringFont;
               Canvas.StrLen(LocalMessages[i].StringMessage, LocalMessages[i].XL, LocalMessages[i].YL);
               LocalMessages[i].YPos = LocalMessages[i].Message.Static.GetOffset(LocalMessages[i].Switch, LocalMessages[i].YL, Canvas.ClipY);
@@ -207,9 +207,9 @@ simulated function postrender(canvas canvas){
           if ( bResChanged || (LocalMessages[i].XL == 0) )
           {
             if ( LocalMessages[i].Message.Static.GetFontSize(LocalMessages[i].Switch) == 1 )
-              LocalMessages[i].StringFont = MyFonts.GetBigFont( Canvas.ClipX );
+              LocalMessages[i].StringFont = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
             else // == 2
-              LocalMessages[i].StringFont = MyFonts.GethugeFont( Canvas.ClipX );
+              LocalMessages[i].StringFont = MyFonts.GethugeFont(B227_ScaledFontScreenWidth(Canvas));
             Canvas.Font = LocalMessages[i].StringFont;
             Canvas.StrLen(LocalMessages[i].StringMessage, LocalMessages[i].XL, LocalMessages[i].YL);
             LocalMessages[i].YPos = LocalMessages[i].Message.Static.GetOffset(LocalMessages[i].Switch, LocalMessages[i].YL, Canvas.ClipY);
@@ -1171,6 +1171,11 @@ case class'warheadammo':  //nothing really fits....
 return Texture'UnrealShare.Icons.I_Dispersion';
 }
 return none;
+}
+
+static function float B227_ScaledFontScreenWidth(Canvas Canvas)
+{
+	return class'UTC_HUD'.static.B227_ScaledFontScreenWidth(Canvas);
 }
 
 defaultproperties

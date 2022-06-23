@@ -60,14 +60,20 @@ function UWindowRootWindow GetRootWindow()
 
 static function Font GetBigFont(Canvas C)
 {
-	if (C.SizeX < 640)
+	local float SizeX;
+
+	SizeX = class'ChallengeHUD'.static.B227_ScaledFontScreenWidth(C);
+
+	if (SizeX < 640)
 		return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
-	else if (C.SizeX < 800)
+	else if (SizeX < 800)
 		return Font(DynamicLoadObject("LadderFonts.UTLadder12", class'Font'));
-	else if (C.SizeX < 1024)
+	else if (SizeX < 1024)
 		return Font(DynamicLoadObject("LadderFonts.UTLadder16", class'Font'));
-	else
+	else if (SizeX < 1440)
 		return Font(DynamicLoadObject("LadderFonts.UTLadder18", class'Font'));
+	else
+		return Font(DynamicLoadObject("LadderFonts.UTLadder22", class'Font'));
 }
 
 function BeforePaint(Canvas C, float X, float Y)

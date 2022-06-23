@@ -26,7 +26,7 @@ function PostRender( Canvas C )
 	C.DrawColor = B227_MultiplyColor(WhiteColor, ESCFadeTime);
 	C.Style = ERenderStyle.STY_Translucent;
 	C.bCenter = True;
-	C.Font = MyFonts.GetBigFont( C.ClipX );
+	C.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(C));
 	C.StrLen(ESCMessage, XL, YL);
 	C.SetPos(0, C.ClipY - YL);
 	C.DrawText(ESCMessage);

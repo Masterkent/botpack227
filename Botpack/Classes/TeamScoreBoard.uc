@@ -50,7 +50,7 @@ function ShowScores( canvas Canvas )
 	}
 
 	SortScores(PlayerCount);
-	Canvas.Font = MyFonts.GetMediumFont( Canvas.ClipX );
+	Canvas.Font = MyFonts.GetMediumFont(B227_ScaledFontScreenWidth(Canvas));
 	Canvas.StrLen("TEXT", XL, YL);
 	ScoreStart = Canvas.CurY + YL*2;
 	if ( ScoreStart + PlayerCount * YL + 2 > Canvas.ClipY )
@@ -98,7 +98,7 @@ function ShowScores( canvas Canvas )
 
 	for ( i=0; i<4; i++ )
 	{
-		Canvas.Font = MyFonts.GetMediumFont( Canvas.ClipX );
+		Canvas.Font = MyFonts.GetMediumFont(B227_ScaledFontScreenWidth(Canvas));
 		if ( PlayerCounts[i] > 0 )
 		{
 			if ( i % 2 == 0 )
@@ -118,14 +118,14 @@ function ShowScores( canvas Canvas )
 			Canvas.StrLen(int(OwnerGame.Teams[i].Score), XL, YL);
 			Canvas.SetPos(XOffset + (Canvas.ClipX/4) - XL, YOffset);
 			Canvas.DrawText(int(OwnerGame.Teams[i].Score), false);
-				
+
 			if ( PlayerCounts[i] > 4 )
 			{
 				if ( i < 2 )
 					YOffset = ScoreStart + YL*8;
 				else
 					YOffset = ScoreStart + YL*19;
-				Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+				Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 				Canvas.SetPos(XOffset, YOffset);
 				if (LongLists[i] == 0)
 					Canvas.DrawText(PlayerCounts[i] - 4 @ PlayersNotShown, false);
@@ -136,7 +136,7 @@ function ShowScores( canvas Canvas )
 	// Trailer
 	if (!B227_bLowRes(Canvas))
 	{
-		Canvas.Font = MyFonts.GetSmallFont( Canvas.ClipX );
+		Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 		DrawTrailer(Canvas);
 	}
 	Canvas.Font = CanvasFont;

@@ -921,24 +921,66 @@ function SetButtonTextures(
 
 static function font GetBigFont(UWindowRootWindow Root)
 {
-	if (Root.WinWidth*Root.GUIScale < 640)
-		return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
-	else if (Root.WinWidth*Root.GUIScale < 800)
-		return Font(DynamicLoadObject("LadderFonts.UTLadder12", class'Font'));
-	else if (Root.WinWidth*Root.GUIScale < 1024)
-		return Font(DynamicLoadObject("LadderFonts.UTLadder16", class'Font'));
+	local float SizeX;
+
+	SizeX = FMin(Root.WinWidth, Root.WinHeight * 4 / 3) * Root.GUIScale;
+
+	if (class'FontInfo'.default.B227_bUseTahomaFonts)
+	{
+		if (SizeX < 640)
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma10);
+		else if (SizeX < 800)
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma12);
+		else if (SizeX < 1024)
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma16);
+		else if (SizeX < 1440)
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma18);
+		else
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma20);
+	}
 	else
-		return Font(DynamicLoadObject("LadderFonts.UTLadder18", class'Font'));
+	{
+		if (SizeX < 640)
+			return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
+		else if (SizeX < 800)
+			return Font(DynamicLoadObject("LadderFonts.UTLadder12", class'Font'));
+		else if (SizeX < 1024)
+			return Font(DynamicLoadObject("LadderFonts.UTLadder16", class'Font'));
+		else if (SizeX < 1440)
+			return Font(DynamicLoadObject("LadderFonts.UTLadder18", class'Font'));
+		else
+			return Font(DynamicLoadObject("LadderFonts.UTLadder20", class'Font'));
+	}
 }
 
 static function font GetSmallFont(UWindowRootWindow Root)
 {
-	if (Root.WinWidth*Root.GUIScale < 800)
-		return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
-	else if (Root.WinWidth*Root.GUIScale < 1024)
-		return Font(DynamicLoadObject("LadderFonts.UTLadder14", class'Font'));
+	local float SizeX;
+
+	SizeX = FMin(Root.WinWidth, Root.WinHeight * 4 / 3) * Root.GUIScale;
+
+	if (class'FontInfo'.default.B227_bUseTahomaFonts)
+	{
+		if (SizeX < 800)
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma10);
+		else if (SizeX < 1024)
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma14);
+		else if (SizeX < 1440)
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma16);
+		else
+			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma18);
+	}
 	else
-		return Font(DynamicLoadObject("LadderFonts.UTLadder16", class'Font'));
+	{
+		if (SizeX < 800)
+			return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
+		else if (SizeX < 1024)
+			return Font(DynamicLoadObject("LadderFonts.UTLadder14", class'Font'));
+		else if (SizeX < 1440)
+			return Font(DynamicLoadObject("LadderFonts.UTLadder16", class'Font'));
+		else
+			return Font(DynamicLoadObject("LadderFonts.UTLadder18", class'Font'));
+	}
 }
 
 function bool GetChallengeVoicePack(out class<ChallengeVoicePack> V)
