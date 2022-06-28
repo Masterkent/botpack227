@@ -64,8 +64,12 @@ var bool NoZBufHack;
 var float M3, M4, M5, M9, M11, M64, M113, M128, M245;
 
 var globalconfig bool B227_bVerticalScaling;
+var globalconfig float B227_UpscaleHUD;
+
+var int B227_CanvasScaleSupport;
 var float B227_CrosshairScale;
 var bool B227_bHandledGameEnd; // prevents counting end stats multiple times
+
 
 /////////////////////////////////////////////////
 // Icon grabbing functions:
@@ -369,6 +373,7 @@ simulated function HudSetup (Canvas Canvas){
   local float CurrentScale;
 
   Canvas.Reset();
+  B227_InitUpscale(Canvas);
   Super.HudSetup(Canvas);
 
   CurrentScale = B227_ScaledScreenWidth(Canvas) / 1536;  //lower icons are 1536 pixels long
@@ -386,6 +391,7 @@ simulated function HudSetup (Canvas Canvas){
   }
   HudMode=0; //no HUD modes in ONP=force
   B227_CrosshairScale = class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 1536);
+  B227_ResetUpscale(Canvas);
 }
 simulated function float GetAmmo(Weapon W){
   if (W.AmmoType==None)
@@ -882,6 +888,7 @@ local byte btemp;
     return;
   }
   HudSetup(canvas);
+  B227_InitUpscale(Canvas);
   InvRightClip=Canvas.ClipX;  //reset stuff
   bSSLRaised=false;
   //detect playermod changes:
@@ -920,6 +927,7 @@ local byte btemp;
     if ( PlayerPawn(Owner).bShowMenu )       //will end up going to uwindow (only called in sp mode)..
     {
       DisplayMenu(Canvas);
+      B227_ResetUpscale(Canvas);
       return;
     }
         if ( (PlayerPawn(Owner).Scoring == None) && (PlayerPawn(Owner).ScoringType != None) )
@@ -932,6 +940,7 @@ local byte btemp;
         PlayerPawn(Owner).Scoring.ShowScores(Canvas);
         DrawTypingPrompt(Canvas, playerpawn(owner).player.Console); //allow typing to show.
         Canvas.Style=ERenderStyle.STY_Masked;
+        B227_ResetUpscale(Canvas);
         return;
       }
     }
@@ -956,6 +965,7 @@ local byte btemp;
   }
   hudmode=default.hudmode; //configuration stuff...
   Canvas.Style=ERenderStyle.STY_Masked;
+  B227_ResetUpscale(Canvas);
 }
  //swaps as motd tick is changed......
 simulated function Tick(float DeltaTime)
@@ -1639,9 +1649,30 @@ static function float B227_ScaledScreenWidth(Canvas Canvas)
 	return Canvas.SizeX;
 }
 
+function B227_InitUpscale(Canvas Canvas)
+{
+	local float CanvasScale;
+
+	if (B227_CanvasScaleSupport > 0)
+	{
+		CanvasScale = FClamp(B227_UpscaleHUD, 1.0, 16.0);
+		class'UTC_HUD'.static.B227_SetDesiredCanvasScale(self, CanvasScale);
+		Canvas.PushCanvasScale(CanvasScale, true);
+	}
+	else if (B227_CanvasScaleSupport == 0)
+		B227_CanvasScaleSupport = int(DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none) * 2 - 1;
+}
+
+function B227_ResetUpscale(Canvas Canvas)
+{
+	if (B227_CanvasScaleSupport > 0)
+		Canvas.PopCanvasScale();
+}
+
 defaultproperties
 {
      NormalStyle=STY_Normal
      HUDConfigWindowType="olextras.tvhudconfig"
      Texture=None
+     B227_UpscaleHUD=1.0
 }

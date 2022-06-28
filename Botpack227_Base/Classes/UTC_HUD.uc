@@ -24,6 +24,9 @@ struct HUDLocalizedMessage
 
 var globalconfig bool B227_bVerticalCrosshairScaling;
 
+var private float B227_DesiredCanvasScale;
+var private string B227_DesiredCanvasScaleHUD;
+
 event Destroyed()
 {
 	while (HUDMutator != none)
@@ -184,6 +187,31 @@ static function float B227_CrosshairSize(Canvas Canvas, float Divider)
 static function float B227_ScaledFontScreenWidth(Canvas Canvas)
 {
 	return FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3);
+}
+
+// Is used by HUDOverlay classes
+static function float B227_GetDesiredCanvasScale(HUD Hud)
+{
+	if (default.B227_DesiredCanvasScale >= 1.0 &&
+		Hud != none &&
+		!Hud.bDeleteMe &&
+		string(Hud.Class) == default.B227_DesiredCanvasScaleHUD)
+	{
+		return default.B227_DesiredCanvasScale;
+	}
+	return 0;
+}
+
+static function B227_SetDesiredCanvasScale(HUD Hud, float Scale)
+{
+	if (default.B227_DesiredCanvasScaleHUD != string(Hud.Class))
+		default.B227_DesiredCanvasScaleHUD = string(Hud.Class);
+	default.B227_DesiredCanvasScale = FClamp(Scale, 1.0, 16.0);
+}
+
+static function B227_ResetDesiredCanvasScale()
+{
+	default.B227_DesiredCanvasScale = 0;
 }
 
 static function color B227_MultiplyColor(color Color, float Factor)

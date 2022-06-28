@@ -13,13 +13,21 @@ simulated function PostRender( canvas Canvas )
 
 	Super.PostRender( Canvas );
 
+	B227_InitUpscale(Canvas);
+
 	if ( bHideHud 
 		|| ((Canvas.ClipX <= 400) && ((PlayerPawn(Owner).bShowScores) || bForceScores)) )
+	{
+		B227_ResetUpscale(Canvas);
 		return;
+	}
 
 	//- if ( TournamentConsole(PlayerPawn(Owner).Player.Console).bShowSpeech == True )
 	if (TournamentPlayer(Owner) != none && TournamentPlayer(Owner).B227_SpeechMenu != none && TournamentPlayer(Owner).B227_SpeechMenu.bShowSpeech)
+	{
+		B227_ResetUpscale(Canvas);
 		return;
+	}
 
 	X = 0;
 	Y = Canvas.ClipY - 384 * Scale;
@@ -57,6 +65,8 @@ simulated function PostRender( canvas Canvas )
 			Canvas.DrawText(CP.PointName);
 			Y -= 140 * Scale;
 		}
+
+	B227_ResetUpscale(Canvas);
 }
 
 simulated function bool SpecialIdentify(Canvas Canvas, Actor Other )

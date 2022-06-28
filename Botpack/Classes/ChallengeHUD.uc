@@ -99,7 +99,10 @@ var class<ServerInfo> ServerInfoClass;
 var globalconfig string FontInfoClass;
 
 var globalconfig bool B227_bVerticalScaling;
+var globalconfig float B227_UpscaleHUD;
+
 var float B227_XScale;
+var int B227_CanvasScaleSupport;
 
 function Destroyed()
 {
@@ -254,6 +257,13 @@ simulated function HUDSetup(canvas canvas)
 {
 	local int FontSize;
 
+	// Setup the way we want to draw all HUD elements
+	Canvas.Reset();
+	Canvas.SpaceX=0;
+	Canvas.bNoSmooth = True;
+
+	B227_InitUpscale(Canvas);
+
 	bResChanged = (Canvas.ClipX != OldClipX);
 	OldClipX = Canvas.ClipX;
 
@@ -261,11 +271,6 @@ simulated function HUDSetup(canvas canvas)
 	PawnOwner = Pawn(PlayerOwner.ViewTarget);
 	if (PawnOwner == none || PawnOwner.bDeleteMe || PawnOwner.PlayerReplicationInfo == none)
 		PawnOwner = PlayerOwner;
-
-	// Setup the way we want to draw all HUD elements
-	Canvas.Reset();
-	Canvas.SpaceX=0;
-	Canvas.bNoSmooth = True;
 
 	B227_XScale = (HUDScale * Canvas.SizeX) / 1280.0;
 	FontSize = Min(3, HUDScale * B227_ScaledScreenWidth(Canvas) / 500);
@@ -291,6 +296,8 @@ simulated function HUDSetup(canvas canvas)
 	bLowRes = ( Canvas.ClipX < 400 );
 	if ( bLowRes )
 		WeaponScale = 1.0;
+
+	B227_ResetUpscale(Canvas);
 }
 
 simulated function DrawDigit(Canvas Canvas, int d, int Step, float UpScale, out byte bMinus )
@@ -909,9 +916,13 @@ simulated function PostRender( canvas Canvas )
 
 	if ( bShowInfo )
 	{
+		B227_InitUpscale(Canvas);
 		ServerInfo.RenderInfo( Canvas );
+		B227_ResetUpscale(Canvas);
 		return;
 	}
+
+	B227_InitUpscale(Canvas);
 
 	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 	OldOriginX = Canvas.OrgX;
@@ -1002,6 +1013,7 @@ simulated function PostRender( canvas Canvas )
 			PlayerOwner.Scoring.ShowScores(Canvas);
 			if ( PlayerOwner.Player.Console.bTyping )
 				DrawTypingPrompt(Canvas, PlayerOwner.Player.Console);
+			B227_ResetUpscale(Canvas);
 			return;
 		}
 	}
@@ -1192,6 +1204,8 @@ simulated function PostRender( canvas Canvas )
 	}
 	if ( PlayerOwner.Player.Console.bTyping )
 		DrawTypingPrompt(Canvas, PlayerOwner.Player.Console);
+
+	B227_ResetUpscale(Canvas);
 
 //  [U227] Excluded
 ///	if ( PlayerOwner.bBadConnectionAlert && (PlayerOwner.Level.TimeSeconds > 5) )
@@ -1806,6 +1820,26 @@ function float B227_WeaponBarScale()
 	return HUDScale * WeaponScale * (Scale / B227_XScale);
 }
 
+function B227_InitUpscale(Canvas Canvas)
+{
+	local float CanvasScale;
+
+	if (B227_CanvasScaleSupport > 0)
+	{
+		CanvasScale = FClamp(B227_UpscaleHUD, 1.0, 16.0);
+		class'UTC_HUD'.static.B227_SetDesiredCanvasScale(self, CanvasScale);
+		Canvas.PushCanvasScale(CanvasScale, true);
+	}
+	else if (B227_CanvasScaleSupport == 0)
+		B227_CanvasScaleSupport = int(DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none) * 2 - 1;
+}
+
+function B227_ResetUpscale(Canvas Canvas)
+{
+	if (B227_CanvasScaleSupport > 0)
+		Canvas.PopCanvasScale();
+}
+
 defaultproperties
 {
 	VersionMessage="Version"
@@ -1864,4 +1898,5 @@ defaultproperties
 	FontInfoClass="Botpack.FontInfo"
 	HUDConfigWindowType="UTMenu.UTChallengeHUDConfig"
 	B227_bVerticalScaling=True
+	B227_UpscaleHUD=1.0
 }

@@ -7,6 +7,7 @@ var float WinWidth, WinHeight;
 
 var B227_UTFadeTextArea TextArea;
 var Color TextColor;
+var float DesiredCanvasScale;
 
 static function B227_MessageOverlay GetInstance(PlayerPawn Player)
 {
@@ -76,6 +77,21 @@ static function Font GetBigFont(Canvas C)
 		return Font(DynamicLoadObject("LadderFonts.UTLadder22", class'Font'));
 }
 
+function InitUpscale(Canvas Canvas)
+{
+	if (PlayerPawn(Owner) != none)
+		DesiredCanvasScale = class'UTC_HUD'.static.B227_GetDesiredCanvasScale(PlayerPawn(Owner).myHUD);
+	if (DesiredCanvasScale > 0)
+		Canvas.PushCanvasScale(DesiredCanvasScale, true);
+}
+
+function ResetUpscale(Canvas Canvas)
+{
+	if (DesiredCanvasScale > 0)
+		Canvas.PopCanvasScale();
+	DesiredCanvasScale = 0;
+}
+
 function BeforePaint(Canvas C, float X, float Y)
 {
 	WinLeft = C.SizeX / 4;
@@ -98,9 +114,13 @@ event PostRender(Canvas Canvas)
 		(GetRootWindow() == none || !GetRootWindow().bWindowVisible) &&
 		TextArea != none)
 	{
+		InitUpscale(Canvas);
+
 		BeforePaint(Canvas, 0, 0);
 		TextArea.BeforePaint(Canvas, 0, 0);
 		TextArea.Paint(Canvas, 0, 0);
+
+		ResetUpscale(Canvas);
 	}
 }
 

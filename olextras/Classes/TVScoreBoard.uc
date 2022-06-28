@@ -183,6 +183,8 @@ static function string parseTime( float time )
 function DrawTimes(canvas canvas){
   local TvPlayer P;
   local float YUp;
+  local float XL, YL;
+
   P=TvPlayer(Canvas.viewport.actor);
   if (P==none||P.Linfo.bCutScene)
     return;
@@ -203,8 +205,10 @@ function DrawTimes(canvas canvas){
     Yup-=rYL;
     Canvas.SetPos(0,Yup);
  }
-  Canvas.DrawText(class'TournamentScoreBoard'.default.ElapsedTime@ParseTime(P.myTime));
-  Canvas.bCenter=false;
+  Canvas.bCenter = false;
+  Canvas.StrLen(class'TournamentScoreBoard'.default.ElapsedTime @ ParseTime(int(P.myTime) / 60 * 60), XL, YL);
+  Canvas.SetPos((Canvas.SizeX - XL) / 2, Yup);
+  Canvas.DrawText(class'TournamentScoreBoard'.default.ElapsedTime @ ParseTime(P.myTime));
 }
 
 defaultproperties

@@ -8,8 +8,10 @@ var float ESCFadeTime;
 
 function PreRender( Canvas C )
 {
+	B227_InitUpscale(C);
 	if (Level.TimeSeconds < 1.5)
 		C.DrawTile( texture'BlackTexture', C.ClipX, C.ClipY, 0, 0, 256, 256 );
+	B227_ResetUpscale(C);
 
 	Super(HUD).PreRender(C);
 }
@@ -19,6 +21,7 @@ function PostRender( Canvas C )
 	local float XL, YL;
 
 	HUDSetup(C);
+	B227_InitUpscale(C);
 
 	if ( PlayerPawn(Owner).ProgressTimeOut > Level.TimeSeconds )
 		DisplayProgressMessage(C);
@@ -32,6 +35,7 @@ function PostRender( Canvas C )
 	C.DrawText(ESCMessage);
 	C.bCenter = False;
 
+	B227_ResetUpscale(C);
 	Super(HUD).PostRender(C);
 }
 

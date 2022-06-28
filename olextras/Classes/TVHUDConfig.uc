@@ -4,7 +4,24 @@
 // ===============================================================
 
 class TVHUDConfig expands oldskoolHUDConfig;
+
 var uwindowcheckbox ShowHUD;
+var localized string B227_ShowHUDText;
+var localized string B227_ShowHUDHelp;
+
+var UWindowEditControl B227_UpscaleHUDEdit;
+var localized string B227_UpscaleHUDText;
+var localized string B227_UpscaleHUDHelp;
+
+var UWindowCheckbox B227_VerticalScalingCheck;
+var localized string B227_VerticalScalingText;
+var localized string B227_VerticalScalingHelp;
+
+// Crosshair
+var UWindowCheckbox B227_VerticalCrosshairScalingCheck;
+var localized string B227_VerticalCrosshairScalingText;
+var localized string B227_VerticalCrosshairScalingHelp;
+
 function Created()
 {
   local int ControlWidth, ControlLeft, ControlRight, controloffset;
@@ -27,27 +44,52 @@ showtalktex = UWindowCheckBox(CreateControl(class'UWindowCheckBox', CenterPos, c
 showtalktex.SetText("Show talktexture");
 showtalktex.SethelpText("If checked, the talktexture of players will appear in the HUD, when messages are sent.");
 showtalktex.SetFont(F_Normal);
-showtalktex.bChecked = oldskoolbasehud(GetPlayerOwner().myHUD).showtalkface;
 controloffset+=25;
 
 //Hide HUD
 ShowHUD = UWindowCheckBox(CreateControl(class'UWindowCheckBox', CenterPos, controloffset, centerwidth, 1));
-ShowHUD.SetText("Show HUD");
-ShowHUD.SethelpText("Show the Heads-up Display (HUD).");
+ShowHUD.SetText(B227_ShowHUDText);
+ShowHUD.SethelpText(B227_ShowHUDHelp);
 ShowHUD.SetFont(F_Normal);
-ShowHUD.bChecked = !TVHUD(GetPlayerOwner().myHUD).bHideHUD;
 controloffset+=25;
+
+	if (B227_CanvasScalingSupported())
+	{
+		B227_UpscaleHUDEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', CenterPos, ControlOffset, ControlWidth, 1));
+		B227_UpscaleHUDEdit.SetText(B227_UpscaleHUDText);
+		B227_UpscaleHUDEdit.SetHelpText(B227_UpscaleHUDHelp);
+		B227_UpscaleHUDEdit.SetFont(F_Normal);
+		B227_UpscaleHUDEdit.SetNumericOnly(true);
+		B227_UpscaleHUDEdit.SetNumericFloat(true);
+		B227_UpscaleHUDEdit.Align = TA_Left;
+		ControlOffset += 25;
+	}
+
+	B227_VerticalScalingCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
+	B227_VerticalScalingCheck.SetText(B227_VerticalScalingText);
+	B227_VerticalScalingCheck.SetHelpText(B227_VerticalScalingHelp);
+	B227_VerticalScalingCheck.SetFont(F_Normal);
+	B227_VerticalScalingCheck.Align = TA_Left;
+	ControlOffset += 25;
+
+	B227_VerticalCrosshairScalingCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
+	B227_VerticalCrosshairScalingCheck.SetText(B227_VerticalCrosshairScalingText);
+	B227_VerticalCrosshairScalingCheck.SetHelpText(B227_VerticalCrosshairScalingHelp);
+	B227_VerticalCrosshairScalingCheck.SetFont(F_Normal);
+	B227_VerticalCrosshairScalingCheck.Align = TA_Left;
+	ControlOffset += 25;
 
 // Crosshair
 CrosshairSlider = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', CenterPos, controloffset, CenterWidth, 1));
 CrosshairSlider.SetRange(0, class'ChallengeHUD'.default.CrossHairCount, 1);
-CrosshairSlider.SetValue(TVHUD(Root.Console.ViewPort.Actor.myHUD).tvCrosshair);
 CrosshairSlider.SetText(CrosshairText);
 CrosshairSlider.SetHelpText(CrosshairHelp);
 CrosshairSlider.SetFont(F_Normal);
 controloffset+=25;
 
 DesiredHeight = ControlOffset + 70;
+
+	B227_LoadCurrentValues();
 }
 
 function BeforePaint(Canvas C, float X, float Y)
@@ -71,6 +113,17 @@ function BeforePaint(Canvas C, float X, float Y)
 
   ShowHUD.WinLeft = CenterPos;
   showtalktex.WinLeft = CenterPos;
+
+	if (B227_UpscaleHUDEdit != none)
+	{
+		B227_UpscaleHUDEdit.SetSize(CenterWidth, 1);
+		B227_UpscaleHUDEdit.WinLeft = CenterPos;
+		B227_UpscaleHUDEdit.EditBoxWidth = 90;
+	}
+	B227_VerticalScalingCheck.SetSize(CenterWidth, 1);
+	B227_VerticalScalingCheck.WinLeft = CenterPos;
+	B227_VerticalCrosshairScalingCheck.SetSize(CenterWidth, 1);
+	B227_VerticalCrosshairScalingCheck.WinLeft = CenterPos;
 }
 
 function Paint(Canvas C, float X, float Y)      //Draw UT HUD crosshair preview
@@ -112,19 +165,79 @@ function CrosshairChanged()  //ol crosshair stuff.....
 
 function Notify(UWindowDialogControl C, byte E)
 {
-  super.notify(c,e);
-  switch(E)
-  {
-    case DE_Change:
-      switch(C)
-      {
-      case ShowHUD:
-        if (TvHUD(GetPlayerOwner().myHUD)!=none)
-          TvHUD(GetPlayerOwner().myHUD).bHideHud=!ShowHUD.bchecked;
-      }
-  }
+	local TVHUD H;
+
+	super.notify(c,e);
+
+	H = TVHUD(GetPlayerOwner().myHUD);
+	if (H == none || !B227_bInitialized)
+		return;
+
+	switch(E)
+	{
+		case DE_Change:
+			switch(C)
+			{
+				case ShowHUD:
+					H.bHideHud = !ShowHUD.bchecked;
+					H.SaveConfig();
+					break;
+
+				case B227_UpscaleHUDEdit:
+					if (B227_UpscaleHUDEdit != none)
+					{
+						H.B227_UpscaleHUD = FMax(1.0, float(B227_UpscaleHUDEdit.GetValue()));
+						H.SaveConfig();
+					}
+					break;
+
+				case B227_VerticalScalingCheck:
+					H.B227_bVerticalScaling = B227_VerticalScalingCheck.bChecked;
+					H.SaveConfig();
+					break;
+
+				case B227_VerticalCrosshairScalingCheck:
+					class'UTC_HUD'.default.B227_bVerticalCrosshairScaling = B227_VerticalCrosshairScalingCheck.bChecked;
+					class'UTC_HUD'.static.StaticSaveConfig();
+					break;
+			}
+	}
+}
+
+function bool B227_CanvasScalingSupported()
+{
+	return DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none;
+}
+
+function B227_LoadCurrentValues()
+{
+	local TVHUD H;
+
+	H = TVHUD(GetPlayerOwner().myHUD);
+	if (H == none)
+		return;
+
+	B227_bInitialized = false;
+
+	showtalktex.bChecked = H.showtalkface;
+	ShowHUD.bChecked = !H.bHideHUD;
+	CrosshairSlider.SetValue(H.tvCrosshair);
+	if (B227_UpscaleHUDEdit != none)
+		B227_UpscaleHUDEdit.SetValue(string(H.B227_UpscaleHUD));
+	B227_VerticalScalingCheck.bChecked = H.B227_bVerticalScaling;
+	B227_VerticalCrosshairScalingCheck.bChecked = class'UTC_HUD'.default.B227_bVerticalCrosshairScaling;
+
+	B227_bInitialized = true;
 }
 
 defaultproperties
 {
+	B227_ShowHUDText="Show HUD"
+	B227_ShowHUDHelp="Show the Heads-up Display (HUD)."
+	B227_UpscaleHUDText="Upscale HUD"
+	B227_UpscaleHUDHelp="If this factor is greater than 1, HUD is rendered at a lower resolution and stretched to full screen."
+	B227_VerticalScalingText="Vertical Icon Scaling"
+	B227_VerticalScalingHelp="Scale size of HUD icons by screen height instead of screen width."
+	B227_VerticalCrosshairScalingText="Vertical Crosshair Scaling"
+	B227_VerticalCrosshairScalingHelp="Scale size of crosshair by screen height instead of screen width."
 }

@@ -131,7 +131,10 @@ function DrawTrailer( canvas Canvas )
 		Hours   = Minutes / 60;
 		Seconds = Seconds - (Minutes * 60);
 		Minutes = Minutes - (Hours * 60);
-		Canvas.DrawText(ElapsedTime@TwoDigitString(Hours)$":"$TwoDigitString(Minutes)$":"$TwoDigitString(Seconds), true);
+		Canvas.StrLen(ElapsedTime @ TwoDigitString(Hours) $ ":00:00", XL, YL);
+		Canvas.bCenter = false;
+		Canvas.SetPos((Canvas.SizeX - XL) / 2, Canvas.ClipY - YL);
+		Canvas.DrawText(ElapsedTime @ TwoDigitString(Hours) $ ":" $ TwoDigitString(Minutes) $ ":" $ TwoDigitString(Seconds), true);
 	}
 
 	if ( PlayerOwner.GameReplicationInfo.GameEndedComments != "" )

@@ -27,10 +27,15 @@ simulated function PostRender( canvas Canvas )
 
 	Super.PostRender( Canvas );
 
+	B227_InitUpscale(Canvas);
+
 	if ( (PlayerOwner == None) || (PawnOwner == None) || (PlayerOwner.GameReplicationInfo == None)
 		|| (PawnOwner.PlayerReplicationInfo == None)
 		|| ((PlayerOwner.bShowMenu || PlayerOwner.bShowScores) && (Canvas.ClipX < 640)) )
+	{
+		B227_ResetUpscale(Canvas);
 		return;
+	}
 
 	Canvas.Style = Style;
 	if( !bHideHUD && !bHideTeamInfo )
@@ -58,6 +63,8 @@ simulated function PostRender( canvas Canvas )
 			Y -= 150 * Scale;
 		}
 	}
+
+	B227_ResetUpscale(Canvas);
 }
 
 simulated function DrawTeam(Canvas Canvas, TeamInfo TI)

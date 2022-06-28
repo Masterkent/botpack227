@@ -5,7 +5,11 @@
 // ============================================================
 
 class oldskoolHUDConfig expands UMenuHUDConfigCW;
+
 var uwindowcheckbox realicons, showtalktex, fragiconsp;
+
+var bool B227_bInitialized;
+
 function Created()
 {
   local int ControlWidth, ControlLeft, ControlRight, controloffset;
@@ -66,8 +70,15 @@ fragiconsp.bChecked = oldskoolbasehud(Root.Console.ViewPort.Actor.myHUD).showfra
 if (!Root.Console.ViewPort.Actor.myHUD.Isa('oldskoolhud'))
 fragiconsp.hidewindow();
 
-
+	B227_bInitialized = true;
 }
+
+function WindowShown()
+{
+	super.WindowShown();
+	B227_LoadCurrentValues();
+}
+
 function BeforePaint(Canvas C, float X, float Y)   //more shtuff......
 {
   local int ControlWidth, ControlLeft, ControlRight;
@@ -170,6 +181,25 @@ function Notify(UWindowDialogControl C, byte E)
 function CrosshairChanged()  //ol crosshair stuff.....
 {
   oldskoolbasehud(GetPlayerOwner().myHUD).olCrosshair = int(CrosshairSlider.Value);
+}
+
+function B227_LoadCurrentValues()
+{
+	local oldskoolbasehud H;
+
+	H = oldskoolbasehud(Root.Console.ViewPort.Actor.myHUD);
+	if (H == none)
+		return;
+
+	B227_bInitialized = false;
+
+	HUDConfigSlider.SetValue(Root.Console.ViewPort.Actor.myHUD.HUDMode);
+	CrosshairSlider.SetValue(H.olCrosshair);
+	showtalktex.bChecked = H.showtalkface;
+	realicons.bChecked = H.realicons;
+	fragiconsp.bChecked = H.showfrag;
+
+	B227_bInitialized = true;
 }
 
 defaultproperties

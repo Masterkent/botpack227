@@ -86,7 +86,19 @@ var UWindowHSliderControl StatusScaleSlider;
 var localized string StatusScaleText;
 var localized string StatusScaleHelp;
 
+var UWindowEditControl B227_UpscaleHUDEdit;
+var localized string B227_UpscaleHUDText;
+var localized string B227_UpscaleHUDHelp;
+
+var UWindowCheckbox B227_VerticalScalingCheck;
+var localized string B227_VerticalScalingText;
+var localized string B227_VerticalScalingHelp;
+
 // Crosshair
+var UWindowCheckbox B227_VerticalCrosshairScalingCheck;
+var localized string B227_VerticalCrosshairScalingText;
+var localized string B227_VerticalCrosshairScalingHelp;
+
 var UWindowHSliderControl CrosshairSlider;
 var localized string CrosshairText;
 var localized string CrosshairHelp;
@@ -221,20 +233,46 @@ function Created()
 	HUDScaleSlider.SetText(HUDScaleText);
 	HUDScaleSlider.SetHelpText(HUDScaleHelp);
 	HUDScaleSlider.SetFont(F_Normal);
-	ControlOffset += 25;
+	ControlOffset += 20;
 
 	WeaponScaleSlider = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', CenterPos, ControlOffset, CenterWidth, 1));
 	WeaponScaleSlider.SetRange(1, 5, 1);
 	WeaponScaleSlider.SetText(WeaponScaleText);
 	WeaponScaleSlider.SetHelpText(WeaponScaleHelp);
 	WeaponScaleSlider.SetFont(F_Normal);
-	ControlOffset += 25;
+	ControlOffset += 20;
 
 	StatusScaleSlider = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', CenterPos, ControlOffset, CenterWidth, 1));
 	StatusScaleSlider.SetRange(5, 15, 1);
 	StatusScaleSlider.SetText(StatusScaleText);
 	StatusScaleSlider.SetHelpText(StatusScaleHelp);
 	StatusScaleSlider.SetFont(F_Normal);
+	ControlOffset += 20;
+
+	if (B227_CanvasScalingSupported())
+	{
+		B227_UpscaleHUDEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', CenterPos, ControlOffset, ControlWidth, 1));
+		B227_UpscaleHUDEdit.SetText(B227_UpscaleHUDText);
+		B227_UpscaleHUDEdit.SetHelpText(B227_UpscaleHUDHelp);
+		B227_UpscaleHUDEdit.SetFont(F_Normal);
+		B227_UpscaleHUDEdit.SetNumericOnly(true);
+		B227_UpscaleHUDEdit.SetNumericFloat(true);
+		B227_UpscaleHUDEdit.Align = TA_Left;
+		ControlOffset += 20;
+	}
+
+	B227_VerticalScalingCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
+	B227_VerticalScalingCheck.SetText(B227_VerticalScalingText);
+	B227_VerticalScalingCheck.SetHelpText(B227_VerticalScalingHelp);
+	B227_VerticalScalingCheck.SetFont(F_Normal);
+	B227_VerticalScalingCheck.Align = TA_Left;
+	ControlOffset += 20;
+
+	B227_VerticalCrosshairScalingCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
+	B227_VerticalCrosshairScalingCheck.SetText(B227_VerticalCrosshairScalingText);
+	B227_VerticalCrosshairScalingCheck.SetHelpText(B227_VerticalCrosshairScalingHelp);
+	B227_VerticalCrosshairScalingCheck.SetFont(F_Normal);
+	B227_VerticalCrosshairScalingCheck.Align = TA_Left;
 	ControlOffset += 20;
 
 	CrosshairColorCombo = UWindowComboControl(CreateControl(class'UWindowComboControl', CenterPos, ControlOffset, CenterWidth, 1));
@@ -300,6 +338,10 @@ function LoadCurrentValues()
 	HUDScaleSlider.SetValue(H.HUDScale*5);
 	WeaponScaleSlider.SetValue(H.WeaponScale*5);
 	StatusScaleSlider.SetValue(H.StatusScale*10);
+	if (B227_UpscaleHUDEdit != none)
+		B227_UpscaleHUDEdit.SetValue(string(H.B227_UpscaleHUD));
+	B227_VerticalScalingCheck.bChecked = H.B227_bVerticalScaling;
+	B227_VerticalCrosshairScalingCheck.bChecked = H.B227_bVerticalCrosshairScaling;
 	CrosshairSlider.SetRange(0, H.CrosshairCount - 1, 1);
 	CrosshairSlider.SetValue(GetPlayerOwner().myHUD.Crosshair);
 	i = HUDColorCombo.FindItemIndex2(H.FavoriteHUDColor.R$","$H.FavoriteHUDColor.G$","$H.FavoriteHUDColor.B, False);
@@ -358,6 +400,7 @@ function LoadDefaultValues()
 	H.CrosshairColor.R = class'ChallengeHUD'.default.CrosshairColor.R;
 	H.CrosshairColor.G = class'ChallengeHUD'.default.CrosshairColor.G;
 	H.CrosshairColor.B = class'ChallengeHUD'.default.CrosshairColor.B;
+	H.B227_UpscaleHUD = class'ChallengeHUD'.default.B227_UpscaleHUD;
 }
 
 function BeforePaint(Canvas C, float X, float Y)
@@ -414,6 +457,16 @@ function BeforePaint(Canvas C, float X, float Y)
 	StatusScaleSlider.SetSize(CenterWidth, 1);
 	StatusScaleSlider.SliderWidth = 90;
 	StatusScaleSlider.WinLeft = CenterPos;
+	if (B227_UpscaleHUDEdit != none)
+	{
+		B227_UpscaleHUDEdit.SetSize(CenterWidth, 1);
+		B227_UpscaleHUDEdit.WinLeft = CenterPos;
+		B227_UpscaleHUDEdit.EditBoxWidth = 90;
+	}
+	B227_VerticalScalingCheck.SetSize(CenterWidth, 1);
+	B227_VerticalScalingCheck.WinLeft = CenterPos;
+	B227_VerticalCrosshairScalingCheck.SetSize(CenterWidth, 1);
+	B227_VerticalCrosshairScalingCheck.WinLeft = CenterPos;
 	CrosshairSlider.SetSize(CenterWidth, 1);
 	CrosshairSlider.SliderWidth = 90;
 	CrosshairSlider.WinLeft = CenterPos;
@@ -496,6 +549,9 @@ function Notify(UWindowDialogControl C, byte E)
 		return;
 	}
 
+	if (C == none)
+		return;
+
 	switch(E)
 	{
 	case DE_Change:
@@ -527,6 +583,9 @@ function Notify(UWindowDialogControl C, byte E)
 		case HUDScaleSlider:
 		case WeaponScaleSlider:
 		case StatusScaleSlider:
+		case B227_UpscaleHUDEdit:
+		case B227_VerticalScalingCheck:
+		case B227_VerticalCrosshairScalingCheck:
 		case HUDColorCombo:
 		case CrosshairColorCombo:
 		case UseTeamColorCheck:
@@ -594,6 +653,10 @@ singular function HUDLayoutChanged()
 	H.HUDScale = HUDScaleSlider.GetValue()/5;
 	H.WeaponScale = WeaponScaleSlider.GetValue()/5;
 	H.StatusScale = StatusScaleSlider.GetValue()/10;
+	if (B227_UpscaleHUDEdit != none)
+		H.B227_UpscaleHUD = FMax(1.0, float(B227_UpscaleHUDEdit.GetValue()));
+	H.B227_bVerticalScaling = B227_VerticalScalingCheck.bChecked;
+	H.B227_bVerticalCrosshairScaling = B227_VerticalCrosshairScalingCheck.bChecked;
 
 	if(HUDColorCombo.GetValue2() == "cust")
 	{
@@ -654,6 +717,11 @@ function SaveConfigs()
 	GetPlayerOwner().SaveConfig();
 	GetPlayerOwner().myHUD.SaveConfig();
 	Super.SaveConfigs();
+}
+
+function bool B227_CanvasScalingSupported()
+{
+	return DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none;
 }
 
 defaultproperties
@@ -720,6 +788,12 @@ defaultproperties
      WeaponScaleHelp="Adjust the size of the weapon icons on the HUD."
      StatusScaleText="Status Size"
      StatusScaleHelp="Adjust the scale of the player status indicator (top right) on the HUD."
+     B227_UpscaleHUDText="Upscale HUD"
+     B227_UpscaleHUDHelp="If this factor is greater than 1, HUD is rendered at a lower resolution and stretched to full screen."
+     B227_VerticalScalingText="Vertical Icon Scaling"
+     B227_VerticalScalingHelp="Scale size of HUD icons by screen height instead of screen width."
+     B227_VerticalCrosshairScalingText="Vertical Crosshair Scaling"
+     B227_VerticalCrosshairScalingHelp="Scale size of crosshair by screen height instead of screen width."
      CrosshairText="Crosshair Style"
      CrosshairHelp="Choose the crosshair appearing at the center of your screen."
      DefaultsText="Reset"
