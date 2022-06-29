@@ -8,6 +8,10 @@ class oldskoolHUDConfig expands UMenuHUDConfigCW;
 
 var uwindowcheckbox realicons, showtalktex, fragiconsp;
 
+var UWindowEditControl B227_HUDScaleEdit;
+var localized string B227_HUDScaleText;
+var localized string B227_HUDScaleHelp;
+
 var bool B227_bInitialized;
 
 function Created()
@@ -70,6 +74,20 @@ fragiconsp.bChecked = oldskoolbasehud(Root.Console.ViewPort.Actor.myHUD).showfra
 if (!Root.Console.ViewPort.Actor.myHUD.Isa('oldskoolhud'))
 fragiconsp.hidewindow();
 
+controloffset+=25;
+
+	if (B227_HUDScalingSupported())
+	{
+		B227_HUDScaleEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', CenterPos, ControlOffset, ControlWidth, 1));
+		B227_HUDScaleEdit.SetText(B227_HUDScaleText);
+		B227_HUDScaleEdit.SetHelpText(B227_HUDScaleHelp);
+		B227_HUDScaleEdit.SetFont(F_Normal);
+		B227_HUDScaleEdit.SetNumericOnly(true);
+		B227_HUDScaleEdit.SetNumericFloat(true);
+		B227_HUDScaleEdit.Align = TA_Left;
+		ControlOffset += 25;
+	}
+
 	B227_bInitialized = true;
 }
 
@@ -106,7 +124,12 @@ function BeforePaint(Canvas C, float X, float Y)   //more shtuff......
   realicons.WinLeft = CenterPos;
   showtalktex.WinLeft = CenterPos;
 
-
+	if (B227_HUDScaleEdit != none)
+	{
+		B227_HUDScaleEdit.SetSize(CenterWidth, 1);
+		B227_HUDScaleEdit.WinLeft = CenterPos;
+		B227_HUDScaleEdit.EditBoxWidth = 90;
+	}
 }
 function Paint(Canvas C, float X, float Y)      //over-ride and add too......
 {
@@ -169,11 +192,15 @@ function Notify(UWindowDialogControl C, byte E)
       oldskoolbasehud(GetPlayerOwner().myHUD).showtalkface=showtalktex.bchecked;
       break;
     case realicons:
-    oldskoolbasehud(GetPlayerOwner().myHUD).realicons=realicons.bchecked;
-    break;
+      oldskoolbasehud(GetPlayerOwner().myHUD).realicons=realicons.bchecked;
+      break;
     case fragiconsp:
-    oldskoolbasehud(GetPlayerOwner().myHUD).showfrag=fragiconsp.bchecked;
-    break;
+      oldskoolbasehud(GetPlayerOwner().myHUD).showfrag=fragiconsp.bchecked;
+      break;
+    case B227_HUDScaleEdit:
+      if (B227_HUDScaleEdit != none && float(B227_HUDScaleEdit.GetValue()) > 0)
+        GetPlayerOwner().myHUD.SetPropertyText("HudScaler", string(FClamp(float(B227_HUDScaleEdit.GetValue()), 1.0, 16.0)));
+      break;
     }
     break;
     }
@@ -198,10 +225,19 @@ function B227_LoadCurrentValues()
 	showtalktex.bChecked = H.showtalkface;
 	realicons.bChecked = H.realicons;
 	fragiconsp.bChecked = H.showfrag;
+	if (B227_HUDScaleEdit != none)
+		B227_HUDScaleEdit.SetValue(H.GetPropertyText("HudScaler"));
 
 	B227_bInitialized = true;
 }
 
+function bool B227_HUDScalingSupported()
+{
+	return DynamicLoadObject("Engine.HUD.HudScaler", class'Object', true) != none;
+}
+
 defaultproperties
 {
+	B227_HUDScaleText="HUD Scale"
+	B227_HUDScaleHelp="If this factor is greater than 1, HUD is rendered at a lower resolution and stretched to full screen."
 }
