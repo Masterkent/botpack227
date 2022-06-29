@@ -188,7 +188,7 @@ simulated function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 	if ( Level.NetMode != NM_DedicatedServer )
-		Shadow = Spawn(class'PlayerShadow',self);
+		class'UTC_Pawn'.static.B227_InitPawnShadow(self);
 	if ( (Role == ROLE_Authority) && (Level.NetMode != NM_Standalone) )
 		BossRef = class<Actor>(DynamicLoadObject("Botpack.TBoss",class'Class'));
 

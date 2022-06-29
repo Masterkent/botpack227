@@ -176,7 +176,14 @@ function Paint(Canvas C, float X, float Y)      //over-ride and add too......
 }
 function Notify(UWindowDialogControl C, byte E)
 {
+  local oldskoolbasehud H;
+
   super(umenupagewindow).notify(c,e); //stupid thing wouldn't show help then :D
+
+  H = oldskoolbasehud(GetPlayerOwner().myHUD);
+  if (H == none || !B227_bInitialized)
+    return;
+
   switch(E)
   {
   case DE_Change:
@@ -189,17 +196,17 @@ function Notify(UWindowDialogControl C, byte E)
       HUDConfigChanged();
       break;
     case showtalktex:
-      oldskoolbasehud(GetPlayerOwner().myHUD).showtalkface=showtalktex.bchecked;
+      H.showtalkface=showtalktex.bchecked;
       break;
     case realicons:
-      oldskoolbasehud(GetPlayerOwner().myHUD).realicons=realicons.bchecked;
+      H.realicons=realicons.bchecked;
       break;
     case fragiconsp:
-      oldskoolbasehud(GetPlayerOwner().myHUD).showfrag=fragiconsp.bchecked;
+      H.showfrag=fragiconsp.bchecked;
       break;
     case B227_HUDScaleEdit:
       if (B227_HUDScaleEdit != none && float(B227_HUDScaleEdit.GetValue()) > 0)
-        GetPlayerOwner().myHUD.SetPropertyText("HudScaler", string(FClamp(float(B227_HUDScaleEdit.GetValue()), 1.0, 16.0)));
+        H.SetPropertyText("HudScaler", string(FClamp(float(B227_HUDScaleEdit.GetValue()), 1.0, 16.0)));
       break;
     }
     break;

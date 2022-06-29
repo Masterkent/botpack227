@@ -205,6 +205,19 @@ static function vector B227_DamageHitLocation(Pawn this)
 	return this.Location;
 }
 
+static function B227_InitPawnShadow(Pawn this)
+{
+	this.bNoDynamicShadowCast = false;
+
+	if (class'GameInfo'.default.bCastShadow && this.Shadow == none)
+	{
+		if (class'GameInfo'.default.bCastProjectorShadows )
+			this.Shadow = this.Spawn(Class'PawnShadowX', this);
+		else
+			this.Shadow = this.Spawn(Class'PawnShadow', this);
+	}
+}
+
 function bool B227_HasAliveEnemy()
 {
 	return Enemy != none && !Enemy.bDeleteMe && Enemy.Health > 0;

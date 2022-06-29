@@ -185,7 +185,7 @@ simulated function PostBeginPlay()
 	InitRating();
 	Super.PostBeginPlay();
 	if ( Level.NetMode != NM_DedicatedServer )
-		Shadow = Spawn(class'PlayerShadow',self);
+		class'UTC_Pawn'.static.B227_InitPawnShadow(self);
 }
  
 function StartMatch();
