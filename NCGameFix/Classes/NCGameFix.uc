@@ -38,6 +38,9 @@ function ReplaceSpawnPoints()
 
 function bool CheckReplacement(Actor A, out byte bSuperRelevant)
 {
+	if (Level.NetMode == NM_Standalone)
+		return true;
+
 	if (NCPickup(A) != none)
 		return
 			NCLantern(A) != none ||
@@ -52,7 +55,7 @@ function bool CheckReplacement(Actor A, out byte bSuperRelevant)
 
 defaultproperties
 {
-	VersionInfo="NCGameFix v1.5 [2022-05-23]"
-	Version="1.5"
+	VersionInfo="NCGameFix v1.6 [2022-06-30]"
+	Version="1.6"
 	bCoopUnlockPaths=True
 }
