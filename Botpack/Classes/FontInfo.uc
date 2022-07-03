@@ -261,6 +261,29 @@ static function font GetStaticACompletelyUnreadableFont(float Width)
 		return Font(DynamicLoadObject("LadderFonts.UTLadder12", class'Font'));
 }
 
+static function B227_SetStaticScaledSmallFont(Canvas Canvas, optional bool bAdjustSpaceX)
+{
+	local float Width;
+
+	Width = class'UTC_HUD'.static.B227_ScaledFontScreenWidth(Canvas);
+	if (Width < 1440)
+	{
+		if (Width < 1024)
+			Canvas.Font = Font'SmallFont';
+		else
+			Canvas.Font = Font'WhiteFont';
+
+		if (bAdjustSpaceX)
+			Canvas.SpaceX = 0;
+	}
+	else
+	{
+		Canvas.Font = Font(DynamicLoadObject("UWindowFonts.Tahoma20", class'Font'));
+		if (bAdjustSpaceX)
+			Canvas.SpaceX = 1;
+	}
+}
+
 static function Font B227_LoadTahomaFont(string FontName)
 {
 	local Font Font;

@@ -1,8 +1,3 @@
-//=============================================================================
-// ONPCoopMutator v5.11                                      Author: Masterkent
-//                                                             Date: 2022-06-12
-//=============================================================================
-
 class ONPCoopMutator expands Mutator
 	config(ONPCoopMutator);
 
@@ -82,6 +77,7 @@ function LevelStartupAdjustments()
 	AdjustTriggers();
 	ReplaceCameraSpots();
 	ReplaceMapInventory();
+	ReplaceSpawnPoints();
 
 	FixCurrentMap();
 	AdjustNextLevel();
@@ -201,6 +197,18 @@ function ReplaceMapInventory()
 			if (!Inv.bScriptInitialized && !InventoryReplacement(Inv, true))
 				Inv.Destroy();
 	}
+}
+
+function ReplaceSpawnPoints()
+{
+	local SpawnPoint SpawnPoint;
+
+	foreach AllActors(class'SpawnPoint', SpawnPoint)
+		if (SpawnPoint.Class == class'SpawnPoint' && SpawnPoint.Tag != '')
+		{
+			SpawnPoint.Spawn(class'ONPSpawnPoint',, SpawnPoint.Tag);
+			SpawnPoint.Tag = '';
+		}
 }
 
 function ReplaceTeleporters()
@@ -1052,13 +1060,13 @@ function AdjustRealCrouchInfo(Actor A)
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.11";
+	return "ONPCoopMutator v5.12";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.11 [2022-06-12]"
-	Version="5.11"
+	VersionInfo="ONPCoopMutator v5.12 [2022-07-03]"
+	Version="5.12"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True

@@ -1,8 +1,3 @@
-//=============================================================================
-// ONPSPFix v1.7                                             Author: Masterkent
-//                                                             Date: 2022-06-12
-//=============================================================================
-
 class ONPSPFix expands Mutator;
 
 var() const string VersionInfo;
@@ -21,9 +16,11 @@ function LevelStartupAdjustments()
 	AdjustMusicEvents();
 	AdjustTriggers();
 	ReplaceCameraSpots();
-	ReplaceTeleporters();
+	ReplaceSpawnPoints();
 
 	FixCurrentMap();
+
+	ReplaceTeleporters();
 }
 
 function AdjustDecorations()
@@ -94,6 +91,18 @@ function ReplaceCameraSpots()
 		}
 }
 
+function ReplaceSpawnPoints()
+{
+	local SpawnPoint SpawnPoint;
+
+	foreach AllActors(class'SpawnPoint', SpawnPoint)
+		if (SpawnPoint.Class == class'SpawnPoint' && SpawnPoint.Tag != '')
+		{
+			SpawnPoint.Spawn(class'ONPSpawnPoint',, SpawnPoint.Tag);
+			SpawnPoint.Tag = '';
+		}
+}
+
 function ReplaceTeleporters()
 {
 	class'B227_SpawnableTeleporter'.static.ReplaceLevelTeleporters(Level);
@@ -106,11 +115,11 @@ function FixCurrentMap()
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.7";
+	return "ONPSPFix v1.8";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.7 [2022-06-12]"
-	Version="1.7"
+	VersionInfo="ONPSPFix v1.8 [2022-07-03]"
+	Version="1.8"
 }

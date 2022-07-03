@@ -245,7 +245,7 @@ simulated function PostRender( canvas Canvas )
     Canvas.DrawColor.G = 255;}
     Canvas.SetPos(0.85 * Canvas.ClipX , multiplier* Canvas.ClipY);
             Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont;
+            class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
             Canvas.DrawText("Clip: "$35-clipcount);
             if (slaveclipcount > 29){       //set colour according to shots left.....
     Canvas.DrawColor.R = 255;
@@ -255,7 +255,7 @@ simulated function PostRender( canvas Canvas )
     Canvas.DrawColor.G = 255;}
     Canvas.SetPos(0.05 * Canvas.ClipX ,multiplier * Canvas.ClipY);
             Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont;
+            class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
          Canvas.DrawText("Clip: "$35-slaveclipcount);}
     else{
                 if (slaveclipcount > 29){       //set colour according to shots left.....
@@ -266,7 +266,7 @@ simulated function PostRender( canvas Canvas )
     Canvas.DrawColor.G = 255;}
         Canvas.SetPos(0.85 * Canvas.ClipX , multiplier * Canvas.ClipY);
             Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont;
+            class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
             Canvas.DrawText("Clip: "$35-slaveclipcount);
             if (clipcount > 29){       //set colour according to shots left.....
     Canvas.DrawColor.R = 255;
@@ -276,7 +276,7 @@ simulated function PostRender( canvas Canvas )
     Canvas.DrawColor.G = 255;}
     Canvas.SetPos(0.05 * Canvas.ClipX , multiplier * Canvas.ClipY);
             Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont;
+            class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
             Canvas.DrawText("Clip: "$35-clipcount); }}
     else { //doesn't have 2
             if (clipcount > 29){       //set colour according to shots left.....
@@ -288,11 +288,11 @@ simulated function PostRender( canvas Canvas )
     if(P.Handedness != 1){
     Canvas.SetPos(0.05 * Canvas.ClipX , multiplier * Canvas.ClipY);
             Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont;  }
+            class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);  }
             else {
             Canvas.SetPos(0.85 * Canvas.ClipX ,multiplier * Canvas.ClipY);
             Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont; }
+            class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true); }
             Canvas.DrawText("Clip: "$35-clipcount);}
 
     Canvas.Reset();

@@ -50,11 +50,14 @@ function Initfor(actor Other)
     SetCollisionSize(Other.CollisionRadius + 4, Other.CollisionHeight);
     if ( !SetLocation(Location) )
       SetCollisionSize(CollisionRadius - 4, CollisionHeight);
-    //if (pawn(other).isa('scriptedpawn'))
-    realcarcass=class<creaturecarcass>(scriptedpawn(other).default.carcasstype); //use default!
-    bgreenblood=realcarcass.default.bgreenblood; //copy.
-    bPermanent=realcarcass.default.bPermanent;
-    lifespan=realcarcass.default.lifespan;
+    if (ScriptedPawn(Other) != none)
+      realcarcass = class<CreatureCarcass>(scriptedpawn(other).default.carcasstype); //use default!
+    if (realcarcass != none)
+    {
+      bgreenblood = realcarcass.default.bgreenblood; //copy.
+      bPermanent = realcarcass.default.bPermanent;
+      lifespan = realcarcass.default.lifespan;
+    }
     DesiredRotation = other.Rotation;
     DesiredRotation.Roll = 0;
     DesiredRotation.Pitch = 0;

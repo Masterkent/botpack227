@@ -85,12 +85,12 @@ simulated function PostRender( canvas Canvas )
     if(PlayerPawn(Owner).Handedness != 1){
    		Canvas.SetPos(0.05 * Canvas.ClipX , multiplier * Canvas.ClipY);
         Canvas.Style = ERenderStyle.STY_Translucent;
-        Canvas.Font = Canvas.SmallFont;
+        class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
 	}
     else {
     	Canvas.SetPos(0.85 * Canvas.ClipX , multiplier * Canvas.ClipY);
     	Canvas.Style = ERenderStyle.STY_Translucent;
-        Canvas.Font = Canvas.SmallFont;
+        class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
 	}
     Canvas.DrawText("Clip: "$8-clipcount);
 

@@ -26,7 +26,7 @@ function FixCurrentMap()
 
 function string GetHumanName()
 {
-	return "SBSPFix v1.1";
+	return "SBSPFix v1.2";
 }
 
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
@@ -76,6 +76,6 @@ function RemoveCutsceneActors()
 
 defaultproperties
 {
-	VersionInfo="SBSPFix v1.1 [2022-02-09]"
-	Version="1.1"
+	VersionInfo="SBSPFix v1.2 [2022-07-02]"
+	Version="1.2"
 }

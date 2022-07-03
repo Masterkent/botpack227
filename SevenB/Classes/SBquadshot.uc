@@ -57,7 +57,7 @@ simulated function PostRender( canvas Canvas )   //render amount of clips left..
     else
       Canvas.SetPos(0.85 * Canvas.ClipX , multiplier * Canvas.ClipY);
    	Canvas.Style = ERenderStyle.STY_Translucent;
-    Canvas.Font = Canvas.SmallFont;
+    class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
     Canvas.DrawText("In Gun: "$ShotsLeft);
 
     Canvas.Reset();

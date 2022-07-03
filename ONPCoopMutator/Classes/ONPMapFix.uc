@@ -455,6 +455,7 @@ function Server_FixCurrentMap_NP19Part2Chico()
 {
 	local ZoneInfo zone;
 	local PressureZone pr_zone;
+	local Trigger Trigger;
 
 	zone = ZoneInfo(LoadLevelActor("ZoneInfo8"));
 	zone.ZoneVelocity = vect(0, 0, 0);
@@ -466,8 +467,16 @@ function Server_FixCurrentMap_NP19Part2Chico()
 	LoadLevelMover("Mover15").bNet = false;
 	LoadLevelMover("Mover171").bNet = true;
 	LoadLevelMover("Mover172").bNet = true;
+
 	LoadLevelTrigger("Trigger20").Event = '';
 	LoadLevelActor("CreatureFactory7").Tag = '';
+
+	foreach AllActors(class'Trigger', Trigger)
+		if (Trigger.Event == 'itburnS')
+		{
+			Trigger.bTriggerOnceOnly = false;
+			Trigger.TriggerType = TT_PawnProximity;
+		}
 }
 
 function Server_FixCurrentMap_NP19Part3ChicoHour()

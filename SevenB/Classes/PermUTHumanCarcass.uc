@@ -15,6 +15,15 @@ function Initfor(actor Other)
 	if (classischildof(scriptedpawn(other).default.carcasstype,class'UTHumanCarcass')) //UT carcass
 		PrePivot = vect(0,0,3);
 	super.Initfor(Other);
+
+	if (ScriptedPawn(Other) != none)
+		realUTcarcass = class<UTHumanCarcass>(ScriptedPawn(Other).default.CarcassType); //use default!
+	if (realUTcarcass != none)
+	{
+		bGreenBlood = realUTcarcass.default.bGreenBlood; //copy.
+		bPermanent = realUTcarcass.default.bPermanent;
+		LifeSpan = realUTcarcass.default.LifeSpan;
+	}
 }
 
 function GibSound()    //statics.
@@ -108,7 +117,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation,
 		}
 	}
 
-	Super.TakeDamage(Damage, instigatedBy, HitLocation, Momentum, DamageType);
+	Super(CreatureCarcass).TakeDamage(Damage, instigatedBy, HitLocation, Momentum, DamageType);
 
   if ( bJerking )
   {

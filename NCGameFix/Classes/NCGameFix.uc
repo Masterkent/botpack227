@@ -29,7 +29,7 @@ function ReplaceSpawnPoints()
 	local SpawnPoint SpawnPoint;
 
 	foreach AllActors(class'SpawnPoint', SpawnPoint)
-		if (SpawnPoint.Class == class'SpawnPoint')
+		if (SpawnPoint.Class == class'SpawnPoint' && SpawnPoint.Tag != '')
 		{
 			SpawnPoint.Spawn(class'NCSpawnPoint',, SpawnPoint.Tag);
 			SpawnPoint.Tag = '';
@@ -53,9 +53,14 @@ function bool CheckReplacement(Actor A, out byte bSuperRelevant)
 	return true;
 }
 
+function string GetHumanName()
+{
+	return "NCGameFix v1.7";
+}
+
 defaultproperties
 {
-	VersionInfo="NCGameFix v1.6 [2022-06-30]"
-	Version="1.6"
+	VersionInfo="NCGameFix v1.7 [2022-07-02]"
+	Version="1.7"
 	bCoopUnlockPaths=True
 }

@@ -192,6 +192,7 @@ function FixCurrentMap_Jones_08_Pirate2()
 
 function FixCurrentMap_Jones_08_Pirate3()
 {
+	DisableTeleporter("Teleporter1");
 	SetDynamicLightMover("Mover13");
 }
 

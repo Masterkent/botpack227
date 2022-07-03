@@ -223,6 +223,8 @@ function Server_FixCurrentMap_NP19Part2Chico()
 {
 	local ZoneInfo zone;
 	local PressureZone pr_zone;
+	local AlarmPoint AlarmPoint;
+	local Trigger Trigger;
 
 	zone = ZoneInfo(LoadLevelActor("ZoneInfo8"));
 	zone.ZoneVelocity = vect(0, 0, 0);
@@ -230,6 +232,32 @@ function Server_FixCurrentMap_NP19Part2Chico()
 
 	pr_zone = PressureZone(LoadLevelActor("PressureZone0"));
 	pr_zone.DieDrawScale = 1;
+
+	LoadLevelTrigger("Trigger20").Event = '';
+	Spawn(class'ONPLevelStartTrigger').Event = 'lasersunder1';
+
+	AlarmPoint(LoadLevelActor("AlarmPoint10")).NextAlarm = 'PathToAlarmPoint11';
+
+	AlarmPoint = AlarmPoint(LoadLevelActor("AlarmPoint13"));
+	AlarmPoint = Spawn(class'ONPSpawnableAlarmPoint',, 'PathToAlarmPoint11', AlarmPoint.Location + vect(200, 0, 0));
+	AlarmPoint.bNoFail = true;
+	AlarmPoint.NextAlarmObject = LoadLevelActor("AlarmPoint11");
+	AlarmPoint.NextAlarm = AlarmPoint.NextAlarmObject.Tag;
+
+	foreach AllActors(class'Trigger', Trigger)
+		if (Trigger.Event == 'itburnS')
+		{
+			if (Trigger.Name == 'Trigger35' ||
+				Trigger.Name == 'Trigger75' ||
+				Trigger.Name == 'Trigger76' ||
+				Trigger.Name == 'Trigger77')
+			{
+				Trigger.InitialState = 'OtherTriggerToggles';
+				Trigger.Tag = 'lasersunder1';
+				Trigger.TriggerType = TT_PawnProximity;
+			}
+			Trigger.bTriggerOnceOnly = false;
+		}
 }
 
 function Server_FixCurrentMap_NP19Part3ChicoHour()

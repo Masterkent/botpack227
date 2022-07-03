@@ -22,8 +22,12 @@ function ServerFixCurrentMap()
 		ServerFixMap_NCLevel003();
 	else if (CurrentMap ~= "NCLevel004")
 		ServerFixMap_NCLevel004();
+	else if (CurrentMap ~= "NCLevel004c")
+		ServerFixMap_NCLevel004c();
 	else if (CurrentMap ~= "NCLevel005")
 		ServerFixMap_NCLevel005();
+	else if (CurrentMap ~= "NCLevel005c")
+		ServerFixMap_NCLevel005c();
 	else if (CurrentMap ~= "NCLevel006")
 		ServerFixMap_NCLevel006();
 	else if (CurrentMap ~= "NCLevel007")
@@ -139,6 +143,11 @@ function ServerFixMap_NCLevel004()
 	}
 }
 
+function ServerFixMap_NCLevel004c()
+{
+	ChangePhysWalkingToNoneFor(class'Nali');
+}
+
 function ServerFixMap_NCLevel005()
 {
 	local PlayerStart PlayerStart;
@@ -158,6 +167,11 @@ function ServerFixMap_NCLevel005()
 
 		ChangeNextMap("NCLevel005c", "NCLevel006");
 	}
+}
+
+function ServerFixMap_NCLevel005c()
+{
+	ChangePhysWalkingToNoneFor(class'Nali');
 }
 
 function ServerFixMap_NCLevel006()
@@ -335,6 +349,8 @@ function ServerFixMap_NCLevel016()
 	local PlayerStart PlayerStart;
 	local Mover Mover;
 	local NCSpawnableTeleporter Telep;
+
+	LoadLevelTrigger("Trigger105").TriggerType = TT_PlayerProximity; // NPCs shouldn't be able to trigger this
 
 	if (Level.NetMode == NM_Standalone)
 		DisablePlayerStart("PlayerStart0");
@@ -594,4 +610,12 @@ function DisablePlayerStart(string PlayerStartName)
 	PlayerStart = PlayerStart(DynamicLoadObject(outer.name $ "." $ PlayerStartName, class'PlayerStart'));
 	PlayerStart.bSinglePlayerStart = False;
 	PlayerStart.bCoopStart = False;
+}
+
+function ChangePhysWalkingToNoneFor(class<Pawn> PawnClass)
+{
+	local Actor P;
+
+	foreach AllActors(PawnClass, P)
+		Spawn(class'NCPhysWalkingToNone', P);
 }
