@@ -11,6 +11,8 @@ var() class<LocalMessage> PickupMessageClass;
 // 1 - scaling PlayerViewOffset.X by FOV angle
 // 2 - scaling PlayerViewOffset by FOV angle (UT436 behavior)
 var() globalconfig int B227_ViewOffsetMode;
+var() globalconfig bool B227_bEnableMuzzleFlash;
+var() config float B227_MuzzleFlashScale;
 
 var vector B227_FireStartTrace, B227_FireEndTrace;
 
@@ -46,6 +48,7 @@ simulated event RenderOverlays(Canvas Canvas)
 	local int Hand;
 	local PlayerPawn PlayerOwner;
 	local float FovScale;
+	local float CustomScale;
 
 	if ( bHideWeapon || (Owner == None) )
 		return;
@@ -68,10 +71,12 @@ simulated event RenderOverlays(Canvas Canvas)
 	if ( !bPlayerOwner || (PlayerOwner.Player == None) )
 		Pawn(Owner).WalkBob = vect(0,0,0);
 
-	if ( (bMuzzleFlash > 0) && bDrawMuzzleFlash && Level.bHighDetailMode && (MFTexture != None) )
+	if ( (bMuzzleFlash > 0) && bDrawMuzzleFlash && Level.bHighDetailMode && (MFTexture != None) &&
+		B227_bEnableMuzzleFlash && B227_MuzzleFlashScale > 0 )
 	{
 		FovScale = 1 / Tan(FClamp(PlayerOwner.FOVAngle, 1, 179) / 360 * Pi);
-		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FovScale;
+		CustomScale = FClamp(B227_MuzzleFlashScale, 0, 2);
+		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FovScale * CustomScale;
 		if ( !bSetFlashTime )
 		{
 			bSetFlashTime = true;
@@ -361,4 +366,6 @@ static function vector B227_WarpZoneHitLocation(WarpZoneInfo WarpZone, vector Hi
 defaultproperties
 {
 	B227_ViewOffsetMode=1
+	B227_bEnableMuzzleFlash=True
+	B227_MuzzleFlashScale=1.0
 }

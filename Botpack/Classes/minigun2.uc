@@ -1,7 +1,8 @@
 //=============================================================================
 // Minigun.
 //=============================================================================
-class Minigun2 extends TournamentWeapon;
+class Minigun2 extends TournamentWeapon
+	config(Botpack);
 
 #exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
@@ -9,6 +10,8 @@ var float ShotAccuracy, LastShellSpawn;
 var int Count;
 var bool bOutOfAmmo, bFiredShot;
 var() texture MuzzleFlashVariations[10];
+
+var() config bool B227_bAdjustMuzzleFlashOffset;
 
 // set which hand is holding weapon
 function setHand(float Hand)
@@ -97,9 +100,9 @@ simulated event RenderOverlays( canvas Canvas )
 		bMuzzleFlash = 0;
 	FlashY = Default.FlashY * (1.08 - 0.16 * FRand());
 	if ( !Owner.IsA('PlayerPawn') || (PlayerPawn(Owner).Handedness == 0) )
-		FlashO = Default.FlashO * (4 + 0.15 * FRand());
+		FlashO = B227_GetMuzzleFlashOffset(true) * (4 + 0.15 * FRand());
 	else
-		FlashO = Default.FlashO * (1 + 0.15 * FRand());
+		FlashO = B227_GetMuzzleFlashOffset(false) * (1 + 0.15 * FRand());
 	Texture'MiniAmmoled'.NotifyActor = Self;
 	Super.RenderOverlays(Canvas);
 	Texture'MiniAmmoled'.NotifyActor = None;
@@ -552,6 +555,19 @@ function B227_AdjustNPCFirePosition()
 	}
 }
 
+simulated function float B227_GetMuzzleFlashOffset(bool bCentered)
+{
+	if (!class'B227_Config'.default.bEnableExtensions ||
+		!B227_bAdjustMuzzleFlashOffset ||
+		B227_ViewOffsetMode == 2)
+	{
+		return default.FlashO;
+	}
+	if (bCentered)
+		return 0.016;
+	return 0.019;
+}
+
 defaultproperties
 {
 	MuzzleFlashVariations(0)=Texture'Botpack.Skins.Muz1'
@@ -619,4 +635,5 @@ defaultproperties
 	LightHue=28
 	LightSaturation=32
 	LightRadius=6
+	B227_bAdjustMuzzleFlashOffset=True
 }
