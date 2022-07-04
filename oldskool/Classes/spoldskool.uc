@@ -53,7 +53,7 @@ function SetUpCurrent(){
   if (level.netmode!=NM_standalone||PermaDecals)
   spawn(class'decalnotify');
   if (level.netmode!=NM_standalone){
-    spawn(class'EveryThingNotify');
+    //-spawn(class'EveryThingNotify');
     return;
   }
   oASMD=basmd; //old options
@@ -198,8 +198,8 @@ other.disable('trigger'); //my version is better :P
 return true; //keep its navigation properties.  With trigger disabled it can't do anything and the hack manages it.
 }
 if (other.isa('decoration')){    //fix content (falling stuff)
-  if (other.isa('tree')||left(getitemname(string(other.class)),5)~="plant")
-    other.style=STY_MASKED; //fix up mask bug in D3D?
+  //-if (other.isa('tree')||left(getitemname(string(other.class)),5)~="plant")
+  //-  other.style=STY_MASKED; //fix up mask bug in D3D?
   fixcontents(decoration(other).Contents);
   fixcontents(decoration(other).Content2);
   fixcontents(decoration(other).Content3);
@@ -208,8 +208,8 @@ if (other.isa('musicevent')&&musicevent(other).Song==none&&level.song==none){ //
   musicevent(other).song=music'olroot.null';
   return true;
 }
-if (other.style==STY_NORMAL&&other.isa('pawn')&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('bird1')||other.isa('Slith')||other.isa('manta')))
-  other.style=STY_MASKED; //fix up masking bug on pawns
+//-if (other.style==STY_NORMAL&&other.isa('pawn')&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('bird1')||other.isa('Slith')||other.isa('manta')))
+//-  other.style=STY_MASKED; //fix up masking bug on pawns
 if (other.IsA('inventory')) //so pickup messages work......
   class'UTC_Inventory'.static.B227_SetPickupMessageClass(Inventory(other), none);
 //here we swap baddie projectiles around.... (neither a spawn notify nor mutator would affect the projectiles so I had to do it the hard way :(
@@ -577,13 +577,13 @@ if ( Other.IsA('Clip') &&bmag&&Other.Location != vect(0,0,0)&&Other.owner==None 
 //items
 if ( Other.IsA('pickup') )
 {
-if (Other.Isa('armor2')){              //icon.....
-armor2(other).Icon=Texture'UnrealShare.Icons.I_Armor';
-return true;}
+//-if (Other.Isa('armor2')){              //icon.....
+//-armor2(other).Icon=Texture'UnrealShare.Icons.I_Armor';
+//-return true;}
 
-if (Other.Isa('thighpads')){  //stronger pads......    (kev suit standarts)
-thighpads(other).Icon=Texture'UnrealShare.Icons.I_kevlar'; //to stop confusion :D
-return true;}
+//-if (Other.Isa('thighpads')){  //stronger pads......    (kev suit standarts)
+//-thighpads(other).Icon=Texture'UnrealShare.Icons.I_kevlar'; //to stop confusion :D
+//-return true;}
 if ( Other.IsA('Tournamentpickup') )        //sure ok :D
       return true;
   if ( Other.IsA('JumpBoots') &&bjump)

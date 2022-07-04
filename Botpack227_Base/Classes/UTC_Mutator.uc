@@ -42,7 +42,6 @@ function bool IsRelevant(Actor Other, out byte bSuperRelevant)
 
 function bool ReplaceWith(Actor Other, string ClassName)
 {
-	local Actor A;
 	local class<Actor> aClass;
 
 	if (Inventory(Other) != none && !bool(Other.Location))
@@ -52,45 +51,7 @@ function bool ReplaceWith(Actor Other, string ClassName)
 	if (aClass == none)
 		return false;
 
-	A = Other.Spawn(aClass, Other.Owner, Other.Tag);
-	B227_ReplacingActor = A;
-	if (A == none)
-		return false;
-
-	if (Inventory(Other) != none)
-	{
-		if (Inventory(Other).MyMarker != none)
-		{
-			Inventory(Other).MyMarker.markedItem = Inventory(A);
-			if (Inventory(A) != none)
-				Inventory(A).MyMarker = Inventory(Other).MyMarker;
-			Inventory(Other).MyMarker = none;
-		}
-
-		if (Inventory(A) != none)
-		{
-			if (Other.CollisionRadius != Other.default.CollisionRadius)
-				A.SetCollisionSize(Other.CollisionRadius, A.CollisionHeight);
-
-			if (Other.CollisionHeight != Other.default.CollisionHeight)
-				A.SetCollisionSize(A.CollisionRadius, Other.CollisionHeight);
-			else
-				A.Move((A.CollisionHeight - Other.CollisionHeight) * vect(0, 0, 1));
-
-			if (Inventory(Other).bHeldItem)
-			{
-				Inventory(A).bHeldItem = true;
-				Inventory(A).RespawnTime = 0.0;
-			}
-			else if (Inventory(Other).RespawnTime == 0.0)
-				Inventory(A).RespawnTime = 0.0;
-		}
-	}
-
-	A.Event = Other.Event;
-	A.Tag = Other.Tag;
-
-	return true;
+	return B227_ReplaceWith(Other, aClass);
 }
 
 function ModifyPlayer(Pawn Other)
@@ -255,4 +216,49 @@ function RegisterHUDMutator()
 	NextHUDMutator = UTC_HUD(Player.myHUD).HUDMutator;
 	UTC_HUD(Player.myHUD).HUDMutator = self;
 	bHUDMutator = true;
+}
+
+function bool B227_ReplaceWith(Actor Actor, class<Actor> NewActorClass)
+{
+	local Actor A;
+
+	A = Actor.Spawn(NewActorClass, Actor.Owner, Actor.Tag);
+	B227_ReplacingActor = A;
+	if (A == none)
+		return false;
+
+	if (Inventory(Actor) != none)
+	{
+		if (Inventory(Actor).MyMarker != none)
+		{
+			Inventory(Actor).MyMarker.markedItem = Inventory(A);
+			if (Inventory(A) != none)
+				Inventory(A).MyMarker = Inventory(Actor).MyMarker;
+			Inventory(Actor).MyMarker = none;
+		}
+
+		if (Inventory(A) != none)
+		{
+			if (Actor.CollisionRadius != Actor.default.CollisionRadius)
+				A.SetCollisionSize(Actor.CollisionRadius, A.CollisionHeight);
+
+			if (Actor.CollisionHeight != Actor.default.CollisionHeight)
+				A.SetCollisionSize(A.CollisionRadius, Actor.CollisionHeight);
+			else
+				A.Move((A.CollisionHeight - Actor.CollisionHeight) * vect(0, 0, 1));
+
+			if (Inventory(Actor).bHeldItem)
+			{
+				Inventory(A).bHeldItem = true;
+				Inventory(A).RespawnTime = 0.0;
+			}
+			else if (Inventory(Actor).RespawnTime == 0.0)
+				Inventory(A).RespawnTime = 0.0;
+		}
+	}
+
+	A.Event = Actor.Event;
+	A.Tag = Actor.Tag;
+
+	return true;
 }

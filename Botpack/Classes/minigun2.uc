@@ -83,10 +83,6 @@ function float RateSelf( out int bUseAltMode )
 
 simulated event RenderOverlays( canvas Canvas )
 {
-	local UT_Shellcase s;
-	local vector X,Y,Z;
-	local float dir;
-
 	if ( bSteadyFlash3rd )
 	{
 		bMuzzleFlash = 1;
@@ -111,18 +107,7 @@ simulated event RenderOverlays( canvas Canvas )
 		&& (Level.Pauser=="") )
 	{
 		LastShellSpawn = Level.TimeSeconds;
-		GetAxes(Pawn(Owner).ViewRotation,X,Y,Z);
-
-		if ( PlayerViewOffset.Y >= 0 )
-			dir = 1;
-		else 
-			dir = -1;
-		if ( Level.bHighDetailMode )
-		{
-			s = Spawn(class'MiniShellCase',Owner, '', Owner.Location + CalcDrawOffset() + 30 * X + (0.4 * PlayerViewOffset.Y+5.0) * Y - Z * 5);
-			if ( s != None ) 
-				s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.3+0.2)*dir*Y + (FRand()*0.3+1.0) * Z)*160);
-		}
+		B227_SpawnShellCase();
 	}
 }
 
@@ -559,13 +544,32 @@ simulated function float B227_GetMuzzleFlashOffset(bool bCentered)
 {
 	if (!class'B227_Config'.default.bEnableExtensions ||
 		!B227_bAdjustMuzzleFlashOffset ||
-		B227_ViewOffsetMode == 2)
+		B227_ViewOffsetMode == 2 ||
+		default.FlashO != class'Minigun2'.default.FlashO)
 	{
 		return default.FlashO;
 	}
 	if (bCentered)
 		return 0.016;
 	return 0.019;
+}
+
+simulated function B227_SpawnShellCase()
+{
+	local UT_Shellcase s;
+	local vector X, Y, Z;
+	local float dir;
+
+	GetAxes(Pawn(Owner).ViewRotation, X, Y, Z);
+
+	if ( PlayerViewOffset.Y >= 0 )
+		dir = 1;
+	else 
+		dir = -1;
+
+	s = Spawn(class'MiniShellCase',Owner, '', Owner.Location + CalcDrawOffset() + 30 * X + (0.4 * PlayerViewOffset.Y+5.0) * Y - Z * 5);
+	if (s != none) 
+		s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.3+0.2)*dir*Y + (FRand()*0.3+1.0) * Z)*160);
 }
 
 defaultproperties

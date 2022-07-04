@@ -84,47 +84,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 
 simulated event RenderOverlays( canvas Canvas )
 {
-  local LongUT_ShellCase s;
-  local vector X,Y,Z;
-  local float dir;
-
-  if ( bSteadyFlash3rd )
-  {
-    bMuzzleFlash = 1;
-    bSetFlashTime = false;
-    if ( !Level.bDropDetail )
-      MFTexture = MuzzleFlashVariations[Rand(10)];
-    else
-      MFTexture = MuzzleFlashVariations[Rand(5)];
-  }
-  else
-    bMuzzleFlash = 0;
-  FlashY = Default.FlashY * (1.08 - 0.16 * FRand());
-  if ( !Owner.IsA('PlayerPawn') || (PlayerPawn(Owner).Handedness == 0) )
-    FlashO = Default.FlashO * (4 + 0.15 * FRand());
-  else
-    FlashO = Default.FlashO * (1 + 0.15 * FRand());
-  Texture'MiniAmmoled'.NotifyActor = Self;
-  Super(TournamentWeapon).RenderOverlays(Canvas);
-  Texture'MiniAmmoled'.NotifyActor = None;
-
-  if ( bSteadyFlash3rd && Level.bHighDetailMode && (Level.TimeSeconds - LastShellSpawn > 0.125)
-    && (Level.Pauser=="") )
-  {
-    LastShellSpawn = Level.TimeSeconds;
-    GetAxes(Pawn(Owner).ViewRotation,X,Y,Z);
-
-    if ( PlayerViewOffset.Y >= 0 )
-      dir = 1;
-    else
-      dir = -1;
-    if ( Level.bHighDetailMode )
-    {
-      s = Spawn(class'LongUT_ShellCase',Owner, '', Owner.Location + CalcDrawOffset() + 30 * X + (0.4 * PlayerViewOffset.Y+5.0) * Y - Z * 5);
-      if ( s != None )
-        s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.3+0.2)*dir*Y + (FRand()*0.3+1.0) * Z)*160);
-    }
-  }
+	super.RenderOverlays(Canvas); // see B227_SpawnShellCase
 }
 
 //no firing in water code:
@@ -225,6 +185,24 @@ Begin:
   if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) )
     Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
   Disable('AnimEnd');
+}
+
+simulated function B227_SpawnShellCase()
+{
+	local LongUT_ShellCase s;
+	local vector X,Y,Z;
+	local float dir;
+
+	GetAxes(Pawn(Owner).ViewRotation,X,Y,Z);
+
+	if ( PlayerViewOffset.Y >= 0 )
+		dir = 1;
+	else
+		dir = -1;
+
+	s = Spawn(class'LongUT_ShellCase',Owner, '', Owner.Location + CalcDrawOffset() + 30 * X + (0.4 * PlayerViewOffset.Y+5.0) * Y - Z * 5);
+	if (s != none)
+		s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.3+0.2)*dir*Y + (FRand()*0.3+1.0) * Z)*160);
 }
 
 defaultproperties

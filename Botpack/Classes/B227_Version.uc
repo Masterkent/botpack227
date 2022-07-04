@@ -2,6 +2,6 @@ class B227_Version expands B227_BaseVersion abstract;
 
 defaultproperties
 {
-	VersionInfo="Botpack v1.19 [2022-07-03]"
-	Version="1.19"
+	VersionInfo="Botpack v1.20 [2022-07-04]"
+	Version="1.20"
 }

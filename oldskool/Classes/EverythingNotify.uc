@@ -8,6 +8,8 @@ class EverythingNotify expands SpawnNotify;
 function prebeginplay(); //don't call parent! (screwed up)
 simulated function PostBeginPlay()
 {
+  // All these tweaks are unneeded in U227
+  /*-
   local actor other;
   if (level.netmode!=nm_client) //mutator works on server.
     return;
@@ -16,16 +18,19 @@ simulated function PostBeginPlay()
   ForEach Allactors(class'actor',other){   //mask.
     if (other.style==STY_NORMAL&&(other.IsA('decoration')&&((other.isa('tree')||left(getitemname(string(other.class)),5)~="plant"))||(other.role==role_authority&&other.isa('pawn')&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('bird1')||other.isa('Slith')||other.isa('manta')))))
       Other.Style=Sty_masked;
-    //-if (other.IsA('scriptedpawn')&&!other.isa('tentacle')&&pawn(other).shadow==none)     //no decal for them.
-    //-  scriptedpawn(other).Shadow = Spawn(class'olpawnShadow',other,,other.location);
+    if (other.IsA('scriptedpawn')&&!other.isa('tentacle')&&pawn(other).shadow==none)     //no decal for them.
+      scriptedpawn(other).Shadow = Spawn(class'olpawnShadow',other,,other.location);
   }
+  */
 }
 simulated event Actor SpawnNotification(Actor other)
 {
+  /*-
     if (other.style==STY_NORMAL&&(other.IsA('decoration')&&((other.isa('tree')||left(getitemname(string(other.class)),5)~="plant"))||(other.role==role_authority&&other.isa('pawn')&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('bird1')||other.isa('Slith')||other.isa('manta')))))
       Other.Style=Sty_masked;
-    //-if (other.IsA('scriptedpawn')&&!other.isa('tentacle')&&pawn(other).shadow==none)     //no decal for them.
-    //-  scriptedpawn(other).Shadow = Spawn(class'olpawnShadow',other,,other.location);
+    -if (other.IsA('scriptedpawn')&&!other.isa('tentacle')&&pawn(other).shadow==none)     //no decal for them.
+    -  scriptedpawn(other).Shadow = Spawn(class'olpawnShadow',other,,other.location);
+  */
   return other;
 }
 
