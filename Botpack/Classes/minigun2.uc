@@ -542,15 +542,14 @@ function B227_AdjustNPCFirePosition()
 
 simulated function float B227_GetMuzzleFlashOffset(bool bCentered)
 {
-	if (!class'B227_Config'.default.bEnableExtensions ||
+	if (!bCentered ||
+		!class'B227_Config'.default.bEnableExtensions ||
 		!B227_bAdjustMuzzleFlashOffset ||
 		B227_ViewOffsetMode == 2 ||
 		default.FlashO != class'Minigun2'.default.FlashO)
 	{
 		return default.FlashO;
 	}
-	if (bCentered)
-		return 0.016;
 	return 0.019;
 }
 

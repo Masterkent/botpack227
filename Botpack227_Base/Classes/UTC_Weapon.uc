@@ -47,6 +47,7 @@ simulated event RenderOverlays(Canvas Canvas)
 	local bool bPlayerOwner;
 	local int Hand;
 	local PlayerPawn PlayerOwner;
+	local float ScreenHeight;
 	local float FovScale;
 	local float CustomScale;
 
@@ -74,6 +75,11 @@ simulated event RenderOverlays(Canvas Canvas)
 	if ( (bMuzzleFlash > 0) && bDrawMuzzleFlash && Level.bHighDetailMode && (MFTexture != None) &&
 		B227_bEnableMuzzleFlash && B227_MuzzleFlashScale > 0 )
 	{
+		if (B227_ViewOffsetMode == 2)
+			ScreenHeight = Canvas.SizeY; // It's hard to calculate the correct offset for this mode anyway, so the original method is preserved for it.
+		else
+			ScreenHeight = Canvas.SizeX * 3 / 4;
+
 		FovScale = 1 / Tan(FClamp(PlayerOwner.FOVAngle, 1, 179) / 360 * Pi);
 		CustomScale = FClamp(B227_MuzzleFlashScale, 0, 2);
 		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FovScale * CustomScale;
@@ -89,11 +95,11 @@ simulated event RenderOverlays(Canvas Canvas)
 			if ( Hand == 0 )
 				Canvas.SetPos(
 					Canvas.ClipX/2 - 0.5 * MuzzleScale * FlashS + Canvas.ClipX * (-0.2 * Default.FireOffset.Y * FlashO) * FovScale,
-					Canvas.ClipY/2 - 0.5 * MuzzleScale * FlashS + Canvas.ClipY * (FlashY + FlashC) * FovScale);
+					Canvas.ClipY/2 - 0.5 * MuzzleScale * FlashS + ScreenHeight * (FlashY + FlashC) * FovScale);
 			else
 				Canvas.SetPos(
 					Canvas.ClipX/2 - 0.5 * MuzzleScale * FlashS + Canvas.ClipX * (Hand * Default.FireOffset.Y * FlashO) * FovScale,
-					Canvas.ClipY/2 - 0.5 * MuzzleScale * FlashS + Canvas.ClipY * FlashY * FovScale);
+					Canvas.ClipY/2 - 0.5 * MuzzleScale * FlashS + ScreenHeight * FlashY * FovScale);
 
 			Canvas.Style = 3;
 			Canvas.DrawIcon(MFTexture, MuzzleScale);
