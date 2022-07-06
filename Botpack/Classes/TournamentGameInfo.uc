@@ -4,7 +4,8 @@
 // default game info is normal single player
 //
 //=============================================================================
-class TournamentGameInfo extends UTC_GameInfo;
+class TournamentGameInfo extends UTC_GameInfo
+	config;
 
 #exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
@@ -40,6 +41,8 @@ var string BestPlayers[3];
 var int BestFPHs[3];
 var string BestRecordDate[3];
 var bool bDisallowOverride;
+
+var() config bool B227_bAllowUnrealIPlayers;
 
 function bool AtCapacity(string Options)
 {
@@ -86,10 +89,10 @@ event playerpawn Login
 				SpawnClass = class'CHSpectator';
 		}
 		else if ( !ClassIsChildOf(SpawnClass, class'TournamentPlayer') )
-			SpawnClass = DefaultPlayerClass;
+			SpawnClass = B227_TransformPlayerClass(SpawnClass);
 	}
 	else if ( !ClassIsChildOf(SpawnClass, class'TournamentPlayer') )
-		SpawnClass = DefaultPlayerClass;
+		SpawnClass = B227_TransformPlayerClass(SpawnClass);
 
 	NewPlayer = Super.Login(Portal, Options, Error, SpawnClass);
 
@@ -402,6 +405,72 @@ function GetTimeStamp(out string AbsoluteTime)
 		AbsoluteTime = AbsoluteTime$":"$Level.Second;
 }
 
+
+event InitGame(string Options, out string Error)
+{
+	super.InitGame(Options, Error);
+	if (Level.NetMode != NM_Standalone && class'B227_Config'.default.bEnableExtras)
+		AddToPackagesMap("Botpack227_Extras");
+}
+
+function class<PlayerPawn> B227_TransformPlayerClass(class<PlayerPawn> PlayerClass)
+{
+	if (!class'B227_Config'.default.bEnableExtras ||
+		!B227_bAllowUnrealIPlayers ||
+		PlayerClass == none ||
+		!ClassIsChildOf(PlayerClass, class'UnrealIPlayer') ||
+		!ClassIsChildOf(PlayerClass, class'Human') && (bHumansOnly || Level.bHumansOnly) ||
+		Level.NetMode != NM_Standalone && !IsInPackageMap("Botpack227_Extras"))
+	{
+		return DefaultPlayerClass;
+	}
+
+	switch (PlayerClass.default.Mesh)
+	{
+		case Mesh'UnrealShare.Female1':
+			PlayerClass = B227_LoadPlayerClass("Botpack227_Extras.UT_FemaleOne");
+			break;
+
+		case Mesh'UnrealI.Female2':
+			PlayerClass = B227_LoadPlayerClass("Botpack227_Extras.UT_FemaleTwo");
+			break;
+
+		case Mesh'UnrealI.Male1':
+			PlayerClass = B227_LoadPlayerClass("Botpack227_Extras.UT_MaleOne");
+			break;
+
+		case Mesh'UnrealI.Male2':
+			PlayerClass = B227_LoadPlayerClass("Botpack227_Extras.UT_MaleTwo");
+			break;
+
+		case Mesh'UnrealShare.Male3':
+			PlayerClass = B227_LoadPlayerClass("Botpack227_Extras.UT_MaleThree");
+			break;
+
+		case Mesh'UnrealI.Nali2':
+			PlayerClass = B227_LoadPlayerClass("Botpack227_Extras.UT_NaliPlayerA");
+			break;
+
+		case Mesh'UnrealI.sktrooper':
+			PlayerClass = B227_LoadPlayerClass("Botpack227_Extras.UT_SkaarjPlayerA");
+			break;
+
+		default:
+			return DefaultPlayerClass;
+	}
+
+	if (PlayerClass != none && ClassIsChildOf(PlayerClass, class'TournamentPlayer'))
+		return PlayerClass;
+
+	B227_bAllowUnrealIPlayers = false;
+	return DefaultPlayerClass;
+}
+
+function class<PlayerPawn> B227_LoadPlayerClass(string PlayerClassName)
+{
+	return class<PlayerPawn>(DynamicLoadObject(PlayerClassName, class'Class', true));
+}
+
 defaultproperties
 {
 	DeathMessage(0)="killed"
@@ -463,4 +532,5 @@ defaultproperties
 	DefaultPlayerClass=Class'Botpack.TMale1'
 	DefaultWeapon=Class'Botpack.ImpactHammer'
 	WaterZoneType=Class'UnrealShare.WaterZone'
+	B227_bAllowUnrealIPlayers=True
 }

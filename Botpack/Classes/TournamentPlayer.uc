@@ -838,7 +838,8 @@ function UTF_PlayHit(float Damage, vector HitLocation, name damageType, vector M
 	PlayTakeHitSound(Damage, damageType, 1);
 	bServerGuessWeapon = ( ((Weapon != None) && Weapon.bPointing) || (GetAnimGroup(AnimSequence) == 'Dodge') );
 	iDam = Clamp(Damage,0,200);
-	ClientPlayTakeHit(hitLocation - Location, iDam, bServerGuessWeapon ); 
+	if (!bIsReducedCrouch)
+		ClientPlayTakeHit(hitLocation - Location, iDam, bServerGuessWeapon ); 
 	if ( !bServerGuessWeapon 
 		&& ((Level.NetMode == NM_DedicatedServer) || (Level.NetMode == NM_ListenServer)) )
 	{
