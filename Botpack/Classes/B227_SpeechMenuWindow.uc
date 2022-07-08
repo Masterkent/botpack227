@@ -437,6 +437,9 @@ function UpdateSelectedOption(float X, float Y)
 					MiniDisplay.WinTop = WinTop + MenuPages[2].Y + MenuPages[2].OptionButtons[OptionIndex].WinTop;
 
 					MiniDisplay.UpdateDisplayedInfo();
+
+					if (!MiniDisplay.bWindowVisible)
+						MiniDisplay.ShowWindow();
 				}
 				return;
 			}
@@ -726,7 +729,10 @@ function InitTargetChildPage()
 	InitPageNumOptions(2, NumOptions);
 
 	if (MiniDisplay == none)
+	{
 		MiniDisplay = B227_SpeechMiniDisplay(CreateWindow(class'B227_SpeechMiniDisplay', 100, 100, 100, 100));
+		MiniDisplay.HideWindow();
+	}
 	MiniDisplay.WinWidth = 256.0/1024.0 * XMod;
 	MiniDisplay.WinHeight = 256.0/768.0 * YMod;
 

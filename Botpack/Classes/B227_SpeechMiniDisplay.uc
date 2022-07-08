@@ -43,6 +43,9 @@ function Reset()
 	if (TeamID >= 0)
 		DisplayArea.Clear();
 	TeamID = -1;
+
+	if (bWindowVisible)
+		HideWindow();
 }
 
 function bool UpdateInfo(int TeamID, string Callsign)

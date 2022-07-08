@@ -299,6 +299,9 @@ function PlayWaiting()
 {
 	local name newAnim;
 
+	if ( Mesh == None )
+		return;
+
 	if ( IsInState('PlayerSwimming') || (Physics==PHYS_Swimming) )
 	{
 		BaseEyeHeight = 0.7 * Default.BaseEyeHeight;

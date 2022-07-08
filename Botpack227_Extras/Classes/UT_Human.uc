@@ -7,36 +7,6 @@ class UT_Human extends UT_UnrealIPlayer
 //-----------------------------------------------------------------------------
 // Animation functions
 
-function PlayTurning()
-{
-	BaseEyeHeight = Default.BaseEyeHeight;
-	if ( (Weapon == None) || (Weapon.Mass < 20) )
-		PlayAnim('TurnSM', 0.3, 0.3);
-	else
-		PlayAnim('TurnLG', 0.3, 0.3);
-}
-
-function TweenToWalking(float tweentime)
-{
-	BaseEyeHeight = Default.BaseEyeHeight;
-	if (Weapon == None)
-		TweenAnim('Walk', tweentime);
-	else if ( Weapon.bPointing || (CarriedDecoration != None) )
-	{
-		if (Weapon.Mass < 20)
-			TweenAnim('WalkSMFR', tweentime);
-		else
-			TweenAnim('WalkLGFR', tweentime);
-	}
-	else
-	{
-		if (Weapon.Mass < 20)
-			TweenAnim('WalkSM', tweentime);
-		else
-			TweenAnim('WalkLG', tweentime);
-	}
-}
-
 function TweenToRunning(float tweentime)
 {
 	BaseEyeHeight = Default.BaseEyeHeight;
@@ -64,27 +34,6 @@ function TweenToRunning(float tweentime)
 	}
 }
 
-function PlayWalking()
-{
-	BaseEyeHeight = Default.BaseEyeHeight;
-	if (Weapon == None)
-		LoopAnim('Walk');
-	else if ( Weapon.bPointing || (CarriedDecoration != None) )
-	{
-		if (Weapon.Mass < 20)
-			LoopAnim('WalkSMFR');
-		else
-			LoopAnim('WalkLGFR');
-	}
-	else
-	{
-		if (Weapon.Mass < 20)
-			LoopAnim('WalkSM');
-		else
-			LoopAnim('WalkLG');
-	}
-}
-
 function PlayRunning()
 {
 	BaseEyeHeight = Default.BaseEyeHeight;
@@ -104,12 +53,6 @@ function PlayRunning()
 		else
 			LoopAnim('RunLG');
 	}
-}
-
-function PlayRising()
-{
-	BaseEyeHeight = 0.4 * Default.BaseEyeHeight;
-	TweenAnim('DuckWlkS', 0.7);
 }
 
 function PlayFeignDeath()
@@ -215,52 +158,6 @@ function PlayDying(name DamageType, vector HitLoc)
 	}
 }
 
-function PlayGutHit(float tweentime)
-{
-	if ( (AnimSequence == 'GutHit') || (AnimSequence == 'Dead2') )
-	{
-		if (FRand() < 0.5)
-			TweenAnim('LeftHit', tweentime);
-		else
-			TweenAnim('RightHit', tweentime);
-	}
-	else if ( FRand() < 0.6 )
-		TweenAnim('GutHit', tweentime);
-	else
-		TweenAnim('Dead2', tweentime);
-
-}
-
-function PlayHeadHit(float tweentime)
-{
-	if ( (AnimSequence == 'HeadHit') || (AnimSequence == 'Dead4') )
-		TweenAnim('GutHit', tweentime);
-	else if ( FRand() < 0.6 )
-		TweenAnim('HeadHit', tweentime);
-	else
-		TweenAnim('Dead4', tweentime);
-}
-
-function PlayLeftHit(float tweentime)
-{
-	if ( (AnimSequence == 'LeftHit') || (AnimSequence == 'Dead3') )
-		TweenAnim('GutHit', tweentime);
-	else if ( FRand() < 0.6 )
-		TweenAnim('LeftHit', tweentime);
-	else
-		TweenAnim('Dead3', tweentime);
-}
-
-function PlayRightHit(float tweentime)
-{
-	if ( (AnimSequence == 'RightHit') || (AnimSequence == 'Dead5') )
-		TweenAnim('GutHit', tweentime);
-	else if ( FRand() < 0.6 )
-		TweenAnim('RightHit', tweentime);
-	else
-		TweenAnim('Dead5', tweentime);
-}
-
 function PlayLanded(float impactVel)
 {
 	impactVel = impactVel/JumpZ;
@@ -309,48 +206,12 @@ function PlayInAir()
 		TweenAnim('JumpLGFR', 0.8);
 }
 
-function PlayDuck()
-{
-	BaseEyeHeight = 0;
-	if ( (Weapon == None) || (Weapon.Mass < 20) )
-		TweenAnim('DuckWlkS', 0.25);
-	else
-		TweenAnim('DuckWlkL', 0.25);
-}
-
-function PlayCrawling()
-{
-	//log("Play duck");
-	BaseEyeHeight = 0;
-	if ( (Weapon == None) || (Weapon.Mass < 20) )
-		LoopAnim('DuckWlkS');
-	else
-		LoopAnim('DuckWlkL');
-}
-
-function TweenToWaiting(float tweentime)
-{
-	if ( (IsInState('PlayerSwimming')) || (Physics == PHYS_Swimming) )
-	{
-		BaseEyeHeight = 0.7 * Default.BaseEyeHeight;
-		if ( (Weapon == None) || (Weapon.Mass < 20) )
-			TweenAnim('TreadSM', tweentime);
-		else
-			TweenAnim('TreadLG', tweentime);
-	}
-	else
-	{
-		BaseEyeHeight = Default.BaseEyeHeight;
-		if ( (Weapon == None) || (Weapon.Mass < 20) )
-			TweenAnim('StillSMFR', tweentime);
-		else
-			TweenAnim('StillFRRP', tweentime);
-	}
-}
-
 function PlayWaiting()
 {
 	local name newAnim;
+
+	if ( Mesh == None )
+		return;
 
 	if ( (IsInState('PlayerSwimming')) || (Physics == PHYS_Swimming) )
 	{
@@ -434,90 +295,6 @@ function PlayRecoil(float Rate)
 		PlayAnim('StillSmFr', Rate, 0.02);
 	else if ( (AnimSequence == 'StillLgFr') || (AnimSequence == 'StillFrRp') )
 		PlayAnim('StillLgFr', Rate, 0.02);
-}
-
-function PlayFiring()
-{
-	// switch animation sequence mid-stream if needed
-	if (AnimSequence == 'RunLG')
-		AnimSequence = 'RunLGFR';
-	else if (AnimSequence == 'RunSM')
-		AnimSequence = 'RunSMFR';
-	else if (AnimSequence == 'WalkLG')
-		AnimSequence = 'WalkLGFR';
-	else if (AnimSequence == 'WalkSM')
-		AnimSequence = 'WalkSMFR';
-	else if ( AnimSequence == 'JumpSMFR' )
-		TweenAnim('JumpSMFR', 0.03);
-	else if ( AnimSequence == 'JumpLGFR' )
-		TweenAnim('JumpLGFR', 0.03);
-	else if ( (GetAnimGroup(AnimSequence) == 'Waiting') || (GetAnimGroup(AnimSequence) == 'Gesture')
-			  && (AnimSequence != 'TreadLG') && (AnimSequence != 'TreadSM') )
-	{
-		if ( Weapon.Mass < 20 )
-			TweenAnim('StillSMFR', 0.02);
-		else
-			TweenAnim('StillFRRP', 0.02);
-	}
-}
-
-function PlayWeaponSwitch(Weapon NewWeapon)
-{
-	if ( (Weapon == None) || (Weapon.Mass < 20) )
-	{
-		if ( (NewWeapon != None) && (NewWeapon.Mass > 20) )
-		{
-			if ( (AnimSequence == 'RunSM') || (AnimSequence == 'RunSMFR') )
-				AnimSequence = 'RunLG';
-			else if ( (AnimSequence == 'WalkSM') || (AnimSequence == 'WalkSMFR') )
-				AnimSequence = 'WalkLG';
-			else if ( AnimSequence == 'JumpSMFR' )
-				AnimSequence = 'JumpLGFR';
-			else if ( AnimSequence == 'DuckWlkL' )
-				AnimSequence = 'DuckWlkS';
-			else if ( AnimSequence == 'StillSMFR' )
-				AnimSequence = 'StillFRRP';
-			else if ( AnimSequence == 'AimDnSm' )
-				AnimSequence = 'AimDnLg';
-			else if ( AnimSequence == 'AimUpSm' )
-				AnimSequence = 'AimUpLg';
-		}
-	}
-	else if ( (NewWeapon == None) || (NewWeapon.Mass < 20) )
-	{
-		if ( (AnimSequence == 'RunLG') || (AnimSequence == 'RunLGFR') )
-			AnimSequence = 'RunSM';
-		else if ( (AnimSequence == 'WalkLG') || (AnimSequence == 'WalkLGFR') )
-			AnimSequence = 'WalkSM';
-		else if ( AnimSequence == 'JumpLGFR' )
-			AnimSequence = 'JumpSMFR';
-		else if ( AnimSequence == 'DuckWlkS' )
-			AnimSequence = 'DuckWlkL';
-		else if (AnimSequence == 'StillFRRP')
-			AnimSequence = 'StillSMFR';
-		else if ( AnimSequence == 'AimDnLg' )
-			AnimSequence = 'AimDnSm';
-		else if ( AnimSequence == 'AimUpLg' )
-			AnimSequence = 'AimUpSm';
-	}
-}
-
-function PlaySwimming()
-{
-	BaseEyeHeight = 0.7 * Default.BaseEyeHeight;
-	if ((Weapon == None) || (Weapon.Mass < 20) )
-		LoopAnim('SwimSM');
-	else
-		LoopAnim('SwimLG');
-}
-
-function TweenToSwimming(float tweentime)
-{
-	BaseEyeHeight = 0.7 * Default.BaseEyeHeight;
-	if ((Weapon == None) || (Weapon.Mass < 20) )
-		TweenAnim('SwimSM',tweentime);
-	else
-		TweenAnim('SwimLG',tweentime);
 }
 
 defaultproperties
