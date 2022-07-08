@@ -299,13 +299,7 @@ function PlayRecoil(float Rate)
 
 defaultproperties
 {
-	bIsHuman=true
 	Footstep1=stwalk1
 	Footstep2=stwalk2
 	Footstep3=stwalk3
-	BaseEyeHeight=+00023.000000
-	EyeHeight=+00023.000000
-	CollisionRadius=+00017.000000
-	CollisionHeight=+00039.000000
-	Buoyancy=+00099.000000
 }

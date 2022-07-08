@@ -3,6 +3,8 @@
 //=============================================================================
 class UT_NaliPlayer extends UT_UnrealIPlayer;
 
+#exec OBJ LOAD FILE="multimesh.u"
+
 var bool bAdjustBalance;
 
 function PlayTurning()
@@ -374,6 +376,13 @@ state PlayerWalking
 	}
 }
 
+function MultimeshPackageRef()
+{
+	local Object Obj;
+	Obj = class'multimesh.NaliVoice'; // Makes a reference to multimesh.u
+}
+
+
 defaultproperties
 {
 	bSinglePlayer=false
@@ -409,4 +418,5 @@ defaultproperties
 	Buoyancy=98.0
 	Skin=JNali1
 	Menuname="Nali"
+	VoiceType="MultiMesh.NaliVoice"
 }

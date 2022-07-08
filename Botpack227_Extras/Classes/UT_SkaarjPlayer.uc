@@ -3,6 +3,8 @@
 //=============================================================================
 class UT_SkaarjPlayer extends UT_UnrealIPlayer;
 
+#exec OBJ LOAD FILE="multimesh.u"
+
 simulated function WalkStep()
 {
 	local sound step;
@@ -365,6 +367,12 @@ function SwimAnimUpdate(bool bNotForward)
 		TweenToSwimming(0.1);
 }
 
+function MultimeshPackageRef()
+{
+	local Object Obj;
+	Obj = class'multimesh.SkaarjVoice'; // Makes a reference to multimesh.u
+}
+
 defaultproperties
 {
 	Footstep1=Sound'UnrealShare.Cow.walkC'
@@ -398,4 +406,5 @@ defaultproperties
 	CollisionHeight=42.00
 	Mass=120.00
 	Buoyancy=118.80
+	VoiceType="MultiMesh.SkaarjVoice"
 }
