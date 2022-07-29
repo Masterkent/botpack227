@@ -120,7 +120,7 @@ function ShowScores( canvas Canvas )
     row++;
     if (level.game.SecretGoals!=0)
       DrawdiffCount("Secrets Found", string(Instigator.SecretCount)$"/"$string(level.game.SecretGoals), Canvas, row++);
-    DrawdiffCount(class'UnrealCoopGameOptions'.default.MenuList[3], class'UMenuNewGameClientWindow'.default.Skills[Level.Game.Difficulty], Canvas, row++);
+    DrawdiffCount(class'UnrealCoopGameOptions'.default.MenuList[3], B227_DifficultyString(Level.Game.Difficulty), Canvas, row++);
     DrawBodyCount("Score", scoreholder.score, Canvas, row++);
     if (level.game!=none&&Level.Game.class==class'tvsp')
       DrawDiffCount("Accumulated Play time", parseTime(TvPlayer(Canvas.viewport.actor).B227_TotalAccumTime()), Canvas, row++);

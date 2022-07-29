@@ -389,8 +389,9 @@ function PlayerSpeech( int Type, int Index, int Callsign )
 				else {
 					for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 						//if ( P.bIsPlayer && (P.PlayerReplicationInfo.TeamId == Callsign)
-						if ( (P.PlayerReplicationInfo.TeamId == Callsign)
-							&& (P.PlayerReplicationInfo.Team == PlayerPawn(Owner).PlayerReplicationInfo.Team) )
+						if (P.PlayerReplicationInfo != none &&
+							P.PlayerReplicationInfo.TeamId == Callsign &&
+							P.PlayerReplicationInfo.Team == PlayerPawn(Owner).PlayerReplicationInfo.Team)
 						{
 							Recipient = P.PlayerReplicationInfo;
 							break;

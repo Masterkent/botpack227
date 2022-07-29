@@ -173,7 +173,7 @@ defaultproperties
      Deaths(0)=Sound'UnrealI.Skaarj.SKPDeath1'
      Deaths(1)=Sound'UnrealI.Skaarj.SKPDeath2'
      Deaths(2)=Sound'UnrealI.Skaarj.SKPDeath3'
-     Deaths(3)=None
+     Deaths(3)=Sound'UnrealI.Skaarj.SKPDeath2'
      Deaths(4)=Sound'UnrealI.Skaarj.SKPDeath1'
      Deaths(5)=Sound'UnrealI.Skaarj.SKPDeath3'
      DefaultSkinName="TSkMSkins.Warr"

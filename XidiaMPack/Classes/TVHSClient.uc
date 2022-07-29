@@ -74,10 +74,10 @@ local umenulabelcontrol tempcontrol;
       }
       else
          Gamez[i].SetText("Incident");
-      Difficulty[i].settext(class'UnrealCoopGameOptions'.default.Difficulties[dif]);
+      Difficulty[i].settext(class'spoldskool'.static.B227_DifficultyString(dif));
     }
     else{
-      Difficulty[i].settext(class'UnrealCoopGameOptions'.default.Difficulties[(i+3)%4]);
+      Difficulty[i].settext(class'spoldskool'.static.B227_DifficultyString((i + 3) % 4));
       times[i].settext("0:00.00");
       if (i%2==1)
         Gamez[i].SetText("Escape");

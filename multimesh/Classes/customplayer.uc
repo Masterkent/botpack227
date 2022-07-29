@@ -148,19 +148,18 @@ simulated function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 	SetMyMesh();
-	if ( Role == ROLE_SimulatedProxy )
-		SetTimer(1.0, true);
 }
 
-simulated function Timer()
+function SetMesh()
 {
-	if ( (Role == ROLE_SimulatedProxy) && (Mesh == None) )
-		SetMyMesh();
-	Super.Timer();
+	SetMyMesh();
 }
 
-simulated function SetMyMesh()
+function SetMyMesh()
 {
+	if (Role != ROLE_Authority)
+		return;
+
 	DrawType = DT_Mesh;
 
 	if ( class'MultiMeshMenu'.default.bForceDefaultMesh
@@ -187,24 +186,6 @@ simulated function SetMyMesh()
 	}
 	else if ( Skin == None )
 		Skin = Default.Skin;
-}
-
-// should use PostNetBeginPlay, but version 400 doesn't have it, so put code here
-simulated function Tick(float DeltaTime)
-{
-	if ( Role != ROLE_SimulatedProxy )
-	{
-		Disable('Tick');
-		return;
-	}
-	if ( (PlayerReplicationInfo == None) || !PlayerReplicationInfo.bIsSpectator )
-		SetMyMesh();
-
-	if ( (PlayerReplicationInfo != None)
-		&& (PlayerReplicationInfo.Owner == None) )
-		PlayerReplicationInfo.SetOwner(self);
-
-	Disable('Tick');
 }
 
 // don't make assumptions deaths will also work as certain type of hit anim
@@ -243,85 +224,6 @@ function PlayRightHit(float tweentime)
 		TweenAnim('GutHit', tweentime);
 	else
 		TweenAnim('RightHit', tweentime);
-}
-
-// hacks because SetMesh() didn't exist in 400 (to preserve compatibility)
-
-state PlayerWalking
-{
-ignores SeePlayer, HearNoise, Bump;
-
-	function BeginState()
-	{
-		if ( Mesh == None )
-			SetMyMesh();
-		WalkBob = vect(0,0,0);
-		DodgeDir = DODGE_None;
-		bIsCrouching = false;
-		bIsTurning = false;
-		bPressedJump = false;
-		if (Physics != PHYS_Falling) SetPhysics(PHYS_Walking);
-		if ( !IsAnimating() )
-			PlayWaiting();
-	}
-}
-
-state PlayerWaiting
-{
-ignores SeePlayer, HearNoise, Bump, TakeDamage, Died, ZoneChange, FootZoneChange;
-
-	function BeginState()
-	{
-		Texture = None;
-		DrawType = DT_Sprite;
-		Mesh = None;
-		if ( PlayerReplicationInfo != None )
-		{
-			PlayerReplicationInfo.bIsSpectator = true;
-			if (UTC_PlayerReplicationInfo(PlayerReplicationInfo) != none)
-				UTC_PlayerReplicationInfo(PlayerReplicationInfo).bWaitingPlayer = true;
-		}
-		SetCollision(false,false,false);
-		EyeHeight = BaseEyeHeight;
-		SetPhysics(PHYS_None);
-	}
-
-	function EndState()
-	{
-		SetMyMesh();
-		PlayerReplicationInfo.bIsSpectator = false;
-		if (UTC_PlayerReplicationInfo(PlayerReplicationInfo) != none)
-			UTC_PlayerReplicationInfo(PlayerReplicationInfo).bWaitingPlayer = false;
-		SetCollision(true,true,true);
-	}
-}
-
-state PlayerSpectating
-{
-ignores SeePlayer, HearNoise, Bump, TakeDamage, Died, ZoneChange, FootZoneChange;
-
-	function BeginState()
-	{
-		Texture = None;
-		DrawType = DT_Sprite;
-		PlayerReplicationInfo.bIsSpectator = true;
-		if (UTC_PlayerReplicationInfo(PlayerReplicationInfo) != none)
-			UTC_PlayerReplicationInfo(PlayerReplicationInfo).bWaitingPlayer = true;
-		bShowScores = true;
-		Mesh = None;
-		SetCollision(false,false,false);
-		EyeHeight = Default.BaseEyeHeight;
-		SetPhysics(PHYS_None);
-	}
-
-	function EndState()
-	{
-		PlayerReplicationInfo.bIsSpectator = false;
-		if (UTC_PlayerReplicationInfo(PlayerReplicationInfo) != none)
-			UTC_PlayerReplicationInfo(PlayerReplicationInfo).bWaitingPlayer = false;
-		SetMyMesh();
-		SetCollision(true,true,true);
-	}
 }
 
 defaultproperties

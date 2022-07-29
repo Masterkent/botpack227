@@ -80,6 +80,7 @@ var LadderInventory RatedGameLadderObj;
 var globalconfig bool B227_bFixedBotCount;
 
 var int B227_ElapsedTime; // Actual match time without waiting at startup phase
+var bool B227_bGenderedMessagesSupported;
 
 function PostBeginPlay()
 {
@@ -95,6 +96,7 @@ function PostBeginPlay()
 		RemainingBots = 0;
 	Super.PostBeginPlay();
 	GameReplicationInfo.RemainingTime = RemainingTime;
+	B227_bGenderedMessagesSupported = DynamicLoadObject("Engine.GameInfo.FemEnteredMessage", class'Property', true) != none;
 }
 
 function PreCacheReferences()
@@ -895,7 +897,7 @@ function Bot SpawnBot(out NavigationPoint StartSpot)
 		BotConfig.CHIndividualize(NewBot, BotN, NumBots);
 		NewBot.ViewRotation = StartSpot.Rotation;
 		// broadcast a welcome message.
-		BroadcastMessage( NewBot.PlayerReplicationInfo.PlayerName$EnteredMessage, false );
+		BroadcastMessage(B227_PlayerEnteredMessage(NewBot), false);
 
 		ModifyBehaviour(NewBot);
 		AddDefaultInventory( NewBot );
@@ -960,7 +962,7 @@ function Bot SpawnRatedBot(out NavigationPoint StartSpot)
 		RatedMatchConfig.Individualize(NewBot, BotN, NumBots, bTeamGame, bEnemy);
 		NewBot.ViewRotation = StartSpot.Rotation;
 		// broadcast a welcome message.
-		BroadcastMessage( NewBot.PlayerReplicationInfo.PlayerName$EnteredMessage, false );
+		BroadcastMessage(B227_PlayerEnteredMessage(NewBot), false);
 
 		ModifyBehaviour(NewBot);
 		AddDefaultInventory( NewBot );
@@ -1551,7 +1553,7 @@ function string GetRules()
 		Resultset = ResultSet$"\\gamestyle\\Classic";
 
 	if(MinPlayers > 0)
-		Resultset = ResultSet$"\\botskill\\"$class'ChallengeBotInfo'.default.Skills[Difficulty];
+		Resultset = ResultSet$"\\botskill\\"$class'ChallengeBotInfo'.static.B227_SkillString(Difficulty);
 
 	return ResultSet;
 }
@@ -1606,6 +1608,19 @@ function B227_UpdateGRIRemainingTime()
 		B227_GRI().RemainingTime = 0;
 		B227_GRI().B227_RemainingTime = 0;
 	}
+}
+
+function string B227_PlayerEnteredMessage(Pawn P)
+{
+	local string Message;
+
+	if (P.bIsFemale && B227_bGenderedMessagesSupported)
+	{
+		Message = GetPropertyText("FemEnteredMessage");
+		if (Len(Message) > 0)
+			return P.PlayerReplicationInfo.PlayerName $ Message;
+	}
+	return P.PlayerReplicationInfo.PlayerName $ EnteredMessage;
 }
 
 defaultproperties

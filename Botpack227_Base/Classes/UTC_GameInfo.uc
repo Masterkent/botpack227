@@ -79,8 +79,8 @@ function AdminLogin(UTC_PlayerPawn P, string Password)
 		P.bAdmin = True;
 		if (B227_PRI(P) != none)
 			B227_PRI(P).bAdmin = P.bAdmin;
+		GetAccessManager().AdminLogin(P);
 		LoginMessage = P.PlayerReplicationInfo.PlayerName @ "became a server administrator.";
-		Log(LoginMessage);
 		BroadcastMessage(LoginMessage);
 	}
 	else
@@ -96,6 +96,7 @@ function AdminLogout(UTC_PlayerPawn P)
 
 	if (P.bAdmin)
 	{
+		GetAccessManager().AdminLogout(P);
 		P.bAdmin = False;
 		if (B227_PRI(P) != none)
 			B227_PRI(P).bAdmin = P.bAdmin;
@@ -104,7 +105,6 @@ function AdminLogout(UTC_PlayerPawn P)
 		if (P.IsInState('CheatFlying'))
 			P.StartWalk();
 		LogoutMessage = P.PlayerReplicationInfo.PlayerName @ "gave up administrator abilities.";
-		Log(LogoutMessage);
 		BroadcastMessage(LogoutMessage);
 	}
 }

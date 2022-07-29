@@ -31,11 +31,11 @@ simulated event Destroyed()
 
 event Trigger( Actor Other, Pawn EventInstigator )
 {
-	if( bTriggerOnceOnly && (Textures[CurrentTexture + 1] == None || CurrentTexture == 9) )
+	if( bTriggerOnceOnly && (CurrentTexture + 1 == ArrayCount(Textures) || Textures[CurrentTexture + 1] == None) )
 		return;
 
 	CurrentTexture++;
-	if( Textures[CurrentTexture] == None || CurrentTexture == 10 )
+	if( CurrentTexture == ArrayCount(Textures) || Textures[CurrentTexture] == None )
 		CurrentTexture = 0;
 }
 

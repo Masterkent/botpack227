@@ -210,7 +210,7 @@ function Fire( float Value )
 		// ammocheck
 		GiveAmmo(Pawn(Owner));
 	}
-	if ( AmmoType.UseAmmo(1) )
+	if ( AmmoType != none && AmmoType.UseAmmo(1) )
 	{
 		GotoState('NormalFire');
 		bPointing=True;

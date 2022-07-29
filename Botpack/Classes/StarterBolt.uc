@@ -109,7 +109,8 @@ static function B227_BoltTick(
 				AimRotation = Proj.Instigator.ViewRotation;
 				Proj.SetRotation(AimRotation);
 			}
-			DrawOffset = Proj.Instigator.Weapon.CalcDrawOffset();
+			if (Proj.Instigator.Weapon != none)
+				DrawOffset = Proj.Instigator.Weapon.CalcDrawOffset();
 		}
 		GetAxes(Proj.Instigator.ViewRotation,X,Y,Z);
 

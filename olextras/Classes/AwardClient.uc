@@ -22,7 +22,7 @@ function string GetMessage(int i){
 
 function SetAwards (int NewDifficulty){
   AwardText="You beat Operation: Na Pali for the first time on"@
-   class'UnrealCoopGameOptions'.default.Difficulties[NewDifficulty]$"!\\n\\nYou have just won:\\n";
+    class'spoldskool'.static.B227_DifficultyString(NewDifficulty)$"!\\n\\nYou have just won:\\n";
   NewDifficulty++;
   While (class'TVHSClient'.default.MaxDif<NewDifficulty){
     class'TVHSClient'.default.MaxDif++;

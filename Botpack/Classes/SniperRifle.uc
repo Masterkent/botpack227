@@ -210,12 +210,12 @@ state Idle
 {
 	function Fire( float Value )
 	{
-		if ( AmmoType == None )
+		if ( AmmoType == None && AmmoName != None )
 		{
 			// ammocheck
 			GiveAmmo(Pawn(Owner));
 		}
-		if (AmmoType.UseAmmo(1))
+		if (AmmoType != none && AmmoType.UseAmmo(1))
 		{
 			GotoState('NormalFire');
 			bCanClientFire = true;

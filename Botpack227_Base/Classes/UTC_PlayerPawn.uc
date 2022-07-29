@@ -282,6 +282,32 @@ exec function Mutate(string MutateString)
 	class'UTC_Mutator'.static.UTSF_Mutate(Level.Game.BaseMutator, MutateString, self);
 }
 
+state PlayerWalking
+{
+	ignores SeePlayer, HearNoise, Bump;
+
+	event BeginState()
+	{
+		if ( Mesh == None )
+			SetMesh();
+		WalkBob = vect(0,0,0);
+		DodgeDir = DODGE_None;
+		DodgeClickTimer = DodgeClickTime;
+		bIsCrouching = bIsReducedCrouch;
+		bIsTurning = false;
+		bPressedJump = false;
+		if (Physics != PHYS_Falling)
+			SetPhysics(PHYS_Walking);
+		if ( !IsAnimating() )
+		{
+			if (bIsCrouching)
+				PlayDuck();
+			else
+				PlayWaiting();
+		}
+	}
+}
+
 state FeigningDeath
 {
 	ignores SeePlayer, HearNoise, Bump, Fire, AltFire, StartClimbing;
@@ -299,7 +325,7 @@ state FeigningDeath
 
 state PlayerSwimming
 {
-ignores SeePlayer, HearNoise, Bump;
+	ignores SeePlayer, HearNoise, Bump;
 
 	function Landed(vector HitNormal)
 	{
@@ -322,7 +348,7 @@ ignores SeePlayer, HearNoise, Bump;
 
 state PlayerWaiting
 {
-ignores SeePlayer, HearNoise, Bump, TakeDamage, Died, ZoneChange, FootZoneChange;
+	ignores SeePlayer, HearNoise, Bump, TakeDamage, Died, ZoneChange, FootZoneChange, StartClimbing;
 
 	exec function Jump( optional float F )
 	{
@@ -395,6 +421,7 @@ ignores SeePlayer, HearNoise, Bump, TakeDamage, Died, ZoneChange, FootZoneChange
 				B227_PRI().bWaitingPlayer = false;
 		}
 		SetCollision(true,true,true);
+		bCanFly = false;
 	}
 
 	function BeginState()
@@ -409,6 +436,43 @@ ignores SeePlayer, HearNoise, Bump, TakeDamage, Died, ZoneChange, FootZoneChange
 		SetCollision(false,false,false);
 		EyeHeight = BaseEyeHeight;
 		SetPhysics(PHYS_None);
+		bCanFly = true;
+		bPressedJump = false;
+	}
+}
+
+state PlayerSpectating
+{
+	ignores SeePlayer, HearNoise, Bump, TakeDamage, Died, ZoneChange, FootZoneChange, StartClimbing;
+
+	event EndState()
+	{
+		if (PlayerReplicationInfo != none)
+		{
+			PlayerReplicationInfo.bIsSpectator = false;
+			if (B227_PRI() != none)
+				B227_PRI().bWaitingPlayer = false;
+		}
+		SetMesh();
+		SetCollision(true,true,true);
+		bCanFly = false;
+	}
+
+	event BeginState()
+	{
+		if (PlayerReplicationInfo != none)
+		{
+			PlayerReplicationInfo.bIsSpectator = true;
+			if (B227_PRI() != none)
+				B227_PRI().bWaitingPlayer = true;
+		}
+		bShowScores = true;
+		Mesh = None;
+		SetCollision(false,false,false);
+		EyeHeight = Default.BaseEyeHeight;
+		SetPhysics(PHYS_None);
+		bCanFly = true;
+		bPressedJump = false;
 	}
 }
 

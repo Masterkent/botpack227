@@ -64,6 +64,7 @@ var class<Actor> BossRef;
 var globalconfig bool B227_bUnrealBeepSound;
 
 var transient B227_SpeechMenu B227_SpeechMenu;
+var transient B227_PermissiveAccessManager B227_PermissiveAccessManager;
 
 replication
 {
@@ -228,11 +229,19 @@ function PreCacheReferences()
 
 exec function KillAll(class<actor> aClass)
 {
-	if ( bAdmin && (Level.NetMode != NM_Standalone) && Level.Game.IsA('DeathMatchPlus')
-		&& ((aClass == class'Bot') || (aClass == class'Pawn')) )
-		DeathMatchPlus(Level.Game).MinPlayers = 0;
+	if (aClass == none || !Level.Game.GetAccessManager().CanExecuteCheatStr(self, 'KillAll', string(aClass)))
+		return;
 
-	Super.KillAll(aClass);
+	if (Level.NetMode != NM_Standalone &&
+		DeathMatchPlus(Level.Game) != none &&
+		(aClass == class'Bot' || aClass == class'Pawn'))
+	{
+		DeathMatchPlus(Level.Game).MinPlayers = 0;
+	}
+
+	B227_PushAdminAccess();
+	super.KillAll(aClass);
+	B227_PopAdminAccess();
 }
 
 ///function ClientPutDown(Weapon Current, Weapon Next) // [U227] Removed
@@ -605,7 +614,7 @@ exec function IAmTheOne()
 
 exec function SetAirControl(float F)
 {
-	if ( bAdmin || (Level.Netmode == NM_Standalone) )
+	if (Level.Game.GetAccessManager().CanExecuteCheatStr(self, 'SetAirControl', string(F)))
 		AirControl = F;
 }
 
@@ -620,7 +629,7 @@ exec function Advance()
 {
 	if( !bCheatsEnabled )
 		return;
-	if ( !bAdmin && (Level.Netmode != NM_Standalone) )
+	if (!Level.Game.GetAccessManager().CanExecuteCheat(self, 'Advance'))
 		return;
 
 	if (Level.Game.IsA('DeathMatchPlus'))
@@ -632,7 +641,7 @@ exec function AdvanceAll()
 {
 	if( !bCheatsEnabled )
 		return;
-	if ( !bAdmin && (Level.Netmode != NM_Standalone) )
+	if (!Level.Game.GetAccessManager().CanExecuteCheat(self, 'AdvanceAll'))
 		return;
 
 	if (Level.Game.IsA('DeathMatchPlus'))
@@ -708,18 +717,21 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 			Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = Texture(DynamicLoadObject(FacePackage$SkinItem$"5"$FaceItem, class'Texture'));
 		else
 			Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = None;
-	}		
+	}
 }
 
 exec function Summon( string ClassName )
 {
 	if( !bCheatsEnabled )
 		return;
-	if( !bAdmin && (Level.Netmode != NM_Standalone) )
+	if (!Level.Game.GetAccessManager().CanExecuteCheatStr(self, 'Summon', ClassName))
 		return;
-	if( instr(ClassName,".")==-1 )
+	if (InStr(ClassName, ".") == -1 && DynamicLoadObject("Botpack." $ ClassName, class'Class', true) != none)
 		ClassName = "Botpack." $ ClassName;
+
+	B227_PushAdminAccess();
 	Super.Summon( ClassName );
+	B227_PopAdminAccess();
 }
 
 function CheckBob(float DeltaTime, float Speed2D, vector Y)
@@ -1263,17 +1275,17 @@ function TweenToWaiting(float tweentime)
 			TweenAnim('StillFRRP', tweentime);
 	}
 }
-	
+
 function PlayRecoil(float Rate)
 {
-	if ( Weapon.bRapidFire )
+	if ( Weapon != none && Weapon.bRapidFire )
 	{
 		if ( !IsAnimating() && (Physics == PHYS_Walking) )
 			LoopAnim('StillFRRP', 0.02);
 	}
 	else if ( AnimSequence == 'StillSmFr' )
 		PlayAnim('StillSmFr', Rate, 0.02);
-	else if ( (AnimSequence == 'StillLgFr') || (AnimSequence == 'StillFrRp') )	
+	else if ( (AnimSequence == 'StillLgFr') || (AnimSequence == 'StillFrRp') )
 		PlayAnim('StillLgFr', Rate, 0.02);
 }
 
@@ -1470,6 +1482,17 @@ function B227_EndSpree(Pawn Killer, Pawn Other)
 	else
 		B227_ReceiveLocalizedMessage(class'KillingSpreeMessage', 0, Other.GetHumanName(), Killer.GetHumanName());
 }
+
+function B227_PushAdminAccess()
+{
+	class'B227_PermissiveAccessManager'.static.PushAdminAccess(Level, B227_PermissiveAccessManager);
+}
+
+function B227_PopAdminAccess()
+{
+	class'B227_PermissiveAccessManager'.static.PopAdminAccess(Level, B227_PermissiveAccessManager);
+}
+
 
 defaultproperties
 {

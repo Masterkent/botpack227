@@ -47,6 +47,8 @@ var config bool UnAir; //U1 aircontrol
 var bool NewVersion; //a hack. :D
 var localized string spymessage[2];
 
+var transient int B227_DifficultiesNum;
+
 function SetUpCurrent(){
   if (level.netmode!=NM_standalone||bUseDecals)   //in co-op, always spawn the notify to allow effect swapping client-side.
   spawn(class'bloodnotify');
@@ -650,7 +652,7 @@ function bool ReplaceWith(actor Other, string aClassName)
   (  (level.game.Difficulty==0 && !Other.bDifficulty0 )          //as gameinfo's isn't called...we'll just make up for it here.....
   ||  (level.game.Difficulty==1 && !Other.bDifficulty1 )
   ||  (level.game.Difficulty==2 && !Other.bDifficulty2 )
-  ||  (level.game.Difficulty==3 && !Other.bDifficulty3 )
+  ||  (level.game.Difficulty>=3 && !Other.bDifficulty3 )
   ||  (!Other.bSinglePlayer && (Level.NetMode==NM_Standalone) )
   ||  (!Other.bNet && ((Level.NetMode == NM_DedicatedServer) || (Level.NetMode == NM_ListenServer)) )
   ||  (!Other.bNetSpecial  && (Level.NetMode==NM_Client)) )
@@ -798,6 +800,19 @@ function bool IsRelevant(Actor Other, out byte bSuperRelevant)
     bResult = NextMutator.IsRelevant(Other, bSuperRelevant);
 
   return bResult;
+}
+
+static function string B227_DifficultyString(byte Difficulty)
+{
+	if (default.B227_DifficultiesNum == 0)
+	{
+		default.B227_DifficultiesNum = int(GetDefaultObject(class'UMenuNewGameClientWindow').GetPropertyText("Skills[]"));
+		if (default.B227_DifficultiesNum == 0)
+			default.B227_DifficultiesNum = -1;
+	}
+	if (Difficulty < default.B227_DifficultiesNum)
+		return class'UMenuNewGameClientWindow'.default.Skills[Difficulty];
+	return string(Difficulty);
 }
 
 defaultproperties

@@ -9,7 +9,7 @@ class TCow extends CustomPlayer;
 simulated function SetMyMesh()
 {
 	Super.SetMyMesh();
-	bIsMultiSkinned = true;
+	//-bIsMultiSkinned = true;
 }
 
 static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, byte TeamNum)

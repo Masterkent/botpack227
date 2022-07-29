@@ -90,7 +90,8 @@ simulated function B227_PostTouch( actor Other )
 			Bot(Other).bJumpOffPawn = true;
 		Bot(Other).SetFall();
 	}
-	Other.SetPhysics(PHYS_Falling);
+	if (Other.Physics == PHYS_Walking)
+		Other.SetPhysics(PHYS_Falling);
 	Other.Velocity += Push;
 }
 

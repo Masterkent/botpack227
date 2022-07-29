@@ -60,11 +60,11 @@ local umenulabelcontrol tempcontrol;
     times[i]=UMenuLabelControl(Createwindow(class'UMenuLabelControl', 383, i*25+35,54, 1));
     if (TimeDif[i]!=""){
       dif=len(TimeDif[i])-1;
-      Difficulty[i].settext(class'UnrealCoopGameOptions'.default.Difficulties[int(mid(TimeDif[i],dif))]);
+      Difficulty[i].settext(class'spoldskool'.static.B227_DifficultyString(int(mid(TimeDif[i], dif))));
       times[i].settext(GetTime(left(TimeDif[i],dif)));
     }
     else{
-      Difficulty[i].settext(class'UnrealCoopGameOptions'.default.Difficulties[i%4]);
+      Difficulty[i].settext(class'spoldskool'.static.B227_DifficultyString(i % 4));
       times[i].settext("0:00.00");
     }
     KillsButtons[i]=UWindowSmallButton(CreateControl(class'UWindowSmallButton', 447, i*25+35, 50, 16));

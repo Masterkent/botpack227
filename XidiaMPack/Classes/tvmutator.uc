@@ -120,7 +120,7 @@ function actor ReplaceNonInv(Actor other,class<actor> NewC){
   (  (level.game.Difficulty==0 && !Other.bDifficulty0 ) //filters
   ||  (level.game.Difficulty==1 && !Other.bDifficulty1 )
   ||  (level.game.Difficulty==2 && !Other.bDifficulty2 )
-  ||  (level.game.Difficulty==3 && !Other.bDifficulty3 )
+  ||  (level.game.Difficulty>=3 && !Other.bDifficulty3 )
   ||  (!Other.bSinglePlayer && (Level.NetMode==NM_Standalone) )
   ||  (!Other.bNet && (Level.NetMode == NM_DedicatedServer || Level.NetMode == NM_ListenServer )) )
     return none;

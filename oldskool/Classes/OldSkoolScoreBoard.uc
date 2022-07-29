@@ -84,7 +84,7 @@ function ShowScores( canvas Canvas )
       Canvas.DrawColor = White; }
     row++;
     DrawBodyCount("Total Kills", scoreholder.killtotal, Canvas, row++);
-    DrawdiffCount("Difficlulty", difficulties[Level.Game.Difficulty], Canvas, row++);
+    DrawdiffCount("Difficulty", B227_DifficultyString(Level.Game.Difficulty), Canvas, row++);
     DrawBodyCount("Score", scoreholder.score, Canvas, row++);
     row++;
     DrawdiffCount("Map Title", level.title, Canvas, row++);              //kinda mirror DM....
@@ -114,6 +114,11 @@ function DrawdiffCount(string thingy, string amount, canvas Canvas, int row)    
   Canvas.DrawText(thingy, False);
   Canvas.SetPos(0.6 * Canvas.ClipX, 0.1 * Canvas.ClipY + 10 * row );
   Canvas.DrawText(amount, False);
+}
+
+static function string B227_DifficultyString(byte Difficulty)
+{
+	return class'spoldskool'.static.B227_DifficultyString(Difficulty);
 }
 
 defaultproperties

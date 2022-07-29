@@ -173,7 +173,10 @@ simulated event RenderTexture(ScriptedTexture Tex)
 {
 	local Color C;
 	local string Temp;
-	
+
+	if (AmmoType == none)
+		return;
+
 	Temp = String(AmmoType.AmmoAmount);
 
 	while(Len(Temp) < 3) Temp = "0"$Temp;

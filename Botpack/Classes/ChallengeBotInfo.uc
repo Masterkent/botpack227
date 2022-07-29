@@ -277,6 +277,13 @@ function int GetBotIndex( coerce string BotName )
 	return i;
 }
 
+static function string B227_SkillString(int Skill)
+{
+	if (0 <= Skill && Skill < ArrayCount(default.Skills))
+		return default.Skills[Skill];
+	return "Skill" @ Skill;
+}
+
 defaultproperties
 {
 	BotFaces(0)="CommandoSkins.Blake"

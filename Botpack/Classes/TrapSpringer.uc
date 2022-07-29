@@ -59,7 +59,7 @@ function float CalcDesire( Pawn Bot, Pawn Enemy )
 event float BotDesireability( pawn Bot )
 {
 	local Pawn P;
-	local int i,j;
+	local int j;
 	local float dist;
 
 	if ( (Trap[0] == None) || (TrapTrigger == None) )
@@ -67,7 +67,7 @@ event float BotDesireability( pawn Bot )
 		Destroy();
 		return -1;
 	}
-	
+
 	if ( bShootit && ((Bot.bFire !=0) || (Bot.bAltFire != 0)) )
 		return -1;
 
@@ -93,12 +93,9 @@ event float BotDesireability( pawn Bot )
 			}
 			else if ( Trap[j].bCollideActors )
 			{
-				for ( i=0 ;i<4; i++ )
-				{
-					P = Pawn(Trap[j].Touching[i]);
-					if ( (P != None) && FoundTrapTarget(Bot, P) )
-						return CalcDesire(Bot, Pawn(Trap[j].Touching[i]));
-				}
+				foreach Trap[j].TouchingActors(class'Pawn', P)
+					if ( FoundTrapTarget(Bot, P) )
+						return CalcDesire(Bot, P);
 			}
 		}
 	return -1;

@@ -1,7 +1,7 @@
 //=============================================================================
 // CannonShot.
 //=============================================================================
-class CannonShot extends Projectile;
+class CannonShot extends B227_Projectile;
 
 #exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
@@ -50,23 +50,33 @@ simulated function ProcessTouch (Actor Other, Vector HitLocation)
 	}
 }
 
-simulated function Explode(vector HitLocation, vector HitNormal)
+function Explode(vector HitLocation, vector HitNormal)
 {
-	Local UT_SpriteBallExplosion s;
-
 	if (FRand() < 0.5)
 		MakeNoise(1.0); 
-	if ( Level.NetMode != NM_DedicatedServer )
-	{
-		s = Spawn(class'UT_SpriteBallExplosion',,,HitLocation+HitNormal*9);
-		s.RemoteRole = ROLE_None;
-	}
+	B227_SetupProjectileExplosion(Location, HitLocation, HitNormal);
 	Destroy();
 }
 
 Begin:
 	Sleep(3);
 	Explode(Location, Vect(0,0,0));
+}
+
+static function B227_Explode(Actor Context, vector Location, vector HitLocation, vector HitNormal, rotator Direction)
+{
+	local UT_SpriteBallExplosion s;
+
+	if (Context.Level.NetMode == NM_DedicatedServer)
+		return;
+
+	s = Context.Spawn(class'UT_SpriteBallExplosion',,, HitLocation + HitNormal * 9);
+	if (s != none)
+		s.RemoteRole = ROLE_None; // Clients will still hear extra explosion sound when playing on a listen server.
+								  // Fixing this issue would require modification of UT_SpriteBallExplosion that
+								  // may affect a lot of classes that use it.
+
+	B227_SpawnDecal(Context, default.ExplosionDecal, Location, HitNormal);
 }
 
 defaultproperties
@@ -94,4 +104,6 @@ defaultproperties
 	LightHue=5
 	LightSaturation=16
 	LightRadius=9
+	B227_bReplicateExplosion=True
+	ExplosionDecal=Class'UnrealShare.BelchScorch'
 }

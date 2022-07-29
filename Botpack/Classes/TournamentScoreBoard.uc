@@ -104,9 +104,9 @@ function DrawTrailer( canvas Canvas )
 		if ( DeathMatchPlus(Level.Game).bRatedGame )
 			Canvas.DrawText(DeathMatchPlus(Level.Game).RatedGameLadderObj.SkillText@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$Level.Title$MapTitleQuote, true);
 		else if ( DeathMatchPlus(Level.Game).bNoviceMode ) 
-			Canvas.DrawText(class'ChallengeBotInfo'.default.Skills[Level.Game.Difficulty]@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$Level.Title$MapTitleQuote, true);
+			Canvas.DrawText(class'ChallengeBotInfo'.static.B227_SkillString(Level.Game.Difficulty)@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$Level.Title$MapTitleQuote, true);
 		else  
-			Canvas.DrawText(class'ChallengeBotInfo'.default.Skills[Level.Game.Difficulty + 4]@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$Level.Title$MapTitleQuote, true);
+			Canvas.DrawText(class'ChallengeBotInfo'.static.B227_SkillString(Level.Game.Difficulty + 4)@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$Level.Title$MapTitleQuote, true);
 	}
 	else
 		Canvas.DrawText(PlayerOwner.GameReplicationInfo.GameName@MapTitle@Level.Title, true);

@@ -44,6 +44,8 @@ var bool bDisallowOverride;
 
 var() config bool B227_bAllowUnrealIPlayers;
 
+var transient B227_PermissiveAccessManager B227_PermissiveAccessManager;
+
 function bool AtCapacity(string Options)
 {
 	local string OverrideClass;

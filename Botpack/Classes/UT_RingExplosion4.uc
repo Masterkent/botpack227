@@ -6,7 +6,8 @@ class UT_RingExplosion4 extends ut_ComboRing;
 simulated function SpawnExtraEffects()
 {
 	bExtraEffectsSpawned = true;
-	SetRotation(Owner.Rotation);
+	if (Owner != none)
+		SetRotation(Owner.Rotation);
 }
 
 simulated function SpawnEffects()

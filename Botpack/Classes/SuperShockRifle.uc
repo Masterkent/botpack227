@@ -40,12 +40,8 @@ function AltFire(float Value)
 
 function float RateSelf( out int bUseAltMode )
 {
-	local Pawn P;
-
 	if (AmmoType != none && AmmoType.AmmoAmount <= 0)
 		return -2;
-
-	P = Pawn(Owner);
 
 	bUseAltMode = 0;
 	return AIRating;

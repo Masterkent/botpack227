@@ -227,9 +227,13 @@ function Logout(pawn Exiting)
 	Super.Logout(Exiting);
 	if ( Exiting.IsA('Spectator') || Exiting.IsA('Commander') )
 		return;
-	if (Exiting.PlayerReplicationInfo != none && Exiting.PlayerReplicationInfo.Team < ArrayCount(Teams))
-		Teams[Exiting.PlayerReplicationInfo.Team].Size--;
 	ClearOrders(Exiting);
+	if (Exiting.PlayerReplicationInfo != none)
+	{
+		if (Exiting.PlayerReplicationInfo.Team < ArrayCount(Teams))
+			Teams[Exiting.PlayerReplicationInfo.Team].Size--;
+		Exiting.PlayerReplicationInfo.Team = 255;
+	}
 	if ( !bGameEnded && bBalanceTeams && !bRatedGame )
 		ReBalance();
 }
@@ -275,27 +279,21 @@ function ReBalance()
 			smallsize = Teams[i].Size;
 		}
 	}
-	
+
 	bBalancing = true;
-	while ( bigsize - smallsize > 1 )
+	if (bigsize - smallsize > 1)
 	{
-		for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-			if ( P.PlayerReplicationInfo != none && (P.PlayerReplicationInfo.Team == big)
-				&& P.IsA('Bot') )
+		for (P = Level.PawnList; P != none; P = P.NextPawn)
+			if (P.PlayerReplicationInfo != none && P.PlayerReplicationInfo.Team == big && Bot(P) != none)
 			{
 				B = Bot(P);
-				break;
+				if (!ChangeTeam(B, small))
+					break;
+				B.Health = 0;
+				B.Died( None, 'Suicided', B.Location );
+				if (--bigsize - ++smallsize <= 1)
+					break;
 			}
-		if ( B != None )
-		{
-			B.Health = 0;
-			B.Died( None, 'Suicided', B.Location );
-			bigsize--;
-			smallsize++;
-			ChangeTeam(B, small);
-		}
-		else
-			Break;
 	}
 	bBalancing = false;
 
@@ -513,19 +511,18 @@ function bool ChangeTeam(Pawn Other, int NewTeam)
 	if ( Other.IsA('TournamentPlayer') )
 		TournamentPlayer(Other).StartSpot = None;
 
-	if ( Other.PlayerReplicationInfo.Team != 255 )
-	{
-		ClearOrders(Other);
-		Teams[Other.PlayerReplicationInfo.Team].Size--;
-	}
-
 	if ( Teams[NewTeam].Size < MaxTeamSize )
 	{
+		if ( Other.PlayerReplicationInfo.Team != 255 )
+		{
+			ClearOrders(Other);
+			Teams[Other.PlayerReplicationInfo.Team].Size--;
+		}
 		AddToTeam(NewTeam, Other);
 		return true;
 	}
 
-	if ( Other.PlayerReplicationInfo.Team == 255 )
+	if ( Other.PlayerReplicationInfo.Team == 255 && Teams[Smallest].Size < MaxTeamSize )
 	{
 		AddToTeam(Smallest, Other);
 		return true;
@@ -538,7 +535,8 @@ function AddToTeam( int num, Pawn Other )
 {
 	local teaminfo aTeam;
 	local Pawn P;
-	local bool bSuccess;
+	local array<PlayerReplicationInfo> PRIArray;
+	local int i, PRIArraySize;
 	local string SkinName, FaceName;
 
 	if ( Other == None )
@@ -557,26 +555,40 @@ function AddToTeam( int num, Pawn Other )
 ///		LocalLog.LogTeamChange(Other);
 ///	if (WorldLog != None)
 ///		WorldLog.LogTeamChange(Other);
-	bSuccess = false;
 	if (PlayerPawn(Other) != none)
 	{
 		Other.PlayerReplicationInfo.TeamID = 0;
 		if (UTC_PlayerPawn(Other) != none)
 			UTC_PlayerPawn(Other).ClientChangeTeam(Other.PlayerReplicationInfo.Team);
+
+		if (Pawn(PlayerPawn(Other).ViewTarget) != none &&
+			!Level.Game.CanSpectate(Other, Pawn(PlayerPawn(Other).ViewTarget)))
+		{
+			PlayerPawn(Other).ViewTarget = none;
+			PlayerPawn(Other).bBehindView = false;
+		}
 	}
 	else
 		Other.PlayerReplicationInfo.TeamID = 1;
 
-	while ( !bSuccess )
+	for (P = Level.PawnList; P != none; P = P.NextPawn)
+		if (P.PlayerReplicationInfo != none &&
+			P.PlayerReplicationInfo != Other.PlayerReplicationInfo &&
+			P.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team)
+		{
+			PRIArray[PRIArraySize++] = P.PlayerReplicationInfo;
+		}
+
+	while (true)
 	{
-		bSuccess = true;
-		for ( P=Level.PawnList; P!=None; P=P.nextPawn )
-			if ( P.PlayerReplicationInfo != none && (P != Other) 
-				&& (P.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team) 
-				&& (P.PlayerReplicationInfo.TeamId == Other.PlayerReplicationInfo.TeamId) )
-				bSuccess = false;
-		if ( !bSuccess )
-			Other.PlayerReplicationInfo.TeamID++;
+		for (i = 0; i < PRIArraySize; ++i)
+			if (PRIArray[i].TeamID == Other.PlayerReplicationInfo.TeamID)
+			{
+				Other.PlayerReplicationInfo.TeamID++;
+				break;
+			}
+		if (i == PRIArraySize)
+			break;
 	}
 
 	BroadcastLocalizedMessage( DMMessageClass, 3, Other.PlayerReplicationInfo, None, aTeam );
@@ -827,8 +839,18 @@ function ClearOrders(Pawn Leaving)
 	local Pawn P;
 
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-		if ( P.IsA('Bot') && (Bot(P).OrderObject == Leaving) )
+	{
+		if (PlayerPawn(P) != none)
+		{
+			if (PlayerPawn(P).ViewTarget == Leaving && !Level.Game.CanSpectate(P, Leaving))
+			{
+				PlayerPawn(P).ViewTarget = none;
+				PlayerPawn(P).bBehindView = false;
+			}
+		}
+		else if (Bot(P) != none && Bot(P).OrderObject == Leaving)
 			Bot(P).SetOrders('Freelance', None);
+	}
 }
 function bool WaitForPoint(bot aBot)
 {
@@ -871,7 +893,7 @@ function string GetRules()
 		Resultset = ResultSet$"\\gamestyle\\Classic";
 
 	if(MinPlayers > 0)
-		Resultset = ResultSet$"\\botskill\\"$class'ChallengeBotInfo'.default.Skills[Difficulty];
+		Resultset = ResultSet$"\\botskill\\"$class'ChallengeBotInfo'.static.B227_SkillString(Difficulty);
 
 	return ResultSet;
 }
