@@ -485,6 +485,10 @@ function Server_FixCurrentMap_NP19Part3ChicoHour()
 	DisablePlayerStart("PlayerStart3");
 	DisablePlayerStart("PlayerStart4");
 	LoadLevelTrigger("Trigger22").TriggerType = TT_PlayerProximity;
+	MakeMoversTriggerableOnceOnly('tunneld3', true);
+	MakeMoversTriggerableOnceOnly('tunneld6', true);
+	MakeMoversTriggerableOnceOnly('multidoor3ofzo', true);
+	MakeMoversTriggerableOnceOnly('blaaaaahmultimoverzoveel', true);
 }
 
 function Server_ModifyCurrentMap_NP21Atje()
@@ -1101,6 +1105,18 @@ function MakeMoverTriggerableOnceOnly(string MoverName, optional bool bProtect)
 	SetMoverTriggerableOnceOnly(m);
 	if (bProtect)
 		m.MoverEncroachType = ME_IgnoreWhenEncroach;
+}
+
+function MakeMoversTriggerableOnceOnly(name MoverTag, optional bool bProtect)
+{
+	local Mover m;
+
+	foreach AllActors(class'Mover', m, MoverTag)
+	{
+		SetMoverTriggerableOnceOnly(m);
+		if (bProtect)
+			m.MoverEncroachType = ME_IgnoreWhenEncroach;
+	}
 }
 
 function SetMoverTriggerableOnceOnly(Mover m)

@@ -64,6 +64,9 @@ var TVVehicle Vehicle;
 
 var float MyTime; //current level time.
 var TVScoreKeeper ScoreHolder; //scoring (sp only)
+
+var B227_PlayerShipEffects B227_PlayerShipEffects;
+
 //STATE PLAYERSHIP: This is a state which simulates the player flying a ship.
 replication{
 reliable if (role==role_authority&&bnetowner) //server -> client functions & varz
@@ -251,10 +254,10 @@ local vector X, Y, Z;
     SetTimer(0.3, false);
     Return;
   }
-  if (shadow!=none){
-    shadow.destroy();
-    shadow=none;
-  }
+  //-if (shadow!=none){
+  //-  shadow.destroy();
+  //-  shadow=none;
+  //-}
   GetAxes(rotation,X,Y,Z);
   X=location-X*(0.8*collisionradius-collisionheight*airspeed/350);
   Y*=collisionradius/7; //offset of engines.
@@ -366,8 +369,8 @@ exec function KillPawns()
 }
 simulated function postnetbeginplay(){ //client smoke timer for non-autonomous proxies.
 super.postnetbeginplay();
-if (role==role_simulatedproxy)
-  SetTimer(0.3,false); //smoke crap
+//-if (role==role_simulatedproxy)
+//-  SetTimer(0.3,false); //smoke crap
 }
 exec function smovedump() //testing
 {
@@ -627,13 +630,20 @@ ignores SeePlayer, HearNoise; //we want bump called
      SoundVolume=255;
      checkwall=false;
      Enable('HitWall');   //lit. issue
-     if (level.netmode!=NM_dedicatedserver){
+     //-if (level.netmode!=NM_dedicatedserver){
 //        SetTimer(0.3,false);
-        timer(); //time now!
-     }
+     //-   timer(); //time now!
+     //-}
+    if (Level.NetMode != NM_Client)
+    {
+      if (B227_PlayerShipEffects != none)
+        B227_PlayerShipEffects.Destroy();
+      B227_PlayerShipEffects = Spawn(class'B227_PlayerShipEffects', self);
+    }
   }
   function PlayWaiting();
   function playchatting(); //no anim
+  function PlayInAir();
 
   function endstate(){
   bcanfly=false;
@@ -648,6 +658,11 @@ ignores SeePlayer, HearNoise; //we want bump called
      if (mesh!=none)
      mesh=default.mesh;
      setmultiskin(self,defaultskinname,DefaultPackage,playerreplicationinfo.team);
+     if (B227_PlayerShipEffects != none)
+     {
+       B227_PlayerShipEffects.Destroy();
+       B227_PlayerShipEffects = none;
+     }
   }
   function AnimEnd()
   {
@@ -2328,6 +2343,8 @@ function PlayDecap()
 
 function PlayGutHit(float tweentime)
 {
+  if (!HasAnim('GutHit'))
+    return;
   if ( (AnimSequence == 'GutHit') || (AnimSequence == 'Dead2') )
   {
     if (FRand() < 0.5)
@@ -2354,6 +2371,8 @@ function PlayHeadHit(float tweentime)
 
 function PlayLeftHit(float tweentime)
 {
+  if (!HasAnim('LeftHit'))
+    return;
   if ( (AnimSequence == 'LeftHit') || (AnimSequence == 'Dead9') )
     TweenAnim('GutHit', tweentime);
   else if ( FRand() < 0.6 )
@@ -2364,6 +2383,8 @@ function PlayLeftHit(float tweentime)
 
 function PlayRightHit(float tweentime)
 {
+  if (!HasAnim('RightHit'))
+    return;
   if ( (AnimSequence == 'RightHit') || (AnimSequence == 'Dead1') )
     TweenAnim('GutHit', tweentime);
   else if ( FRand() < 0.6 )

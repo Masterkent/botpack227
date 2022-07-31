@@ -183,6 +183,13 @@ ignores SeePlayer, HearNoise;
 
 		Mass = 1000;
 		FlightStartTime = Level.TimeSeconds;
+
+		if (Level.NetMode != NM_Client)
+		{
+			if (B227_PlayerShipEffects != none)
+				B227_PlayerShipEffects.Destroy();
+			B227_PlayerShipEffects = Spawn(class'B227_PlayerShipEffects', self);
+		}
 	}
 	
 	function EndState()

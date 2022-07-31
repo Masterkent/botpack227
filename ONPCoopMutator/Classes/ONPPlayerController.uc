@@ -54,7 +54,7 @@ function UpdateServerPlayerState(PlayerPawn Player)
 	if (GameRulesPtr.LInfo != none && GameRulesPtr.LInfo.bjet && ONPPlayer != none)
 	{
 		PlayerState = ONPPlayer.GetStateName();
-		
+
 		if (!ONPPlayer.bReadyToPlay || ONPPlayer.ReachedExit != none)
 			SetPlayerWaiting(ONPPlayer);
 		else if (ONPPlayer.IsInState('PlayerWalking') || ONPPlayer.IsInState('PlayerWaiting'))
@@ -87,6 +87,7 @@ function InitPlayerFlight(tvplayer Player)
 	{
 		PlayerState = 'PlayerShip';
 		Player.GotoState(PlayerState);
+		Player.SetCollision(Player.bCollideActors, Player.bBlockActors, false);
 		Player.bFire = 0;
 		Player.bAltFire = 0;
 
