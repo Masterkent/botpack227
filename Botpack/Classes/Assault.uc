@@ -1064,6 +1064,12 @@ function bool ChangeTeam(Pawn Other, int NewTeam)
 	return bResult;
 }
 
+function int B227_TimeLimitSeconds()
+{
+	if (SavedTime > 0)
+		return SavedTime;
+	return super.B227_TimeLimitSeconds();
+}
 
 defaultproperties
 {

@@ -776,10 +776,10 @@ function Timer()
 		else
 		{
 			B227_ElapsedTime++;
-			if ( !bOverTime && (TimeLimit > 0) )
+			if ( !bOverTime && (B227_TimeLimitSeconds() > 0) )
 			{
 				B227_GRI().bStopCountDown = false;
-				RemainingTime = TimeLimit * 60 - B227_ElapsedTime;
+				RemainingTime = B227_TimeLimitSeconds() - B227_ElapsedTime;
 				if ( RemainingTime % 60 == 0 )
 					B227_GRI().RemainingMinute = RemainingTime;
 				if ( RemainingTime <= 0 )
@@ -1621,6 +1621,11 @@ function string B227_PlayerEnteredMessage(Pawn P)
 			return P.PlayerReplicationInfo.PlayerName $ Message;
 	}
 	return P.PlayerReplicationInfo.PlayerName $ EnteredMessage;
+}
+
+function int B227_TimeLimitSeconds()
+{
+	return TimeLimit * 60;
 }
 
 defaultproperties
