@@ -318,6 +318,8 @@ function Server_FixCurrentMap_ONP_map02LinesofCommX()
 		CreatureFactory(LoadLevelActor("CreatureFactory2")).prototype;
 
 	LoadLevelTrigger("Trigger13").bTriggerOnceOnly = true;
+	EarthQuake(LoadLevelActor("Earthquake1")).bThrowPlayer = false;
+	EarthQuake(LoadLevelActor("Earthquake2")).bThrowPlayer = false;
 }
 
 function Server_FixCurrentMap_ONP_map06ProcessingX()

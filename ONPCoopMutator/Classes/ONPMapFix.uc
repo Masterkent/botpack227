@@ -606,6 +606,8 @@ function Server_FixCurrentMap_ONP_map02LinesofCommX()
 
 	LoadLevelTrigger("Trigger13").bTriggerOnceOnly = true;
 	LoadLevelMover("Mover24").StayOpenTime = 4.0;
+	EarthQuake(LoadLevelActor("Earthquake1")).bThrowPlayer = false;
+	EarthQuake(LoadLevelActor("Earthquake2")).bThrowPlayer = false;
 	MakeMessageEventFor("SpecialEvent4");
 	MakeMessageEventFor("SpecialEvent11");
 	MakeMessageEventFor("SpecialEvent28");

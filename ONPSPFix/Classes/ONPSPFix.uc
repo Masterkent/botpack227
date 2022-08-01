@@ -115,11 +115,11 @@ function FixCurrentMap()
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.8";
+	return "ONPSPFix v1.9";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.8 [2022-07-03]"
-	Version="1.8"
+	VersionInfo="ONPSPFix v1.9 [2022-08-02]"
+	Version="1.9"
 }

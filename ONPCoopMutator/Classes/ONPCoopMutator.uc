@@ -1060,13 +1060,13 @@ function AdjustRealCrouchInfo(Actor A)
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.13";
+	return "ONPCoopMutator v5.14";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.13 [2022-07-31]"
-	Version="5.13"
+	VersionInfo="ONPCoopMutator v5.14 [2022-08-02]"
+	Version="5.14"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True
