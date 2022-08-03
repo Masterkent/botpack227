@@ -285,6 +285,9 @@ function PlayCrawling()
 
 function TweenToWaiting(float tweentime)
 {
+	if (bIsTyping && AnimSequence == 'gunfix' || IsAnimating() && (AnimSequence == 'Shield' || AnimSequence == 'Fighter'))
+		return;
+
 	if ( IsInState('PlayerSwimming') || Physics==PHYS_Swimming )
 	{
 		BaseEyeHeight = 0.7 * Default.BaseEyeHeight;
@@ -303,6 +306,12 @@ function PlayWaiting()
 
 	if ( Mesh == None )
 		return;
+
+	if (bIsTyping)
+	{
+		PlayChatting();
+		return;
+	}
 
 	if ( IsInState('PlayerSwimming') || (Physics==PHYS_Swimming) )
 	{
@@ -365,6 +374,38 @@ function SwimAnimUpdate(bool bNotForward)
 {
 	if ( !bAnimTransition && (GetAnimGroup(AnimSequence) != 'Gesture') && (AnimSequence != 'Swim') )
 		TweenToSwimming(0.1);
+}
+
+exec function Taunt(name Sequence)
+{
+	if (HasAnim(Sequence) && GetAnimGroup(Sequence) == 'Gesture')
+		super.Taunt(Sequence);
+	else if (Sequence == 'Victory1' || Sequence == 'Wave')
+	{
+		ServerTaunt(Sequence);
+		PlayAnim('Shield', 0.6, 0.1);
+	}
+	else if (Sequence == 'Thrust')
+	{
+		ServerTaunt(Sequence);
+		PlayAnim('Fighter', 0.8, 0.1);
+	}
+}
+
+function ServerTaunt(name Sequence)
+{
+	if (HasAnim(Sequence) && GetAnimGroup(Sequence) == 'Gesture')
+		super.ServerTaunt(Sequence);
+	else if (Sequence == 'Victory1' || Sequence == 'Wave')
+		PlayAnim('Shield', 0.6, 0.1);
+	else if (Sequence == 'Thrust')
+		PlayAnim('Fighter', 0.8, 0.1);
+}
+
+function PlayChatting()
+{
+	if (Mesh != none)
+		LoopAnim('gunfix', 0.7, 0.25);
 }
 
 function MultimeshPackageRef()

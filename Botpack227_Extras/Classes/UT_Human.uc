@@ -213,6 +213,12 @@ function PlayWaiting()
 	if ( Mesh == None )
 		return;
 
+	if (bIsTyping)
+	{
+		PlayChatting();
+		return;
+	}
+
 	if ( (IsInState('PlayerSwimming')) || (Physics == PHYS_Swimming) )
 	{
 		BaseEyeHeight = 0.7 * Default.BaseEyeHeight;
@@ -295,6 +301,12 @@ function PlayRecoil(float Rate)
 		PlayAnim('StillSmFr', Rate, 0.02);
 	else if ( (AnimSequence == 'StillLgFr') || (AnimSequence == 'StillFrRp') )
 		PlayAnim('StillLgFr', Rate, 0.02);
+}
+
+function PlayChatting()
+{
+	if (Mesh != none)
+		LoopAnim('Breath2', 0.3, 1.0);
 }
 
 defaultproperties

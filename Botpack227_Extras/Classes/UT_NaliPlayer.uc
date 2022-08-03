@@ -197,6 +197,9 @@ function PlayCrawling()
 
 function TweenToWaiting(float tweentime)
 {
+	if (bIsTyping && AnimSequence == 'Levitate')
+		return;
+
 	if ( IsInState('PlayerSwimming') || Physics==PHYS_Swimming )
 	{
 		BaseEyeHeight = 0.7 * Default.BaseEyeHeight;
@@ -215,6 +218,12 @@ function PlayWaiting()
 
 	if ( Mesh == None )
 		return;
+
+	if (bIsTyping)
+	{
+		PlayChatting();
+		return;
+	}
 
 	if ( IsInState('PlayerSwimming') || (Physics==PHYS_Swimming) )
 	{
@@ -374,6 +383,12 @@ state PlayerWalking
 		NormallyVisible();
 		Super.EndState();
 	}
+}
+
+function PlayChatting()
+{
+	if (Mesh != none)
+		LoopAnim('Levitate', 0.3, 1.0);
 }
 
 function MultimeshPackageRef()
