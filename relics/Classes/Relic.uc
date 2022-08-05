@@ -9,6 +9,9 @@ var bool Initialized;
 var RelicInventory SpawnedRelic;
 var int NavPoint;
 
+var float B227_RespawnTimer;
+var bool B227_bMoveRelic;
+
 function PostBeginPlay()
 {
 	local NavigationPoint NP;
@@ -66,8 +69,20 @@ function Timer()
 		{
 			SpawnedRelic.IdleTime = 0;
 			Spawn(class'RelicSpawnEffect', SpawnedRelic,, SpawnedRelic.Location, SpawnedRelic.Rotation);
+			B227_bMoveRelic = true;
 			SpawnedRelic.Destroy();
+			B227_bMoveRelic = false;
 		}
+	}
+}
+
+event Tick(float DeltaTime)
+{
+	if (B227_RespawnTimer > 0)
+	{
+		B227_RespawnTimer = FMax(0, FMin(B227_RespawnTimer, RelicClass.default.B227_RespawnTime) - DeltaTime);
+		if (B227_RespawnTimer == 0)
+			B227_SpawnRelic(RelicClass);
 	}
 }
 
@@ -99,6 +114,19 @@ function B227_SpawnRelic(class<RelicInventory> RelicClass, optional int RecurseC
 			PointCount++;
 		}
 	}
+}
+
+function B227_RespawnRelic(class<RelicInventory> RelicClass)
+{
+	if (RelicClass.default.B227_RespawnTime > 0 && !B227_bMoveRelic)
+		B227_SetRespawnTimer(RelicClass);
+	else
+		B227_SpawnRelic(RelicClass);
+}
+
+function B227_SetRespawnTimer(class<RelicInventory> RelicClass)
+{
+	B227_RespawnTimer = RelicClass.default.B227_RespawnTime;
 }
 
 function B227_SetSpawnedRelic(RelicInventory RelicInv)

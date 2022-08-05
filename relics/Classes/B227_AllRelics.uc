@@ -5,12 +5,13 @@ struct RelicInventoryInfo
 {
 	var class<RelicInventory> RelicClass;
 	var RelicInventory SpawnedRelic;
+	var float RespawnTimer;
 };
 
 var array<RelicInventoryInfo> Relics;
 var int NumRelics;
 
-function PostBeginPlay()
+event PostBeginPlay()
 {
 	local NavigationPoint NP;
 	local int i;
@@ -36,6 +37,7 @@ function PostBeginPlay()
 	for (i = 0; i < NumRelics; ++i)
 		B227_SpawnRelic(Relics[i].RelicClass);
 
+	Spawn(class'B227_RelicGameRules');
 	SetTimer(5.0, True);
 
 	if (Level.NetMode != NM_Standalone)
@@ -54,8 +56,23 @@ event Timer()
 			{
 				Relics[i].SpawnedRelic.IdleTime = 0;
 				Spawn(class'RelicSpawnEffect', Relics[i].SpawnedRelic,, Relics[i].SpawnedRelic.Location, Relics[i].SpawnedRelic.Rotation);
+				B227_bMoveRelic = true;
 				Relics[i].SpawnedRelic.Destroy();
+				B227_bMoveRelic = false;
 			}
+		}
+}
+
+event Tick(float DeltaTime)
+{
+	local int i;
+
+	for (i = 0; i < NumRelics; ++i)
+		if (Relics[i].RespawnTimer > 0)
+		{
+			Relics[i].RespawnTimer = FMax(0, FMin(Relics[i].RespawnTimer, Relics[i].RelicClass.default.B227_RespawnTime) - DeltaTime);
+			if (Relics[i].RespawnTimer == 0)
+				B227_SpawnRelic(Relics[i].RelicClass);
 		}
 }
 
@@ -89,6 +106,18 @@ function bool HasSpawnedRelic(RelicInventory RelicInv)
 	return false;
 }
 
+function B227_SetRespawnTimer(class<RelicInventory> RelicClass)
+{
+	local int i;
+
+	for (i = 0; i < NumRelics; ++i)
+		if (Relics[i].RelicClass == RelicClass)
+		{
+			Relics[i].RespawnTimer = RelicClass.default.B227_RespawnTime;
+			return;
+		}
+}
+
 function B227_SetSpawnedRelic(RelicInventory RelicInv)
 {
 	local int i;
@@ -96,7 +125,7 @@ function B227_SetSpawnedRelic(RelicInventory RelicInv)
 	if (RelicInv != none)
 	{
 		for (i = 0; i < NumRelics; ++i)
-			if (RelicInv.Class == Relics[i].RelicClass)
+			if (Relics[i].RelicClass == RelicInv.Class)
 			{
 				Relics[i].SpawnedRelic = RelicInv;
 				RelicInv.B227_Relics = self;

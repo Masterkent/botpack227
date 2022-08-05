@@ -1,16 +1,38 @@
-class RelicRedemptionInventory expands RelicInventory;
+class RelicRedemptionInventory expands RelicInventory
+	config;
 
 #exec OBJ LOAD FILE="relicsResources.u" PACKAGE=relics
 
+var config bool B227_bPreventDeath;
+
 function inventory PrioritizeArmor( int Damage, name DamageType, vector HitLocation )
 {
-	local int PointNumber, PointCount;
 	local Pawn Victim;
-	local NavigationPoint NP;
 
 	Victim = Pawn(Owner);
-	if ( (Victim == None) || (Victim.Health - Damage > 0) || !bActive )
+	if ( default.B227_bPreventDeath || (Victim == None) || (Victim.Health - Damage > 0) || !bActive )
 		return Super.PrioritizeArmor(Damage, DamageType, HitLocation);
+
+	B227_RecoverPawn(Victim);
+
+	NextArmor = None;
+	Return self;
+}
+
+//
+// Absorb damage.
+//
+function int ArmorAbsorbDamage(int Damage, name DamageType, vector HitLocation)
+{
+	if ( Pawn(Owner) != None )
+		Pawn(Owner).Health = Pawn(Owner).default.Health;
+	return 0;
+}
+
+function B227_RecoverPawn(Pawn Victim)
+{
+	local int PointNumber, PointCount;
+	local NavigationPoint NP;
 
 	// Redeem this poor soul.
 	if (MyRelic != none)
@@ -43,18 +65,6 @@ function inventory PrioritizeArmor( int Damage, name DamageType, vector HitLocat
 	// Move the relic.
 	Victim.DeleteInventory(self);
 	Destroy();
-	NextArmor = None;
-	Return self;
-}
-
-//
-// Absorb damage.
-//
-function int ArmorAbsorbDamage(int Damage, name DamageType, vector HitLocation)
-{
-	if ( Pawn(Owner) != None )
-		Pawn(Owner).Health = Pawn(Owner).default.Health;
-	return 0;
 }
 
 defaultproperties

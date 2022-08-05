@@ -1,4 +1,5 @@
-class RelicInventory expands TournamentPickup;
+class RelicInventory expands TournamentPickup
+	config;
 
 #exec OBJ LOAD FILE="relicsResources.u" PACKAGE=relics
 
@@ -8,6 +9,7 @@ var RelicShell ShellEffect;
 var texture ShellSkin;
 var class<RelicShell> ShellType;
 
+var config int B227_RespawnTime;
 var B227_AllRelics B227_Relics;
 
 replication
@@ -21,9 +23,9 @@ function Destroyed()
 	if ( ShellEffect != None )
 		ShellEffect.Destroy();
 	if ( (MyRelic != None) && (MyRelic.SpawnedRelic == self) )
-		MyRelic.SpawnRelic(0);
+		MyRelic.B227_RespawnRelic(Class);
 	if (B227_Relics != none && B227_Relics.HasSpawnedRelic(self))
-		B227_Relics.B227_SpawnRelic(Class);
+		B227_Relics.B227_RespawnRelic(Class);
 
 	Super.Destroyed();
 }
