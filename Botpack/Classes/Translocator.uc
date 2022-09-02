@@ -150,7 +150,7 @@ function Fire( float Value )
 			bDisrupted = true;
 		}
 		else
-			Owner.PlaySound(AltFireSound, SLOT_Misc, 4 * Pawn(Owner).SoundDampening);
+			Owner.PlaySound(AltFireSound, SLOT_None, 4 * Pawn(Owner).SoundDampening);
 		bTTargetOut = false;
 		TTarget.Destroy();
 		TTarget = None;
@@ -236,7 +236,7 @@ function Translocate()
 				Level.Game.WorldLog.LogSpecialEvent("translocate_fail", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 
 			Pawn(Owner).SetLocation(Start);
-			Owner.PlaySound(AltFireSound, SLOT_Misc, 4 * Pawn(Owner).SoundDampening);
+			Owner.PlaySound(AltFireSound, SLOT_None, 4 * Pawn(Owner).SoundDampening);
 		}
 		else 
 		{ 
@@ -270,7 +270,7 @@ function Translocate()
 	} 
 	else 
 	{
-		Owner.PlaySound(AltFireSound, SLOT_Misc, 4 * Pawn(Owner).SoundDampening);
+		Owner.PlaySound(AltFireSound, SLOT_None, 4 * Pawn(Owner).SoundDampening);
 		if (Level.Game.LocalLog != None)
 			Level.Game.LocalLog.LogSpecialEvent("translocate_fail", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 		if (Level.Game.WorldLog != None)

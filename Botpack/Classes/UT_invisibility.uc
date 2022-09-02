@@ -13,7 +13,7 @@ state Activated
 		bActive = false;
 		if (Owner != none)
 		{
-			Owner.PlaySound(DeActivateSound);
+			Owner.PlaySound(DeActivateSound, SLOT_None);
 
 			if (Owner.Texture == FireTexture'Botpack227_Base.Belt_fx.Invis.Invis')
 			{
@@ -91,7 +91,7 @@ state Activated
 	function BeginState()
 	{
 		bActive = true;
-		Owner.PlaySound(ActivateSound,, 4.0);
+		Owner.PlaySound(ActivateSound, SLOT_None, 4.0);
 
 		Owner.SetDisplayProperties(ERenderStyle.STY_Translucent, 
 								   FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',

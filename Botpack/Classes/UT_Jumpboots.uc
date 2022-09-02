@@ -38,13 +38,13 @@ function OwnerJumped()
 		{
 			if ( Owner != None )
 			{
-				Owner.PlaySound(DeActivateSound);
+				Owner.PlaySound(DeActivateSound, SLOT_None);
 				ResetOwner();
 			}
 			UsedUp();
 		}
 		else
-			Owner.PlaySound(sound'BootJmp');
+			Owner.PlaySound(sound'BootJmp', SLOT_None);
 		Charge -= 1;
 	}
 	if( Inventory != None )
@@ -108,7 +108,7 @@ state Activated
 
 Begin:
 	if (Pawn(Owner) != none)
-		Owner.PlaySound(ActivateSound);
+		Owner.PlaySound(ActivateSound, SLOT_None);
 }
 
 state DeActivated

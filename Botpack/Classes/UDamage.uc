@@ -68,7 +68,7 @@ function SetUDamageWeapon()
 		if (TournamentWeapon(UDamageWeapon) != none && TournamentWeapon(UDamageWeapon).Affector == self)
 			TournamentWeapon(UDamageWeapon).Affector = none;
 	}
-		
+
 	UDamageWeapon = Pawn(Owner).Weapon;
 	// Make new weapon cool.
 	if (UDamageWeapon != none)
@@ -249,6 +249,17 @@ function Destroyed()
 		B227_Effect.LifeSpan = 3; // finish playing sounds and destroy
 
 	super.Destroyed();
+}
+
+event float BotDesireability(Pawn Bot)
+{
+	local Inventory Inv;
+
+	for (Inv = Bot.Inventory; Inv != none; Inv = Inv.Inventory)
+		if (Inv.IsA('RelicStrengthInventory'))
+			return -1; // can't pickup up UDamage if have strength relic
+
+	return super.BotDesireability(Bot);
 }
 
 // Auxiliary
