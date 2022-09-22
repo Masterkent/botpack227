@@ -261,9 +261,9 @@ Begin:
 
 function PostBeginPlay(){
 	bInvGroupChecked=true;
-	if (level.game.bDeathMatch){
-		 InventoryGroup=3;
-	}
+	//-if (level.game.bDeathMatch){
+	//-	 InventoryGroup=3;
+	//-}
 }
 
 function float RateSelf( out int bUseAltMode )                                   //UsAaR33:  edited eightball botcode
