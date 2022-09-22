@@ -64,7 +64,7 @@ function string GetCallSign( PlayerReplicationInfo P )
 {
 	if ( P == None )
 		return "";
-	if ( (Level.NetMode == NM_Standalone) && (P.TeamID == 0) )
+	if ( Level.NetMode == NM_Standalone && P.TeamID == 0 && P.Team < 4 )
 		return LeaderSign[P.Team];
 	else
 		return P.PlayerName;
@@ -81,12 +81,12 @@ function BotInitialize(PlayerReplicationInfo Sender, PlayerReplicationInfo Recip
 	else
 	{
 		SetTimer(0.1, false);
-		if ( recipient != None )
+		if ( Recipient != None )
 		{
-			if ( (Level.NetMode == NM_Standalone) && (recipient.TeamID == 0) )
+			if ( Level.NetMode == NM_Standalone && Recipient.TeamID == 0 && Recipient.Team < 4 )
 			{
-				Phrase[0] = NameSound[recipient.Team];
-				PhraseTime[0] = NameTime[recipient.Team];
+				Phrase[0] = NameSound[Recipient.Team];
+				PhraseTime[0] = NameTime[Recipient.Team];
 				m = 1;
 			}
 			DelayedResponse = GetCallSign(Recipient)$CommaText;
@@ -134,17 +134,17 @@ function ClientInitialize(PlayerReplicationInfo Sender, PlayerReplicationInfo Re
 		SetClientAckMessage(messageIndex, Recipient, MessageSound, MessageTime);
 	else
 	{
-		if ( recipient != None )
+		if ( Recipient != None )
 		{
-			if ( (Level.NetMode == NM_Standalone) && (recipient.TeamID == 0) )
+			if ( Level.NetMode == NM_Standalone && Recipient.TeamID == 0 && Recipient.Team < 4 )
 			{
-				Phrase[0] = NameSound[recipient.Team];
-				PhraseTime[0] = NameTime[recipient.Team];
+				Phrase[0] = NameSound[Recipient.Team];
+				PhraseTime[0] = NameTime[Recipient.Team];
 				m = 1;
 			}
 			DelayedResponse = GetCallSign(Recipient)$CommaText;
 		}
-		else if ( (messageType == 'OTHER') && (messageIndex == 9) )
+		else if ( messageType == 'OTHER' && messageIndex == 9 && Sender.Team < 4 )
 		{
 			Phrase[0] = NameSound[Sender.Team];
 			PhraseTime[0] = NameTime[Sender.Team];
@@ -185,7 +185,7 @@ function SetClientAckMessage(int messageIndex, PlayerReplicationInfo Recipient, 
 	MessageTime = AckTime[messageIndex];
 
 	if ( (Recipient != None) && (Level.NetMode == NM_Standalone) 
-		&& (recipient.TeamID == 0) && PlayerPawn(Owner).GameReplicationInfo.bTeamGame )
+		&& (Recipient.TeamID == 0) && PlayerPawn(Owner).GameReplicationInfo.bTeamGame && Recipient.Team < 4 )
 	{
 		Phrase[1] = NameSound[Recipient.Team];
 		PhraseTime[1] = NameTime[Recipient.Team];
@@ -194,14 +194,15 @@ function SetClientAckMessage(int messageIndex, PlayerReplicationInfo Recipient, 
 
 function SetAckMessage(int messageIndex, PlayerReplicationInfo Recipient, out Sound MessageSound, out Float MessageTime)
 {
-	DelayedResponse = AckString[messageIndex]$CommaText$GetCallSign(recipient);
+	DelayedResponse = AckString[messageIndex]$CommaText$GetCallSign(Recipient);
 	SetTimer(3 + FRand(), false); // wait for initial order to be spoken
 	Phrase[0] = AckSound[messageIndex];
 	PhraseTime[0] = AckTime[messageIndex];
-	if ( (Level.NetMode == NM_Standalone) && (recipient.TeamID == 0) && PlayerPawn(Owner).GameReplicationInfo.bTeamGame )
+	if ( Level.NetMode == NM_Standalone && Recipient.TeamID == 0 && PlayerPawn(Owner).GameReplicationInfo.bTeamGame &&
+		Recipient.Team < 4 )
 	{
-		Phrase[1] = NameSound[recipient.Team];
-		PhraseTime[1] = NameTime[recipient.Team];
+		Phrase[1] = NameSound[Recipient.Team];
+		PhraseTime[1] = NameTime[Recipient.Team];
 	}
 }
 
@@ -328,7 +329,10 @@ function Timer()
 	if ( bDelayedResponse )
 	{
 		bDelayedResponse = false;
-		if ( Owner.IsA('PlayerPawn') )
+		if (PlayerPawn(Owner) != none &&
+			PlayerPawn(Owner).PlayerReplicationInfo != none &&
+			PlayerPawn(Owner).GameReplicationInfo != none &&
+			DelayedSender != none)
 		{
 			if ( PlayerPawn(Owner).GameReplicationInfo.bTeamGame 
 				 && (PlayerPawn(Owner).PlayerReplicationInfo.Team == DelayedSender.Team) )

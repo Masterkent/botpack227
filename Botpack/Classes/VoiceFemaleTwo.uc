@@ -25,13 +25,13 @@ function SetOtherMessage(int messageIndex, PlayerReplicationInfo Recipient, out 
 		SetTimer(3 + FRand(), false); // wait for initial request to be spoken
 		if ( FRand() < 0.5 )
 		{
-			DelayedResponse = AckString[2]$CommaText$GetCallSign(recipient);
+			DelayedResponse = AckString[2]$CommaText$GetCallSign(Recipient);
 			Phrase[0] = AckSound[2];
 			PhraseTime[0] = AckTime[2];
-			if ( (Level.NetMode == NM_Standalone) && (recipient.TeamID == 0) )
+			if (Level.NetMode == NM_Standalone && Recipient.TeamID == 0 && Recipient.Team < 4)
 			{
-				Phrase[1] = NameSound[recipient.Team];
-				PhraseTime[1] = NameTime[recipient.Team];
+				Phrase[1] = NameSound[Recipient.Team];
+				PhraseTime[1] = NameTime[Recipient.Team];
 			}
 			return;
 		}

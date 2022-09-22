@@ -862,7 +862,7 @@ function SetupButtonStyle(
 			C.Style = 3;
 		if (ChallengeHUD(GetPlayerOwner().MyHUD).bUseTeamColor)
 		{
-			if (GetPlayerOwner().MyHUD.IsA('ChallengeTeamHUD'))
+			if (GetPlayerOwner().MyHUD.IsA('ChallengeTeamHUD') && GetPlayerOwner().PlayerReplicationInfo.Team < 4)
 			{
 				HUDColor = ChallengeTeamHUD(GetPlayerOwner().MyHUD).TeamColor[GetPlayerOwner().PlayerReplicationInfo.Team];
 			} else {

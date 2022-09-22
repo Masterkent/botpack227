@@ -78,7 +78,10 @@ simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name M
 				     ClassIsChildOf(MessageClass, class'TeamSayMessagePlus') )
 	{
 		FaceTexture = PRI.TalkTexture;
-		FaceTeam = TeamColor[PRI.Team];
+		if (PRI.Team < 4)
+			FaceTeam = TeamColor[PRI.Team];
+		else
+			FaceTeam = FavoriteHUDColor;
 		if ( FaceTexture != None )
 			FaceTime = Level.TimeSeconds + 3;
 		if ( Msg == "" )
@@ -120,7 +123,9 @@ simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name M
 
 simulated function SetIDColor( Canvas Canvas, int type )
 {
-	if ( type == 0 )
+	if (IdentifyTarget.Team == 255)
+		Canvas.DrawColor = B227_MultiplyColor(WhiteColor, 0.333 * IdentifyFadeTime);
+	else if ( type == 0 )
 		Canvas.DrawColor = B227_MultiplyColor(AltTeamColor[IdentifyTarget.Team], 0.333 * IdentifyFadeTime);
 	else
 		Canvas.DrawColor = B227_MultiplyColor(TeamColor[IdentifyTarget.Team], 0.333 * IdentifyFadeTime);
