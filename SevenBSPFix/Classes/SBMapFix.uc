@@ -24,6 +24,8 @@ function FixCurrentMap()
 		FixCurrentMap_Jones_05_TemplePart3();
 	else if (CurrentMap ~= "Jones-06-Vandora")
 		FixCurrentMap_Jones_06_Vandora();
+	else if (CurrentMap ~= "Jones-07-Noork")
+		FixCurrentMap_Jones_07_Noork();
 	else if (CurrentMap ~= "Jones-08-Pirate2")
 		FixCurrentMap_Jones_08_Pirate2();
 	else if (CurrentMap ~= "Jones-08-Pirate3")
@@ -159,6 +161,10 @@ function ModifyCurrentMap_Jones_05_TemplePart3()
 
 function FixCurrentMap_Jones_06_Vandora()
 {
+	LoadLevelMover("Mover9").InitialState = 'TriggerOpenTimed';
+	LoadLevelMover("Mover12").InitialState = 'TriggerOpenTimed';
+	class'SBTriggerStoppedMover'.static.CreateFor(Level, "Mover10");
+
 	MakeMoverTriggerableOnceOnly("Mover105"); // destructible bars
 	MakeMoverTriggerableOnceOnly("Mover106"); // destructible bars
 }
@@ -167,6 +173,16 @@ function ModifyCurrentMap_Jones_06_Vandora()
 {
 	if (Mutator.bSkipCutscenes)
 		MakeActorRelevant("NonBuggyViewSpot5");
+}
+
+function FixCurrentMap_Jones_07_Noork()
+{
+	LoadLevelMover("Mover22").InitialState = 'TriggerOpenTimed';
+	LoadLevelMover("Mover26").InitialState = 'TriggerOpenTimed';
+	LoadLevelTrigger("Trigger21").ReTriggerDelay = 0;
+	class'SBTriggerStoppedMover'.static.CreateFor(Level, "Mover23");
+
+	MakeDamageEventFor("SpecialEvent78");
 }
 
 function ModifyCurrentMap_Jones_07_Noork()
@@ -290,6 +306,11 @@ function DisableTeleporter(string TeleporterName)
 	telep.SetCollision(false);
 	telep.DrawType = DT_None;
 	telep.URL = "";
+}
+
+function MakeDamageEventFor(string SpecialEventName)
+{
+	class'SBDamageEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
 }
 
 function SetDynamicLightMover(string MoverName)

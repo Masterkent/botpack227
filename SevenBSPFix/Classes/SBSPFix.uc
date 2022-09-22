@@ -76,6 +76,6 @@ function RemoveCutsceneActors()
 
 defaultproperties
 {
-	VersionInfo="SBSPFix v1.2 [2022-07-02]"
-	Version="1.2"
+	VersionInfo="SBSPFix v1.4 [2022-09-21]"
+	Version="1.4"
 }
