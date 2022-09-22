@@ -9,6 +9,7 @@ defaultproperties
 {
      AmmoAmount=15
      MaxAmmo=90
+     UsedInWeaponSlot(2)=0
      UsedInWeaponSlot(3)=1
      PickupSound=Sound'botpack.Pickups.AmmoPick'
      ParentAmmo=None

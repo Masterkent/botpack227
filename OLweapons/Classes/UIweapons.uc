@@ -68,14 +68,11 @@ exec function stopreload()
 
 //new replicated versions for OSA 2.25
 //now set pawn(owner).bextra3
-function tick(float delta){    //server bextra 3 updater:    (bshadowcast is unused anyway.)
-  if (role<role_authority&&playerpawn(owner)!=none&&bool(pawn(owner).bextra3)!=owner.bShadowCast){
-    owner.bshadowcast=!owner.bshadowcast;
-    if (owner.bshadowcast) //now reload
-      reload();
-    else
-      stopreload();
-  }
+function tick(float delta)
+{
+	// B227 NOTE: Owner's bExtra3 is replicated in Unreal (in contrast to UT),
+	// hence no hacks are needed to send the client input to servers.
+	// This function is preserved for binary compatibility.
 }
 
 
