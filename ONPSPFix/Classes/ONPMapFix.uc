@@ -100,6 +100,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map21Welcome();
 	else if (CurrentMap ~= "ONP-map22Disposal")
 		Server_FixCurrentMap_ONP_map22Disposal();
+	else if (CurrentMap ~= "ONP-map30Ruins")
+		Server_FixCurrentMap_ONP_map30Ruins();
 	else if (CurrentMap ~= "ONP-map39Escape")
 		Server_FixCurrentMap_ONP_map39Escape();
 }
@@ -278,12 +280,16 @@ function Server_FixCurrentMap_NP23Kew()
 function Server_FixCurrentMap_NP27DavidM()
 {
 	local Actor A;
+
 	A = LoadLevelActor("TvTranslocator1", true);
 	if (A != none)
 	{
 		A.DrawType = A.default.DrawType;
 		A.Mesh = A.default.Mesh;
 	}
+
+	LoadLevelTrigger("Trigger46").TriggerType = TT_PawnProximity;
+	LoadLevelTrigger("Trigger47").TriggerType = TT_PawnProximity;
 }
 
 function Server_FixCurrentMap_NP29DavidM()
@@ -415,6 +421,11 @@ function Server_FixCurrentMap_ONP_map21Welcome()
 function Server_FixCurrentMap_ONP_map22Disposal()
 {
 	LoadLevelMover("Mover34").StayOpenTime = 4;
+}
+
+function Server_FixCurrentMap_ONP_map30Ruins()
+{
+	LoadLevelTrigger("Trigger19").bTriggerOnceOnly = true;
 }
 
 function Server_FixCurrentMap_ONP_map39Escape()
