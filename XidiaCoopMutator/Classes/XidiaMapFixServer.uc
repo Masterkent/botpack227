@@ -99,6 +99,7 @@ function Server_FixCurrentMap_XidiaGold_Map6_Derelict_b()
 function Server_FixCurrentMap_XidiaGold_Map7_Darklord()
 {
 	local Mover Mover;
+	local Trigger Trigger;
 
 	class'XidiaTriggerStoppedMover'.static.CreateFor(Level, "Mover13");
 
@@ -107,23 +108,26 @@ function Server_FixCurrentMap_XidiaGold_Map7_Darklord()
 	Mover.Tag = 'ToTheEnd2';
 
 	LoadLevelMover("Mover31").MoveTime = 10;
-	if (class'XidiaTriggerStoppedMover'.static.CreateFor(Level, "Mover31", 'EyeOfTheBeholder_Triggered') != none)
+	if (class'XidiaTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover31", 'Trigger_EyeOfTheBeholder', 'EyeOfTheBeholder') != none)
 	{
-		LoadLevelActor("SpecialEvent20").Tag = 'EyeOfTheBeholder_Triggered';
-		LoadLevelActor("SpecialEvent21").Tag = 'EyeOfTheBeholder_Triggered';
-		LoadLevelTrigger("Trigger27").ReTriggerDelay = 0;
+		Trigger = LoadLevelTrigger("Trigger27");
+		Trigger.Event = 'Trigger_EyeOfTheBeholder';
+		Trigger.ReTriggerDelay = 0;
 	}
 }
 
 function Server_FixCurrentMap_XidiaES_Map1_SelfDestruct()
 {
-	local SpecialEvent SpecialEvent;
+	local Trigger Trigger;
 
-	if (class'XidiaTriggerStoppedMover'.static.CreateFor(Level, "Mover31", 'EyeOfTheBeholder_Triggered') != none)
+	if (class'XidiaTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover31", 'Trigger_EyeOfTheBeholder', 'EyeOfTheBeholder') != none)
 	{
-		foreach AllActors(class'SpecialEvent', SpecialEvent, 'EyeOfTheBeholder')
-			SpecialEvent.Tag = 'EyeOfTheBeholder_Triggered';
-		LoadLevelTrigger("Trigger27").ReTriggerDelay = 0;
+		foreach AllActors(class'Trigger', Trigger)
+			if (Trigger.Event == 'EyeOfTheBeholder')
+			{
+				Trigger.Event = 'Trigger_EyeOfTheBeholder';
+				Trigger.ReTriggerDelay = 0;
+			}
 	}
 }
 
@@ -148,12 +152,13 @@ function Server_FixCurrentMap_XidiaES_Map3_ReOP()
 
 function Server_FixCurrentMap_XidiaES_Map4_DeadMines()
 {
-	local SpecialEvent SpecialEvent;
+	local Trigger Trigger;
 
-	if (class'XidiaTriggerStoppedMover'.static.CreateFor(Level, "Mover18", 'Tram001_Triggered') != none)
+	if (class'XidiaTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover18", 'Trigger_Tram001', 'Tram001') != none)
 	{
-		foreach AllActors(class'SpecialEvent', SpecialEvent, 'Tram001')
-			SpecialEvent.Tag = 'Tram001_Triggered';
+		foreach AllActors(class'Trigger', Trigger)
+			if (Trigger.Event == 'Tram001')
+				Trigger.Event = 'Trigger_Tram001';
 	}
 
 	LoadLevelTrigger("Trigger43").bTriggerOnceOnly = false;

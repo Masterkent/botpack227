@@ -637,13 +637,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "XidiaCoopMutator v1.4";
+	return "XidiaCoopMutator v1.5";
 }
 
 defaultproperties
 {
-	VersionInfo="XidiaCoopMutator v1.4 [2022-05-18]"
-	Version="1.4"
+	VersionInfo="XidiaCoopMutator v1.5 [2022-09-20]"
+	Version="1.5"
 	bReplaceUnrealWeapons=False
 	bUseXidiaJumpBoots=True
 	bUseXidiaWeaponsSupply=True
