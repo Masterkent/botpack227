@@ -13,11 +13,14 @@ struct Remapping
 	var() config bool bApplyMapFixes;
 };
 
+var() config bool bModifyRogueScarredOne;
 var() config bool bUseSpeech;
 var() config bool bUseSpeechMenuForU1Players;
+var() config bool bUseWeaponsSupply;
 var() config string GameEndURL;
 var() config array<Remapping> MapReplacements;
 
+var string CurrentMap;
 var SBGameRules GameRulesPtr;
 
 function PostBeginPlay()
@@ -78,10 +81,9 @@ function DisableFadeViewTriggers()
 function ModifyCurrentMap()
 {
 	local int i;
-	local string CurrentMap;
 	local bool bApplyMapFixes;
 
-	CurrentMap = string(outer.name);
+	CurrentMap = string(Outer.Name);
 
 	bApplyMapFixes = true;
 	for (i = 0; i < Array_Size(MapReplacements); ++i)
@@ -452,14 +454,14 @@ function bool ReplaceWithC(actor Other, class<Actor> aClass)
 {
 	local Actor A;
 
-  	if (level.game.Difficulty == 0 && !Other.bDifficulty0 ||
+	if (level.game.Difficulty == 0 && !Other.bDifficulty0 ||
 		level.game.Difficulty == 1 && !Other.bDifficulty1 ||
 		level.game.Difficulty == 2 && !Other.bDifficulty2 ||
 		level.game.Difficulty >= 3 && !Other.bDifficulty3 ||
 		!Other.bSinglePlayer && Level.NetMode == NM_Standalone || 
 		!Other.bNet && (Level.NetMode == NM_DedicatedServer || Level.NetMode == NM_ListenServer))
 	{
-    	return false;
+		return false;
 	}
 	if (FRand() > Other.OddsOfAppearing)
 	{
@@ -515,13 +517,15 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "SevenBCoopMutator v2.6";
+	return "SevenBCoopMutator v2.8";
 }
 
 defaultproperties
 {
-	VersionInfo="SevenBCoopMutator v2.6 [2022-05-18]"
-	Version="2.6"
+	VersionInfo="SevenBCoopMutator v2.8 [2022-09-22]"
+	Version="2.8"
+	bModifyRogueScarredOne=True
 	bUseSpeech=False
 	bUseSpeechMenuForU1Players=True
+	bUseWeaponsSupply=True
 }

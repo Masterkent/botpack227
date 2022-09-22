@@ -116,7 +116,7 @@ function Server_FixCurrentMap_Jones_05_Trench2()
 
 	IDisp = Spawn(class'SBInstantDispatcher',, 'activate_crystals');
 	IDisp.bTriggerOnceOnly = true;
-	Disp = Dispatcher(LoadLevelActor("Dispatcher1"));
+	Disp = LoadLevelDispatcher("Dispatcher1");
 	IDisp.OutEvents[0] = Disp.OutEvents[1];
 	Disp.OutEvents[1] = 'activate_crystals';
 }
@@ -194,14 +194,14 @@ function Server_FixCurrentMap_Jones_05_TemplePart3()
 	LoadLevelTrigger("Trigger72").bNet = true;
 	LoadLevelTrigger("Trigger47").bTriggerOnceOnly = true; // message "You have no reason to take the Broken Shockrifle"
 
-	Dispatcher(LoadLevelActor("Dispatcher6")).OutEvents[3] = 'ASMDtrigger';
+	LoadLevelDispatcher("Dispatcher6").OutEvents[3] = 'ASMDtrigger';
 
 	// Door to chamber with Titans
 	LoadLevelActor("Mover63").Event = 'ProphetChamberDoor_Open_Disp';
 	Spawn(class'SBMoverStateController',, 'Mover_ProphetChamberDoor').MoverName = 'Mover62';
 	M = LoadLevelMover("Mover62");
 
-	DispatcherPlus(LoadLevelActor("DispatcherPlus19")).OutEvents[1] = 'ProphetChamberDoor_Close';
+	LoadLevelDispatcherPlus("DispatcherPlus19").OutEvents[1] = 'ProphetChamberDoor_Close';
 	IDisp = Spawn(class'SBInstantDispatcher',, 'ProphetChamberDoor_Open_Disp');
 	IDisp.ConditionTrigger = MakeConditionTrigger('ProphetChamberDoor_Close', 'OtherTriggerTurnsOff', true);
 	IDisp.OutEvents[0] = 'ProphetChamberDoor_Open';
@@ -234,7 +234,7 @@ function Server_FixCurrentMap_Jones_05_TemplePart3()
 	Spawn(class'SBKillActors',, 'TheGiftHasBeenSpent').ActorClass = class'SuperShockCore';
 
 	// Realm
-	Disp = DispatcherPlus(LoadLevelActor("DispatcherPlus22"));
+	Disp = LoadLevelDispatcherPlus("DispatcherPlus22");
 	Disp.OutEvents[1] = 'RealmExported';
 	Disp.OutTrigger[2] = 1;
 
@@ -253,7 +253,7 @@ function Server_FixCurrentMap_Jones_05_TemplePart3()
 
 	DisableTrigger("Trigger70"); // no translator messages from the Nali
 
-	Disp = DispatcherPlus(LoadLevelActor("DispatcherPlus23"));
+	Disp = LoadLevelDispatcherPlus("DispatcherPlus23");
 	Disp.OutEvents[1] = 'BlueGate';
 	Disp.OutEvents[3] = 'BlueTrig';
 
@@ -272,6 +272,12 @@ function Server_FixCurrentMap_Jones_05_TemplePart3()
 function Server_FixCurrentMap_Jones_06_Vandora()
 {
 	local Mover M;
+	local ScriptedFemale ScriptedFemale;
+	local int i;
+
+	LoadLevelMover("Mover9").InitialState = 'TriggerOpenTimed';
+	LoadLevelMover("Mover12").InitialState = 'TriggerOpenTimed';
+	class'SBTriggerStoppedMover'.static.CreateFor(Level, "Mover10");
 
 	MakeMoverTriggerableOnceOnly("Mover105"); // destructible bars
 	MakeMoverTriggerableOnceOnly("Mover106"); // destructible bars
@@ -283,12 +289,19 @@ function Server_FixCurrentMap_Jones_06_Vandora()
 	M = LoadLevelMover("Mover72");
 	M.Tag = 'SpinnerLairPadlock';
 	SetMoverTriggerableOnceOnly(M);
+
+	ScriptedFemale = ScriptedFemale(LoadLevelActor("ScriptedFemale2"));
+	ScriptedFemale.CarcassType = ScriptedFemale.default.CarcassType;
+	for (i = 0; i < ArrayCount(ScriptedFemale.Deaths); ++i)
+		ScriptedFemale.Deaths[i] = ScriptedFemale.default.Deaths[i];
 }
 
 function Server_FixCurrentMap_Jones_07_Noork()
 {
-	local SpecialEvent aSpecialEvent;
-	local ScriptedHuman aScriptedHuman;
+	local Dispatcher Disp;
+	local SpecialEvent SpecialEvent;
+	local ScriptedHuman ScriptedHuman;
+	local ScriptedPawn ScriptedPawn;
 
 	DisableNonSPPlayerStarts();
 
@@ -306,19 +319,34 @@ function Server_FixCurrentMap_Jones_07_Noork()
 	LoadLevelActor("ScriptedMale9").Tag = 'SneakySniper';
 	LoadLevelActor("ScriptedMale7").Tag = 'SonofSneakySniper';
 
-	foreach AllActors(class'SpecialEvent', aSpecialEvent, 'ShotInTheHead')
-		aSpecialEvent.Tag = '';
-	foreach AllActors(class'ScriptedHuman', aScriptedHuman)
+	foreach AllActors(class'SpecialEvent', SpecialEvent, 'ShotInTheHead')
+		SpecialEvent.Tag = '';
+	foreach AllActors(class'ScriptedHuman', ScriptedHuman)
 	{
-		aScriptedHuman.bCanStrafe = true;
-		if (aScriptedHuman.AccelRate == 0)
-			aScriptedHuman.AccelRate = aScriptedHuman.default.AccelRate;
-		if (aScriptedHuman.GroundSpeed == 0)
+		ScriptedHuman.bCanStrafe = true;
+		if (ScriptedHuman.AccelRate == 0)
+			ScriptedHuman.AccelRate = ScriptedHuman.default.AccelRate;
+		if (ScriptedHuman.GroundSpeed == 0)
 		{
-			aScriptedHuman.GroundSpeed = aScriptedHuman.default.GroundSpeed;
-			aScriptedHuman.JumpZ = 0;
+			ScriptedHuman.GroundSpeed = ScriptedHuman.default.GroundSpeed;
+			ScriptedHuman.JumpZ = 0;
 		}
 	}
+
+	LoadLevelMover("Mover22").InitialState = 'TriggerOpenTimed';
+	LoadLevelMover("Mover26").InitialState = 'TriggerOpenTimed';
+	LoadLevelTrigger("Trigger21").ReTriggerDelay = 0;
+	class'SBTriggerStoppedMover'.static.CreateFor(Level, "Mover23");
+
+	Disp = LoadLevelDispatcher("Dispatcher10");
+	Disp.OutDelays[0] = 1;
+	Disp.OutEvents[1] = '';
+	MakeDamageEventFor("SpecialEvent78");
+
+	LoadLevelActor("ScarredOne0").bNet = false;
+	ScriptedPawn = ScriptedPawn(LoadLevelActor("ScarredOne1"));
+	ScriptedPawn.AttitudeToPlayer = ATTITUDE_Hate;
+	ScriptedPawn.CarcassType = ScriptedPawn.default.CarcassType;
 }
 
 function Server_FixCurrentMap_Jones_08_Pirate2()
@@ -327,8 +355,8 @@ function Server_FixCurrentMap_Jones_08_Pirate2()
 
 	LoadLevelActor("TranslatorEvent1").SetLocation(LoadLevelActor("Trigger11").Location);
 	LoadLevelActor("TranslatorEvent2").SetLocation(LoadLevelActor("Trigger29").Location);
-	DispatcherPlus(LoadLevelActor("DispatcherPlus2")).OutEvents[6] = '';
-	Dispatcher(LoadLevelActor("Dispatcher3")).OutEvents[2] = '';
+	LoadLevelDispatcherPlus("DispatcherPlus2").OutEvents[6] = '';
+	LoadLevelDispatcher("Dispatcher3").OutEvents[2] = '';
 
 	Tr = LoadLevelTrigger("Trigger0");
 	Tr.bTriggerOnceOnly = true;
@@ -373,7 +401,7 @@ function Server_FixCurrentMap_Jones_08_Pirate3()
 
 	DisableTeleporter("Teleporter1");
 	LoadLevelActor("Teleporter0").Tag = 'EnableEndPortation';
-	DispatcherPlus(LoadLevelActor("DispatcherPlus6")).OutEvents[7] = 'EnableEndPortation';
+	LoadLevelDispatcherPlus("DispatcherPlus6").OutEvents[7] = 'EnableEndPortation';
 }
 
 function Server_FixCurrentMap_Jones_09_Scar()
@@ -388,10 +416,10 @@ function Server_FixCurrentMap_Jones_09_Scar()
 	AssignInitialState(StartTrigger, 'OtherTriggerTurnsOff');
 
 	ScriptedPawn(LoadLevelActor("TheScarredOne1")).FirstHatePlayerEvent = 'ScarredOneFinaleMusic';
-	Disp = DispatcherPlus(LoadLevelActor("DispatcherPlus2"));
+	Disp = LoadLevelDispatcherPlus("DispatcherPlus2");
 	Disp.OutEvents[6] = '';
 
-	Disp = DispatcherPlus(LoadLevelActor("DispatcherPlus4"));
+	Disp = LoadLevelDispatcherPlus("DispatcherPlus4");
 	Disp.OutEvents[2] = '';
 	Disp.OutEvents[4] = 'EndActorz';
 }
@@ -411,8 +439,33 @@ function Server_ModifyCurrentMap_Jones_02_Darkness()
 
 function Server_ModifyCurrentMap_Jones_03_Rogue()
 {
+	local Dispatcher Disp;
+	local Mover Mover;
+	local ScriptedPawn ScriptedPawn;
+
 	if (!MutatorPtr.bUseSpeech)
 		AdjustTriggeredTeleporter("Teleporter0", "Trigger38");
+
+	if (MutatorPtr.bModifyRogueScarredOne)
+	{
+		LoadLevelActor("Dispatcher8").bNet = true;
+		LoadLevelActor("Trigger22").bNet = true;
+
+		MakeMoverTriggerableOnceOnly("AttachMover0");
+		foreach AllActors(class'Mover', Mover, 'SewageProcessorDoors')
+		{
+			Mover.bNet = true;
+			SetMoverTriggerableOnceOnly(Mover);
+		}
+
+		ScriptedPawn = ScriptedPawn(LoadLevelActor("TheScarredOne0"));
+		ScriptedPawn.bNet = true;
+		ScriptedPawn.CarcassType = ScriptedPawn.default.CarcassType;
+
+		Disp = Spawn(class'Dispatcher',, 'TheGhostOfOraghar');
+		Disp.OutEvents[0] = 'ScarredOneWindow';
+		Disp.OutDelays[0] = 8;
+	}
 }
 
 function Server_ModifyCurrentMap_Jones_05_TemplePart2()
@@ -462,6 +515,16 @@ function DisableConsoleCommandTriggers()
 		tr.Tag = '';
 		tr.Command = "";
 	}
+}
+
+function Dispatcher LoadLevelDispatcher(string DispatcherName)
+{
+	return Dispatcher(LoadLevelActor(DispatcherName));
+}
+
+function DispatcherPlus LoadLevelDispatcherPlus(string DispatcherName)
+{
+	return DispatcherPlus(LoadLevelActor(DispatcherName));
 }
 
 function ZoneInfo LoadLevelZone(string ZoneName)
@@ -566,4 +629,9 @@ function Trigger MakeConditionTrigger(name ConditionTag, name InitialStateName, 
 	result.bInitiallyActive = InitialCondition;
 
 	return result;
+}
+
+function MakeDamageEventFor(string SpecialEventName)
+{
+	class'SBDamageEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
 }

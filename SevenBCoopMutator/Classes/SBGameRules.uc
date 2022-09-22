@@ -23,6 +23,7 @@ function ModifyPlayer(Pawn Player)
 	GiveSBPlayerInteraction(Player);
 	GiveSBUserUtils(Player);
 	GiveSBFlashlight(Player);
+	GiveWeaponsSupply(Player);
 }
 
 function ModifyPlayerVoicePack(Pawn Player)
@@ -102,6 +103,73 @@ function GivePickup(class<pickup> PickupClass, Pawn Player)
 	Pickup.PickupFunction(Player);
 	if (Pickup.bActivatable && PlayerPawn(Player) == none)
 		Pickup.Activate();
+}
+
+function GiveWeaponsSupply(Pawn Player)
+{
+	if (!MutatorPtr.bUseWeaponsSupply)
+		return;
+
+	if (MutatorPtr.CurrentMap ~= "Jones-02-Darkness")
+		GiveNewWeapon(class'SevenB.SevenShockRifle', Player);
+	else if (MutatorPtr.CurrentMap ~= "Jones-05-TemplePart2")
+	{
+		GiveNewWeapon(class'SevenB.SevenMachineMag', Player);
+		GiveNewWeapon(class'SevenB.SevenPulseGun', Player);
+	}
+	else if (MutatorPtr.CurrentMap ~= "Jones-06-Vandora")
+		GiveNewWeapon(class'SevenB.SevenShockRifle', Player);
+	else if (MutatorPtr.CurrentMap ~= "Jones-07-Noork")
+	{
+		GiveNewWeapon(class'SevenB.SevenPulseGun', Player);
+		GiveNewWeapon(class'SevenB.SBBloodRipper', Player);
+	}
+	else if (MutatorPtr.CurrentMap ~= "Jones-08-Pirate")
+	{
+		GiveNewWeapon(class'SevenB.SevenShockRifle', Player);
+		GiveNewWeapon(class'SevenB.SBquadshot', Player);
+		GiveNewWeapon(class'SevenB.SevenPulseGun', Player);
+		GiveNewWeapon(class'SevenB.SevenSniperRifle', Player);
+	}
+	else if (MutatorPtr.CurrentMap ~= "Jones-08-Pirate2")
+		GiveNewWeapon(class'SevenB.SevenSniperRifle', Player);
+	else if (MutatorPtr.CurrentMap ~= "Jones-08-Pirate3")
+		GiveNewWeapon(class'SevenB.SevenSniperRifle', Player);
+}
+
+function GiveNewWeapon(class<Weapon> WeapClass, Pawn Player)
+{
+	local Inventory Inv;
+
+	for (Inv = Player.Inventory; Inv != none; Inv = Inv.Inventory)
+		if (Inv.Class == WeapClass)
+			return;
+	GiveWeapon(WeapClass, Player);
+}
+
+function GiveWeapon(class<Weapon> WeapClass, Pawn Player)
+{
+	local Weapon NewWeapon;
+
+	NewWeapon = Player.Spawn(WeapClass);
+	if (NewWeapon == None)
+		return;
+	NewWeapon.Instigator = Player;
+	NewWeapon.BecomeItem();
+
+	if (NewWeapon.AmmoName != none && NewWeapon.AmmoName.default.AmmoAmount > 0)
+		NewWeapon.PickupAmmoCount += NewWeapon.AmmoName.default.AmmoAmount;
+
+	Player.AddInventory(NewWeapon);
+	if (SevenMachineMag(NewWeapon) != none)
+	{
+		SevenMachineMag(NewWeapon).HasTwoMag = true;
+		NewWeapon.TravelPostAccept();
+	}
+	NewWeapon.BringUp();
+	NewWeapon.GiveAmmo(Player);
+	NewWeapon.SetSwitchPriority(Player);
+	NewWeapon.WeaponSet(Player);
 }
 
 function float PlayerJumpZScaling()
