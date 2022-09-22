@@ -97,6 +97,8 @@ function Server_FixCurrentMap_ONP()
 		Server_FixCurrentMap_NP09Silver();
 	else if (CurrentMap ~= "NP11Tonnberry")
 		Server_FixCurrentMap_NP11Tonnberry();
+	else if (CurrentMap ~= "NP12Tonnberry")
+		Server_FixCurrentMap_NP12Tonnberry();
 	else if (CurrentMap ~= "NP13DrPest")
 		Server_FixCurrentMap_NP13DrPest();
 	else if (CurrentMap ~= "NP14MClaneDrPest")
@@ -117,6 +119,8 @@ function Server_FixCurrentMap_ONP()
 		Server_FixCurrentMap_NP22DavidM();
 	else if (CurrentMap ~= "NP23Kew")
 		Server_FixCurrentMap_NP23Kew();
+	else if (CurrentMap ~= "NP24MClane")
+		Server_FixCurrentMap_NP24MClane();
 	else if (CurrentMap ~= "NP25DavidM")
 		Server_FixCurrentMap_NP25DavidM();
 	else if (CurrentMap ~= "NP26DavidM")
@@ -164,6 +168,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map13SignsX();
 	else if (CurrentMap ~= "ONP-map14SoothsayerX")
 		Server_FixCurrentMap_ONP_map14SoothsayerX();
+	else if (CurrentMap ~= "ONP-map16BoldX")
+		Server_FixCurrentMap_ONP_map16BoldX();
 	else if (CurrentMap ~= "ONP-map17SiteBX")
 		Server_FixCurrentMap_ONP_map17SiteBX();
 	else if (CurrentMap ~= "ONP-map18FriendX")
@@ -276,6 +282,7 @@ function Server_ModifyCurrentMap_NP02DavidM()
 function Server_FixCurrentMap_NP02DavidM()
 {
 	local Pawn P;
+	local Trigger Trigger;
 
 	P = Pawn(LoadLevelActor("SkaarjWarrior0", true));
 	if (P != none)
@@ -292,6 +299,17 @@ function Server_FixCurrentMap_NP02DavidM()
 	}
 
 	LoadLevelTrigger("Trigger22").Event = '';
+
+	if (class'ONPTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover62", 'toggle_biglift', 'biglift') != none)
+	{
+		Trigger = LoadLevelTrigger("Trigger35");
+		Trigger.Event = 'toggle_biglift';
+		Trigger.ReTriggerDelay = 0;
+
+		Trigger = LoadLevelTrigger("Trigger41");
+		Trigger.Event = 'toggle_biglift';
+		Trigger.ReTriggerDelay = 0;
+	}
 }
 
 function Server_FixCurrentMap_NP05Heiko()
@@ -322,6 +340,8 @@ function Server_FixCurrentMap_NP06Heiko()
 {
 	local Actor A;
 
+	class'ONPTriggerStoppedMover'.static.CreateFor(Level, "Mover15");
+
 	LoadLevelTrigger("Trigger33").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger35").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger61").bTriggerOnceOnly = true;
@@ -343,6 +363,7 @@ function Server_FixCurrentMap_NP08Hourences()
 {
 	local Effects e;
 	local ONPParticleFireSpawner NewFireSpawner;
+	local Trigger Trigger;
 
 	foreach AllActors(class'Effects', e)
 		if (e.IsA('ParticleFireSpawner'))
@@ -351,6 +372,39 @@ function Server_FixCurrentMap_NP08Hourences()
 			if (NewFireSpawner != none)
 				NewFireSpawner.ReplaceOriginalSpawner(e);
 		}
+
+	if (class'ONPTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover33", 'toggle_lift1', 'olallalala2') != none)
+	{
+		Trigger = LoadLevelTrigger("Trigger80");
+		Trigger.Event = 'toggle_lift1';
+		Trigger.ReTriggerDelay = 0;
+
+		Trigger = LoadLevelTrigger("Trigger81");
+		Trigger.Event = 'toggle_lift1';
+		Trigger.ReTriggerDelay = 0;
+	}
+
+	if (class'ONPTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover34", 'toggle_lift2', 'olallalala3') != none)
+	{
+		Trigger = LoadLevelTrigger("Trigger82");
+		Trigger.Event = 'toggle_lift2';
+		Trigger.ReTriggerDelay = 0;
+
+		Trigger = LoadLevelTrigger("Trigger84");
+		Trigger.Event = 'toggle_lift2';
+		Trigger.ReTriggerDelay = 0;
+	}
+
+	if (class'ONPTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover32", 'toggle_lift3', 'olallalala1') != none)
+	{
+		Trigger = LoadLevelTrigger("Trigger78");
+		Trigger.Event = 'toggle_lift3';
+		Trigger.ReTriggerDelay = 0;
+
+		Trigger = LoadLevelTrigger("Trigger79");
+		Trigger.Event = 'toggle_lift3';
+		Trigger.ReTriggerDelay = 0;
+	}
 }
 
 function Server_FixCurrentMap_NP09Silver()
@@ -384,6 +438,12 @@ function Server_FixCurrentMap_NP11Tonnberry()
 	m.PlayerBumpEvent = m.Tag;
 }
 
+function Server_FixCurrentMap_NP12Tonnberry()
+{
+	LoadLevelMover("Mover159").InitialState = 'TriggerOpenTimed';
+	LoadLevelActor("Dispatcher15").Tag = '';
+}
+
 function Server_FixCurrentMap_NP13DrPest()
 {
 	local Pawn P;
@@ -413,36 +473,36 @@ function Server_FixCurrentMap_NP15Chico()
 {
 	LoadLevelTrigger("Trigger112").bTriggerOnceOnly = true;
 
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "Light150", 2000, 1000);
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "Light187", 4000, 3000);
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode44", 1000, 800);
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode255", 3000, 1500);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Light150", 2000, 1000);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Light187", 4000, 3000);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode44", 1000, 800);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode255", 3000, 1500);
 }
 
 function Server_FixCurrentMap_NP16Chico()
 {
 	ZoneInfo(LoadLevelActor("ZoneInfo0")).ZoneVelocity = vect(0, 0, 0);
 
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode533", 1000, 250);
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode545", 2000, 1500);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode533", 1000, 250);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode545", 2000, 1500);
 }
 
 function Server_FixCurrentMap_NP17Chico()
 {
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode293", 1500, 600);
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode304", 3000, 2000);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode293", 1500, 600);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode304", 3000, 2000);
 }
 
 function Server_FixCurrentMap_NP18Chico()
 {
 	LoadLevelMover("Mover27").Event = '';
 
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode416", 3000, 3000);
-	MakeNetVisibilityCylinder('NetVisCylinder_1', "PathNode426", 3000, 300);
-	MakeNetVisibilityCylinder('NetVisCylinder_2', "PathNode2", 1200, 600);
-	MakeNetVisibilityCylinder('NetVisCylinder_2', "PathNode61", 1000, 400);
-	MakeNetVisibilityCylinder('NetVisCylinder_3', "PathNode49", 1500, 400);
-	MakeNetVisibilityCylinder('NetVisCylinder_3', "PathNode81", 3000, 1200);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode416", 3000, 3000);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "PathNode426", 3000, 300);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_2', "PathNode2", 1200, 600);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_2', "PathNode61", 1000, 400);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_3', "PathNode49", 1500, 400);
+	MakeNetVisibilityCylinderAt('NetVisCylinder_3', "PathNode81", 3000, 1200);
 }
 
 function Server_ModifyCurrentMap_NP19Part2Chico()
@@ -507,6 +567,12 @@ function Server_FixCurrentMap_NP23Kew()
 	DisableTeleporter("Teleporter1");
 }
 
+function Server_FixCurrentMap_NP24MClane()
+{
+	class'ONPTriggerStoppedMover'.static.CreateFor(Level, "Mover35");
+	class'ONPTriggerStoppedMover'.static.CreateFor(Level, "Mover43");
+}
+
 function Server_FixCurrentMap_NP25DavidM()
 {
 	LoadLevelActor("SpecialEvent9").Tag = '';
@@ -525,12 +591,39 @@ function Server_FixCurrentMap_NP26DavidM()
 function Server_FixCurrentMap_NP27DavidM()
 {
 	local Actor A;
+	local Trigger Trigger;
+
+	if (class'ONPTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover24", 'toggle_lift1', 'lift1337d') != none)
+	{
+		Trigger = LoadLevelTrigger("Trigger40");
+		Trigger.Event = 'toggle_lift1';
+		Trigger.ReTriggerDelay = 0;
+
+		Trigger = LoadLevelTrigger("Trigger41");
+		Trigger.Event = 'toggle_lift1';
+		Trigger.ReTriggerDelay = 0;
+	}
+
 	A = LoadLevelActor("TvTranslocator1", true);
 	if (A != none)
 	{
 		A.DrawType = A.default.DrawType;
 		A.Mesh = A.default.Mesh;
 	}
+
+	if (class'ONPTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover52", 'toggle_lift2', 'lift13372d') != none)
+	{
+		Trigger = LoadLevelTrigger("Trigger35");
+		Trigger.Event = 'toggle_lift2';
+		Trigger.ReTriggerDelay = 0;
+
+		Trigger = LoadLevelTrigger("Trigger42");
+		Trigger.Event = 'toggle_lift2';
+		Trigger.ReTriggerDelay = 0;
+	}
+
+	LoadLevelTrigger("Trigger46").TriggerType = TT_PawnProximity;
+	LoadLevelTrigger("Trigger47").TriggerType = TT_PawnProximity;
 }
 
 function Server_FixCurrentMap_NP29DavidM()
@@ -554,6 +647,8 @@ function Server_FixCurrentMap_NP32Strogg()
 	local ONPParticleFireSpawner NewFireSpawner;
 
 	MakeMoverTriggerableOnceOnly("Mover30");
+	LoadLevelActor("TriggerLight40").InitialState = 'TriggerTurnsOff';
+
 	AssignInitialState(LoadLevelMover("Mover47"), 'TriggerOpenTimed'); // disable mover
 	AssignInitialState(LoadLevelMover("Mover48"), 'TriggerOpenTimed'); // disable mover
 
@@ -572,6 +667,9 @@ function Server_FixCurrentMap_NP33Atje()
 	LoadLevelActor("PlayerStart2").Tag = 'sp1';
 	LoadLevelActor("PlayerStart3").Tag = 'sp1';
 	LoadLevelActor("PlayerStart4").Tag = 'sp1';
+
+	MakeMoverTriggerableOnceOnly("Mover8");
+	MakeMoverTriggerableOnceOnly("Mover9");
 }
 
 function Server_FixCurrentMap_NP34Atje()
@@ -704,6 +802,11 @@ function Server_FixCurrentMap_ONP_map13SignsX()
 {
 	LoadLevelActor("Trigger71").Tag = 'ambush';
 	LoadLevelActor("SpecialEvent8").Tag = '';
+
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Light43", 3000, 2000);     // WarpZoneInfo1
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "ZoneInfo2", 1000, 1000);   // WarpZoneInfo2
+	MakeNetVisibilityCylinderAt('NetVisCylinder_2', "PathNode285", 6000, 6000); // WarpZoneInfo3
+	MakeNetVisibilityCylinderAt('NetVisCylinder_2', "Light199", 2000, 1000);    // WarpZoneInfo4
 }
 
 function Server_FixCurrentMap_ONP_map14SoothsayerX()
@@ -738,6 +841,14 @@ function Server_FixCurrentMap_ONP_map14SoothsayerX()
 	TeleporterEnergyUp = Spawn(class'Counter',, 'energyup');
 	TeleporterEnergyUp.Event = 'TeleporterEnergyUp';
 	TeleporterEnergyUp.NumToCount = 1;
+}
+
+function Server_FixCurrentMap_ONP_map16BoldX()
+{
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "ZoneInfo8", 1024, 256);          // WarpZoneInfo0
+	MakeNetVisibilityCylinder('NetVisCylinder_1', vect(1730, 10000, -812), 256, 256); // WarpZoneInfo1
+	MakeNetVisibilityCylinderAt('NetVisCylinder_2', "PathNode162", 2000, 512);        // WarpZoneInfo2
+	MakeNetVisibilityCylinderAt('NetVisCylinder_2', "PathNode193", 2000, 512);        // WarpZoneInfo3
 }
 
 function Server_FixCurrentMap_ONP_map17SiteBX()
@@ -777,6 +888,9 @@ function Server_FixCurrentMap_ONP_map20InterloperX()
 {
 	LoadLevelMover("Mover97").StayOpenTime = 4;
 	MakeMessageEventFor("SpecialEvent25");
+
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Trigger47", 1500, 256); // WarpZoneInfo0
+	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Light1653", 400, 128);  // WarpZoneInfo1
 }
 
 function Server_FixCurrentMap_ONP_map21NestX()
@@ -1026,6 +1140,7 @@ function Server_FixCurrentMap_ONP_map28Bellyofthebeast()
 
 function Server_FixCurrentMap_ONP_map30Ruins()
 {
+	LoadLevelTrigger("Trigger19").bTriggerOnceOnly = true;
 	MakeMessageEventFor("SpecialEvent45");
 }
 
@@ -1201,11 +1316,20 @@ function MakePermanentInventoryPointsFor(class<Inventory> InventoryClass)
 			Spawn(class'ONPInventoryTrigger').AttachInventory(Inventory(inv));
 }
 
-function MakeNetVisibilityCylinder(name CylinderTag, string ActorName, float CylinderRadius, float CylinderHeight)
+function MakeNetVisibilityCylinderAt(name CylinderTag, string ActorName, float CylinderRadius, float CylinderHeight)
+{
+	MakeNetVisibilityCylinder(CylinderTag, LoadLevelActor(ActorName).Location, CylinderRadius, CylinderHeight); 
+}
+
+function MakeNetVisibilityCylinder(
+	name CylinderTag,
+	vector CylinderLocation,
+	float CylinderRadius,
+	float CylinderHeight)
 {
 	local ONPNetVisibilityCylinder Cylinder;
 
-	Cylinder = Spawn(class'ONPNetVisibilityCylinder',, CylinderTag, LoadLevelActor(ActorName).Location);
+	Cylinder = Spawn(class'ONPNetVisibilityCylinder',, CylinderTag, CylinderLocation);
 	if (Cylinder != none)
 		Cylinder.SetCollisionSize(CylinderRadius, CylinderHeight);
 }
