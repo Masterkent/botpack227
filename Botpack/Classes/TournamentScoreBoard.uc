@@ -13,6 +13,8 @@ var bool bTimeDown;
 var FontInfo MyFonts;
 var localized string MapTitleQuote;
 
+var float B227_MarginLeft, B227_InnerWidth; // margin and width of the area that contains the score table
+
 function Destroyed()
 {
 	Super.Destroyed();
@@ -161,21 +163,22 @@ function DrawTrailer( canvas Canvas )
 
 function DrawCategoryHeaders(Canvas Canvas)
 {
-	local float Offset, XL, YL;
+	local float Offset, XL, YL, XL2;
 
 	Offset = Canvas.CurY;
 	Canvas.DrawColor = WhiteColor;
 
-	Canvas.StrLen(PlayerString, XL, YL);
-	Canvas.SetPos((Canvas.ClipX / 8)*2 - XL/2, Offset);
+	Canvas.StrLen( "0000", XL, YL );
+
+	Canvas.SetPos(B227_MarginLeft + B227_InnerWidth * 0.1875, Offset);
 	Canvas.DrawText(PlayerString);
 
-	Canvas.StrLen(FragsString, XL, YL);
-	Canvas.SetPos((Canvas.ClipX / 8)*5 - XL/2, Offset);
+	Canvas.StrLen(FragsString, XL2, YL);
+	Canvas.SetPos(B227_MarginLeft + B227_InnerWidth * 0.625 + XL * 0.5 - XL2, Offset);
 	Canvas.DrawText(FragsString);
 
-	Canvas.StrLen(DeathsString, XL, YL);
-	Canvas.SetPos((Canvas.ClipX / 8)*6 - XL/2, Offset);
+	Canvas.StrLen(DeathsString, XL2, YL);
+	Canvas.SetPos(B227_MarginLeft + B227_InnerWidth * 0.75 + XL * 0.5 - XL2, Offset);
 	Canvas.DrawText(DeathsString);
 }
 
@@ -199,7 +202,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 	else 
 		Canvas.DrawColor = CyanColor;
 
-	Canvas.SetPos(Canvas.ClipX * 0.1875, YOffset);
+	Canvas.SetPos(B227_MarginLeft + B227_InnerWidth * 0.1875, YOffset);
 	Canvas.DrawText(PRI.PlayerName, False);
 
 	Canvas.StrLen( "0000", XL, YL );
@@ -209,15 +212,15 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 		Canvas.DrawColor = LightCyanColor;
 
 	Canvas.StrLen( int(PRI.Score), XL2, YL );
-	Canvas.SetPos( Canvas.ClipX * 0.625 + XL * 0.5 - XL2, YOffset );
+	Canvas.SetPos( B227_MarginLeft + B227_InnerWidth * 0.625 + XL * 0.5 - XL2, YOffset );
 	Canvas.DrawText( int(PRI.Score), false );
 
 	// Draw Deaths
 	Canvas.StrLen( int(PRI.Deaths), XL2, YL );
-	Canvas.SetPos( Canvas.ClipX * 0.75 + XL * 0.5 - XL2, YOffset );
+	Canvas.SetPos( B227_MarginLeft + B227_InnerWidth * 0.75 + XL * 0.5 - XL2, YOffset );
 	Canvas.DrawText( int(PRI.Deaths), false );
 
-	if ( (Canvas.ClipX > 512) && (Level.NetMode != NM_Standalone) )
+	if ( (B227_InnerWidth > 512) && (Level.NetMode != NM_Standalone) )
 	{
 		Canvas.DrawColor = WhiteColor;
 		Canvas.Font = MyFonts.GetSmallestFont(B227_ScaledFontScreenWidth(Canvas));
@@ -225,17 +228,17 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 		// Draw Time
 		Time = Max(1, (Level.TimeSeconds + B227_OwnerPRI().StartTime - PRI.StartTime)/60);
 		Canvas.TextSize( TimeString$": 999", XL3, YL3 );
-		Canvas.SetPos( Canvas.ClipX * 0.75 + XL, YOffset );
+		Canvas.SetPos( B227_MarginLeft + B227_InnerWidth * 0.75 + XL, YOffset );
 		Canvas.DrawText( TimeString$":"@Time, false );
 
 		// Draw FPH
 		Canvas.TextSize( FPHString$": 999", XL2, YL2 );
-		Canvas.SetPos( Canvas.ClipX * 0.75 + XL, YOffset + 0.5 * YL );
+		Canvas.SetPos( B227_MarginLeft + B227_InnerWidth * 0.75 + XL, YOffset + 0.5 * YL );
 		Canvas.DrawText( FPHString$": "@int(60 * PRI.Score/Time), false );
 
 		XL3 = FMax(XL3, XL2);
 		// Draw Ping
-		Canvas.SetPos( Canvas.ClipX * 0.75 + XL + XL3 + 16, YOffset );
+		Canvas.SetPos( B227_MarginLeft + B227_InnerWidth * 0.75 + XL + XL3 + 16, YOffset );
 		Canvas.DrawText( PingString$":"@PRI.Ping, false );
 	}
 }
@@ -293,9 +296,12 @@ function ShowScores( canvas Canvas )
 		}
 	}
 	SortScores(PlayerCount);
-	
+
 	CanvasFont = Canvas.Font;
 	Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
+
+	B227_InnerWidth = B227_ScaledScreenWidth(Canvas);
+	B227_MarginLeft = (Canvas.SizeX - B227_InnerWidth) / 2;
 
 	Canvas.SetPos(0, 160.0/768.0 * Canvas.ClipY);
 	DrawCategoryHeaders(Canvas);
@@ -339,6 +345,11 @@ function TournamentGameReplicationInfo B227_GRI()
 function bool B227_bLowRes(Canvas Canvas)
 {
 	return Canvas.ClipX < 400 || Canvas.ClipY < 300;
+}
+
+static function float B227_ScaledScreenWidth(Canvas Canvas)
+{
+	return class'ChallengeHUD'.static.B227_ScaledScreenWidth(Canvas);
 }
 
 static function float B227_ScaledFontScreenWidth(Canvas Canvas)

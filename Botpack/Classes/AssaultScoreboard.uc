@@ -10,7 +10,7 @@ function ShowScores( canvas Canvas )
 	Super.ShowScores(Canvas);
 
 	if ( OwnerHUD.IsA('AssaultHUD') )
-		AssaultHUD(OwnerHUD).DrawTimeAt(Canvas, 0.5 * Canvas.ClipX - 80 * Canvas.ClipX/1280, 4);
+		AssaultHUD(OwnerHUD).DrawTimeAt(Canvas, 0.5 * Canvas.ClipX - 80 * B227_ScaledScreenWidth(Canvas)/1280, 4);
 }
 
 function DrawVictoryConditions(Canvas Canvas)

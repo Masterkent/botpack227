@@ -189,10 +189,8 @@ static function font GetStaticSmallestFont(float Width)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
 		else if (Width < 1024)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma12);
-		else if (Width < 1440)
-			return B227_LoadTahomaFont(default.B227_FontName_Tahoma14);
 		else
-			return B227_LoadTahomaFont(default.B227_FontName_Tahoma16);
+			return B227_LoadTahomaFont(default.B227_FontName_Tahoma14);
 	}
 	else
 	{
@@ -202,10 +200,8 @@ static function font GetStaticSmallestFont(float Width)
 			return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
 		else if (Width < 1024)
 			return Font(DynamicLoadObject("LadderFonts.UTLadder12", class'Font'));
-		else if (Width < 1440)
-			return Font(DynamicLoadObject("LadderFonts.UTLadder14", class'Font'));
 		else
-			return Font(DynamicLoadObject("LadderFonts.UTLadder16", class'Font'));
+			return Font(DynamicLoadObject("LadderFonts.UTLadder14", class'Font'));
 	}
 }
 
@@ -221,24 +217,12 @@ function font GetAReallySmallFont(float Width)
 
 static function font GetStaticAReallySmallFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts)
-	{
-		if (Width < 1440)
-			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
-		else
-			return B227_LoadTahomaFont(default.B227_FontName_Tahoma14); 
-	}
+	if (Width < 800)
+		return Font'SmallFont';
+	else if (Width < 1024)
+		return Font(DynamicLoadObject("LadderFonts.UTLadder8", class'Font'));
 	else
-	{
-		if (Width < 800)
-			return Font'SmallFont';
-		else if (Width < 1024)
-			return Font(DynamicLoadObject("LadderFonts.UTLadder8", class'Font'));
-		else if (Width < 1440)
-			return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
-		else
-			return Font(DynamicLoadObject("LadderFonts.UTLadder14", class'Font'));
-	}
+		return Font(DynamicLoadObject("LadderFonts.UTLadder10", class'Font'));
 }
 
 function font GetACompletelyUnreadableFont(float Width)
@@ -255,10 +239,8 @@ static function font GetStaticACompletelyUnreadableFont(float Width)
 {
 	if (Width < 800)
 		return Font'SmallFont';
-	else if (Width < 1440)
-		return Font(DynamicLoadObject("LadderFonts.UTLadder8", class'Font'));
 	else
-		return Font(DynamicLoadObject("LadderFonts.UTLadder12", class'Font'));
+		return Font(DynamicLoadObject("LadderFonts.UTLadder8", class'Font'));
 }
 
 static function B227_SetStaticScaledSmallFont(Canvas Canvas, optional bool bAdjustSpaceX)

@@ -7,23 +7,24 @@ var localized string VictoryGoal;
 
 function DrawCategoryHeaders(Canvas Canvas)
 {
-	local float Offset, XL, YL;
+	local float Offset, XL, YL, XL2;
 
 	Offset = Canvas.CurY;
 	Canvas.DrawColor = WhiteColor;
 
-	Canvas.StrLen(PlayerString, XL, YL);
-	Canvas.SetPos((Canvas.ClipX / 8)*2 - XL/2, Offset);
+	Canvas.StrLen( "0000", XL, YL );
+
+	Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 1.5, Offset);
 	Canvas.DrawText(PlayerString);
 
-	Canvas.StrLen(FragsString, XL, YL);
-	Canvas.SetPos((Canvas.ClipX / 8)*6 - XL/2, Offset);
+	Canvas.StrLen(FragsString, XL2, YL);
+	Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 6 + XL/2 - XL2/2, Offset);
 	Canvas.DrawText(FragsString);
 
 	if (Level.NetMode != NM_StandAlone)
 	{
-		Canvas.StrLen(PingString, XL, YL);
-		Canvas.SetPos((Canvas.ClipX / 8)*7 - XL/2, Offset);
+		Canvas.StrLen(PingString, XL2, YL);
+		Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 7 + XL/2 - XL2/2, Offset);
 		Canvas.DrawText(PingString);
 	}
 }
@@ -39,7 +40,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 		Canvas.DrawColor = GoldColor;
 	else 
 		Canvas.DrawColor = CyanColor;
-	Canvas.SetPos((Canvas.ClipX / 8) * 1.5, YOffset);
+	Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 1.5, YOffset);
 	Canvas.DrawText(PRI.PlayerName, False);
 
 	Canvas.StrLen( "0000", XL, YL );
@@ -50,7 +51,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 	else
 		Canvas.DrawColor = GoldColor;
 	Canvas.StrLen( int(PRI.Score), XL2, YL );
-	Canvas.SetPos( (Canvas.ClipX / 8) * 6 + XL/2 - XL2, YOffset );
+	Canvas.SetPos( B227_MarginLeft + (B227_InnerWidth / 8) * 6 + XL/2 - XL2, YOffset );
 	Canvas.DrawText( int(PRI.Score), false );
 
 	if (Level.NetMode != NM_Standalone)
@@ -58,7 +59,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 		// Draw Ping
 		Canvas.DrawColor = LightCyanColor;
 		Canvas.StrLen( PRI.Ping, XL2, YL );
-		Canvas.SetPos( (Canvas.ClipX / 8) * 7 + XL/2 - XL2, YOffset );
+		Canvas.SetPos( B227_MarginLeft + (B227_InnerWidth / 8) * 7 + XL/2 - XL2, YOffset );
 		Canvas.DrawText( PRI.Ping, false );
 	}
 }

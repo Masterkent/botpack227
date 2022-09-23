@@ -29,6 +29,9 @@ function ShowScores( canvas Canvas )
 	Canvas.Style = ERenderStyle.STY_Normal;
 	CanvasFont = Canvas.Font;
 
+	B227_InnerWidth = B227_ScaledScreenWidth(Canvas);
+	B227_MarginLeft = (Canvas.SizeX - B227_InnerWidth) / 2;
+
 	// Header
 	DrawHeader(Canvas);
 
@@ -68,9 +71,9 @@ function ShowScores( canvas Canvas )
 		if ( Ordered[I].Team < 4 )
 		{
 			if ( Ordered[I].Team % 2 == 0 )
-				XOffset = (Canvas.ClipX / 4) - (Canvas.ClipX / 8);
+				XOffset = B227_MarginLeft + (B227_InnerWidth / 4) - (B227_InnerWidth / 8);
 			else
-				XOffset = ((Canvas.ClipX / 4) * 3) - (Canvas.ClipX / 8);
+				XOffset = B227_MarginLeft + ((B227_InnerWidth / 4) * 3) - (B227_InnerWidth / 8);
 
 			Canvas.StrLen("TEXT", XL, YL);
 			Canvas.DrawColor = AltTeamColor[Ordered[I].Team];
@@ -102,9 +105,9 @@ function ShowScores( canvas Canvas )
 		if ( PlayerCounts[i] > 0 )
 		{
 			if ( i % 2 == 0 )
-				XOffset = (Canvas.ClipX / 4) - (Canvas.ClipX / 8);
+				XOffset = B227_MarginLeft + (B227_InnerWidth / 4) - (B227_InnerWidth / 8);
 			else
-				XOffset = ((Canvas.ClipX / 4) * 3) - (Canvas.ClipX / 8);
+				XOffset = B227_MarginLeft + ((B227_InnerWidth / 4) * 3) - (B227_InnerWidth / 8);
 			YOffset = ScoreStart - YL + 2;
 
 			if ( i > 1 )
@@ -116,7 +119,7 @@ function ShowScores( canvas Canvas )
 			Canvas.StrLen(TeamName[i], XL, YL);
 			Canvas.DrawText(TeamName[i], false);
 			Canvas.StrLen(int(OwnerGame.Teams[i].Score), XL, YL);
-			Canvas.SetPos(XOffset + (Canvas.ClipX/4) - XL, YOffset);
+			Canvas.SetPos(XOffset + (B227_InnerWidth/4) - XL, YOffset);
 			Canvas.DrawText(int(OwnerGame.Teams[i].Score), false);
 
 			if ( PlayerCounts[i] > 4 )
@@ -148,7 +151,7 @@ function DrawScore(Canvas Canvas, float Score, float XOffset, float YOffset)
 	local float XL, YL;
 
 	Canvas.StrLen(string(int(Score)), XL, YL);
-	Canvas.SetPos(XOffset + (Canvas.ClipX/4) - XL, YOffset);
+	Canvas.SetPos(XOffset + (B227_InnerWidth/4) - XL, YOffset);
 	Canvas.DrawText(int(Score), False);
 }
 
@@ -176,7 +179,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 	Canvas.DrawText(PRI.PlayerName, False);
 	Canvas.StrLen(PRI.PlayerName, XL, YB);
 
-	if ( Canvas.ClipX > 512 )
+	if ( B227_InnerWidth > 512 )
 	{
 		CanvasFont = Canvas.Font;
 		Canvas.Font = Font'SmallFont';
@@ -184,7 +187,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 
 		if (Level.NetMode != NM_Standalone)
 		{
-			if ( !bCompressed || (Canvas.ClipX > 640) )
+			if ( !bCompressed || (B227_InnerWidth > 640) )
 			{
 				// Draw Time
 				Time = Max(1, (Level.TimeSeconds + B227_OwnerPRI().StartTime - PRI.StartTime)/60);
@@ -208,7 +211,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 		Canvas.DrawColor = TeamColor[PRI.Team];
 	DrawScore(Canvas, PRI.Score, XOffset, YOffset);
 
-	if (Canvas.ClipX < 512)
+	if (B227_InnerWidth < 512)
 		return;
 
 	// Draw location, Order
