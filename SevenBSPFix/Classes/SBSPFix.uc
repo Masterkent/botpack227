@@ -24,11 +24,6 @@ function FixCurrentMap()
 	Spawn(class'SBMapFix', self);
 }
 
-function string GetHumanName()
-{
-	return "SBSPFix v1.2";
-}
-
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
 	if (Other.Class == class'Botpack.SuperShockRifle')
@@ -74,8 +69,13 @@ function RemoveCutsceneActors()
 		}
 }
 
+function string GetHumanName()
+{
+	return "SBSPFix v1.5";
+}
+
 defaultproperties
 {
-	VersionInfo="SBSPFix v1.4 [2022-09-21]"
-	Version="1.4"
+	VersionInfo="SBSPFix v1.5 [2022-09-23]"
+	Version="1.5"
 }

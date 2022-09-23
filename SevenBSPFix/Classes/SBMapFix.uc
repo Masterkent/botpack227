@@ -18,7 +18,11 @@ function FixCurrentMap()
 {
 	CurrentMap = string(Outer.Name);
 
-	if (CurrentMap ~= "Jones-05-TemplePart2")
+	if (CurrentMap ~= "Jones-02-Darkness")
+		FixCurrentMap_Jones_02_Darkness();
+	else if (CurrentMap ~= "Jones-03-Rogue")
+		FixCurrentMap_Jones_03_Rogue();
+	else if (CurrentMap ~= "Jones-05-TemplePart2")
 		FixCurrentMap_Jones_05_TemplePart2();
 	else if (CurrentMap ~= "Jones-05-TemplePart3")
 		FixCurrentMap_Jones_05_TemplePart3();
@@ -66,10 +70,28 @@ function ModifyCurrentMap_Jones_01_Deployment()
 	}
 }
 
+function FixCurrentMap_Jones_02_Darkness()
+{
+	local SpecialEvent SpecialEvent;
+
+	MakeDamageEventFor("SpecialEvent174");
+	foreach AllActors(class'SpecialEvent', SpecialEvent, 'LaserGridZapped')
+		SpecialEvent.SetLocation(LoadLevelActor("Light335").Location);
+
+	foreach AllActors(class'SpecialEvent', SpecialEvent, 'CrewBerthsLaserGrid')
+		SpecialEvent.SetLocation(LoadLevelActor("Trigger58").Location);
+}
+
 function ModifyCurrentMap_Jones_02_Darkness()
 {
 	if (Mutator.bSkipCutscenes)
 		DisableTrigger("Trigger62");
+}
+
+function FixCurrentMap_Jones_03_Rogue()
+{
+	MakeMoverTriggerableOnceOnly("Mover6");
+	MakeInstigatorSoundEventFor('NoYouDont');
 }
 
 function ModifyCurrentMap_Jones_03_Rogue()
@@ -177,12 +199,18 @@ function ModifyCurrentMap_Jones_06_Vandora()
 
 function FixCurrentMap_Jones_07_Noork()
 {
+	local SpecialEvent SpecialEvent;
+
+	foreach AllActors(class'SpecialEvent', SpecialEvent, 'LaserGridDicer')
+		SpecialEvent.SetLocation(LoadLevelActor("Trigger16").Location);
+
 	LoadLevelMover("Mover22").InitialState = 'TriggerOpenTimed';
 	LoadLevelMover("Mover26").InitialState = 'TriggerOpenTimed';
 	LoadLevelTrigger("Trigger21").ReTriggerDelay = 0;
 	class'SBTriggerStoppedMover'.static.CreateFor(Level, "Mover23");
 
 	MakeDamageEventFor("SpecialEvent78");
+	MakeInstigatorSoundEventFor('FLGShock');
 }
 
 function ModifyCurrentMap_Jones_07_Noork()
@@ -311,6 +339,11 @@ function DisableTeleporter(string TeleporterName)
 function MakeDamageEventFor(string SpecialEventName)
 {
 	class'SBDamageEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
+}
+
+function MakeInstigatorSoundEventFor(name SpecialEventTag)
+{
+	class'SBInstigatorSoundEvent'.static.WrapSpecialEvents(self, SpecialEventTag);
 }
 
 function SetDynamicLightMover(string MoverName)
