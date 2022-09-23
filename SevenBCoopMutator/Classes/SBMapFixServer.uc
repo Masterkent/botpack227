@@ -19,6 +19,8 @@ function Server_FixCurrentMap()
 
 	if (CurrentMap ~= "Jones-02-Darkness")
 		Server_FixCurrentMap_Jones_02_Darkness();
+	else if (CurrentMap ~= "Jones-03-Rogue")
+		Server_FixCurrentMap_Jones_03_Rogue();
 	else if (CurrentMap ~= "Jones-04-Trench")
 		Server_FixCurrentMap_Jones_04_Trench();
 	else if (CurrentMap ~= "Jones-05-Trench2")
@@ -61,12 +63,29 @@ function Server_ModifyCurrentMap()
 function Server_FixCurrentMap_Jones_02_Darkness()
 {
 	local Decoration aDecoration;
+	local SpecialEvent SpecialEvent;
 
 	CreatureFactory(LoadLevelActor("CreatureFactory9")).bCovert = false;
 
 	foreach AllActors(class'Decoration', aDecoration)
 		if (aDecoration.IsA('Fan2'))
 			aDecoration.bAlwaysRelevant = true;
+
+	class'SBTriggerStoppedMover'.static.CreateFor(Level, "Mover105");
+
+	MakeDamageEventFor("SpecialEvent174");
+	foreach AllActors(class'SpecialEvent', SpecialEvent, 'LaserGridZapped')
+		SpecialEvent.SetLocation(LoadLevelActor("Light335").Location);
+
+	foreach AllActors(class'SpecialEvent', SpecialEvent, 'CrewBerthsLaserGrid')
+		SpecialEvent.SetLocation(LoadLevelActor("Trigger58").Location);
+}
+
+function Server_FixCurrentMap_Jones_03_Rogue()
+{
+	MakeMoverTriggerableOnceOnly("Mover6");
+	MakeInstigatorSoundEventFor('NoYouDont');
+	LoadLevelActor("Light878").RemoteRole = ROLE_None;
 }
 
 function Server_FixCurrentMap_Jones_04_Trench()
@@ -119,6 +138,8 @@ function Server_FixCurrentMap_Jones_05_Trench2()
 	Disp = LoadLevelDispatcher("Dispatcher1");
 	IDisp.OutEvents[0] = Disp.OutEvents[1];
 	Disp.OutEvents[1] = 'activate_crystals';
+
+	MakeMoverTriggerableOnceOnly("Mover25", true);
 }
 
 function Server_FixCurrentMap_Jones_05_TemplePart2()
@@ -333,6 +354,9 @@ function Server_FixCurrentMap_Jones_07_Noork()
 		}
 	}
 
+	foreach AllActors(class'SpecialEvent', SpecialEvent, 'LaserGridDicer')
+		SpecialEvent.SetLocation(LoadLevelActor("Trigger16").Location);
+
 	LoadLevelMover("Mover22").InitialState = 'TriggerOpenTimed';
 	LoadLevelMover("Mover26").InitialState = 'TriggerOpenTimed';
 	LoadLevelTrigger("Trigger21").ReTriggerDelay = 0;
@@ -342,11 +366,13 @@ function Server_FixCurrentMap_Jones_07_Noork()
 	Disp.OutDelays[0] = 1;
 	Disp.OutEvents[1] = '';
 	MakeDamageEventFor("SpecialEvent78");
+	MakeInstigatorSoundEventFor('FLGShock');
 
 	LoadLevelActor("ScarredOne0").bNet = false;
 	ScriptedPawn = ScriptedPawn(LoadLevelActor("ScarredOne1"));
 	ScriptedPawn.AttitudeToPlayer = ATTITUDE_Hate;
 	ScriptedPawn.CarcassType = ScriptedPawn.default.CarcassType;
+	LoadLevelActor("MusicEvent0").Tag = ScriptedPawn.FirstHatePlayerEvent;
 }
 
 function Server_FixCurrentMap_Jones_08_Pirate2()
@@ -634,4 +660,9 @@ function Trigger MakeConditionTrigger(name ConditionTag, name InitialStateName, 
 function MakeDamageEventFor(string SpecialEventName)
 {
 	class'SBDamageEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
+}
+
+function MakeInstigatorSoundEventFor(name SpecialEventTag)
+{
+	class'SBInstigatorSoundEvent'.static.WrapSpecialEvents(self, SpecialEventTag);
 }
