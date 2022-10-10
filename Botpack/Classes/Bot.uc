@@ -2,7 +2,8 @@
 // Bot.
 //=============================================================================
 class Bot expands UTC_Pawn
-	abstract;
+	abstract
+	config(Botpack);
 
 var(Pawn) class<carcass> CarcassType;
 
@@ -127,10 +128,12 @@ var texture StatusDoll, StatusBelt;
 // allowed voices
 var string VoicePackMetaClass;
 
+var globalconfig float B227_DodgeEndTime;
 var int B227_Handedness;
 
 // Auxiliary
 var bool B227_bDisableSeePlayer;
+var float B227_DodgeDoneTimestamp;
 
 function PreBeginPlay()
 {
@@ -552,7 +555,7 @@ function UTF_PlayHit(float Damage, vector HitLocation, name damageType, vector M
 			else
 				spawn(class 'UT_BloodBurst',self,,hitLocation + BloodOffset);
 		}
-	}	
+	}
 
 	bFireFalling = false;
 	bOptionalTakeHit = ( (Level.TimeSeconds - LastPainTime > 0.3 + 0.25 * skill)
@@ -1899,6 +1902,14 @@ function TryToDuck(vector duckDir, bool bReversed)
 	if ( Region.Zone.bWaterZone || (Region.Zone.ZoneGravity.Z > Region.Zone.Default.ZoneGravity.Z) )
 		return;
 
+	if (class'B227_Config'.default.bEnableExtensions &&
+		default.B227_DodgeEndTime > 0 &&
+		B227_DodgeDoneTimestamp > 0 &&
+		Level.TimeSeconds - B227_DodgeDoneTimestamp <= default.B227_DodgeEndTime)
+	{
+		return;
+	}
+
 	duckDir.Z = 0;
 	bDuckLeft = !bReversed;
 	Extent.X = CollisionRadius;
@@ -1937,6 +1948,7 @@ function TryToDuck(vector duckDir, bool bReversed)
 		bFire = 0;
 		bAltFire = 0;
 	}
+	B227_DodgeDoneTimestamp = -1;
 	GotoState('FallingState','Ducking');
 }
 
@@ -6724,6 +6736,9 @@ ignores Bump, Hitwall, WarnTarget;
 	{
 		local vector Vel2D;
 
+		if (B227_DodgeDoneTimestamp < 0)
+			B227_DodgeDoneTimestamp = Level.TimeSeconds;
+
 		if ( MoveTarget != None )
 		{
 			Vel2D = Velocity;
@@ -7585,5 +7600,6 @@ defaultproperties
 	Buoyancy=100.000000
 	RotationRate=(Pitch=3072,Yaw=30000,Roll=2048)
 	NetPriority=3.000000
+	B227_DodgeEndTime=0.35
 	B227_Handedness=-1
 }

@@ -18,13 +18,13 @@ function DrawCategoryHeaders(Canvas Canvas)
 	Canvas.DrawText(PlayerString);
 
 	Canvas.StrLen(FragsString, XL2, YL);
-	Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 6 + XL/2 - XL2/2, Offset);
+	Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 6 + XL/2 - XL2, Offset);
 	Canvas.DrawText(FragsString);
 
 	if (Level.NetMode != NM_StandAlone)
 	{
 		Canvas.StrLen(PingString, XL2, YL);
-		Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 7 + XL/2 - XL2/2, Offset);
+		Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 7 + XL/2 - XL2, Offset);
 		Canvas.DrawText(PingString);
 	}
 }
