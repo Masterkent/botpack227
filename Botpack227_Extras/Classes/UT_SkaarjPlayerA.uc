@@ -3,7 +3,6 @@ class UT_SkaarjPlayerA expands UT_SkaarjPlayer;
 defaultproperties
 {
 	BaseEyeHeight=27.000000
-	bIsHuman=False
 	Buoyancy=99.000000
 	CollisionHeight=39.000000
 	CollisionRadius=17.000000

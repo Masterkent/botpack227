@@ -1,6 +1,3 @@
-//=============================================================================
-// SkaarjPlayer.
-//=============================================================================
 class UT_SkaarjPlayer extends UT_UnrealIPlayer;
 
 #exec OBJ LOAD FILE="multimesh.u"
@@ -416,6 +413,7 @@ function MultimeshPackageRef()
 
 defaultproperties
 {
+	bIsHuman=False
 	Footstep1=Sound'UnrealShare.Cow.walkC'
 	Footstep2=Sound'UnrealShare.Cow.walkC'
 	Footstep3=Sound'UnrealShare.Cow.walkC'

@@ -1,6 +1,3 @@
-//=============================================================================
-// NaliPlayer.
-//=============================================================================
 class UT_NaliPlayer extends UT_UnrealIPlayer;
 
 #exec OBJ LOAD FILE="multimesh.u"
@@ -400,6 +397,7 @@ function MultimeshPackageRef()
 
 defaultproperties
 {
+	bIsHuman=False
 	bSinglePlayer=false
 	FootStep1=WalkC
 	FootStep2=WalkC
