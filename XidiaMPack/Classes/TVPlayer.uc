@@ -49,8 +49,10 @@ var bool bDec;
 const AverageChange = 23;
 const drunkclamp = 13;
 
+var CodeConsoleWindow B227_CodeConsoleWindow;
+
 //STATE PLAYERSHIP: This is a state which simulates the player flying a ship.
-replication{
+replication {
 reliable if (role==role_authority&&bnetowner) //server -> client functions & varz
   dointerpolate, ClientSetMP3, PlayerMod, minspeed;
 reliable if (role==role_authority&&!bdemorecording) //only in net game.. not demo
@@ -2183,6 +2185,23 @@ function float B227_TotalAccumTime()
 	if (ScoreHolder != none)
 		return ScoreHolder.AccumTime + MyTime;
 	return MyTime;
+}
+
+function B227_OpenCodeConsoleWindow(CodeConsole CC)
+{
+	Acceleration=vect(0,0,0);
+	WindowConsole(Player.Console).bQuickKeyEnable = true;
+	WindowConsole(Player.Console).LaunchUWindow();
+	if (!WindowConsole(Player.Console).bcreatedroot) //must generate root
+		WindowConsole(Player.Console).createrootwindow(none);
+	B227_CodeConsoleWindow = CodeConsoleWindow(WindowConsole(Player.Console).Root.CreateWindow(class'CodeConsoleWindow', 0, 0, 200, 200));
+	B227_CodeConsoleWindow.CC = CC;
+}
+
+function B227_CloseCodeConsoleWindow()
+{
+	if (B227_CodeConsoleWindow != none && B227_CodeConsoleWindow.bWindowVisible)
+		B227_CodeConsoleWindow.Close();
 }
 
 defaultproperties

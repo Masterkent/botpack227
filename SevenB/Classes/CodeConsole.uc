@@ -92,27 +92,24 @@ function Trigger( actor Other, pawn EventInstigator )
    CheckTouching();
 }
 function CheckTouching(){ //save games/enabling
-  local int i;
+  local TVPlayer Player;
   bactive=false; //not using!
-  for (i=0;i<4;i++)
-      if ( Touching[i] != None )
-        Touch(Touching[i]);
+  foreach TouchingActors(class'TVPlayer', Player)
+    Touch(Player);
 }
-simulated function touch(actor other){
-  local CodeConsoleWindow CCW;
-  if (!bEnabled||bActive||!other.isa('tvplayer')||viewport(playerpawn(other).player)==none)
+simulated function Touch(Actor Other){
+  if (!bEnabled || bActive || TVPlayer(Other) == none || Viewport(Playerpawn(Other).Player) == none)
     return;
   //play sound and initialize uwindow menu:
-  if (Promptsound!=none)
+  if (PromptSound != none)
     PlaySound(PromptSound, SLOT_Misc);
-  Other.Acceleration=vect(0,0,0);
-  WindowConsole(Playerpawn(Other).Player.Console).bQuickKeyEnable = true;
-  WindowConsole(Playerpawn(other).Player.Console).LaunchUWindow();
-  if (!WindowConsole(Playerpawn(other).Player.Console).bcreatedroot) //must generate root
-     WindowConsole(Playerpawn(other).Player.Console).createrootwindow(none);
-  CCW=CodeConsoleWindow(WindowConsole(Playerpawn(other).Player.Console).Root.CreateWindow(class'CodeConsoleWindow', 0, 0, 200, 200));
-  bActive=true;
-  CCW.CC=self; //init.
+  bActive = true;
+  TVPlayer(Other).B227_OpenCodeConsoleWindow(self);
+}
+simulated event UnTouch(Actor Other)
+{
+	if (TVPlayer(Other) != none)
+		TVPlayer(Other).B227_CloseCodeConsoleWindow();
 }
 simulated function TestCode (tvplayer p, int code){
   //log ("in code is"@code@"Correct code is"@mycode);
