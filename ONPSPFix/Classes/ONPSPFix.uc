@@ -1,11 +1,15 @@
-class ONPSPFix expands Mutator;
+class ONPSPFix expands Mutator
+	config(ONPSPFix);
 
 var() const string VersionInfo;
 var() const string Version;
 
-function PostBeginPlay()
+var() config bool bPreventFallingOutOfWorld;
+
+event PostBeginPlay()
 {
 	LevelStartupAdjustments();
+	AddGameRules();
 }
 
 function LevelStartupAdjustments()
@@ -113,13 +117,26 @@ function FixCurrentMap()
 	Spawn(class'ONPMapFix', self);
 }
 
+function AddGameRules()
+{
+	local GameRules GR;
+
+	GR = Spawn(class'ONPGameRules', self);
+
+	if (Level.Game.GameRules == none)
+		Level.Game.GameRules = GR;
+	else if (GR != None)
+		Level.Game.GameRules.AddRules(GR);
+}
+
 function string GetHumanName()
 {
-	return "ONPSPFix v1.11";
+	return "ONPSPFix v1.12";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.11 [2022-09-20]"
-	Version="1.11"
+	VersionInfo="ONPSPFix v1.12 [2022-11-22]"
+	Version="1.12"
+	bPreventFallingOutOfWorld=True
 }

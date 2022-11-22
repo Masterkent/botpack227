@@ -221,7 +221,10 @@ function RegisterONPLevelInfo(actor newinfo)
 
 function bool PreventDeath(Pawn P, Pawn Killer, name DamageType)
 {
-	return PlayerPawn(P) != none && P.Region.ZoneNumber == 0 && MoveToNearestNavPoint(P);
+	return MutatorPtr.bPreventFallingOutOfWorld &&
+		PlayerPawn(P) != none &&
+		P.Region.ZoneNumber == 0 &&
+		MoveToNearestNavPoint(P);
 }
 
 function bool MoveToNearestNavPoint(Pawn P)

@@ -74,6 +74,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map02LinesofCommX();
 	else if (CurrentMap ~= "ONP-map06ProcessingX")
 		Server_FixCurrentMap_ONP_map06ProcessingX();
+	else if (CurrentMap ~= "ONP-map07PlanningX")
+		Server_FixCurrentMap_ONP_map07PlanningX();
 	else if (CurrentMap ~= "ONP-map08DisposalX")
 		Server_FixCurrentMap_ONP_map08DisposalX();
 	else if (CurrentMap ~= "ONP-map09SurfaceX")
@@ -342,9 +344,15 @@ function Server_FixCurrentMap_ONP_map06ProcessingX()
 	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
 }
 
+function Server_FixCurrentMap_ONP_map07PlanningX()
+{
+	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true;
+}
+
 function Server_FixCurrentMap_ONP_map08DisposalX()
 {
 	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
 }
 

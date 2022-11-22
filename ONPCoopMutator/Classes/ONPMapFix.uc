@@ -744,11 +744,13 @@ function Server_FixCurrentMap_ONP_map06ProcessingX()
 function Server_FixCurrentMap_ONP_map07PlanningX()
 {
 	LoadLevelMover("Mover0").StayOpenTime = 4.0;
+	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true;
 }
 
 function Server_FixCurrentMap_ONP_map08DisposalX()
 {
 	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
 }
 

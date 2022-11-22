@@ -24,6 +24,7 @@ var() config bool bReplaceONPTranslocator;
 var() config bool bDisableFlashlightReplacement;
 var() config bool bInfiniteSpecialItems;
 var() config bool bDiscardItemsOnGameEnd;
+var() config bool bPreventFallingOutOfWorld;
 var() config string ONPGameEndURL;
 var() config string PXGameEndURL;
 var() config string PX0GameEndURL;
@@ -32,7 +33,7 @@ var() config bool bDebugMode;
 
 var ONPGameRules GameRulesPtr;
 
-function PostBeginPlay()
+event PostBeginPlay()
 {
 	if (bDebugMode)
 		DebugChecks();
@@ -225,9 +226,9 @@ function AddGameRules()
 {
 	GameRulesPtr = Spawn(class'ONPGameRules', self);
 
-	if (Level.Game.GameRules == None)
+	if (Level.Game.GameRules == none)
 		Level.Game.GameRules = GameRulesPtr;
-	else if (GameRulesPtr != None)
+	else if (GameRulesPtr != none)
 		Level.Game.GameRules.AddRules(GameRulesPtr);
 }
 
@@ -1060,13 +1061,13 @@ function AdjustRealCrouchInfo(Actor A)
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.16";
+	return "ONPCoopMutator v5.17";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.16 [2022-09-20]"
-	Version="5.16"
+	VersionInfo="ONPCoopMutator v5.17 [2022-11-22]"
+	Version="5.17"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True
@@ -1080,6 +1081,7 @@ defaultproperties
 	bDisableFlashlightReplacement=True
 	bInfiniteSpecialItems=True
 	bDiscardItemsOnGameEnd=True
+	bPreventFallingOutOfWorld=True
 	ONPGameEndURL="NP02DavidM#"
 	PXGameEndURL="ONP-map01FirstDayX#"
 	PX0GameEndURL="ONP-map01FirstDayX#"
