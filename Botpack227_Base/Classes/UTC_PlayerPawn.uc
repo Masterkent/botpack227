@@ -31,6 +31,28 @@ replication
 		B227_GetWeapon;
 }
 
+
+event PlayerInput(float DeltaTime)
+{
+	if (WindowConsole(Player.Console) != none && Player.Console.IsInState('UWindow'))
+	{
+		bEdgeForward = false;
+		bEdgeBack = false;
+		bEdgeLeft = false;
+		bEdgeRight = false;
+		bWasForward = false;
+		bWasBack = false;
+		bWasLeft = false;
+		bWasRight = false;
+		aStrafe = 0;
+		aTurn = 0;
+		aForward = 0;
+		aLookUp = 0;
+	}
+	else
+		super.PlayerInput(DeltaTime);
+}
+
 simulated function UTF_ClientPlaySound(
 	sound ASound,
 	optional bool bInterrupt,
