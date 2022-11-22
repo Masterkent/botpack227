@@ -104,6 +104,9 @@ var globalconfig float B227_UpscaleHUD;
 var float B227_XScale;
 var int B227_CanvasScaleSupport;
 
+var float B227_LastRankUpdateTimestamp;
+var int B227_LastRankedScore;
+
 function Destroyed()
 {
 	Super.Destroyed();
@@ -624,6 +627,9 @@ simulated function DrawGameSynopsis(Canvas Canvas)
 		|| PawnOwner.PlayerReplicationInfo.bIsSpectator 
 		|| (PlayerCount == 1) )
 		return;
+
+	if (Level.TimeSeconds - B227_LastRankUpdateTimestamp >= 0.1 || int(B227_OwnerPRI().Score) != B227_LastRankedScore)
+		UpdateRankAndSpread();
 
 	Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
 	Canvas.DrawColor = WhiteColor;
@@ -1275,13 +1281,15 @@ function Timer()
 		return;
 
 	// Update the rank and spread.
-	UpdateRankAndSpread();
+	if (Level.TimeSeconds - B227_LastRankUpdateTimestamp >= 0.1)
+		UpdateRankAndSpread();
 }
 
 function UpdateRankAndSpread()
 {
 	local UTC_PlayerReplicationInfo PRI;
 	local int HighScore;
+	local float OwnerScore;
 
 	if (B227_OwnerPRI() == none)
 		return;
@@ -1290,6 +1298,7 @@ function UpdateRankAndSpread()
 	HighScore = -100;
 	bTiedScore = False;
 	Rank = 1;
+	OwnerScore = B227_OwnerPRI().Score;
 	foreach AllActors(class'UTC_PlayerReplicationInfo', PRI)
 	{
 		if ( (PRI != None) && (!PRI.bIsSpectator || PRI.bWaitingPlayer) )
@@ -1297,9 +1306,9 @@ function UpdateRankAndSpread()
 			PlayerCount++;
 			if (PRI != B227_OwnerPRI())
 			{
-				if (PRI.Score > B227_OwnerPRI().Score)
+				if (PRI.Score > OwnerScore)
 					Rank += 1;
-				else if (PRI.Score == B227_OwnerPRI().Score)
+				else if (PRI.Score == OwnerScore)
 				{
 					bTiedScore = True;
 					if (PRI.Deaths < B227_OwnerPRI().Deaths)
@@ -1313,7 +1322,9 @@ function UpdateRankAndSpread()
 			}
 		}
 	}
-	Lead = int(B227_OwnerPRI().Score) - HighScore;
+	Lead = int(OwnerScore) - HighScore;
+	B227_LastRankUpdateTimestamp = Level.TimeSeconds;
+	B227_LastRankedScore = int(OwnerScore);
 }
 
 simulated function TellTime(int num)
