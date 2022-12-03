@@ -19,6 +19,8 @@ var() int MyTeam;
 var Actor GunBase;
 var() localized string PreKillMessage, PostKillMessage;
 
+var bool B227_bPermanentDamagedState;
+
 function PostBeginPlay()
 {
 	SpawnBase();
@@ -230,6 +232,8 @@ Begin:
 	Spawn(class'UT_BlackSmoke');
 	Sleep(1.0);
 	Spawn(class'UT_BlackSmoke');
+	if (B227_bPermanentDamagedState)
+		stop;
 	Sleep(13.0);
 	Health = Default.Health;
 	GotoState(NextState);
