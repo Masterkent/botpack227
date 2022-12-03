@@ -72,6 +72,8 @@ function Server_FixCurrentMap_Xenome()
 	// X series
 	if (CurrentMap ~= "ONP-map02LinesofCommX")
 		Server_FixCurrentMap_ONP_map02LinesofCommX();
+	else if (CurrentMap ~= "ONP-map03oppressivemetalX")
+		Server_FixCurrentMap_ONP_map03oppressivemetalX();
 	else if (CurrentMap ~= "ONP-map06ProcessingX")
 		Server_FixCurrentMap_ONP_map06ProcessingX();
 	else if (CurrentMap ~= "ONP-map07PlanningX")
@@ -80,10 +82,32 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map08DisposalX();
 	else if (CurrentMap ~= "ONP-map09SurfaceX")
 		Server_FixCurrentMap_ONP_map09SurfaceX();
+	else if (CurrentMap ~= "ONP-map11CobaltX")
+		Server_FixCurrentMap_ONP_map11CobaltX();
+	else if (CurrentMap ~= "ONP-map12DamX")
+		Server_FixCurrentMap_ONP_map12DamX();
+	else if (CurrentMap ~= "ONP-map13SignsX")
+		Server_FixCurrentMap_ONP_map13SignsX();
+	else if (CurrentMap ~= "ONP-map14SoothsayerX")
+		Server_FixCurrentMap_ONP_map14SoothsayerX();
+	else if (CurrentMap ~= "ONP-map15RevelationX")
+		Server_FixCurrentMap_ONP_map15RevelationX();
+	else if (CurrentMap ~= "ONP-map16BoldX")
+		Server_FixCurrentMap_ONP_map16BoldX();
 	else if (CurrentMap ~= "ONP-map18FriendX")
 		Server_FixCurrentMap_ONP_map18FriendX();
+	else if (CurrentMap ~= "ONP-map19IceX")
+		Server_FixCurrentMap_ONP_map19IceX();
+	else if (CurrentMap ~= "ONP-map20InterloperX")
+		Server_FixCurrentMap_ONP_map20InterloperX();
+	else if (CurrentMap ~= "ONP-map21NestX")
+		Server_FixCurrentMap_ONP_map21NestX();
 	else if (CurrentMap ~= "ONP-map22TransferX")
 		Server_FixCurrentMap_ONP_map22TransferX();
+	else if (CurrentMap ~= "ONP-map23PowerPlayX")
+		Server_FixCurrentMap_ONP_map23PowerPlayX();
+	else if (CurrentMap ~= "ONP-map24CoreX")
+		Server_FixCurrentMap_ONP_map24CoreX();
 
 	// non-X series
 	else if (CurrentMap ~= "ONP-map02Detour")
@@ -330,16 +354,21 @@ function Server_FixCurrentMap_ONP_map02LinesofCommX()
 	EarthQuake(LoadLevelActor("Earthquake2")).bThrowPlayer = false;
 }
 
+function Server_FixCurrentMap_ONP_map03oppressivemetalX()
+{
+	SetNamedTriggerPawnClassProximity("Trigger4");
+	SetNamedTriggerPawnClassProximity("Trigger8");
+	SetNamedTriggerPawnClassProximity("Trigger47");
+	SetEventTriggersPawnClassProximity('felldoom');
+}
+
 function Server_FixCurrentMap_ONP_map06ProcessingX()
 {
-	local Trigger Tr;
+	local Trigger Trigger;
 
-	foreach AllActors(class'Trigger', Tr)
-		if (StrStartsWith(Tr.Event, "splash", true))
-		{
-			Tr.TriggerType = TT_ClassProximity;
-			Tr.ClassProximityType = class'Pawn';
-		}
+	foreach AllActors(class'Trigger', Trigger)
+		if (StrStartsWith(Trigger.Event, "splash", true))
+			SetTriggerPawnClassProximity(Trigger);
 
 	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
 }
@@ -347,6 +376,7 @@ function Server_FixCurrentMap_ONP_map06ProcessingX()
 function Server_FixCurrentMap_ONP_map07PlanningX()
 {
 	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger23");
 }
 
 function Server_FixCurrentMap_ONP_map08DisposalX()
@@ -354,14 +384,47 @@ function Server_FixCurrentMap_ONP_map08DisposalX()
 	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger31");
 }
 
 function Server_FixCurrentMap_ONP_map09SurfaceX()
 {
+	SetNamedTriggerPawnClassProximity("Trigger6");
 	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
 	CreatureFactory(LoadLevelActor("CreatureFactory0")).bCovert = false;
 	CreatureFactory(LoadLevelActor("CreatureFactory1")).bCovert = false;
 	CreatureFactory(LoadLevelActor("CreatureFactory2")).bCovert = false;
+}
+
+function Server_FixCurrentMap_ONP_map11CobaltX()
+{
+	LoadLevelTrigger("Trigger8").bTriggerOnceOnly = true;
+}
+
+function Server_FixCurrentMap_ONP_map12DamX()
+{
+	SetEventTriggersPawnClassProximity('choppedup');
+}
+
+function Server_FixCurrentMap_ONP_map13SignsX()
+{
+	SetNamedTriggerPawnClassProximity("Trigger30");
+}
+
+function Server_FixCurrentMap_ONP_map14SoothsayerX()
+{
+	SetNamedTriggerPawnClassProximity("Trigger64");
+}
+
+function Server_FixCurrentMap_ONP_map15RevelationX()
+{
+	SetNamedTriggerPawnClassProximity("Trigger62");
+}
+
+function Server_FixCurrentMap_ONP_map16BoldX()
+{
+	SetEventTriggersPawnClassProximity('diced');
+	SetEventTriggersPawnClassProximity('wasted');
 }
 
 function Server_FixCurrentMap_ONP_map18FriendX()
@@ -369,10 +432,30 @@ function Server_FixCurrentMap_ONP_map18FriendX()
 	LoadLevelTrigger("Trigger15").bTriggerOnceOnly = true;
 }
 
+function Server_FixCurrentMap_ONP_map19IceX()
+{
+	SetNamedTriggerPawnClassProximity("Trigger73");
+}
+
+function Server_FixCurrentMap_ONP_map20InterloperX()
+{
+	SetEventTriggersPawnClassProximity('Death');
+	SetEventTriggersPawnClassProximity('ohdearyoufell');
+}
+
+function Server_FixCurrentMap_ONP_map21NestX()
+{
+	SetEventTriggersPawnClassProximity('wasted');
+}
+
 function Server_FixCurrentMap_ONP_map22TransferX()
 {
 	LoadLevelTrigger("Trigger29").bTriggerOnceOnly = true;
 	LoadLevelMover("Mover56").MoverEncroachType = ME_IgnoreWhenEncroach;
+
+	SetNamedTriggerPawnClassProximity("Trigger46");
+	SetEventTriggersPawnClassProximity('chopped');
+	SetEventTriggersPawnClassProximity('ohdearyoufell');
 }
 
 simulated function Client_FixCurrentMap_ONP_map22TransferX()
@@ -380,6 +463,17 @@ simulated function Client_FixCurrentMap_ONP_map22TransferX()
 	LoadLevelMover("Mover26").bDynamicLightMover = false;
 }
 
+function Server_FixCurrentMap_ONP_map23PowerPlayX()
+{
+	SetEventTriggersPawnClassProximity('wasted');
+}
+
+function Server_FixCurrentMap_ONP_map24CoreX()
+{
+	SetEventTriggersPawnClassProximity('Death');
+	SetEventTriggersPawnClassProximity('electric');
+	SetNamedTriggerPawnClassProximity("Trigger56");
+}
 
 function Server_FixCurrentMap_ONP_map02Detour()
 {
@@ -473,6 +567,26 @@ function SetMoverTriggerableOnceOnly(Mover m)
 {
 	m.bTriggerOnceOnly = True;
 	AssignInitialState(m, 'TriggerOpenTimed');
+}
+
+function SetTriggerPawnClassProximity(Trigger Trigger)
+{
+	Trigger.TriggerType = TT_ClassProximity;
+	Trigger.ClassProximityType = class'Pawn';
+}
+
+function SetNamedTriggerPawnClassProximity(string TriggerName)
+{
+	SetTriggerPawnClassProximity(LoadLevelTrigger(TriggerName));
+}
+
+function SetEventTriggersPawnClassProximity(name EventName)
+{
+	local Trigger Trigger;
+
+	foreach AllActors(class'Trigger', Trigger)
+		if (Trigger.Event == EventName)
+			SetTriggerPawnClassProximity(Trigger);
 }
 
 function AssignInitialState(Actor A, name StateName)

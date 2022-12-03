@@ -131,12 +131,12 @@ function AddGameRules()
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.12";
+	return "ONPSPFix v1.13";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.12 [2022-11-22]"
-	Version="1.12"
+	VersionInfo="ONPSPFix v1.13 [2022-11-27]"
+	Version="1.13"
 	bPreventFallingOutOfWorld=True
 }

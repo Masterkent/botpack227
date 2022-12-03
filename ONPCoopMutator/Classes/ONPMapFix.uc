@@ -148,6 +148,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map01FirstDayX();
 	else if (CurrentMap ~= "ONP-map02LinesofCommX")
 		Server_FixCurrentMap_ONP_map02LinesofCommX();
+	else if (CurrentMap ~= "ONP-map03oppressivemetalX")
+		Server_FixCurrentMap_ONP_map03oppressivemetalX();
 	else if (CurrentMap ~= "ONP-map04StaticX")
 		Server_FixCurrentMap_ONP_map04StaticX();
 	else if (CurrentMap ~= "ONP-map06ProcessingX")
@@ -168,6 +170,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map13SignsX();
 	else if (CurrentMap ~= "ONP-map14SoothsayerX")
 		Server_FixCurrentMap_ONP_map14SoothsayerX();
+	else if (CurrentMap ~= "ONP-map15RevelationX")
+		Server_FixCurrentMap_ONP_map15RevelationX();
 	else if (CurrentMap ~= "ONP-map16BoldX")
 		Server_FixCurrentMap_ONP_map16BoldX();
 	else if (CurrentMap ~= "ONP-map17SiteBX")
@@ -714,6 +718,14 @@ function Server_FixCurrentMap_ONP_map02LinesofCommX()
 	MakeMessageEventFor("SpecialEvent5");
 }
 
+function Server_FixCurrentMap_ONP_map03oppressivemetalX()
+{
+	SetNamedTriggerPawnClassProximity("Trigger4");
+	SetNamedTriggerPawnClassProximity("Trigger8");
+	SetNamedTriggerPawnClassProximity("Trigger47");
+	SetEventTriggersPawnClassProximity('felldoom');
+}
+
 function Server_FixCurrentMap_ONP_map04StaticX()
 {
 	MakeMessageEventFor("SpecialEvent10");
@@ -726,14 +738,11 @@ function Server_FixCurrentMap_ONP_map04StaticX()
 
 function Server_FixCurrentMap_ONP_map06ProcessingX()
 {
-	local Trigger Tr;
+	local Trigger Trigger;
 
-	foreach AllActors(class'Trigger', Tr)
-		if (StrStartsWith(Tr.Event, "splash", true))
-		{
-			Tr.TriggerType = TT_ClassProximity;
-			Tr.ClassProximityType = class'Pawn';
-		}
+	foreach AllActors(class'Trigger', Trigger)
+		if (StrStartsWith(Trigger.Event, "splash", true))
+			SetTriggerPawnClassProximity(Trigger);
 
 	AssignInitialState(LoadLevelActor("Trigger58"), 'NormalTrigger');
 	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
@@ -745,6 +754,7 @@ function Server_FixCurrentMap_ONP_map07PlanningX()
 {
 	LoadLevelMover("Mover0").StayOpenTime = 4.0;
 	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger23");
 }
 
 function Server_FixCurrentMap_ONP_map08DisposalX()
@@ -752,10 +762,12 @@ function Server_FixCurrentMap_ONP_map08DisposalX()
 	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger31");
 }
 
 function Server_FixCurrentMap_ONP_map09SurfaceX()
 {
+	SetNamedTriggerPawnClassProximity("Trigger6");
 	LoadLevelActor("MaleBodyThree20").bSimulatedPawnRep = true;
 	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
 	LoadLevelActor("Trigger23").Tag = '';
@@ -787,6 +799,7 @@ function Server_FixCurrentMap_ONP_map10AmbushX()
 
 function Server_FixCurrentMap_ONP_map11CobaltX()
 {
+	LoadLevelTrigger("Trigger8").bTriggerOnceOnly = true;
 	MakeMessageEventFor("SpecialEvent10");
 	MakeMessageEventFor("SpecialEvent30");
 	MakeMessageEventFor("SpecialEvent56");
@@ -797,6 +810,7 @@ function Server_FixCurrentMap_ONP_map11CobaltX()
 
 function Server_FixCurrentMap_ONP_map12DamX()
 {
+	SetEventTriggersPawnClassProximity('choppedup');
 	MakeMessageEventFor("SpecialEvent30");
 }
 
@@ -804,6 +818,7 @@ function Server_FixCurrentMap_ONP_map13SignsX()
 {
 	LoadLevelActor("Trigger71").Tag = 'ambush';
 	LoadLevelActor("SpecialEvent8").Tag = '';
+	SetNamedTriggerPawnClassProximity("Trigger30");
 
 	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Light43", 3000, 2000);     // WarpZoneInfo1
 	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "ZoneInfo2", 1000, 1000);   // WarpZoneInfo2
@@ -827,6 +842,8 @@ function Server_FixCurrentMap_ONP_map14SoothsayerX()
 	LoadLevelMover("Mover43").StayOpenTime = 4;
 	LoadLevelMover("Mover44").StayOpenTime = 4;
 
+	SetNamedTriggerPawnClassProximity("Trigger64");
+
 	Telep = Teleporter(LoadLevelActor("Teleporter0"));
 	Telep.bEnabled = false;
 	Telep.Tag = 'TeleporterEnergyUp';
@@ -845,8 +862,16 @@ function Server_FixCurrentMap_ONP_map14SoothsayerX()
 	TeleporterEnergyUp.NumToCount = 1;
 }
 
+function Server_FixCurrentMap_ONP_map15RevelationX()
+{
+	SetNamedTriggerPawnClassProximity("Trigger62");
+}
+
 function Server_FixCurrentMap_ONP_map16BoldX()
 {
+	SetEventTriggersPawnClassProximity('diced');
+	SetEventTriggersPawnClassProximity('wasted');
+
 	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "ZoneInfo8", 1024, 256);          // WarpZoneInfo0
 	MakeNetVisibilityCylinder('NetVisCylinder_1', vect(1730, 10000, -812), 256, 256); // WarpZoneInfo1
 	MakeNetVisibilityCylinderAt('NetVisCylinder_2', "PathNode162", 2000, 512);        // WarpZoneInfo2
@@ -878,18 +903,23 @@ function Server_FixCurrentMap_ONP_map18FriendX()
 	NaliDestructionEvent = Spawn(class'ONPPawnDestructionEvent');
 	NaliDestructionEvent.AssignPawn(Pawn(LoadLevelActor("NaliPriest0")));
 	NaliDestructionEvent.Event = 'wooddoorup';
+
+	SetNamedTriggerPawnClassProximity("Trigger11");
 }
 
 function Server_FixCurrentMap_ONP_map19IceX()
 {
 	LoadLevelMover("Mover120").StayOpenTime = 4;
 	MakeMessageEventFor("SpecialEvent25");
+	SetNamedTriggerPawnClassProximity("Trigger73");
 }
 
 function Server_FixCurrentMap_ONP_map20InterloperX()
 {
 	LoadLevelMover("Mover97").StayOpenTime = 4;
 	MakeMessageEventFor("SpecialEvent25");
+	SetEventTriggersPawnClassProximity('Death');
+	SetEventTriggersPawnClassProximity('ohdearyoufell');
 
 	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Trigger47", 1500, 256); // WarpZoneInfo0
 	MakeNetVisibilityCylinderAt('NetVisCylinder_1', "Light1653", 400, 128);  // WarpZoneInfo1
@@ -900,6 +930,7 @@ function Server_FixCurrentMap_ONP_map21NestX()
 	DisablePlayerStart("PlayerStart0");
 	DisablePlayerStart("PlayerStart10");
 	MakeMessageEventFor("SpecialEvent2");
+	SetEventTriggersPawnClassProximity('wasted');
 }
 
 function Server_FixCurrentMap_ONP_map22TransferX()
@@ -911,6 +942,10 @@ function Server_FixCurrentMap_ONP_map22TransferX()
 
 	LoadLevelTrigger("Trigger29").bTriggerOnceOnly = true;
 	LoadLevelMover("Mover56").MoverEncroachType = ME_IgnoreWhenEncroach;
+
+	SetNamedTriggerPawnClassProximity("Trigger46");
+	SetEventTriggersPawnClassProximity('chopped');
+	SetEventTriggersPawnClassProximity('ohdearyoufell');
 }
 
 simulated function Client_FixCurrentMap_ONP_map22TransferX()
@@ -920,6 +955,8 @@ simulated function Client_FixCurrentMap_ONP_map22TransferX()
 
 function Server_FixCurrentMap_ONP_map23PowerPlayX()
 {
+	SetEventTriggersPawnClassProximity('wasted');
+
 	MakeMessageEventFor("SpecialEvent25");
 	MakeMessageEventFor("SpecialEvent27");
 	MakeMessageEventFor("SpecialEvent30");
@@ -955,6 +992,10 @@ function Server_FixCurrentMap_ONP_map24CoreX()
 	SteelBox.SetLocation(vect(-12750, -3230, 0) + vect(0, 0, 1) * SteelBox.Location.Z);
 	SteelBox.bPushable = false;
 	SteelBox.bMovable = false;
+
+	SetEventTriggersPawnClassProximity('Death');
+	SetEventTriggersPawnClassProximity('electric');
+	SetNamedTriggerPawnClassProximity("Trigger56");
 
 	Teleporter(LoadLevelActor("Teleporter19")).URL = MutatorPtr.PXGameEndURL;
 }
@@ -1242,6 +1283,26 @@ function SetMoverTriggerableOnceOnly(Mover m)
 {
 	m.bTriggerOnceOnly = True;
 	AssignInitialState(m, 'TriggerOpenTimed');
+}
+
+function SetTriggerPawnClassProximity(Trigger Trigger)
+{
+	Trigger.TriggerType = TT_ClassProximity;
+	Trigger.ClassProximityType = class'Pawn';
+}
+
+function SetNamedTriggerPawnClassProximity(string TriggerName)
+{
+	SetTriggerPawnClassProximity(LoadLevelTrigger(TriggerName));
+}
+
+function SetEventTriggersPawnClassProximity(name EventName)
+{
+	local Trigger Trigger;
+
+	foreach AllActors(class'Trigger', Trigger)
+		if (Trigger.Event == EventName)
+			SetTriggerPawnClassProximity(Trigger);
 }
 
 function AssignInitialState(Actor A, name StateName)
