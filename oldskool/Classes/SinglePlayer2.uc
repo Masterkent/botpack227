@@ -192,8 +192,18 @@ event playerpawn Login
     }
 /* Psychic_313: changed to remove potential OldModels dependency
   else if ( !ClassIsChildOf(SpawnClass, class'TournamentPlayer') || Left(string(spawnclass),6) ~= "u4etc."|| ClassIsChildOf(SpawnClass, class'oldskool.sktrooper'))         //don't allow U4E or sktrooperz*/
-  else if ( !ClassIsChildOf(SpawnClass, class'TournamentPlayer') || ((Left(string(spawnclass),6) ~= "u4etc."|| SpawnClass.default.Mesh==LodMesh'UnrealI.sktrooper')&&bhumansonly) || !SpawnClass.default.bSinglePlayer)         //don't allow U4E or sktrooperz, unless hacked so bhumansonly=false
-  SpawnClass = DefaultPlayerClass;
+  else if (((Left(string(spawnclass), 6) ~= "u4etc." || !SpawnClass.default.bIsHuman) && bHumansOnly) || !SpawnClass.default.bSinglePlayer)
+  {
+    //don't allow U4E or sktrooperz, unless hacked so bhumansonly=false
+    SpawnClass = DefaultPlayerClass;
+  }
+  else if (!ClassIsChildOf(SpawnClass, class'TournamentPlayer'))
+  {
+    if (ClassIsChildOf(SpawnClass, class'UnrealIPlayer') && class'B227_Config'.default.bEnableExtras)
+      class'TournamentGameInfo'.static.B227_ReplaceUnrealIPlayerClass(SpawnClass);
+    if (class<TournamentPlayer>(SpawnClass) == none)
+      SpawnClass = DefaultPlayerClass;
+  }
 
   NewPlayer = Super.Login(Portal, Options, Error, SpawnClass);
   //if (!newplayer.isinstate('invalidstate'))
