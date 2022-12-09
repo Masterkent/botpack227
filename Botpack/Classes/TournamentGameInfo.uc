@@ -427,6 +427,18 @@ function class<PlayerPawn> B227_TransformPlayerClass(class<PlayerPawn> PlayerCla
 		return DefaultPlayerClass;
 	}
 
+	if (!B227_ReplaceUnrealIPlayerClass(PlayerClass))
+		return DefaultPlayerClass;
+
+	if (class<TournamentPlayer>(PlayerClass) != none)
+		return PlayerClass;
+
+	B227_bAllowUnrealIPlayers = false;
+	return DefaultPlayerClass;
+}
+
+static function bool B227_ReplaceUnrealIPlayerClass(out class<PlayerPawn> PlayerClass)
+{
 	switch (PlayerClass.default.Mesh)
 	{
 		case Mesh'UnrealShare.Female1':
@@ -458,17 +470,13 @@ function class<PlayerPawn> B227_TransformPlayerClass(class<PlayerPawn> PlayerCla
 			break;
 
 		default:
-			return DefaultPlayerClass;
+			return false;
 	}
 
-	if (PlayerClass != none && ClassIsChildOf(PlayerClass, class'TournamentPlayer'))
-		return PlayerClass;
-
-	B227_bAllowUnrealIPlayers = false;
-	return DefaultPlayerClass;
+	return true;
 }
 
-function class<PlayerPawn> B227_LoadPlayerClass(string PlayerClassName)
+static function class<PlayerPawn> B227_LoadPlayerClass(string PlayerClassName)
 {
 	return class<PlayerPawn>(DynamicLoadObject(PlayerClassName, class'Class', true));
 }
