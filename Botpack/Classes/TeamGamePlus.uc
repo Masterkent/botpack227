@@ -313,13 +313,17 @@ function ReBalance()
 
 function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, optional string incomingName)
 {
-	local PlayerStart Dest, Candidate[16], Best;
-	local float Score[16], BestScore, NextDist;
+	local array<PlayerStart> Candidate;
+	local array<float> Score;
+	local array<Pawn> Players;
+	local int PlayerCount;
+	local PlayerStart Dest, Best;
+	local float BestScore, NextDist, CollisionDist, DistScore;
 	local pawn OtherPlayer;
-	local int i, num;
+	local int i, j, num;
 	local Teleporter Tel;
-	local NavigationPoint N;
 	local byte Team;
+	local bool bHasEnabledStartSpot;
 
 	if (bStartMatch && TournamentPlayer(Player) != none &&
 		Level.NetMode == NM_Standalone &&
@@ -341,72 +345,75 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 	if ( Team == 255 )
 		Team = 0;
 
-	//choose candidates
-	for ( N=Level.NavigationPointList; N!=None; N=N.nextNavigationPoint )
+	// choose candidates
+	foreach AllActors(class'PlayerStart', Dest)
 	{
-		Dest = PlayerStart(N);
-		if ( (Dest != None) && Dest.bEnabled
-			&& (!bSpawnInTeamArea || (Team == Dest.TeamNumber)) )
+		if (Dest.bEnabled && (!bSpawnInTeamArea || (Team == Dest.TeamNumber)) )
 		{
-			if (num<16)
-				Candidate[num] = Dest;
-			else if (Rand(num) < 16)
-				Candidate[Rand(16)] = Dest;
-			num++;
+			if (!bHasEnabledStartSpot)
+			{
+				num = 0;
+				bHasEnabledStartSpot = true;
+			}
 		}
+		else if (bHasEnabledStartSpot)
+			continue;
+
+		Candidate[num++] = Dest;
 	}
 
-	if (num == 0 )
-	{
-		log("Didn't find any player starts in list for team"@Team@"!!!"); 
-		foreach AllActors( class'PlayerStart', Dest )
-		{
-			if (num<16)
-				Candidate[num] = Dest;
-			else if (Rand(num) < 16)
-				Candidate[Rand(16)] = Dest;
-			num++;
-		}
-		if ( num == 0 )
-			return None;
-	}
+	if (!bHasEnabledStartSpot)
+		Log("Didn't find any player starts for team" @ Team @ "!!!");
 
-	if (num>16) 
-		num = 16;
+	if (num == 0)
+		return none;
 
-	//assess candidates
-	for (i=0;i<num;i++)
+	for ( OtherPlayer=Level.PawnList; OtherPlayer!=None; OtherPlayer=OtherPlayer.NextPawn)
+		if ( OtherPlayer.PlayerReplicationInfo != none && (OtherPlayer.Health > 0) && !OtherPlayer.IsA('Spectator') )
+			Players[PlayerCount++] = OtherPlayer;
+
+	// assess candidates
+	for (i = 0; i < num; ++i)
 	{
 		if ( Candidate[i] == LastStartSpot )
 			Score[i] = -6000.0;
 		else
-			Score[i] = 4000 * FRand(); //randomize
-	}
+			Score[i] = 4000 * FRand(); // randomize
 
-	for ( OtherPlayer=Level.PawnList; OtherPlayer!=None; OtherPlayer=OtherPlayer.NextPawn)	
-		if ( OtherPlayer.PlayerReplicationInfo != none && (OtherPlayer.Health > 0) && !OtherPlayer.IsA('Spectator') )
-			for (i=0; i<num; i++)
-				if ( OtherPlayer.Region.Zone == Candidate[i].Region.Zone ) 
-				{
-					Score[i] -= 1500;
-					NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
-					if (NextDist < 2 * (CollisionRadius + CollisionHeight))
-						Score[i] -= 1000000.0;
-					else if ( (NextDist < 2000) && (OtherPlayer.PlayerReplicationInfo.Team != Team)
-							&& FastTrace(Candidate[i].Location, OtherPlayer.Location) )
-						Score[i] -= (10000.0 - NextDist);
-				}
+		DistScore = 0;
 
-	BestScore = Score[0];
-	Best = Candidate[0];
-	for (i=1; i<num; i++)
-		if (Score[i] > BestScore)
+		for (j = 0; j < PlayerCount; ++j)
+		{
+			OtherPlayer = Players[j];
+			NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
+
+			if (Player != none)
+				CollisionDist = Player.CollisionRadius + Player.CollisionHeight +
+					OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight;
+			else
+				CollisionDist = 2 * (OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight);
+
+			if (NextDist < CollisionDist)
+				Score[i] -= 1000000.0;
+			else if (OtherPlayer.PlayerReplicationInfo.Team != Team)
+			{
+				if (FastTrace(Candidate[i].Location, OtherPlayer.Location))
+					Score[i] -= 10000;
+				if (NextDist < 2000)
+					DistScore = FMin(DistScore, NextDist - 2000);
+			}
+		}
+
+		Score[i] += DistScore;
+
+		if (i == 0 || Score[i] > BestScore)
 		{
 			BestScore = Score[i];
 			Best = Candidate[i];
 		}
-	LastStartSpot = Best;
+	}
 
+	LastStartSpot = Best;
 	return Best;
 }
 

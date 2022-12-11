@@ -1331,12 +1331,17 @@ Re-implement for each game type
 */
 function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, optional string incomingName)
 {
-	local PlayerStart Dest, Candidate[16], Best;
-	local float Score[16], BestScore, NextDist;
-	local pawn OtherPlayer;
-	local int i, num;
+	local array<PlayerStart> Candidate;
+	local array<float> Score;
+	local array<Pawn> Players;
+	local int PlayerCount;
+	local PlayerStart Dest, Best;
+	local float BestScore, NextDist, CollisionDist, DistScore;
+	local Pawn OtherPlayer;
+	local int i, j, num;
 	local Teleporter Tel;
-	local NavigationPoint N, LastPlayerStartSpot;
+	local NavigationPoint LastPlayerStartSpot;
+	local bool bHasEnabledStartSpot;
 
 	if (bStartMatch && TournamentPlayer(Player) != none &&
 		Level.NetMode == NM_Standalone &&
@@ -1350,74 +1355,78 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 			if( string(Tel.Tag)~=incomingName )
 				return Tel;
 
-	//choose candidates	
-	for ( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
+	// choose candidates
+	foreach AllActors(class'PlayerStart', Dest)
 	{
-		Dest = PlayerStart(N);
-		if ( (Dest != None) && Dest.bEnabled && !Dest.Region.Zone.bWaterZone )
+		if (Dest.bEnabled && !Dest.Region.Zone.bWaterZone )
 		{
-			if (num<16)
-				Candidate[num] = Dest;
-			else if (Rand(num) < 16)
-				Candidate[Rand(16)] = Dest;
-			num++;
+			if (!bHasEnabledStartSpot)
+			{
+				num = 0;
+				bHasEnabledStartSpot = true;
+			}
 		}
+		else if (bHasEnabledStartSpot)
+			continue;
+
+		Candidate[num++] = Dest;
 	}
 
-	if (num == 0 )
-		foreach AllActors( class 'PlayerStart', Dest )
-		{
-			if (num<16)
-				Candidate[num] = Dest;
-			else if (Rand(num) < 16)
-				Candidate[Rand(16)] = Dest;
-			num++;
-		}
-
-	if (num>16) num = 16;
-	else if (num == 0)
-		return None;
+	if (num == 0)
+		return none;
 
 	if (TournamentPlayer(Player) != none && TournamentPlayer(Player).StartSpot != none)
 		LastPlayerStartSpot = TournamentPlayer(Player).StartSpot;
 
-	//assess candidates
-	for (i=0;i<num;i++)
+	for ( OtherPlayer=Level.PawnList; OtherPlayer!=None; OtherPlayer=OtherPlayer.NextPawn)
+		if ( OtherPlayer.PlayerReplicationInfo != none && (OtherPlayer.Health > 0) && !OtherPlayer.IsA('Spectator') )
+			Players[PlayerCount++] = OtherPlayer;
+
+	for (i = 0; i < num; ++i)
 	{
 		if ( (Candidate[i] == LastStartSpot) || (Candidate[i] == LastPlayerStartSpot) )
 			Score[i] = -10000.0;
 		else
-			Score[i] = 3000 * FRand(); //randomize
-	}
-	for ( OtherPlayer=Level.PawnList; OtherPlayer!=None; OtherPlayer=OtherPlayer.NextPawn)	
-		if ( OtherPlayer.PlayerReplicationInfo != none && (OtherPlayer.Health > 0) && !OtherPlayer.IsA('Spectator') )
-			for ( i=0; i<num; i++ )
-			{
-				if ( OtherPlayer.Region.Zone == Candidate[i].Region.Zone )
-				{
-					Score[i] -= 1500;
-					NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
-					if ( NextDist < OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight )
-						Score[i] -= 1000000.0;
-					else if ( (NextDist < 2000) && FastTrace(Candidate[i].Location, OtherPlayer.Location) )
-						Score[i] -= (10000.0 - NextDist);
-				}
-				else if ( NumPlayers + NumBots == 2 )
-				{
-					Score[i] += 2 * VSize(OtherPlayer.Location - Candidate[i].Location);
-					if ( FastTrace(Candidate[i].Location, OtherPlayer.Location) )
-						Score[i] -= 10000;
-				}
-			}
+			Score[i] = 3000 * FRand(); // randomize
 
-	BestScore = Score[0];
-	Best = Candidate[0];
-	for (i=1;i<num;i++)
-		if (Score[i] > BestScore)
+		DistScore = 0;
+
+		for (j = 0; j < PlayerCount; ++j)
+		{
+			// B227 NOTE: Zone-dependent score may lead to odd selection of start spots.
+			// F.e., on DM-ArcaneTemple, ZoneInfo0 would be preferred in most cases.
+			// This is why Region.Zone is not checked here anymore.
+
+			OtherPlayer = Players[j];
+			NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
+
+			if (Player != none)
+				CollisionDist = Player.CollisionRadius + Player.CollisionHeight +
+					OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight;
+			else
+				CollisionDist = 2 * (OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight);
+
+			if (NextDist < CollisionDist)
+				Score[i] -= 1000000.0;
+			else
+			{
+				if (FastTrace(Candidate[i].Location, OtherPlayer.Location))
+					Score[i] -= 10000;
+
+				if (NumPlayers + NumBots == 2)
+					Score[i] += 2 * NextDist;
+				else if (NextDist < 2000)
+					DistScore = FMin(DistScore, NextDist - 2000);
+			}
+		}
+		Score[i] += DistScore;
+
+		if (i == 0 || Score[i] > BestScore)
 		{
 			BestScore = Score[i];
 			Best = Candidate[i];
 		}
+	}
 
 	LastStartSpot = Best;
 	return Best;

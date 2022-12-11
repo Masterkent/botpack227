@@ -284,6 +284,13 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 			Team = 1;
 	}
 
+	if (bStartMatch && TournamentPlayer(Player) != none &&
+		Level.NetMode == NM_Standalone &&
+		TournamentPlayer(Player).StartSpot != none)
+	{
+		return TournamentPlayer(Player).StartSpot;
+	}
+
 	return super.UTF_FindPlayerStart(None, Team, incomingName);
 }
 
