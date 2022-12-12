@@ -1413,10 +1413,13 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 				if (FastTrace(Candidate[i].Location, OtherPlayer.Location))
 					Score[i] -= 10000;
 
-				if (NumPlayers + NumBots == 2)
-					Score[i] += 2 * NextDist;
-				else if (NextDist < 2000)
-					DistScore = FMin(DistScore, NextDist - 2000);
+				if (NextDist < 2000)
+				{
+					if (NumPlayers + NumBots == 2)
+						DistScore = FMin(DistScore, 2 * (NextDist - 2000));
+					else
+						DistScore = FMin(DistScore, NextDist - 2000);
+				}
 			}
 		}
 		Score[i] += DistScore;
