@@ -121,9 +121,17 @@ function DrawTrailer( canvas Canvas )
 		Canvas.DrawText(PlayerOwner.GameReplicationInfo.GameName@MapTitle@LevelTitle, true);
 
 	Canvas.SetPos(0, Canvas.ClipY - YL);
-	if ( bTimeDown || (PlayerOwner.GameReplicationInfo.RemainingTime > 0) )
+
+	if (UTC_GameReplicationInfo(PlayerOwner.GameReplicationInfo) != none &&
+		UTC_GameReplicationInfo(PlayerOwner.GameReplicationInfo).B227_bSyncTime)
 	{
-		bTimeDown = true;
+		bTimeDown = UTC_GameReplicationInfo(PlayerOwner.GameReplicationInfo).B227_RemainingTime >= 0;
+	}
+	else if (!bTimeDown)
+		bTimeDown = PlayerOwner.GameReplicationInfo.RemainingTime > 0;
+
+	if (bTimeDown)
+	{
 		if ( PlayerOwner.GameReplicationInfo.RemainingTime <= 0 )
 			Canvas.DrawText(RemainingTime@"00:00", true);
 		else

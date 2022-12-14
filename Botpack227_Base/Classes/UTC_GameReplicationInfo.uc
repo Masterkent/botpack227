@@ -13,8 +13,8 @@ var float UpdateTimer;
 var UTC_PlayerReplicationInfo PRIArray[32];
 
 var private string B227_GameEndedComments;
-var int B227_RemainingTime;
-var bool B227_bSyncRemainingTime;
+var int B227_ElapsedTime, B227_RemainingTime;
+var bool B227_bSyncTime;
 
 replication
 {
@@ -26,6 +26,7 @@ replication
 
 	reliable if (Role == ROLE_Authority)
 		B227_GameEndedComments,
+		B227_ElapsedTime,
 		B227_RemainingTime;
 }
 
@@ -43,22 +44,26 @@ simulated event Timer()
 
 	if ( Level.NetMode == NM_Client )
 	{
+		if (B227_ElapsedTime >= 0)
+		{
+			ElapsedTime = B227_ElapsedTime;
+			B227_bSyncTime = true;
+		}
 		if (B227_RemainingTime >= 0)
 		{
 			RemainingTime = B227_RemainingTime;
-			B227_RemainingTime = -1;
-			B227_bSyncRemainingTime = true;
+			B227_bSyncTime = true;
 		}
-		if (Level.TimeSeconds - SecondCount >= Level.TimeDilation)
+
+		if (!B227_bSyncTime && Level.TimeSeconds - SecondCount >= Level.TimeDilation)
 		{
 			ElapsedTime++;
-			if ( RemainingMinute != 0 )
+			if (RemainingMinute != 0)
 			{
-				if (!B227_bSyncRemainingTime)
-					RemainingTime = RemainingMinute;
+				RemainingTime = RemainingMinute;
 				RemainingMinute = 0;
 			}
-			if ( !B227_bSyncRemainingTime && (RemainingTime > 0) && !bStopCountDown )
+			if (RemainingTime > 0 && !bStopCountDown)
 				RemainingTime--;
 			SecondCount += Level.TimeDilation;
 		}
@@ -103,6 +108,8 @@ simulated event PostNetReceive()
 
 defaultproperties
 {
+	bNetNotify=True
 	NetUpdateFrequency=20
+	B227_ElapsedTime=-1
 	B227_RemainingTime=-1
 }

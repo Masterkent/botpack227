@@ -676,7 +676,7 @@ function Timer()
 			for (P=Level.PawnList; P!=None; P=P.NextPawn )
 				if ( P.IsA('PlayerPawn') )
 					PlayerPawn(P).SetProgressTime(2);
-			B227_UpdateGRIRemainingTime();
+			B227_UpdateGRITime();
 			return;
 		}
 		else
@@ -795,7 +795,7 @@ function Timer()
 		}
 	}
 
-	B227_UpdateGRIRemainingTime();
+	B227_UpdateGRITime();
 }
 
 function bool TooManyBots()
@@ -1608,18 +1608,21 @@ function B227_UpdateGRILimits()
 	TournamentGameReplicationInfo(GameReplicationInfo).TimeLimit = TimeLimit;
 }
 
-function B227_UpdateGRIRemainingTime()
+function B227_UpdateGRITime()
 {
 	if (TimeLimit > 0)
 	{
-		B227_GRI().RemainingTime = RemainingTime;
-		B227_GRI().B227_RemainingTime = RemainingTime;
+		B227_GRI().B227_ElapsedTime = -1;
+		B227_GRI().B227_RemainingTime = Max(0, RemainingTime);
+		B227_GRI().RemainingTime = B227_GRI().B227_RemainingTime;
 	}
 	else
 	{
+		B227_GRI().B227_ElapsedTime = B227_ElapsedTime;
+		B227_GRI().B227_RemainingTime = -1;
 		B227_GRI().RemainingTime = 0;
-		B227_GRI().B227_RemainingTime = 0;
 	}
+	B227_GRI().B227_bSyncTime = true;
 }
 
 function string B227_PlayerEnteredMessage(Pawn P)
