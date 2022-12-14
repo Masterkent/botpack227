@@ -70,7 +70,9 @@ function Server_FixCurrentMap_ONP()
 function Server_FixCurrentMap_Xenome()
 {
 	// X series
-	if (CurrentMap ~= "ONP-map02LinesofCommX")
+	if (CurrentMap ~= "ONP-map01FirstDayX")
+		Server_FixCurrentMap_ONP_map01FirstDayX();
+	else if (CurrentMap ~= "ONP-map02LinesofCommX")
 		Server_FixCurrentMap_ONP_map02LinesofCommX();
 	else if (CurrentMap ~= "ONP-map03oppressivemetalX")
 		Server_FixCurrentMap_ONP_map03oppressivemetalX();
@@ -110,12 +112,22 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map24CoreX();
 
 	// non-X series
+	else if (CurrentMap ~= "ONP-map01FirstDay")
+		Server_FixCurrentMap_ONP_map01FirstDay();
 	else if (CurrentMap ~= "ONP-map02Detour")
 		Server_FixCurrentMap_ONP_map02Detour();
 	else if (CurrentMap ~= "ONP-map04LabEntrance")
 		Server_FixCurrentMap_ONP_map04LabEntrance();
 	else if (CurrentMap ~= "ONP-map05FriendlyFire")
 		Server_FixCurrentMap_ONP_map05FriendlyFire();
+	else if (CurrentMap ~= "ONP-map06PowerPlay")
+		Server_FixCurrentMap_ONP_map06PowerPlay();
+	else if (CurrentMap ~= "ONP-map07Questionableethics")
+		Server_FixCurrentMap_ONP_map07Questionableethics();
+	else if (CurrentMap ~= "ONP-map09ComplexSituation")
+		Server_FixCurrentMap_ONP_map09ComplexSituation();
+	else if (CurrentMap ~= "ONP-map13Processing")
+		Server_FixCurrentMap_ONP_map13Processing();
 	else if (CurrentMap ~= "ONP-map14Mine")
 		Server_FixCurrentMap_ONP_map14Mine();
 	else if (CurrentMap ~= "ONP-map16Dam")
@@ -126,10 +138,28 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map21Welcome();
 	else if (CurrentMap ~= "ONP-map22Disposal")
 		Server_FixCurrentMap_ONP_map22Disposal();
+	else if (CurrentMap ~= "ONP-map23Newfoe")
+		Server_FixCurrentMap_ONP_map23Newfoe();
+	else if (CurrentMap ~= "ONP-map26EBE")
+		Server_FixCurrentMap_ONP_map26EBE();
+	else if (CurrentMap ~= "ONP-map27Entrance")
+		Server_FixCurrentMap_ONP_map27Entrance();
+	else if (CurrentMap ~= "ONP-map28Bellyofthebeast")
+		Server_FixCurrentMap_ONP_map28Bellyofthebeast();
 	else if (CurrentMap ~= "ONP-map30Ruins")
 		Server_FixCurrentMap_ONP_map30Ruins();
+	else if (CurrentMap ~= "ONP-map35Genetics")
+		Server_FixCurrentMap_ONP_map35Genetics();
+	else if (CurrentMap ~= "ONP-map36Birthing")
+		Server_FixCurrentMap_ONP_map36Birthing();
+	else if (CurrentMap ~= "ONP-map37Halted")
+		Server_FixCurrentMap_ONP_map37Halted();
+	else if (CurrentMap ~= "ONP-map38Tothecore")
+		Server_FixCurrentMap_ONP_map38Tothecore();
 	else if (CurrentMap ~= "ONP-map39Escape")
 		Server_FixCurrentMap_ONP_map39Escape();
+	else if (CurrentMap ~= "ONP-map40Boss")
+		Server_FixCurrentMap_ONP_map40Boss();
 }
 
 simulated function Client_FixCurrentMap()
@@ -344,6 +374,12 @@ function Server_FixCurrentMap_NP32Strogg()
 }
 
 
+function Server_FixCurrentMap_ONP_map01FirstDayX()
+{
+	SetEventTriggersPawnClassProximity('arhh');
+	SetNamedTriggerPawnClassProximity("Trigger52");
+}
+
 function Server_FixCurrentMap_ONP_map02LinesofCommX()
 {
 	CreatureFactory(LoadLevelActor("CreatureFactory3")).prototype =
@@ -475,6 +511,13 @@ function Server_FixCurrentMap_ONP_map24CoreX()
 	SetNamedTriggerPawnClassProximity("Trigger56");
 }
 
+
+function Server_FixCurrentMap_ONP_map01FirstDay()
+{
+	SetEventTriggersPawnClassProximity('arhh');
+	SetNamedTriggerPawnClassProximity("Trigger52");
+}
+
 function Server_FixCurrentMap_ONP_map02Detour()
 {
 	DisableTeleporter("fadeoutTeleporter3");
@@ -484,16 +527,40 @@ function Server_FixCurrentMap_ONP_map04LabEntrance()
 {
 	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = false;
 	LoadLevelMover("Mover79").StayOpenTime = 4;
+	SetEventTriggersPawnClassProximity('aarrhh');
 }
 
 function Server_FixCurrentMap_ONP_map05FriendlyFire()
 {
 	DisableTeleporter("fadeoutTeleporter1");
+	SetNamedTriggerPawnClassProximity("Trigger1");
+}
+
+function Server_FixCurrentMap_ONP_map06PowerPlay()
+{
+	SetEventTriggersPawnClassProximity('ouch');
+}
+
+function Server_FixCurrentMap_ONP_map07Questionableethics()
+{
+	SetEventTriggersPawnClassProximity('aarrhh');
+}
+
+function Server_FixCurrentMap_ONP_map09ComplexSituation()
+{
+	SetEventTriggersPawnClassProximity('aarrhh');
+}
+
+function Server_FixCurrentMap_ONP_map13Processing()
+{
+	SetNamedTriggerPawnClassProximity("Trigger29");
 }
 
 function Server_FixCurrentMap_ONP_map14Mine()
 {
 	LoadLevelMover("Mover1").StayOpenTime = 4;
+	SetNamedTriggerPawnClassProximity("Trigger2");
+	SetNamedTriggerPawnClassProximity("Trigger16");
 }
 
 function Server_FixCurrentMap_ONP_map16Dam()
@@ -513,21 +580,69 @@ function Server_FixCurrentMap_ONP_map16Dam()
 function Server_FixCurrentMap_ONP_map19Teleporter()
 {
 	LoadLevelTrigger("Trigger32").bTriggerOnceOnly = true;
+	SetEventTriggersPawnClassProximity('killkill');
+	SetEventTriggersPawnClassProximity('killkill2');
 }
 
 function Server_FixCurrentMap_ONP_map21Welcome()
 {
 	LoadLevelMover("Mover0").StayOpenTime = 4;
+	SetNamedTriggerPawnClassProximity("Trigger23");
 }
 
 function Server_FixCurrentMap_ONP_map22Disposal()
 {
 	LoadLevelMover("Mover34").StayOpenTime = 4;
+	SetNamedTriggerPawnClassProximity("Trigger31");
+}
+
+function Server_FixCurrentMap_ONP_map23Newfoe()
+{
+	SetNamedTriggerPawnClassProximity("Trigger21");
+}
+
+function Server_FixCurrentMap_ONP_map26EBE()
+{
+	SetNamedTriggerPawnClassProximity("Trigger0");
+}
+
+function Server_FixCurrentMap_ONP_map27Entrance()
+{
+	SetEventTriggersPawnClassProximity('burnbaby');
+}
+
+function Server_FixCurrentMap_ONP_map28Bellyofthebeast()
+{
+	SetEventTriggersPawnClassProximity('zapped');
+	SetNamedTriggerPawnClassProximity("Trigger5");
+	SetNamedTriggerPawnClassProximity("Trigger40");
 }
 
 function Server_FixCurrentMap_ONP_map30Ruins()
 {
 	LoadLevelTrigger("Trigger19").bTriggerOnceOnly = true;
+}
+
+function Server_FixCurrentMap_ONP_map35Genetics()
+{
+	SetEventTriggersPawnClassProximity('fallwaste');
+}
+
+function Server_FixCurrentMap_ONP_map36Birthing()
+{
+	SetEventTriggersPawnClassProximity('Death');
+	SetNamedTriggerPawnClassProximity("Trigger11");
+}
+
+function Server_FixCurrentMap_ONP_map37Halted()
+{
+	SetNamedTriggerPawnClassProximity("Trigger14");
+}
+
+function Server_FixCurrentMap_ONP_map38Tothecore()
+{
+	SetEventTriggersPawnClassProximity('turfed');
+	SetNamedTriggerPawnClassProximity("Trigger5");
 }
 
 function Server_FixCurrentMap_ONP_map39Escape()
@@ -536,6 +651,11 @@ function Server_FixCurrentMap_ONP_map39Escape()
 
 	foreach AllActors(class'EarthQuake', EQ)
 		EQ.bThrowPlayer = false;
+}
+
+function Server_FixCurrentMap_ONP_map40Boss()
+{
+	SetEventTriggersPawnClassProximity('pitofdeath');
 }
 
 
