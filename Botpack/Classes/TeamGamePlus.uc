@@ -400,7 +400,7 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 				if (FastTrace(Candidate[i].Location, OtherPlayer.Location))
 					Score[i] -= 10000;
 				if (NextDist < 2000)
-					DistScore = FMin(DistScore, NextDist - 2000);
+					DistScore = FMin(DistScore, 2 * (NextDist - 2000));
 			}
 		}
 

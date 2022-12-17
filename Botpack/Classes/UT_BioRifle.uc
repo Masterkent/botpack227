@@ -42,7 +42,7 @@ function float RateSelf( out int bUseAltMode )
 	EnemyDir2d = EnemyDir;
 	EnemyDir2d.Z = 0;
 	EnemyCollisionDist = VSize(EnemyDir2d) - Owner.CollisionRadius - Pawn(Owner).Enemy.CollisionRadius;
-	EnemyCollisionDist = FMax(0, FMin(EnemyCollisionDist, Abs(EnemyDir.Z) - Owner.CollisionHeight - Pawn(Owner).Enemy.CollisionHeight));
+	EnemyCollisionDist = FMax(EnemyCollisionDist, Abs(EnemyDir.Z) - Owner.CollisionHeight - Pawn(Owner).Enemy.CollisionHeight);
 	if (EnemyCollisionDist < 150)
 		return 0.05 + EnemyDist * 0.001;
 

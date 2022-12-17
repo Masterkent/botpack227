@@ -1412,14 +1412,8 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 			{
 				if (FastTrace(Candidate[i].Location, OtherPlayer.Location))
 					Score[i] -= 10000;
-
 				if (NextDist < 2000)
-				{
-					if (NumPlayers + NumBots == 2)
-						DistScore = FMin(DistScore, 2 * (NextDist - 2000));
-					else
-						DistScore = FMin(DistScore, NextDist - 2000);
-				}
+					DistScore = FMin(DistScore, 2 * (NextDist - 2000));
 			}
 		}
 		Score[i] += DistScore;
@@ -1565,7 +1559,7 @@ function string GetRules()
 		Resultset = ResultSet$"\\gamestyle\\Classic";
 
 	if(MinPlayers > 0)
-		Resultset = ResultSet$"\\botskill\\"$class'ChallengeBotInfo'.static.B227_SkillString(Difficulty);
+		Resultset = ResultSet$"\\botskill\\"$class'ChallengeBotInfo'.static.B227_SkillString(BotConfig.Difficulty);
 
 	return ResultSet;
 }

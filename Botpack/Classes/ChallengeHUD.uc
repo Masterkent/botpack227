@@ -1522,14 +1522,16 @@ simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name M
 			MessageClass = class'RedSayMessagePlus';
 			break;
 		case 'Pickup':
-			PickupTime = Level.TimeSeconds;
+			//-PickupTime = Level.TimeSeconds;
+			LocalizedMessage(class'PickupMessagePlus', 0, none, none, none, Msg);
+			return;
 		default:
 			MessageClass = class'StringMessagePlus';
 			break;
 	}
 
-	if ( ClassIsChildOf(MessageClass, class'SayMessagePlus') || 
-				     ClassIsChildOf(MessageClass, class'TeamSayMessagePlus') )
+	if (ClassIsChildOf(MessageClass, class'SayMessagePlus') || 
+		ClassIsChildOf(MessageClass, class'TeamSayMessagePlus'))
 	{
 		FaceTexture = PRI.TalkTexture;
 		if ( FaceTexture != None )

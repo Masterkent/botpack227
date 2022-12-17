@@ -61,7 +61,7 @@ event PostLogin( playerpawn NewPlayer )
 		LocalPlayer = NewPlayer;
 
 	if ( (TotalKills > 0.15 * (NumPlayers + NumBots) * Lives) && NewPlayer.IsA('CHSpectator') )
-		GameName = AltStartupMessage;	
+		GameName = AltStartupMessage;
 	Super.PostLogin(NewPlayer);
 	GameName = Default.GameName;
 }
@@ -112,7 +112,7 @@ function bool IsRelevant(actor Other)
 	return Super.IsRelevant(Other);
 }
 
-function bool RestartPlayer( pawn aPlayer )	
+function bool RestartPlayer( pawn aPlayer )
 {
 	local NavigationPoint startSpot;
 	local bool foundStart;
@@ -137,10 +137,10 @@ function bool RestartPlayer( pawn aPlayer )
 		}
 	}
 
-	startSpot = UTF_FindPlayerStart(None, 255);
+	startSpot = UTF_FindPlayerStart(aPlayer, 255);
 	if( startSpot == None )
 		return false;
-		
+
 	foundStart = aPlayer.SetLocation(startSpot.Location);
 	if( foundStart )
 	{
@@ -193,8 +193,8 @@ function Killed( pawn killer, pawn Other, name damageType )
 
 	if ( Other.bIsPlayer )
 		TotalKills++;
-			
-	Super.Killed(Killer, Other, damageType);	
+
+	Super.Killed(Killer, Other, damageType);
 
 	FragLimit = OldFragLimit;
 
@@ -245,7 +245,7 @@ function CheckEndGame()
 					B.SetEnemy(D);
 			}
 		}
-	}		
+	}
 }
 
 function ScoreKill(pawn Killer, pawn Other)
@@ -350,7 +350,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 			}
 		}
 	}
-				
+
 	for ( inv=PlayerPawn.inventory; inv!=None; inv=inv.inventory )
 	{
 		weap = Weapon(inv);
@@ -365,7 +365,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 		inv.RespawnTime = 0.0;
 		inv.GiveTo(PlayerPawn);
 	}
-}	
+}
 
 function ModifyBehaviour(Bot NewBot)
 {

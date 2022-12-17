@@ -422,7 +422,7 @@ state PlayerWaiting
 		aLookup  *= 0.24;
 		aTurn    *= 0.24;
 		aUp		 *= 0.1;
-	
+
 		Acceleration = aForward*X + aStrafe*Y + aUp*vect(0,0,1);  
 
 		UpdateRotation(DeltaTime, 1);
@@ -448,6 +448,7 @@ state PlayerWaiting
 
 	function BeginState()
 	{
+		bHidden = true;
 		Mesh = None;
 		if ( PlayerReplicationInfo != None )
 		{
