@@ -402,6 +402,8 @@ Begin:
 
 	Disable('AnimEnd');
 	PlayIdleAnim();
+	FinishAnim();
+	PlayIdleAnim();
 }
 
 ///////////////////////////////////////////////////////////

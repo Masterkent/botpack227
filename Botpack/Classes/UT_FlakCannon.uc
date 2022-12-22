@@ -92,9 +92,12 @@ function float RateSelf( out int bUseAltMode )
 
 simulated event RenderOverlays( canvas Canvas )
 {
-	Texture'FlakAmmoled'.NotifyActor = Self;
+	local Actor NotifyActor;
+
+	NotifyActor = Texture'FlakAmmoled'.NotifyActor;
+	Texture'FlakAmmoled'.NotifyActor = self;
 	Super.RenderOverlays(Canvas);
-	Texture'FlakAmmoled'.NotifyActor = None;
+	Texture'FlakAmmoled'.NotifyActor = NotifyActor;
 }
 
 

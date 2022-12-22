@@ -86,6 +86,8 @@ function float RateSelf( out int bUseAltMode )
 
 simulated event RenderOverlays( canvas Canvas )
 {
+	local Actor NotifyActor;
+
 	if ( bSteadyFlash3rd )
 	{
 		bMuzzleFlash = 1;
@@ -102,9 +104,11 @@ simulated event RenderOverlays( canvas Canvas )
 		FlashO = B227_GetMuzzleFlashOffset(true) * (4 + 0.15 * FRand());
 	else
 		FlashO = B227_GetMuzzleFlashOffset(false) * (1 + 0.15 * FRand());
-	Texture'MiniAmmoled'.NotifyActor = Self;
+
+	NotifyActor = Texture'MiniAmmoled'.NotifyActor;
+	Texture'MiniAmmoled'.NotifyActor = self;
 	Super.RenderOverlays(Canvas);
-	Texture'MiniAmmoled'.NotifyActor = None;
+	Texture'MiniAmmoled'.NotifyActor = NotifyActor;
 
 	if ( bSteadyFlash3rd && Level.bHighDetailMode && (Level.TimeSeconds - LastShellSpawn > 0.125)
 		&& (Level.Pauser=="") )
