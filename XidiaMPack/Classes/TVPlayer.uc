@@ -1337,11 +1337,11 @@ state PlayerWalking
 {
   function EndState(){   //reset col. cylinder (in case swim and such)
     Super.EndState();
-    SetTimer(0.0,false);
+    //- SetTimer(0.0,false);
     if (SetDuck(default.collisionheight))
       bForceDuck=false;
   }
-  function PlayWaiting()  //humming
+  /*- function PlayWaiting()  //humming
   {
     Global.PlayWaiting();
     enable('timer'); //in case disabled
@@ -1353,7 +1353,7 @@ state PlayerWalking
      if (!bIsTyping && velocity == vect(0,0,0) && playermod!=1)
        PlaySound(Sound'XiHumm', SLOT_Interact, 16, true); //interact so footsteps override it
      SetTimer(GetSoundDuration(Sound'XiHumm')+4*frand(),false);
-  }
+  }*/
 
   function Dodge(eDodgeDir DodgeMove) //soundz
   {
@@ -1375,7 +1375,8 @@ state PlayerWalking
     Velocity.Z = 160;
     if (lastplaysound<level.timeseconds){
       if (linfo.bisMissionPack)
-        PlaySound(Sound'XiDodge', SLOT_Talk, 1.0, true, 800, 1.0 );
+        //-PlaySound(Sound'XiDodge', SLOT_Talk, 1.0, true, 800, 1.0 );
+        PlaySound(JumpSounds[0], SLOT_Talk, 1.0, true, 800, 1.0);
       else
         PlaySound(JumpSound, SLOT_Talk, 1.0, true, 800, 1.0 );
     }
@@ -2127,6 +2128,7 @@ static function SetXiGoldskin (tvplayer SkinActor){
 static function SetXidiaSkin(Actor SkinActor, string SkinName, string FaceName, byte TeamNum)
 {
   local string MeshName, FacePackage, SkinItem, FaceItem, SkinPackage;
+  local int i;
 
   MeshName = SkinActor.GetItemName(string(SkinActor.Mesh));
 
@@ -2176,6 +2178,10 @@ static function SetXidiaSkin(Actor SkinActor, string SkinName, string FaceName, 
     else
       Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = None;
   }
+
+  if (TVPlayer(SkinActor) != none)
+     for (i = 0; i < 3; i++)
+       TVPlayer(SkinActor).JumpSounds[i] = class'TMale1'.default.JumpSound;
 }
 
 function float B227_TotalAccumTime()
