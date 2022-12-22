@@ -10,8 +10,15 @@ function PostBeginPlay()
 	Mutator = SBSPFix(Owner);
 	if (Mutator == none)
 		return;
+	FixClient();
 	FixCurrentMap();
 	ModifyCurrentMap();
+}
+
+function FixClient()
+{
+	if (Texture'FlakAmmoled'.NotifyActor == none)
+		Texture'FlakAmmoled'.NotifyActor = self;
 }
 
 function FixCurrentMap()

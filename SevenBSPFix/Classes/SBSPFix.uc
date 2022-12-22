@@ -71,11 +71,11 @@ function RemoveCutsceneActors()
 
 function string GetHumanName()
 {
-	return "SBSPFix v1.5";
+	return "SBSPFix v1.6";
 }
 
 defaultproperties
 {
-	VersionInfo="SBSPFix v1.5 [2022-09-23]"
-	Version="1.5"
+	VersionInfo="SBSPFix v1.6 [2022-12-22]"
+	Version="1.6"
 }

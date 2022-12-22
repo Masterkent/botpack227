@@ -36,6 +36,7 @@ function LevelStartupAdjustments()
 	AdjustPlantSpawners();
 	AdjustSpeechEvents();
 	DisableFadeViewTriggers();
+	FixDetachedClient();
 	AdjustNextLevel();
 	ModifyCurrentMap();
 }
@@ -76,6 +77,15 @@ function DisableFadeViewTriggers()
 	local FadeViewTrigger Tr;
 	foreach AllActors(class'FadeViewTrigger', Tr)
 		Tr.Tag = '';
+}
+
+function FixDetachedClient()
+{
+	local class<Actor> ActorClass;
+
+	ActorClass = class<Actor>(DynamicLoadObject("Botpack.B227_FixDetachedClient", class'Class', true));
+	if (ActorClass != none)
+		Spawn(ActorClass);
 }
 
 function ModifyCurrentMap()
@@ -517,13 +527,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "SevenBCoopMutator v2.9";
+	return "SevenBCoopMutator v2.10";
 }
 
 defaultproperties
 {
-	VersionInfo="SevenBCoopMutator v2.9 [2022-09-23]"
-	Version="2.9"
+	VersionInfo="SevenBCoopMutator v2.10 [2022-12-22]"
+	Version="2.10"
 	bModifyRogueScarredOne=True
 	bUseSpeech=False
 	bUseSpeechMenuForU1Players=True
