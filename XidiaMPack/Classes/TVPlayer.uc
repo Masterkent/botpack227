@@ -11,7 +11,11 @@ class TVPlayer expands TournamentPlayer;
 //sound imports:
 #exec OBJ LOAD FILE="XidiaMPackResources.u" PACKAGE=XidiaMPack
 
-//#exec AUDIO IMPORT FILE="Sounds\XidiaSpenceSoundsInjured1.WAV" NAME="XiHit1"
+#exec AUDIO IMPORT FILE="Sounds\B227_XiDodge.WAV" NAME="B227_XiDodge"
+#exec AUDIO IMPORT FILE="Sounds\B227_XiHit3.WAV" NAME="B227_XiHit3"
+#exec AUDIO IMPORT FILE="Sounds\B227_XiJump.WAV" NAME="B227_XiJump"
+#exec AUDIO IMPORT FILE="Sounds\B227_XiLand1.WAV" NAME="B227_XiLand1"
+#exec AUDIO IMPORT FILE="Sounds\B227_XiLand2.WAV" NAME="B227_XiLand2"
 
 //ship model:
 
@@ -1375,8 +1379,7 @@ state PlayerWalking
     Velocity.Z = 160;
     if (lastplaysound<level.timeseconds){
       if (linfo.bisMissionPack)
-        //-PlaySound(Sound'XiDodge', SLOT_Talk, 1.0, true, 800, 1.0 );
-        PlaySound(JumpSounds[0], SLOT_Talk, 1.0, true, 800, 1.0);
+        PlaySound(Sound'B227_XiDodge', SLOT_Talk, 1.0, true, 800, 1.0 );
       else
         PlaySound(JumpSound, SLOT_Talk, 1.0, true, 800, 1.0 );
     }
@@ -1927,9 +1930,9 @@ function PlayLanded(float impactVel)
   if ( impactVel > 0.17 && lastplaysound<level.timeseconds) {//rand soundzzzzzzzzzzzzzzzzzzzzzzz
     rand=frand();
     if (rand<0.5)
-      PlaySound(Sound'XiLand2', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+      PlaySound(Sound'B227_XiLand2', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
     else /*if ( rand<0.5)*/
-      PlaySound(Sound'XiLand1', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+      PlaySound(Sound'B227_XiLand1', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
 /*      else if ( rand<0.75)
     PlaySound(Sound'OLfall3', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
       else
@@ -2128,7 +2131,6 @@ static function SetXiGoldskin (tvplayer SkinActor){
 static function SetXidiaSkin(Actor SkinActor, string SkinName, string FaceName, byte TeamNum)
 {
   local string MeshName, FacePackage, SkinItem, FaceItem, SkinPackage;
-  local int i;
 
   MeshName = SkinActor.GetItemName(string(SkinActor.Mesh));
 
@@ -2178,10 +2180,6 @@ static function SetXidiaSkin(Actor SkinActor, string SkinName, string FaceName, 
     else
       Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = None;
   }
-
-  if (TVPlayer(SkinActor) != none)
-     for (i = 0; i < 3; i++)
-       TVPlayer(SkinActor).JumpSounds[i] = class'TMale1'.default.JumpSound;
 }
 
 function float B227_TotalAccumTime()
@@ -2214,9 +2212,9 @@ defaultproperties
 {
      MaxSpeed=1337
      MinSpeed=800
-     JumpSounds(0)=Sound'XidiaMPack.XiJump'
-     JumpSounds(1)=Sound'XidiaMPack.XiJump'
-     JumpSounds(2)=Sound'XidiaMPack.XiJump'
+     JumpSounds(0)=Sound'XidiaMPack.B227_XiJump'
+     JumpSounds(1)=Sound'XidiaMPack.B227_XiJump'
+     JumpSounds(2)=Sound'XidiaMPack.B227_XiJump'
      Deaths(0)=Sound'XidiaMPack.XiDie1'
      Deaths(1)=Sound'XidiaMPack.XiDie2'
      Deaths(2)=Sound'XidiaMPack.XiDie3'
@@ -2241,7 +2239,7 @@ defaultproperties
      SelectionMesh="Botpack.SelectionMale1"
      SpecialMesh="Botpack.TrophyMale2"
      HitSound1=Sound'XidiaMPack.XiHit2'
-     HitSound2=Sound'XidiaMPack.XiHit3'
+     HitSound2=Sound'XidiaMPack.B227_XiHit3'
      Die=Sound'XidiaMPack.XiDie1'
      MenuName="Male Soldier"
      VoiceType="BotPack.VoiceMaleTwo"
