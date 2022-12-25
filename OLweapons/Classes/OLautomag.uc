@@ -919,6 +919,12 @@ function AnimEnd()
     Super.AnimEnd();
 }
 
+event Destroyed()
+{
+	if (slavemag != none && !slavemag.bDeleteMe)
+		slavemag.Destroy();
+}
+
 // End Class
 //=============================================================================
 
