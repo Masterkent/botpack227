@@ -71,6 +71,8 @@ var travel ammo  AmmoType2;     //other inv ammo
 var travel bool bUseAlt; //using alt ammo
 var float LastSwitchTime; //ai..
 
+var int B227_FireEffectCount;
+
 replication{
   reliable if (role==role_authority && bNetOwner)
     AmmoType2;
@@ -554,7 +556,10 @@ function bool ClientFire( float Value )
       PlayerPawn(Owner).ShakeView(ShakeTime, ShakeMag, ShakeVert);
     }
     if ( Affector != None )
+    {
       Affector.FireEffect();
+      B227_FireEffectCount = 0;
+    }
 
     PlayFiring();
     if ( Role < ROLE_Authority ){
@@ -573,7 +578,10 @@ function bool ClientAltFire(float Value) //change states later!
   if ( bCanClientFire && AmmoType2.AmmoAmount > 0)
   {
     if ( Affector != None )
+    {
       Affector.FireEffect();
+      B227_FireEffectCount = 0;
+    }
     PlayAltFiring();
     GotoState('AmmoToggle');
     return true;
@@ -671,6 +679,11 @@ state NormalFire
       if (Pawn(Owner).bFire != 0)
       {
         LoopAnim('Fire', 1.95 );
+        if (Affector != none && ++B227_FireEffectCount >= 3)
+        {
+          Affector.FireEffect();
+          B227_FireEffectCount = 0;
+        }
       }
     }
 
