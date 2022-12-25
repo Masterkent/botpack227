@@ -305,6 +305,9 @@ function class<Inventory> InventoryClassReplacement(class<Inventory> InventoryCl
 	if (ClassIsChildOf(InventoryClass, class'osDispersionPowerup'))
 		return class'WeaponPowerUp';
 
+	if (InventoryClass == class'UT_ShieldBelt')
+		return class'olWeapons.ospowershield';
+
 	return InventoryClass;
 }
 
@@ -527,13 +530,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "SevenBCoopMutator v2.10";
+	return "SevenBCoopMutator v2.11";
 }
 
 defaultproperties
 {
-	VersionInfo="SevenBCoopMutator v2.10 [2022-12-22]"
-	Version="2.10"
+	VersionInfo="SevenBCoopMutator v2.11 [2022-12-25]"
+	Version="2.11"
 	bModifyRogueScarredOne=True
 	bUseSpeech=False
 	bUseSpeechMenuForU1Players=True

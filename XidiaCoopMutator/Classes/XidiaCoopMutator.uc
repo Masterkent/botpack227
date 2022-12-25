@@ -434,6 +434,9 @@ function class<Inventory> InventoryClassReplacement(class<Inventory> InventoryCl
 	if (bReplaceUnrealWeapons && ClassIsChildOf(InventoryClass, class'Ammo'))
 		return ToXidiaAmmoType(class<Ammo>(InventoryClass));
 
+	if (InventoryClass == class'UT_ShieldBelt')
+		return class'olWeapons.ospowershield';
+
 	return InventoryClass;
 }
 
@@ -637,13 +640,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "XidiaCoopMutator v1.5";
+	return "XidiaCoopMutator v1.7";
 }
 
 defaultproperties
 {
-	VersionInfo="XidiaCoopMutator v1.5 [2022-09-20]"
-	Version="1.5"
+	VersionInfo="XidiaCoopMutator v1.7 [2022-12-25]"
+	Version="1.7"
 	bReplaceUnrealWeapons=False
 	bUseXidiaJumpBoots=True
 	bUseXidiaWeaponsSupply=True

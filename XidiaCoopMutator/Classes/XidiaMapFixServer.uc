@@ -53,8 +53,14 @@ function Server_FixCurrentMap_XidiaGold_Map3_OutpostPheonix()
 	local VisibleTeleporter VisibleTeleporter;
 
 	Trigger = LoadLevelTrigger("Trigger59");
-	Trigger.TriggerType = TT_Shoot;
-	Trigger.DamageThreshold = 1;
+	Trigger.bInitiallyActive = false;
+	Trigger.InitialState = 'OtherTriggerTurnsOn';
+	Trigger.Tag = 'ShockerRifle';
+
+	Trigger = LoadLevelTrigger("Trigger60");
+	Trigger.bInitiallyActive = false;
+	Trigger.InitialState = 'OtherTriggerTurnsOn';
+	Trigger.Tag = 'ShockerRifle';
 
 	foreach AllActors(class'SpecialEvent', SpecialEvent, 'ShotInTheHead')
 		SpecialEvent.Tag = '';
