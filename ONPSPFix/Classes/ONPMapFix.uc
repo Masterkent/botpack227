@@ -603,6 +603,31 @@ function Server_FixCurrentMap_ONP_map23Newfoe()
 
 function Server_FixCurrentMap_ONP_map26EBE()
 {
+	local Decoration SteelBox;
+	local Mover Mover;
+
+	SteelBox = Decoration(LoadLevelActor("SteelBox7"));
+	SteelBox.bPushable = false;
+	SteelBox.bMovable = false;
+
+	Mover = LoadLevelMover("Mover12");
+	Mover.BasePos.X = -12448;
+	Mover.BaseRot.Yaw = 49152;
+	Mover.KeyPos[1].X = 0;
+	Mover.KeyRot[1].Yaw = 0;
+	Mover.SetLocation(Mover.Location + vect(0, 0, 20000));
+	Mover.SetRotation(Mover.BaseRot);
+	Mover.SetLocation(Mover.BasePos);
+
+	Mover = LoadLevelMover("Mover13");
+	Mover.BasePos.X = -12448;
+	Mover.BaseRot.Yaw = 49152;
+	Mover.KeyPos[1].X = 0;
+	Mover.KeyRot[1].Yaw = 0;
+	Mover.SetLocation(Mover.Location + vect(0, 0, 20000));
+	Mover.SetRotation(Mover.BaseRot);
+	Mover.SetLocation(Mover.BasePos);
+
 	SetNamedTriggerPawnClassProximity("Trigger0");
 }
 

@@ -268,6 +268,8 @@ simulated function Client_FixCurrentMap()
 		Client_FixCurrentMap_NP09Silver();
 	else if (CurrentMap ~= "ONP-map22TransferX")
 		Client_FixCurrentMap_ONP_map22TransferX();
+	else if (CurrentMap ~= "ONP-map26EBE")
+		Client_FixCurrentMap_ONP_map26EBE();
 }
 
 simulated function FixLightEffects()
@@ -963,6 +965,11 @@ simulated function Client_FixCurrentMap_ONP_map22TransferX()
 	LoadLevelMover("Mover26").bDynamicLightMover = false;
 }
 
+simulated function Client_FixCurrentMap_ONP_map26EBE()
+{
+	Common_FixCurrentMap_ONP_map26EBE();
+}
+
 function Server_FixCurrentMap_ONP_map23PowerPlayX()
 {
 	SetEventTriggersPawnClassProximity('wasted');
@@ -1198,9 +1205,34 @@ function Server_FixCurrentMap_ONP_map26EBE()
 	SteelBox.bPushable = false;
 	SteelBox.bMovable = false;
 
+	Common_FixCurrentMap_ONP_map26EBE();
+
 	SetNamedTriggerPawnClassProximity("Trigger0");
 
 	MakeMessageEventFor("SpecialEvent0");
+}
+
+simulated function Common_FixCurrentMap_ONP_map26EBE()
+{
+	local Mover Mover;
+
+	Mover = LoadLevelMover("Mover12");
+	Mover.BasePos.X = -12448;
+	Mover.BaseRot.Yaw = 49152;
+	Mover.KeyPos[1].X = 0;
+	Mover.KeyRot[1].Yaw = 0;
+	Mover.SetLocation(Mover.Location + vect(0, 0, 20000));
+	Mover.SetRotation(Mover.BaseRot);
+	Mover.SetLocation(Mover.BasePos);
+
+	Mover = LoadLevelMover("Mover13");
+	Mover.BasePos.X = -12448;
+	Mover.BaseRot.Yaw = 49152;
+	Mover.KeyPos[1].X = 0;
+	Mover.KeyRot[1].Yaw = 0;
+	Mover.SetLocation(Mover.Location + vect(0, 0, 20000));
+	Mover.SetRotation(Mover.BaseRot);
+	Mover.SetLocation(Mover.BasePos);
 }
 
 function Server_FixCurrentMap_ONP_map27Entrance()
