@@ -525,6 +525,7 @@ function Server_FixCurrentMap_ONP_map02Detour()
 
 function Server_FixCurrentMap_ONP_map04LabEntrance()
 {
+	LoadLevelTrigger("Trigger44").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = false;
 	LoadLevelMover("Mover79").StayOpenTime = 4;
 	SetEventTriggersPawnClassProximity('aarrhh');
@@ -605,6 +606,7 @@ function Server_FixCurrentMap_ONP_map26EBE()
 {
 	local Decoration SteelBox;
 	local Mover Mover;
+	local int CollisionFlags;
 
 	SteelBox = Decoration(LoadLevelActor("SteelBox7"));
 	SteelBox.bPushable = false;
@@ -615,18 +617,22 @@ function Server_FixCurrentMap_ONP_map26EBE()
 	Mover.BaseRot.Yaw = 49152;
 	Mover.KeyPos[1].X = 0;
 	Mover.KeyRot[1].Yaw = 0;
-	Mover.SetLocation(Mover.Location + vect(0, 0, 20000));
-	Mover.SetRotation(Mover.BaseRot);
+	CollisionFlags = GetActorCollisionFlags(Mover);
+	Mover.SetCollision(false, false, false);
 	Mover.SetLocation(Mover.BasePos);
+	Mover.SetRotation(Mover.BaseRot);
+	SetActorCollisionWithFlags(Mover, CollisionFlags);
 
 	Mover = LoadLevelMover("Mover13");
 	Mover.BasePos.X = -12448;
 	Mover.BaseRot.Yaw = 49152;
 	Mover.KeyPos[1].X = 0;
 	Mover.KeyRot[1].Yaw = 0;
-	Mover.SetLocation(Mover.Location + vect(0, 0, 20000));
-	Mover.SetRotation(Mover.BaseRot);
+	CollisionFlags = GetActorCollisionFlags(Mover);
+	Mover.SetCollision(false, false, false);
 	Mover.SetLocation(Mover.BasePos);
+	Mover.SetRotation(Mover.BaseRot);
+	SetActorCollisionWithFlags(Mover, CollisionFlags);
 
 	SetNamedTriggerPawnClassProximity("Trigger0");
 }
@@ -766,6 +772,16 @@ simulated function EliminateStaticActor(string ActorName)
 	A.SetCollision(false);
 	A.bProjTarget = false;
 	A.DrawType = DT_None;
+}
+
+function int GetActorCollisionFlags(Actor A)
+{
+	return int(A.bCollideActors) + (int(A.bBlockActors) << 1) + (int(A.bBlockActors) << 2);
+}
+
+function SetActorCollisionWithFlags(Actor A, int CollisionFlags)
+{
+	A.SetCollision((CollisionFlags & 1) > 0, (CollisionFlags & 2) > 0, (CollisionFlags & 4) > 0);
 }
 
 static function bool StrStartsWith(coerce string S, string SubStr, bool bCaseInsensitive)
