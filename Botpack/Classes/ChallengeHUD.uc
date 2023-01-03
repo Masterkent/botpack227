@@ -412,7 +412,7 @@ simulated function DrawStatus(Canvas Canvas)
 		else
 		{
 			i++;
-			if ( i > 100 )
+			if ( i > 1000 )
 				break; // can occasionally get temporary loops in netplay
 		}
 	}
@@ -723,7 +723,7 @@ simulated function DrawWeapons(Canvas Canvas)
 				WeaponSlot[W.InventoryGroup] = W;
 		}
 		i++;
-		if ( i > 100 )
+		if ( i > 1000 )
 			break; // can occasionally get temporary loops in netplay
 	}
 	W = PawnOwner.Weapon;
@@ -1119,7 +1119,7 @@ simulated function PostRender( canvas Canvas )
 	// Display MOTD
 	if ( MOTDFadeOutTime > 0.0 )
 		DrawMOTD(Canvas);
-		 
+
 	if( !bHideHUD )
 	{
 		if ( !PawnOwner.PlayerReplicationInfo.bIsSpectator )
@@ -1129,7 +1129,7 @@ simulated function PostRender( canvas Canvas )
 			// Draw Ammo
 			if ( !bHideAmmo )
 				DrawAmmo(Canvas);
-			
+
 			// Draw Health/Armor status
 			DrawStatus(Canvas);
 
@@ -1194,7 +1194,7 @@ simulated function PostRender( canvas Canvas )
 				LastReportedTime = PlayerOwner.GameReplicationInfo.RemainingTime;
 				if ( PlayerOwner.GameReplicationInfo.RemainingTime <= 30 )
 				{
-					bTimeValid = ( bTimeValid || (PlayerOwner.GameReplicationInfo.RemainingTime > 0) );	
+					bTimeValid = ( bTimeValid || (PlayerOwner.GameReplicationInfo.RemainingTime > 0) );
 					if ( PlayerOwner.GameReplicationInfo.RemainingTime == 30 )
 						TellTime(5);
 					else if ( bTimeValid && PlayerOwner.GameReplicationInfo.RemainingTime <= 10 )
@@ -1211,7 +1211,9 @@ simulated function PostRender( canvas Canvas )
 	if ( PlayerOwner.Player.Console.bTyping )
 		DrawTypingPrompt(Canvas, PlayerOwner.Player.Console);
 
+	B227_DrawTranslator(Canvas);
 	B227_ResetUpscale(Canvas);
+	Canvas.Reset();
 
 //  [U227] Excluded
 ///	if ( PlayerOwner.bBadConnectionAlert && (PlayerOwner.Level.TimeSeconds > 5) )
@@ -1851,6 +1853,25 @@ function B227_ResetUpscale(Canvas Canvas)
 {
 	if (B227_CanvasScaleSupport > 0)
 		Canvas.PopCanvasScale();
+}
+
+function B227_DrawTranslator(Canvas Canvas)
+{
+	local Inventory Inv;
+	local Translator Translator;
+	local int i;
+
+	for (Inv = PlayerOwner.Inventory; ++i <= 1000 && Inv != none; Inv = Inv.Inventory)
+		if (Translator(Inv) != none && Translator(Inv).bCurrentlyActivated)
+		{
+			Translator = Translator(Inv);
+			if (Canvas.SizeY >= 1050)
+				Translator.TranslatorScale = FMax(3.0, Translator.TranslatorScale);
+			else if (Canvas.SizeY >= 768)
+				Translator.TranslatorScale = FMax(2.0, Translator.TranslatorScale);
+			Translator.DrawTranslator(Canvas);
+			return;
+		}
 }
 
 defaultproperties

@@ -123,7 +123,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		bSuperRelevant = 0;
 		return true;
 	}
-	if ( Other.IsA('Ammo') )
+	if (Ammo(Other) != none)
 	{
 		if ( Other.IsA('TournamentAmmo') )
 			return true;
@@ -163,7 +163,13 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		}
 		if ( Other.IsA('FlakBox') )
 		{
-			ReplaceWith( Other, "Botpack.FlakAmmo" );
+			if (Other.IsA('FlakShellAmmo'))
+			{
+				if (ReplaceWith(Other, "Botpack.B227_FlakShellAmmo") && UTC_Ammo(B227_ReplacingActor) != none)
+					B227_ReplacingActor.SetRotation(B227_ReplacingActor.Rotation + rot(16384, 0, 0));
+			}
+			else
+				ReplaceWith(Other, "Botpack.FlakAmmo");
 			return false;
 		}
 		if ( Other.IsA('Clip') )
@@ -185,11 +191,14 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		return true;
 	}
 
-	if ( Other.IsA('Pickup') )
+	if (Pickup(Other) != none)
 	{
 		if (B227_bAutoActivatePickups &&
+			!Pickup(Other).bCanHaveMultipleCopies &&
 			!Other.IsA('SCUBAGear') &&
-			!Other.IsA('UPakScubaGear'))
+			!Other.IsA('Translator') &&
+			!Other.IsA('UPakScubaGear') &&
+			!Other.IsA('VoiceBox'))
 		{
 			Pickup(Other).bAutoActivate = true;
 		}
@@ -208,7 +217,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		{
 			if (MyGame != none && MyGame.bJumpMatch)
 				return false;
-			if (ReplaceWith( Other, "Botpack.UT_JumpBoots" ) && UT_JumpBoots(B227_ReplacingActor) != none && Inventory(Other) != none)
+			if (ReplaceWith(Other, "Botpack.UT_JumpBoots") && UT_JumpBoots(B227_ReplacingActor) != none && Inventory(Other) != none)
 				UT_JumpBoots(B227_ReplacingActor).Charge = Inventory(Other).Charge;
 			return false;
 		}
@@ -225,7 +234,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 			ReplaceWith( Other, "Botpack.ThighPads");
 			return false;
 		}
-		if ( Other.IsA('SuperHealth') )
+		if (Other.Class == class'SuperHealth')
 		{
 			ReplaceWith( Other, "Botpack.HealthPack" );
 			return false;
@@ -235,7 +244,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 			ReplaceWith( Other, "Botpack.Armor2" );
 			return false;
 		}
-		if ( Other.IsA('Bandages') )
+		if (Other.Class == class'Bandages')
 		{
 			ReplaceWith( Other, "Botpack.HealthVial" );
 			return false;
