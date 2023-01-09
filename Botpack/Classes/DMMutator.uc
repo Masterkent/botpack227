@@ -195,6 +195,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	{
 		if (B227_bAutoActivatePickups &&
 			!Pickup(Other).bCanHaveMultipleCopies &&
+			!Other.IsA('ForceField') &&
 			!Other.IsA('SCUBAGear') &&
 			!Other.IsA('Translator') &&
 			!Other.IsA('UPakScubaGear') &&

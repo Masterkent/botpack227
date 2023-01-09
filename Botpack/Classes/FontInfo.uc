@@ -5,6 +5,7 @@ var float SavedWidth[7];
 var font SavedFont[7];
 
 var config bool B227_bUseTahomaFonts;
+var int B227_NoLadderFonts;
 
 var string B227_FontName_Tahoma10;
 var string B227_FontName_Tahoma12;
@@ -14,6 +15,17 @@ var string B227_FontName_Tahoma18;
 var string B227_FontName_Tahoma20;
 var string B227_FontName_Tahoma24;
 var string B227_FontName_Tahoma30;
+
+event PostBeginPlay()
+{
+	if (default.B227_NoLadderFonts < 0)
+	{
+		if (int(Level.EngineVersion) == 227 && int(Level.EngineSubVersion) == 10)
+			B227_CheckLadderFonts();
+		else
+			default.B227_NoLadderFonts = 0;
+	}
+}
 
 function font GetHugeFont(float Width)
 {
@@ -27,7 +39,7 @@ function font GetHugeFont(float Width)
 
 static function font GetStaticHugeFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts)
+	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 512)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -67,7 +79,7 @@ function font GetBigFont(float Width)
 
 static function font GetStaticBigFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts)
+	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 512)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -109,7 +121,7 @@ function font GetMediumFont(float Width)
 
 static function font GetStaticMediumFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts)
+	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 512)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -145,7 +157,7 @@ function font GetSmallFont(float Width)
 
 static function font GetStaticSmallFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts)
+	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 800)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -183,7 +195,7 @@ function font GetSmallestFont(float Width)
 
 static function font GetStaticSmallestFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts)
+	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 800)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -266,6 +278,34 @@ static function B227_SetStaticScaledSmallFont(Canvas Canvas, optional bool bAdju
 	}
 }
 
+// Check for broken 227j version of LadderFonts.utx
+function B227_CheckLadderFonts()
+{
+	local name PackageName;
+	local string FileName;
+	local string GUID;
+	local int NmCount;
+	local int ImpCount;
+	local int ExpCount;
+	local int FileSize;
+
+	foreach AllLinkers(
+		PackageName,
+		FileName,
+		GUID,
+		NmCount,
+		ImpCount,
+		ExpCount,
+		FileSize)
+	{
+		if (PackageName == 'LadderFonts')
+		{
+			default.B227_NoLadderFonts = int(FileSize == 2781435);
+			return;
+		}
+	}
+}
+
 static function Font B227_LoadTahomaFont(string FontName)
 {
 	local Font Font;
@@ -329,6 +369,7 @@ static function Font B227_LoadTahomaFont(string FontName)
 
 defaultproperties
 {
+	B227_NoLadderFonts=-1
 	B227_FontName_Tahoma10="Tahoma10"
 	B227_FontName_Tahoma12="Tahoma12"
 	B227_FontName_Tahoma14="Tahoma14"

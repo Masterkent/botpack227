@@ -923,6 +923,7 @@ event Destroyed()
 {
 	if (slavemag != none && !slavemag.bDeleteMe)
 		slavemag.Destroy();
+	super.Destroyed();
 }
 
 // End Class
