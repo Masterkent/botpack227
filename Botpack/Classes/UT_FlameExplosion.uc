@@ -3,11 +3,13 @@
 //=============================================================================
 class UT_FlameExplosion expands AnimSpriteEffect;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=textures\UT_Explosion.utx PACKAGE=Botpack.UT_Explosions
+#exec TEXTURE IMPORT NAME=ExplosionPal2 FILE=Textures\UnrealShare\exppal.pcx GROUP=Effects
+#exec AUDIO IMPORT FILE="Sounds\UnrealShare\general\expl04.wav" NAME="Expl04" GROUP="General"
 
 function MakeSound()
 {
-	PlaySound (EffectSound1,,3.0);	
+	PlaySound (EffectSound1,,3.0);
 }
 
 simulated function PostBeginPlay()

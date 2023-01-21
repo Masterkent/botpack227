@@ -1,7 +1,7 @@
 class RatedTeamInfoDemo2 expands RatedTeamInfo;
 
 // Thunder Crash
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=TLThunder FILE=textures\teamsymbols\TLThunder.PCX GROUP="TeamSymbols" MIPS=OFF
 
 defaultproperties
 {

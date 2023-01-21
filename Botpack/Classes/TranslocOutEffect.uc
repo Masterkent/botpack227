@@ -3,7 +3,7 @@
 //=============================================================================
 class TranslocOutEffect extends Effects;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=TPEffect FILE=MODELS\Teleport.PCX GROUP="Skins"
 
 simulated function PostBeginPlay()
 {

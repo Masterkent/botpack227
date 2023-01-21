@@ -3,7 +3,7 @@
 //=============================================================================
 class UT_BloodPuff extends UT_SpriteSmokePuff;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+//-#exec OBJ LOAD FILE=..\Unrealshare\textures\BloodyPuff.utx PACKAGE=UnrealShare.BloodyPuff
 
 defaultproperties
 {

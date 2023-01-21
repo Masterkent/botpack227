@@ -3,7 +3,7 @@
 //=============================================================================
 class UT_BlackSmoke extends UT_SpriteSmokePuff;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+//-#exec OBJ LOAD FILE=..\UnrealShare\textures\SmokeBlack.utx PACKAGE=UnrealShare.SmokeBlack
 
 defaultproperties
 {

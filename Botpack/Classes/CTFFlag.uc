@@ -3,7 +3,19 @@
 //=============================================================================
 class CTFFlag extends Decoration;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=pflag ANIVFILE=MODELS\pflag_a.3d DATAFILE=MODELS\pflag_d.3d X=0 Y=0 Z=0 ZEROTEX=1
+#exec MESH ORIGIN MESH=pflag X=400 Y=0 Z=0 YAW=128
+
+#exec MESH SEQUENCE MESH=pflag SEQ=All   STARTFRAME=0 NUMFRAMES=133
+#exec MESH SEQUENCE MESH=pflag SEQ=pflag STARTFRAME=0 NUMFRAMES=133
+
+#exec TEXTURE IMPORT NAME=JpflagB FILE=MODELS\N-Flag-B.PCX GROUP=Skins FLAGS=2 // twosided
+#exec TEXTURE IMPORT NAME=JpflagR FILE=MODELS\N-Flag-R.PCX GROUP=Skins FLAGS=2 // twosided
+
+#exec MESHMAP NEW   MESHMAP=pflag MESH=pflag
+#exec MESHMAP SCALE MESHMAP=pflag X=0.1 Y=0.1 Z=0.2
+
+#exec MESHMAP SETTEXTURE MESHMAP=pflag NUM=0 TEXTURE=JpflagB
 
 var byte	 	 Team;      	
 var bool bHome;

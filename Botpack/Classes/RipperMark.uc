@@ -1,6 +1,6 @@
 class RipperMark expands UnrealShare.Scorch;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=ripperblast FILE=TEXTURES\DECALS\Blast_2.PCX LODSET=2
 
 defaultproperties
 {

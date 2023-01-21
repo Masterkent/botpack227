@@ -2,9 +2,7 @@ class B227_UTSmokeTrailEmitter expands XEmitter
 	transient
 	config(Botpack);
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
-
-var config bool bAutoReduceSmokeOpacity;
+#exec OBJ LOAD FILE=textures\utSmoke.utx PACKAGE=botpack.utsmoke
 
 var float StartTimestamp;
 var float OffsetDistance;
@@ -19,8 +17,6 @@ event Tick(float DeltaTime)
 		bDisabled = false;
 
 	UpdatePosition();
-	if (bAutoReduceSmokeOpacity)
-		UpdateOpacity();
 }
 
 event FellOutOfWorld();
@@ -29,27 +25,6 @@ function UpdatePosition()
 {
 	SetLocation(Owner.Location - vector(Owner.Rotation) * OffsetDistance);
 	SetRotation(Owner.Rotation);
-}
-
-function UpdateOpacity()
-{
-	const MaxGroupingDist = 128;
-	const MaxGroupingActors = 16;
-	local B227_UTSmokeTrailEmitter OtherSmokeEmitter;
-	local float Grouping;
-	local int i;
-
-	if (Level.TimeSeconds < NextOpacityUpdateTimestamp)
-		return;
-
-	foreach RadiusActors(class'B227_UTSmokeTrailEmitter', OtherSmokeEmitter, MaxGroupingDist)
-		if (OtherSmokeEmitter.Owner != none && OtherSmokeEmitter != self && i++ < MaxGroupingActors)
-			Grouping +=
-				FMax(0, vector(Rotation) Dot vector(OtherSmokeEmitter.Rotation)) *
-				(1 - VSize(Location - OtherSmokeEmitter.Location) / MaxGroupingDist);
-	FadeInMaxAmount = default.FadeInMaxAmount * (1 + Grouping / 2) / (1 + Grouping);
-
-	NextOpacityUpdateTimestamp = Level.TimeSeconds + 0.1 * Level.TimeDilation;
 }
 
 function SetEmitterDelay(float Time)

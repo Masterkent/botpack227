@@ -3,7 +3,7 @@
 //=============================================================================
 class Razor2Alt extends Razor2;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec AUDIO IMPORT FILE="Sounds\Ripper\RazorjackAltFire.WAV" NAME="RazorAlt" GROUP="Ripper"
 
 simulated function PostBeginPlay()
 {

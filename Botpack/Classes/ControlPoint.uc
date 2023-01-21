@@ -3,15 +3,48 @@
 //=============================================================================
 class ControlPoint extends NavigationPoint;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=GoldSkin2 FILE=models\UnrealShare\gold.PCX GROUP="None"
+#exec TEXTURE IMPORT NAME=RedSkin2 FILE=MODELS\ChromR.PCX GROUP=Skins 
+#exec TEXTURE IMPORT NAME=BlueSkin2 FILE=MODELS\ChromB.PCX GROUP=Skins 
 
 // Red Team
+#exec MESH IMPORT MESH=DomR ANIVFILE=MODELS\DomR_a.3d DATAFILE=MODELS\DomR_d.3d X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=DomR X=0 Y=0 Z=0
+#exec MESH SEQUENCE MESH=DomR SEQ=All  STARTFRAME=0 NUMFRAMES=1
+#exec MESH SEQUENCE MESH=DomR SEQ=DomR STARTFRAME=0 NUMFRAMES=1
+#exec MESHMAP NEW   MESHMAP=DomR MESH=DomR
+#exec MESHMAP SCALE MESHMAP=DomR X=0.1 Y=0.1 Z=0.2
+#exec MESHMAP SETTEXTURE MESHMAP=DomR NUM=0 TEXTURE=RedSkin2
 
 // Blue Team
+#exec MESH IMPORT MESH=DomB ANIVFILE=MODELS\DomB_a.3d DATAFILE=MODELS\DomB_d.3d X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=DomB X=0 Y=0 Z=0
+#exec MESH SEQUENCE MESH=DomB SEQ=All  STARTFRAME=0 NUMFRAMES=1
+#exec MESH SEQUENCE MESH=DomB SEQ=DomB STARTFRAME=0 NUMFRAMES=1
+#exec MESHMAP NEW   MESHMAP=DomB MESH=DomB
+#exec MESHMAP SCALE MESHMAP=DomB X=0.1 Y=0.1 Z=0.2
+#exec MESHMAP SETTEXTURE MESHMAP=DomB NUM=0 TEXTURE=BlueSkin2
 
 // Gold Team
+#exec MESH IMPORT MESH=MercSymbol ANIVFILE=MODELS\MercSymbol_a.3d DATAFILE=MODELS\MercSymbol_d.3d X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=MercSymbol X=0 Y=0 Z=0
+#exec MESH SEQUENCE MESH=MercSymbol SEQ=All                      STARTFRAME=0 NUMFRAMES=1
+#exec MESH SEQUENCE MESH=MercSymbol SEQ=DomY                     STARTFRAME=0 NUMFRAMES=1
+#exec MESHMAP NEW   MESHMAP=MercSymbol MESH=MercSymbol
+#exec MESHMAP SCALE MESHMAP=MercSymbol X=0.1 Y=0.1 Z=0.2
+#exec MESHMAP SETTEXTURE MESHMAP=MercSymbol NUM=0 TEXTURE=GoldSkin2
 
 // Neutral
+#exec MESH IMPORT MESH=DomN ANIVFILE=MODELS\DomN_a.3d DATAFILE=MODELS\DomN_d.3d X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=DomN X=0 Y=0 Z=0
+#exec MESH SEQUENCE MESH=DomN SEQ=All  STARTFRAME=0 NUMFRAMES=1
+#exec MESH SEQUENCE MESH=DomN SEQ=DomN STARTFRAME=0 NUMFRAMES=1
+#exec TEXTURE IMPORT NAME=JDomN0 FILE=MODELS\ChromX.PCX GROUP=Skins
+#exec MESHMAP NEW   MESHMAP=DomN MESH=DomN
+#exec MESHMAP SCALE MESHMAP=DomN X=0.1 Y=0.1 Z=0.2
+#exec MESHMAP SETTEXTURE MESHMAP=DomN NUM=0 TEXTURE=JDomN0
+
+#exec AUDIO IMPORT FILE="Sounds\Domination\takeDP2.WAV" NAME="ControlSound" GROUP="Domination"
 
 var TeamInfo ControllingTeam;
 var Pawn Controller;
@@ -21,7 +54,7 @@ var() Name GreenEvent;
 var() Name GoldEvent;
 var() bool bSelfDisplayed;
 var() localized String PointName;
-var() Sound ControlSound;	
+var() Sound ControlSound;
 var   int ScoreTime;
 var   bool bScoreReady;
 

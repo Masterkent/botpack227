@@ -3,7 +3,12 @@
 //=============================================================================
 class RocketPack extends TournamentAmmo;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=RocketPackMesh ANIVFILE=MODELS\eightballammo_a.3D DATAFILE=MODELS\eightballammo_d.3D X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=RocketPackMesh X=0 Y=0 Z=0 ROLL=-64
+#exec MESH SEQUENCE MESH=RocketPackMesh SEQ=All    STARTFRAME=0  NUMFRAMES=1
+#exec TEXTURE IMPORT NAME=JRocketPack1 FILE=MODELS\eightballammo.PCX GROUP="Skins"
+#exec MESHMAP SCALE MESHMAP=RocketPackMesh X=0.036 Y=0.036 Z=0.072
+#exec MESHMAP SETTEXTURE MESHMAP=RocketPackMesh NUM=1 TEXTURE=JRocketPack1
 #exec TEXTURE IMPORT NAME=B227_I_RocketPack FILE=Textures\Hud\B227_i_RocketPack.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

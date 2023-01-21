@@ -4,7 +4,10 @@
 class CTFGame extends TeamGamePlus
 	config;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec AUDIO IMPORT FILE="Sounds\CTF\RockOnDude.wav" NAME="CaptureSound" GROUP="CTF"
+#exec AUDIO IMPORT FILE="Sounds\CTF\ctf9.wav" NAME="CaptureSound2" GROUP="CTF"
+#exec AUDIO IMPORT FILE="Sounds\CTF\ctf10.wav" NAME="CaptureSound3" GROUP="CTF"
+#exec AUDIO IMPORT FILE="Sounds\CTF\returnf1.wav" NAME="ReturnSound" GROUP="CTF"
 
 var() sound CaptureSound[4];
 var() sound ReturnSound;

@@ -3,7 +3,16 @@
 //=============================================================================
 class TranslocatorTarget extends B227_SyncedProjectile;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH  IMPORT MESH=Module ANIVFILE=MODELS\Transobj_a.3D DATAFILE=MODELS\Transobj_d.3D X=0 Y=0 Z=0 UNMIRROR=1
+#exec MESH ORIGIN MESH=Module X=0 Y=0 Z=-150 YAW=0 PITCH=0 ROLL=0
+#exec MESH SEQUENCE MESH=Module SEQ=All		STARTFRAME=0  NUMFRAMES=3
+#exec MESH SEQUENCE MESH=Module SEQ=Open	STARTFRAME=0  NUMFRAMES=3
+#exec TEXTURE IMPORT NAME=tloc2 FILE=MODELS\tran2.PCX GROUP="Skins" LODSET=2
+#exec MESHMAP SCALE MESHMAP=Module X=0.028 Y=0.028 Z=0.056
+#exec MESHMAP SETTEXTURE MESHMAP=Module NUM=1 TEXTURE=tloc2
+
+#exec AUDIO IMPORT FILE="Sounds\UnrealI\Krall\krasht2.wav" NAME="TDisrupt" GROUP="translocator"
+#exec AUDIO IMPORT FILE="Sounds\Pickups\ambhum3.wav" NAME="targethum" GROUP="translocator"
 
 var float Disruption, SpawnTime;
 var() float DisruptionThreshold;

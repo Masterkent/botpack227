@@ -3,7 +3,7 @@
 //=============================================================================
 class TrainingCTF extends CTFGame;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=..\Sounds\TutVoiceCTF.uax PACKAGE=TutVoiceCTF
 
 var bool bOldAutoTaunt;
 

@@ -3,7 +3,18 @@
 //=============================================================================
 class RocketMk2 extends B227_SyncedProjectile;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=UTRocket ANIVFILE=MODELS\eightballrocket_a.3D DATAFILE=MODELS\eightballrocket_d.3D X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=UTRocket X=0 Y=-250 Z=-30 YAW=-64
+
+#exec MESH SEQUENCE MESH=UTRocket SEQ=All       STARTFRAME=0   NUMFRAMES=2
+#exec MESH SEQUENCE MESH=UTRocket SEQ=Still     STARTFRAME=0   NUMFRAMES=1
+#exec MESH SEQUENCE MESH=UTRocket SEQ=Wing     STARTFRAME=1   NUMFRAMES=1
+
+#exec TEXTURE IMPORT NAME=JuRocket1 FILE=MODELS\eightballrocket.PCX LODSET=2
+#exec MESHMAP SCALE MESHMAP=UTRocket X=2.2 Y=2.2 Z=4.5 YAW=128
+#exec MESHMAP SETTEXTURE MESHMAP=UTRocket NUM=1 TEXTURE=Jurocket1
+
+#exec AUDIO IMPORT FILE="Sounds\RocketLauncher\brufly1c.Wav" NAME=RocketFly1 GROUP="RocketLauncher"
 
 var float SmokeRate;
 var bool bRing,bHitWater,bWaterStart;

@@ -3,7 +3,14 @@
 //=============================================================================
 class EnhancedRespawn expands Effects;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec AUDIO IMPORT FILE="Sounds\Pickups\item-respawn2.WAV" NAME="RespawnSound2" GROUP="Generic"
+
+#exec MESH IMPORT MESH=TeleEffect2 ANIVFILE=MODELS\telepo_a.3D DATAFILE=MODELS\telepo_d.3D X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=TeleEffect2 X=0 Y=0 Z=-200 YAW=0
+#exec MESH SEQUENCE MESH=TeleEffect2 SEQ=All  STARTFRAME=0  NUMFRAMES=30
+#exec MESH SEQUENCE MESH=TeleEffect2  SEQ=Burst  STARTFRAME=0  NUMFRAMES=30
+#exec MESHMAP SCALE MESHMAP=TeleEffect2 X=0.03 Y=0.03 Z=0.06
+#exec MESHMAP SETTEXTURE MESHMAP=TeleEffect2 NUM=0 TEXTURE=DefaultTexture
 
 simulated function BeginPlay()
 {

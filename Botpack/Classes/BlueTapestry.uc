@@ -3,7 +3,7 @@
 //=============================================================================
 class BlueTapestry extends Tapestry1;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=JTapB FILE=MODELS\Tap_blue.PCX GROUP=Skins FLAGS=2  LODSET=2
 
 defaultproperties
 {

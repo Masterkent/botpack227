@@ -1,6 +1,6 @@
 class BigEnergyImpact expands UnrealShare.Scorch;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=bigshockmark FILE=TEXTURES\DECALS\misc_burn.PCX LODSET=2
 
 defaultproperties
 {

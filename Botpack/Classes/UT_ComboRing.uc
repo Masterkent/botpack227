@@ -3,7 +3,8 @@
 //=============================================================================
 class UT_ComboRing extends UT_RingExplosion;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=pBlueRing FILE=MODELS\ring2.pcx GROUP=Effects
+#exec TEXTURE IMPORT NAME=pPurpleRing FILE=MODELS\pPurpleRing.pcx GROUP=Effects
 
 simulated function PostBeginPlay()
 {

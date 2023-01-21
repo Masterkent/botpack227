@@ -1,7 +1,7 @@
 class RatedTeamInfo1 expands RatedTeamInfo;
 
 // Iron Guard
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=TLGuard FILE=textures\teamsymbols\TLGuard.PCX GROUP="TeamSymbols" MIPS=OFF
 
 defaultproperties
 {

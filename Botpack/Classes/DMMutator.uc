@@ -8,6 +8,8 @@ class DMMutator expands UTC_Mutator
 var DeathMatchPlus MyGame;
 
 var config bool B227_bAutoActivatePickups;
+var config bool B227_bFlakShellAmmo;
+var globalconfig bool B227_bLogNonUTInventory;
 
 function PostBeginPlay()
 {
@@ -63,7 +65,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		if ( Other.IsA('TournamentWeapon') )
 			return true;
 
-		log("Found "$Other$" at "$Other.location);
+		if (B227_bLogNonUTInventory)
+			log("Found "$Other$" at "$Other.location);
 		//Assert(false);
 		if ( Other.IsA('Stinger') )
 		{
@@ -128,7 +131,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		if ( Other.IsA('TournamentAmmo') )
 			return true;
 
-		log("Found "$Other$" at "$Other.location);
+		if (B227_bLogNonUTInventory)
+			log("Found "$Other$" at "$Other.location);
 		//Assert(false);
 
 		if ( Other.IsA('ASMDAmmo') )
@@ -163,7 +167,9 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		}
 		if ( Other.IsA('FlakBox') )
 		{
-			if (Other.IsA('FlakShellAmmo'))
+			if (Other.IsA('FlakShellAmmo') &&
+				class'B227_Config'.default.bEnableExtensions &&
+				B227_bFlakShellAmmo)
 			{
 				if (ReplaceWith(Other, "Botpack.B227_FlakShellAmmo") && UTC_Ammo(B227_ReplacingActor) != none)
 					B227_ReplacingActor.SetRotation(B227_ReplacingActor.Rotation + rot(16384, 0, 0));
@@ -209,11 +215,12 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	if ( Other.IsA('TournamentHealth') )
 		return true;
 
-	log("Found "$Other$" at "$Other.location);
 	//Assert(false);
 
 	if (Pickup(Other) != none)
 	{
+		if (B227_bLogNonUTInventory)
+			log("Found "$Other$" at "$Other.location);
 		if ( Other.IsA('JumpBoots') )
 		{
 			if (MyGame != none && MyGame.bJumpMatch)
@@ -302,4 +309,6 @@ function B227_ModifyDefaultWeapon()
 defaultproperties
 {
 	B227_bAutoActivatePickups=True
+	B227_bFlakShellAmmo=True
+	B227_bLogNonUTInventory=True
 }

@@ -3,7 +3,12 @@
 //=============================================================================
 class BladeHopper extends TournamentAmmo;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=BladeHopperM ANIVFILE=MODELS\razorammo_a.3D DATAFILE=MODELS\razorammo_d.3D LODSTYLE=10
+#exec MESH ORIGIN MESH=BladeHopperM X=0 Y=0 Z=-70 YAW=0
+#exec MESH SEQUENCE MESH=BladeHopperM SEQ=All    STARTFRAME=0  NUMFRAMES=1
+#exec TEXTURE IMPORT NAME=BladeHopperT FILE=MODELS\razorammo.PCX GROUP="Skins"  LODSET=2
+#exec MESHMAP SCALE MESHMAP=BladeHopperM X=0.05 Y=0.05 Z=0.1
+#exec MESHMAP SETTEXTURE MESHMAP=BladeHopperM NUM=0 TEXTURE=BladeHopperT
 #exec TEXTURE IMPORT NAME=B227_I_BladeHopper FILE=Textures\Hud\B227_i_BladeHopper.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

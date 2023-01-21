@@ -1,7 +1,7 @@
 class RatedTeamInfo2 expands RatedTeamInfo;
 
 // Black Legion
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=TLLegion FILE=textures\teamsymbols\TLLegion.PCX GROUP="TeamSymbols" MIPS=OFF
 
 defaultproperties
 {

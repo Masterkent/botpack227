@@ -3,7 +3,7 @@
 //=============================================================================
 class RedTapestry extends Tapestry1;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=JTapR FILE=MODELS\Tap_red.PCX GROUP=Skins FLAGS=2 LODSET=2
 
 defaultproperties
 {

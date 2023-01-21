@@ -3,7 +3,15 @@
 //=============================================================================
 class ThighPads extends TournamentPickup;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=BotpackResources
+#exec MESH IMPORT MESH=ThighPads ANIVFILE=MODELS\ThighPads_a.3d DATAFILE=MODELS\ThighPads_d.3d X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=ThighPads X=0 Y=0 Z=0
+#exec MESH SEQUENCE MESH=ThighPads SEQ=All                      STARTFRAME=0 NUMFRAMES=1
+#exec MESH SEQUENCE MESH=ThighPads SEQ=sit                      STARTFRAME=0 NUMFRAMES=1
+#exec MESHMAP NEW   MESHMAP=ThighPads MESH=ThighPads
+#exec MESHMAP SCALE MESHMAP=ThighPads X=0.04 Y=0.04 Z=0.08
+#exec TEXTURE IMPORT NAME=JThighPads_01 FILE=MODELS\ThighPads1.PCX GROUP=Skins LODSET=2
+#exec MESHMAP SETTEXTURE MESHMAP=ThighPads NUM=1 TEXTURE=JThighPads_01
+#exec MESHMAP SETTEXTURE MESHMAP=ThighPads NUM=2 TEXTURE=JThighPads_01
 #exec TEXTURE IMPORT NAME=B227_I_ThighPads FILE=Textures\Hud\B227_i_ThighPads.pcx GROUP="Icons" MIPS=OFF
 
 function bool HandlePickupQuery(Inventory Item)

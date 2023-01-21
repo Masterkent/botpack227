@@ -3,7 +3,7 @@
 //=============================================================================
 class ShockProj extends B227_Projectile;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=textures\ASMDAlt.utx PACKAGE=Botpack.ASMDAlt
 
 var() Sound ExploSound;
 

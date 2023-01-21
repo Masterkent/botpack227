@@ -3,7 +3,22 @@
 //=============================================================================
 class UT_BioGel extends Projectile;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=BioGelm ANIVFILE=MODELS\UnrealShare\nGel_a.3D DATAFILE=MODELS\UnrealShare\nGel_d.3D X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=BioGelm X=-45 Y=0 Z=0 YAW=0 PITCH=-64 ROLL=0
+#exec MESH SEQUENCE MESH=BioGelm SEQ=All     STARTFRAME=0   NUMFRAMES=56
+#exec MESH SEQUENCE MESH=BioGelm SEQ=Flying  STARTFRAME=0   NUMFRAMES=13
+#exec MESH SEQUENCE MESH=BioGelm SEQ=Still   STARTFRAME=13  NUMFRAMES=1
+#exec MESH SEQUENCE MESH=BioGelm SEQ=Hit     STARTFRAME=14  NUMFRAMES=10
+#exec MESH SEQUENCE MESH=BioGelm SEQ=Drip    STARTFRAME=24  NUMFRAMES=13
+#exec MESH SEQUENCE MESH=BioGelm SEQ=Slide   STARTFRAME=37  NUMFRAMES=7
+#exec MESH SEQUENCE MESH=BioGelm SEQ=Shrivel STARTFRAME=44  NUMFRAMES=12
+#exec TEXTURE IMPORT NAME=Jgreen FILE=MODELS\green.PCX
+#exec MESHMAP SCALE MESHMAP=BioGelm X=0.04 Y=0.04 Z=0.08
+#exec MESHMAP SETTEXTURE MESHMAP=BioGelm NUM=1 TEXTURE=Jgreen
+#exec MESH NOTIFY MESH=BioGelm SEQ=Drip TIME=0.6 FUNCTION=DropDrip
+
+#exec AUDIO IMPORT FILE="Sounds\UnrealShare\general\explg02.wav" NAME="Explg02" GROUP="General"
+#exec AUDIO IMPORT FILE="Sounds\UnrealI\BRifle\GelHit1.WAV" NAME="GelHit" GROUP="BioRifle"
 
 var vector SurfaceNormal;
 var bool bOnGround;

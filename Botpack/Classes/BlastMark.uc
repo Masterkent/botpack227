@@ -1,6 +1,6 @@
 class BlastMark expands UnrealShare.Scorch;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=rocketblast FILE=TEXTURES\DECALS\Blast_1.PCX LODSET=2
 
 defaultproperties
 {

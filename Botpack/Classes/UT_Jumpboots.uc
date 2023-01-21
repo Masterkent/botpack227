@@ -3,7 +3,17 @@
 //=============================================================================
 class UT_JumpBoots extends TournamentPickup;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec AUDIO IMPORT FILE="Sounds\UnrealShare\Pickups\BOOTSA1.WAV" NAME="BootSnd" GROUP="Pickups"
+
+#exec TEXTURE IMPORT NAME=I_Boots FILE=TEXTURES\HUD\i_Boots.PCX GROUP="Icons" MIPS=OFF
+
+#exec MESH IMPORT MESH=jboot ANIVFILE=MODELS\boots_a.3D DATAFILE=MODELS\boots_d.3D
+#exec MESH ORIGIN MESH=jboot X=0 Y=0 Z=-70 YAW=64
+#exec MESH SEQUENCE MESH=jboot SEQ=All    STARTFRAME=0   NUMFRAMES=1
+#exec MESH SEQUENCE MESH=jboot SEQ=Still  STARTFRAME=0   NUMFRAMES=1
+#exec TEXTURE IMPORT NAME=Jlboot2 FILE=MODELS\boots.PCX GROUP=Skins LODSET=2
+#exec MESHMAP SCALE MESHMAP=jboot X=0.045 Y=0.045 Z=0.09
+#exec MESHMAP SETTEXTURE MESHMAP=jboot NUM=1 TEXTURE=Jlboot2
 #exec TEXTURE IMPORT NAME=B227_I_UT_JumpBoots FILE=Textures\Hud\B227_i_UT_JumpBoots.pcx GROUP="Icons" MIPS=OFF
 
 var int TimeCharge;

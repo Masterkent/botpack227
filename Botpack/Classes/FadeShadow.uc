@@ -1,6 +1,6 @@
 class FadeShadow expands Decal;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=fshadow FILE=TEXTURES\DECALS\shadow_2.PCX LODSET=2 ALPHATRICK=1
 
 var Actor LightSource;
 var Vector OldOwnerLocation;

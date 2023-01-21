@@ -3,7 +3,15 @@
 //=============================================================================
 class WarShell extends B227_Projectile;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=missile ANIVFILE=MODELS\missile_a.3d DATAFILE=MODELS\missile_d.3d LODSTYLE=2
+#exec MESH ORIGIN MESH=missile X=0 Y=0 Z=100 PITCH=192
+#exec MESH SEQUENCE MESH=missile SEQ=All                      STARTFRAME=0 NUMFRAMES=100
+#exec MESH SEQUENCE MESH=missile SEQ=missile                  STARTFRAME=0 NUMFRAMES=100
+#exec MESHMAP NEW   MESHMAP=missile MESH=missile
+#exec MESHMAP SCALE MESHMAP=missile X=0.1 Y=0.1 Z=0.2
+#exec TEXTURE IMPORT NAME=Jmissile_01 FILE=Models\missile.PCX GROUP=Skins
+#exec MESHMAP SETTEXTURE MESHMAP=missile NUM=1 TEXTURE=Jmissile_01 TLOD=30
+#exec AUDIO IMPORT FILE="Sounds\Warhead\redeemerrocketfly.wav" NAME="WarFly" GROUP=Redeemer
 
 var float CannonTimer, SmokeRate;
 var	RedeemerTrail Trail;

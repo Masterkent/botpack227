@@ -3,7 +3,13 @@
 //=============================================================================
 class Pylon extends Decoration;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=PylonM ANIVFILE=MODELS\Pylon_a.3D DATAFILE=MODELS\Pylon_d.3D X=0 Y=0 Z=0 MLOD=0
+#exec MESH ORIGIN MESH=PylonM X=0 Y=0 Z=0 YAW=64
+#exec MESH SEQUENCE MESH=PylonM SEQ=All    STARTFRAME=0   NUMFRAMES=1
+#exec MESH SEQUENCE MESH=PylonM SEQ=Still  STARTFRAME=0   NUMFRAMES=1
+#exec TEXTURE IMPORT NAME=JPylon1 FILE=MODELS\Pylon.PCX GROUP=Skins LODSET=2
+#exec MESHMAP SCALE MESHMAP=PylonM X=0.04 Y=0.04 Z=0.08
+#exec MESHMAP SETTEXTURE MESHMAP=PylonM NUM=0 TEXTURE=JPylon1
 
 var bool bFirstHit;
 

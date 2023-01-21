@@ -3,7 +3,7 @@
 //=============================================================================
 class WarExplosion2 extends WarExplosion;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=textures\WLExplo.utx PACKAGE=BotPack.WarExplosionS2
 
 defaultproperties
 {

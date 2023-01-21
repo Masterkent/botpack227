@@ -4,7 +4,10 @@
 class TournamentFemale extends TournamentPlayer
 	abstract;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=..\Sounds\FemaleSounds.uax PACKAGE=Botpack.FemaleSounds
+
+#exec TEXTURE IMPORT NAME=Woman FILE=TEXTURES\HUD\IFem2.PCX GROUP="Icons" MIPS=OFF
+#exec TEXTURE IMPORT NAME=WomanBelt FILE=TEXTURES\HUD\IFemSBelt.PCX GROUP="Icons" MIPS=OFF
 
 function PlayRightHit(float tweentime)
 {

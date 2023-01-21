@@ -4,7 +4,7 @@
 class UTHumanCarcass extends Carcass
 	abstract;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec AUDIO IMPORT FILE="Sounds\Male\gib01.WAV" NAME="NewGib" GROUP="Male"
 
 var class<UTMasterCreatureChunk> MasterReplacement;
 var() bool bGreenBlood;

@@ -4,7 +4,7 @@
 class TournamentAmmo extends UTC_Ammo
 	abstract;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec AUDIO IMPORT FILE="Sounds\Pickups\AmmoPickup_4.WAV" NAME="AmmoPick" GROUP="Pickups"
 
 defaultproperties
 {

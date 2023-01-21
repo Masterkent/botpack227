@@ -3,7 +3,12 @@
 //=============================================================================
 class StarterBolt extends PBolt;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=sbolt0 FILE=Textures\Bolt2a_00.bmp GROUP=Skins	//Translucent
+#exec TEXTURE IMPORT NAME=sbolt1 FILE=Textures\Bolt2a_01.bmp GROUP=Skins	//Translucent
+#exec TEXTURE IMPORT NAME=sbolt2 FILE=Textures\Bolt2a_02.bmp GROUP=Skins	//Translucent
+#exec TEXTURE IMPORT NAME=sbolt3 FILE=Textures\Bolt2a_03.bmp GROUP=Skins	//Translucent
+#exec TEXTURE IMPORT NAME=sbolt4 FILE=Textures\Bolt2a_04.bmp GROUP=Skins	//Translucent
+#exec MESHMAP SETTEXTURE MESHMAP=pbolt NUM=0 TEXTURE=pbolt0
 
 var float OldError, NewError, StartError, AimError; //used for bot aiming
 var rotator AimRotation;

@@ -4,7 +4,8 @@
 class TournamentMale extends TournamentPlayer
 	abstract;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=..\Sounds\Male1Voice.uax PACKAGE=Male1Voice
+#exec OBJ LOAD FILE=..\Sounds\MaleSounds.uax PACKAGE=Botpack.MaleSounds 
 
 function PlayDying(name DamageType, vector HitLoc)
 {

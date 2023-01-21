@@ -3,7 +3,7 @@
 //=============================================================================
 class VoiceMaleOne extends VoiceMale;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=..\Sounds\Male1Voice.uax PACKAGE=Male1Voice
 #exec OBJ LOAD FILE="Male1Voice.uax"
 
 function SetOtherMessage(int messageIndex, PlayerReplicationInfo Recipient, out Sound MessageSound, out Float MessageTime)

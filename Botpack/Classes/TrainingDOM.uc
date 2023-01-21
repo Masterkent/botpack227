@@ -3,7 +3,7 @@
 //=============================================================================
 class TrainingDOM extends Domination;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=..\Sounds\TutVoiceDOM.uax PACKAGE=TutVoiceDOM
 
 var bool bOldAutoTaunt;
 

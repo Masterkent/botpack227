@@ -1,7 +1,7 @@
 class RatedTeamInfo3 expands RatedTeamInfo;
 
 // Blood Reavers
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=TLReavers FILE=textures\teamsymbols\TLReavers.PCX GROUP="TeamSymbols" MIPS=OFF
 
 defaultproperties
 {

@@ -3,7 +3,15 @@
 //=============================================================================
 class UT_Grenade extends B227_SyncedProjectile;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=UTGrenade ANIVFILE=MODELS\eightballrocket_a.3D DATAFILE=MODELS\eightballrocket_d.3D X=0 Y=0 Z=0
+#exec MESH ORIGIN MESH=UTGrenade X=0 Y=0 Z=0 YAW=-64
+
+#exec MESH SEQUENCE MESH=UTGrenade SEQ=All       STARTFRAME=0   NUMFRAMES=1
+#exec MESH SEQUENCE MESH=UTGrenade SEQ=WingIn    STARTFRAME=0   NUMFRAMES=1
+
+#exec TEXTURE IMPORT NAME=JuRocket1 FILE=MODELS\eightballRocket.PCX
+#exec MESHMAP SCALE MESHMAP=UTGrenade X=2.2 Y=2.2 Z=4.3 YAW=128
+#exec MESHMAP SETTEXTURE MESHMAP=UTGrenade NUM=1 TEXTURE=JuRocket1
 
 var bool bCanHitOwner, bHitWater;
 var float Count, SmokeRate;

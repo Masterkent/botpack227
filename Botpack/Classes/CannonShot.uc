@@ -3,7 +3,14 @@
 //=============================================================================
 class CannonShot extends B227_Projectile;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=gbProj0 FILE=MODELS\UnrealI\gb_a00.pcx GROUP=Effects
+#exec TEXTURE IMPORT NAME=gbProj1 FILE=MODELS\UnrealI\gb_a01.pcx GROUP=Effects
+#exec TEXTURE IMPORT NAME=gbProj2 FILE=MODELS\UnrealI\gb_a02.pcx GROUP=Effects
+#exec TEXTURE IMPORT NAME=gbProj3 FILE=MODELS\UnrealI\gb_a03.pcx GROUP=Effects
+#exec TEXTURE IMPORT NAME=gbProj4 FILE=MODELS\UnrealI\gb_a04.pcx GROUP=Effects
+#exec TEXTURE IMPORT NAME=gbProj5 FILE=MODELS\UnrealI\gb_a05.pcx GROUP=Effects
+
+#exec AUDIO IMPORT FILE="Sounds\UnrealShare\flak\expl2.wav" NAME="expl2" GROUP="flak"
 
 var() texture SpriteAnim[6];
 var int i;

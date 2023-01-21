@@ -3,7 +3,13 @@
 //=============================================================================
 class UTTeleportEffect extends PawnTeleportEffect;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec MESH IMPORT MESH=UTTeleEffect ANIVFILE=MODELS\tele2_a.3D DATAFILE=MODELS\tele2_d.3D
+#exec MESH ORIGIN MESH=UTTeleEffect X=0 Y=0 Z=-200 YAW=64
+#exec MESH SEQUENCE MESH=UTTeleEffect SEQ=All  STARTFRAME=0  NUMFRAMES=30
+#exec MESH SEQUENCE MESH=UTTeleEffect  SEQ=Burst  STARTFRAME=0  NUMFRAMES=30
+#exec MESHMAP SCALE MESHMAP=UTTeleEffect X=0.06 Y=0.06 Z=0.16
+ 
+#exec OBJ LOAD FILE=textures\FlareFX.utx PACKAGE=Botpack.FlareFX
 
 var bool bSpawnEffects;
 var UTTeleEffect T1, T2;

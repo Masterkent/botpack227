@@ -3,7 +3,7 @@
 //=============================================================================
 class ImpactHole expands UnrealShare.Scorch;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=impactcrack FILE=TEXTURES\DECALS\ImpactMark.PCX LODSET=2
 
 defaultproperties
 {

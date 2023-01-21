@@ -3,7 +3,7 @@
 //=============================================================================
 class TrainingAS extends Assault;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=..\Sounds\TutVoiceAS.uax PACKAGE=TutVoiceAS
 #exec OBJ LOAD FILE="Announcer.uax"
 
 var string AS[13];

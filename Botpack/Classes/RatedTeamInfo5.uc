@@ -1,7 +1,7 @@
 class RatedTeamInfo5 expands RatedTeamInfo;
 
 // Venom
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=TLVenom FILE=textures\teamsymbols\TLVenom.PCX GROUP="TeamSymbols" MIPS=OFF
 
 defaultproperties
 {

@@ -1,7 +1,7 @@
 class RatedTeamInfo8 expands RatedTeamInfo;
 
 // Dark Phalanx
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=TSkaarj2 FILE=textures\teamsymbols\skaarjteam_b.pcx GROUP="TeamSymbols" MIPS=OFF
 
 defaultproperties
 {

@@ -3,7 +3,19 @@
 //=============================================================================
 class UDamage extends TournamentPickup;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec TEXTURE IMPORT NAME=I_UDamage FILE=TEXTURES\HUD\i_udamage.PCX GROUP="Icons" MIPS=OFF
+
+#exec MESH IMPORT MESH=udamage ANIVFILE=MODELS\udamage_a.3d DATAFILE=MODELS\udamage_d.3d X=0 Y=0 Z=0
+#exec MESH LODPARAMS MESH=udamage STRENGTH=0.6
+#exec MESH SEQUENCE MESH=udamage SEQ=All     STARTFRAME=0 NUMFRAMES=1
+#exec MESH SEQUENCE MESH=udamage SEQ=Udamage STARTFRAME=0 NUMFRAMES=1
+#exec MESHMAP NEW   MESHMAP=udamage MESH=udamage
+#exec MESHMAP SCALE MESHMAP=udamage X=0.05 Y=0.05 Z=0.1
+
+#exec AUDIO IMPORT FILE="Sounds\Pickups\MofSFire.WAV" NAME="AmpFire" GROUP="Pickups"
+#exec AUDIO IMPORT FILE="Sounds\Pickups\MofSPickup.WAV" NAME="AmpPickup" GROUP="Pickups"
+#exec AUDIO IMPORT FILE="Sounds\Pickups\MofSFO1.WAV" NAME="AmpOut" GROUP="Pickups"
+#exec AUDIO IMPORT FILE="Sounds\Pickups\MofSRunOut1b.WAV" NAME="AmpFire2b" GROUP="Pickups"
 
 var Weapon UDamageWeapon;
 var sound ExtraFireSound;

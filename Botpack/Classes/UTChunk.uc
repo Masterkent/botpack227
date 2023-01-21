@@ -7,7 +7,7 @@ var	chunktrail trail;
 var Texture AnimFrame[12];
 var int Count;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec OBJ LOAD FILE=textures\ChunkGlow.utx PACKAGE=Botpack.ChunkGlow
 
 	simulated function PostBeginPlay()
 	{

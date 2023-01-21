@@ -3,7 +3,8 @@
 //=============================================================================
 class FortStandard extends StationaryPawn;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+#exec AUDIO IMPORT FILE="Sounds\Domination\teleprt28.WAV" NAME="ControlSound" GROUP="Domination"
+#exec AUDIO IMPORT FILE="Sounds\Domination\uLNitro1.WAV" NAME="WarningSound" GROUP="Domination"
 
 var() bool bSelfDisplayed;
 var() bool bTriggerOnly;
