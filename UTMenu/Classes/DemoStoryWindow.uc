@@ -18,10 +18,7 @@ event Tick(float Delta)
 
 function Created()
 {
-	local int i;
 	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos;
-	local color TextColor;
 
 	Super.Created();
 
@@ -30,9 +27,6 @@ function Created()
 	bLeaveOnScreen = True;
 	bAlwaysOnTop = True;
 	class'UTLadder'.Static.SetupWinParams(Self, Root, W, H);
-
-	XMod = 4*W;
-	YMod = 3*H;
 
 	YOffset2 = WinHeight;
 
@@ -45,7 +39,7 @@ function Paint(Canvas C, float X, float Y)
 {
 	local int XOffset, YOffset;
 	local int W, H, FontSize, i;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, XL, YL, YL2, XScale, YScale;
+	local float XMod, YMod, XL, YL, YL2, XScale, YScale;
 	local float OldClipX, OldClipY, OldOrgX, OldOrgY;
 
 	class'UTLadder'.Static.SetupWinParams(Self, Root, W, H);

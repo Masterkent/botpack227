@@ -13,25 +13,24 @@ receiver=ob;
 box=messagebox(title,message,buttons,escresult,enterresult);
 box.bleaveonscreen=leaveonscreen;
 }
+
 function MessageBoxDone(UWindowMessageBox W, MessageBoxResult Result)    //idiot wants to disable oldskool.
 {
 //receiver.messageboxdone(w,result);
-  local uwindowrootwindow testroot;
-  if(Result == MR_Yes)
-  {
-    switch(W)
-    {
-    case Box:
-      testroot=uwindowrootwindow(dynamicloadobject(oldskoolrootwindow(root).SavedRoot,class'class')); //check if saved root exists.
-      if (testroot==none)
-      oldskoolrootwindow(root).savedroot="umenu.UMenuRootWindow";
-      root.console.rootwindow=oldskoolrootwindow(root).savedroot;   //set to saved one.
-      root.console.default.rootwindow=oldskoolrootwindow(root).savedroot; //allows oldskool item to work right.
-      root.console.saveconfig();
-      root.console.resetuwindow();    //reinitailize root.
-      break;
-    }
-  }
+	if (W == box && Result == MR_Yes)
+	{
+		class'oldskoolRootwindow'.default.B227_bEnabled = false;
+		//check if saved root exists.
+		if (class'oldskoolRootwindow'.default.savedroot == "" ||
+			class<UWindowRootWindow>(DynamicLoadObject(class'oldskoolRootwindow'.default.savedroot, class'class', true)) == none)
+		{
+			class'oldskoolRootwindow'.default.savedroot = "UMenu.UMenuRootWindow";
+		}
+		Root.Console.RootWindow = class'oldskoolRootwindow'.default.savedroot;   //set to saved one.
+		Root.Console.default.RootWindow = Root.Console.RootWindow; //allows oldskool item to work right.
+		Root.Console.SaveConfig();
+		Root.Console.ResetUWindow();    //reinitialize root.
+	}
 }
 //don't run these
 function BeforePaint(Canvas C, float X, float Y);

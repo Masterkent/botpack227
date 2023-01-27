@@ -26,10 +26,11 @@ function Created()
 function SetSizePos()
 {
   local float W, H;
-    if(Root.WinHeight < 400)
-    SetSize(260, Min(Root.WinHeight - 32, H + (LookAndFeel.FrameT.H + LookAndFeel.FrameB.H)));
+
+  if(Root.WinHeight < 400)
+    SetSize(B227_DesiredWinWidth(), Min(Root.WinHeight - 32, H + (LookAndFeel.FrameT.H + LookAndFeel.FrameB.H)));
   else
-    SetSize(260, Min(Root.WinHeight - 50, /*H + (LookAndFeel.FrameT.H + LookAndFeel.FrameB.H)*/480));
+    SetSize(B227_DesiredWinWidth(), Min(Root.WinHeight - 50, /*H + (LookAndFeel.FrameT.H + LookAndFeel.FrameB.H)*/480));
 
   GetDesiredDimensions(W, H);
 
@@ -45,8 +46,8 @@ function ResolutionChanged(float W, float H)
 
 function Resized()
 {
-  if(WinWidth != 260)
-    WinWidth = 260;
+  if(WinWidth != B227_DesiredWinWidth())
+    WinWidth = B227_DesiredWinWidth();
 
   Super.Resized();
 }
@@ -59,6 +60,16 @@ function HideWindow()
   p=root.createwindow(class'uwindowwindow',0,0,1,1,self); //holds this in mem.
   p.bTransient=true;
   p.sendtoback();
+}
+
+static function float B227_DesiredWinWidth()
+{
+	return 320;
+}
+
+static function float B227_ControlXOffset()
+{
+	return (B227_DesiredWinWidth() - 260.0) / 2;
 }
 
 defaultproperties

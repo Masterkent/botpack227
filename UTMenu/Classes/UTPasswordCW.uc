@@ -11,7 +11,6 @@ function Created()
 {
 	local float EditWidth;
 	local int i;
-	local Color TC;
 
 	Super.Created();
 

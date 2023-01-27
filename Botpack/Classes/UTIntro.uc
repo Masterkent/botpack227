@@ -102,18 +102,6 @@ auto state Startup
 		if(TickCount < 2)
 			return;
 
-//      [U227] Excluded
-///		if (DemoBuild == 1 && !bOpened )
-///		{
-///			for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-///			{
-///				if ( P.IsA('PlayerPawn') && (PlayerPawn(P) != None)
-///					&& (PlayerPawn(P).Player != None)
-///					&& (TournamentConsole(PlayerPawn(P).Player.Console) != None) 
-///					&& PlayerPawn(P).ProgressMessage[0] == "")
-///					TournamentConsole(PlayerPawn(P).Player.Console).LaunchUWindow();
-///			}
-///		}
 		bOpened = True;
 		Disable('Tick');
 	}

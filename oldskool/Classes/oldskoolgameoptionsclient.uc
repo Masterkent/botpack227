@@ -15,147 +15,153 @@ var int Maxbgr;
 var canvas C; //h4ck..
 
 //build menu stuff.....
-function created(){
-//local class<backrounds> TempClass;
-local string Nextbgr;
-local string Tempbgr[256];
-local string temptitles[256];
-local bool bFoundSavedbgr;
-local string NextDesc;
-local int i, selection, j;
-super.created();
-i = 0;
-backround = UWindowComboControl(CreateControl(class'UWindowComboControl', 10, 10, 210, 1));
-backround.SetButtons(True);
-backround.SetText("Background");
-backround.Align = TA_Left;
-backround.SetHelpText("Select the background you wish to have on the UT desktop");
-backround.SetFont(F_Normal);
-backround.SetEditable(False);
-//load the list of backgrounds     ripped from umenustartmatchclientwindow and edited for discription support....
-GetPlayerOwner().GetNextIntDesc("backrounds", 0, nextbgr, NextDesc);
-  while (Nextbgr != ""&&i<255)
-  {
-    Tempbgr[i] = Nextbgr;
-    Temptitles[i] = nextdesc;
-    i++;
-    GetPlayerOwner().GetNextIntDesc("backrounds", i, Nextbgr, NextDesc);
-  }
-  if (dynamicloadobject("osxbackgroundChanger.osxChanger",class'class')!=none) //must load in mem or crash will occur.
-    GetPlayerOwner().GetNextIntDesc("osxbackgroundChanger.osxChanger", 0, nextbgr, NextDesc);     //hack to get OSX backgrounds on.
-  while (Nextbgr != ""&&I<255)
-  {
-    Tempbgr[i] = Nextbgr;
-    Temptitles[i] = nextdesc;
-    i++;
-    j++;
-    GetPlayerOwner().GetNextIntDesc("osxbackgroundChanger.osxChanger", j, Nextbgr, NextDesc);
-  }
-  // Fill the control.
-  for (i=0; i<256; i++)
-  {
-    if (Tempbgr[i] != "")
-    {
-      bgrs[Maxbgr] = Tempbgr[i];
-      if ( !bFoundSavedbgr && (bgrs[Maxbgr] ~= oldskoolrootwindow(root).Backround) )
-      {
-        bFoundSavedbgr = true;
-        Selection = Maxbgr;
-      }
-      backround.AddItem(temptitles[i]);
-      Maxbgr++;
-    }
-  }
+function created()
+{
+	//local class<backrounds> TempClass;
+	local string Nextbgr;
+	local string Tempbgr[256];
+	local string temptitles[256];
+	local bool bFoundSavedbgr;
+	local string NextDesc;
+	local int i, selection, j;
+	local float ControlXOffset;
 
-backround.SetSelectedIndex(Selection);
-mutatorButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, 35, 210, 16));
-mutatorButton.SetText("SP Mutators");
-mutatorbutton.Align = TA_Left;
-mutatorButton.SetFont(F_Normal);
-mutatorButton.SetHelpText("Select to configure the mutators you wish to use in Singleplayer");
-/*decalcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 60, 210, 1));
-decalcheck.SetText("Use Decals.");
-decalcheck.SethelpText("If checked, Unreal I weapons will use decals.  Also monster projectiles will also have decals, and monster shadows will exist.");
-decalcheck.SetFont(F_Normal);
-decalcheck.Align = TA_Left;
-decalcheck.bChecked = class'Olweapons.uiweapons'.default.bUseDecals;    */
-decalcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 60, 210, 1));    //decals now blood decals.
-decalcheck.SetText("Blood Decals");
-decalcheck.SethelpText("If checked, then Unreal I creatures will have blood decals, providing that decals are on and gore is set to normal.");
-decalcheck.SetFont(F_Normal);
-decalcheck.Align = TA_Left;
-decalcheck.bChecked = class'Oldskool.spoldskool'.default.bUseDecals;
-quickmap = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 85, 210, 1));
-quickmap.SetText("Use Quickmap");
-quickmap.SethelpText("If checked, the new game window will utilitize caching, which will save a list of custom maps, reducing loading time.");
-quickmap.SetFont(F_Normal);
-quickmap.Align = TA_Left;
-quickmap.bChecked = class'olroot.oldskoolmapsclientwindow'.default.bquickmode;
-akimbocheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 110, 210, 1));
-akimbocheck.SetText("Allow Akimbo Automags");
-akimbocheck.SethelpText("Do you wish to allow two automags to be held at once in Deathmatch?");
-akimbocheck.SetFont(F_Normal);
-akimbocheck.Align = TA_Left;
-akimbocheck.bChecked = class'Olweapons.uiweapons'.default.akimbomag;
-fragicon = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 135, 210, 1));
-fragicon.SetText("UT armor rules");
-fragicon.SethelpText("If checked, you will only be able to have 150 armor on you.  If not, then you can collect as many as you want.  NOTE: THIS ONLY WORKS RIGHT IF ALL ARMOR IS SET TO UNREAL I versions.");
-fragicon.SetFont(F_Normal);
-fragicon.Align = TA_Left;
-fragicon.bChecked = class'Olweapons.uiweapons'.default.newarmorrules;
-/*skprop = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 160, 210, 1));
-skprop.SetText("Skaarj Class Properties");
-skprop.SethelpText("If checked, the skaarj trooper will have 130 health, be larger than the normal player, and be able to jump higher.");
-skprop.SetFont(F_Normal);
-skprop.Align = TA_Left;
-skprop.bChecked = class'Oldskool.skinconfiguration'.default.skaarjprop;*/
-oldhud = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 160, 210, 1));
-oldhud.SetText("Unreal I HUD in DM");
-//oldhud.SethelpText("If checked, the Unreal I HUD will be used in botmatch/multiplayer provided that OldSkool is in the mutators list.");
-oldhud.SethelpText("If checked, the Unreal I HUD will be used in botmatch/multiplayer, even on the client.   Note that this should be turned OFF when using a non-Epic gametype.");
+	super.created();
 
-oldhud.SetFont(F_Normal);
-oldhud.Align = TA_Left;
-oldhud.bChecked = oldskoolrootwindow(root).bhud;
-oldboard = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 185, 210, 1));
-oldboard.SetText("Unreal I Scoreboard in DM");
-//oldboard.SethelpText("If checked, the Unreal I Scoreboard will be used in botmatch/multiplayer provided that OldSkool is in the mutators list.");
-oldboard.SethelpText("If checked, the Unreal I Scoreboard will be used in botmatch/multiplayer, even on the client.  Note that this should be turned OFF when using a non-Epic gametype.");
-oldboard.SetFont(F_Normal);
-oldboard.Align = TA_Left;
-//oldboard.bChecked = class'Oldskool.oldskool'.default.bscorebored;   //bscoreBORED..lol ;)
-oldboard.bChecked = oldskoolrootwindow(root).bscoreboard;   //bscoreBORED..lol ;)
-pistolcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 210, 210, 1));
-pistolcheck.SetText("Random Dispersion Pistol Power-ups");
-pistolcheck.SethelpText("If checked, random dispersion powerups will be spawned in the level, in accordance with the two options below.  Do NOT use if the level already has powerups in it.");
-pistolcheck.SetFont(F_Normal);
-pistolcheck.Align = TA_Left;
-pistolcheck.bChecked = class'Oldskool.oldskool'.default.bpowerups;
-ptimeslider = UWindowEditControl(CreateControl(class'UWindowEditControl', 10, 235, 210, 1));
-ptimeslider.SetNumericOnly(True);
-ptimeslider.SetMaxLength(3);
-ptimeslider.Align = TA_Left;
-ptimeslider.SetValue(string(class'Oldskool.oldskool'.default.poweruptime));
-ptimeslider.SetText("Power-up Time");
-ptimeslider.SetHelpText("Select how long powerups will stay after spawning.  Select 0 for them to last until they are pickup up.");
-ptimeslider.SetFont(F_Normal);
-//ptimeslider.setsize(WinWidth/2.5, 1);
-pamountslider = UWindowEditControl(CreateControl(class'UWindowEditControl', 10, 260, 210, 1));
-pamountslider.SetNumericOnly(True);
-pamountslider.SetMaxLength(3);
-pamountslider.Align = TA_Left;
-//pamountslider.setsize(WinWidth/2.5, 1);
-pamountslider.SetValue(string(class'Oldskool.oldskool'.default.maxpowerups));
-pamountslider.SetText("Power-up Amount");
-pamountslider.SetHelpText("Select how many power-ups will be spawned.");
-pamountslider.SetFont(F_Normal);
-DesiredWidth = 220;
-DesiredHeight = 280;
-if (!class'Oldskool.oldskool'.default.bpowerups){
-ptimeslider.hidewindow();           //disable sliders if main option disabled.
-pamountslider.hidewindow();
-DesiredHeight = 230;}
-Initialized = True;
+	ControlXOffset = class'OldskoolConfigWindow'.static.B227_ControlXOffset();
+
+	i = 0;
+	backround = UWindowComboControl(CreateControl(class'UWindowComboControl', ControlXOffset + 10, 10, 210, 1));
+	backround.SetButtons(True);
+	backround.SetText("Background");
+	backround.Align = TA_Left;
+	backround.SetHelpText("Select the background you wish to have on the UT desktop");
+	backround.SetFont(F_Normal);
+	backround.SetEditable(False);
+	//load the list of backgrounds     ripped from umenustartmatchclientwindow and edited for discription support....
+	GetPlayerOwner().GetNextIntDesc("backrounds", 0, nextbgr, NextDesc);
+	  while (Nextbgr != ""&&i<255)
+	  {
+		Tempbgr[i] = Nextbgr;
+		Temptitles[i] = nextdesc;
+		i++;
+		GetPlayerOwner().GetNextIntDesc("backrounds", i, Nextbgr, NextDesc);
+	  }
+	  if (dynamicloadobject("osxbackgroundChanger.osxChanger",class'class')!=none) //must load in mem or crash will occur.
+		GetPlayerOwner().GetNextIntDesc("osxbackgroundChanger.osxChanger", 0, nextbgr, NextDesc);     //hack to get OSX backgrounds on.
+	  while (Nextbgr != ""&&I<255)
+	  {
+		Tempbgr[i] = Nextbgr;
+		Temptitles[i] = nextdesc;
+		i++;
+		j++;
+		GetPlayerOwner().GetNextIntDesc("osxbackgroundChanger.osxChanger", j, Nextbgr, NextDesc);
+	  }
+	  // Fill the control.
+	  for (i=0; i<256; i++)
+	  {
+		if (Tempbgr[i] != "")
+		{
+		  bgrs[Maxbgr] = Tempbgr[i];
+		  if ( !bFoundSavedbgr && (bgrs[Maxbgr] ~= oldskoolrootwindow(root).Backround) )
+		  {
+			bFoundSavedbgr = true;
+			Selection = Maxbgr;
+		  }
+		  backround.AddItem(temptitles[i]);
+		  Maxbgr++;
+		}
+	  }
+
+	backround.SetSelectedIndex(Selection);
+	mutatorButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', ControlXOffset + 10, 35, 210, 16));
+	mutatorButton.SetText("SP Mutators");
+	mutatorbutton.Align = TA_Left;
+	mutatorButton.SetFont(F_Normal);
+	mutatorButton.SetHelpText("Select to configure the mutators you wish to use in Singleplayer");
+	/*decalcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 60, 210, 1));
+	decalcheck.SetText("Use Decals.");
+	decalcheck.SethelpText("If checked, Unreal I weapons will use decals.  Also monster projectiles will also have decals, and monster shadows will exist.");
+	decalcheck.SetFont(F_Normal);
+	decalcheck.Align = TA_Left;
+	decalcheck.bChecked = class'Olweapons.uiweapons'.default.bUseDecals;    */
+	decalcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 60, 210, 1));    //decals now blood decals.
+	decalcheck.SetText("Blood Decals");
+	decalcheck.SethelpText("If checked, then Unreal I creatures will have blood decals, providing that decals are on and gore is set to normal.");
+	decalcheck.SetFont(F_Normal);
+	decalcheck.Align = TA_Left;
+	decalcheck.bChecked = class'Oldskool.spoldskool'.default.bUseDecals;
+	quickmap = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 85, 210, 1));
+	quickmap.SetText("Use Quickmap");
+	quickmap.SethelpText("If checked, the new game window will utilitize caching, which will save a list of custom maps, reducing loading time.");
+	quickmap.SetFont(F_Normal);
+	quickmap.Align = TA_Left;
+	quickmap.bChecked = class'olroot.oldskoolmapsclientwindow'.default.bquickmode;
+	akimbocheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 110, 210, 1));
+	akimbocheck.SetText("Allow Akimbo Automags");
+	akimbocheck.SethelpText("Do you wish to allow two automags to be held at once in Deathmatch?");
+	akimbocheck.SetFont(F_Normal);
+	akimbocheck.Align = TA_Left;
+	akimbocheck.bChecked = class'Olweapons.uiweapons'.default.akimbomag;
+	fragicon = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 135, 210, 1));
+	fragicon.SetText("UT armor rules");
+	fragicon.SethelpText("If checked, you will only be able to have 150 armor on you.  If not, then you can collect as many as you want.  NOTE: THIS ONLY WORKS RIGHT IF ALL ARMOR IS SET TO UNREAL I versions.");
+	fragicon.SetFont(F_Normal);
+	fragicon.Align = TA_Left;
+	fragicon.bChecked = class'Olweapons.uiweapons'.default.newarmorrules;
+	/*skprop = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 160, 210, 1));
+	skprop.SetText("Skaarj Class Properties");
+	skprop.SethelpText("If checked, the skaarj trooper will have 130 health, be larger than the normal player, and be able to jump higher.");
+	skprop.SetFont(F_Normal);
+	skprop.Align = TA_Left;
+	skprop.bChecked = class'Oldskool.skinconfiguration'.default.skaarjprop;*/
+	oldhud = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 160, 210, 1));
+	oldhud.SetText("Unreal I HUD in DM");
+	//oldhud.SethelpText("If checked, the Unreal I HUD will be used in botmatch/multiplayer provided that OldSkool is in the mutators list.");
+	oldhud.SethelpText("If checked, the Unreal I HUD will be used in botmatch/multiplayer, even on the client.   Note that this should be turned OFF when using a non-Epic gametype.");
+
+	oldhud.SetFont(F_Normal);
+	oldhud.Align = TA_Left;
+	oldhud.bChecked = oldskoolrootwindow(root).bhud;
+	oldboard = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 185, 210, 1));
+	oldboard.SetText("Unreal I Scoreboard in DM");
+	//oldboard.SethelpText("If checked, the Unreal I Scoreboard will be used in botmatch/multiplayer provided that OldSkool is in the mutators list.");
+	oldboard.SethelpText("If checked, the Unreal I Scoreboard will be used in botmatch/multiplayer, even on the client.  Note that this should be turned OFF when using a non-Epic gametype.");
+	oldboard.SetFont(F_Normal);
+	oldboard.Align = TA_Left;
+	//oldboard.bChecked = class'Oldskool.oldskool'.default.bscorebored;   //bscoreBORED..lol ;)
+	oldboard.bChecked = oldskoolrootwindow(root).bscoreboard;   //bscoreBORED..lol ;)
+	pistolcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 210, 210, 1));
+	pistolcheck.SetText("Random Dispersion Pistol Power-ups");
+	pistolcheck.SethelpText("If checked, random dispersion powerups will be spawned in the level, in accordance with the two options below.  Do NOT use if the level already has powerups in it.");
+	pistolcheck.SetFont(F_Normal);
+	pistolcheck.Align = TA_Left;
+	pistolcheck.bChecked = class'Oldskool.oldskool'.default.bpowerups;
+	ptimeslider = UWindowEditControl(CreateControl(class'UWindowEditControl', ControlXOffset + 10, 235, 210, 1));
+	ptimeslider.SetNumericOnly(True);
+	ptimeslider.SetMaxLength(3);
+	ptimeslider.Align = TA_Left;
+	ptimeslider.SetValue(string(class'Oldskool.oldskool'.default.poweruptime));
+	ptimeslider.SetText("Power-up Time");
+	ptimeslider.SetHelpText("Select how long powerups will stay after spawning.  Select 0 for them to last until they are pickup up.");
+	ptimeslider.SetFont(F_Normal);
+	//ptimeslider.setsize(WinWidth/2.5, 1);
+	pamountslider = UWindowEditControl(CreateControl(class'UWindowEditControl', ControlXOffset + 10, 260, 210, 1));
+	pamountslider.SetNumericOnly(True);
+	pamountslider.SetMaxLength(3);
+	pamountslider.Align = TA_Left;
+	//pamountslider.setsize(WinWidth/2.5, 1);
+	pamountslider.SetValue(string(class'Oldskool.oldskool'.default.maxpowerups));
+	pamountslider.SetText("Power-up Amount");
+	pamountslider.SetHelpText("Select how many power-ups will be spawned.");
+	pamountslider.SetFont(F_Normal);
+	DesiredWidth = 220;
+	DesiredHeight = 280;
+	if (!class'Oldskool.oldskool'.default.bpowerups){
+	ptimeslider.hidewindow();           //disable sliders if main option disabled.
+	pamountslider.hidewindow();
+	DesiredHeight = 230;}
+	Initialized = True;
 }
 function BeforePaint(Canvas C, float X, float Y)    //to set the stuff correctly.....
 {

@@ -12,9 +12,7 @@ var localized string SpeechBinderHelp;
 
 function Created()
 {
-	local bool bJoystick;
 	local int ControlWidth, ControlLeft, ControlRight;
-	local int CenterWidth, CenterPos;
 
 	Super.Created();
 
@@ -24,9 +22,6 @@ function Created()
 	ControlWidth = WinWidth/2.5;
 	ControlLeft = (WinWidth/2 - ControlWidth)/2;
 	ControlRight = WinWidth/2 + ControlLeft;
-
-	CenterWidth = (WinWidth/4)*3;
-	CenterPos = (WinWidth - CenterWidth)/2;
 
 	InstantRocketCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', ControlRight, ControlOffset, ControlWidth, 1));
 	InstantRocketCheck.bChecked = TournamentPlayer(GetPlayerOwner()).bInstantRocket;

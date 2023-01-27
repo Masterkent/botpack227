@@ -44,7 +44,7 @@ function bool ReplaceWith(Actor Other, string ClassName)
 {
 	local class<Actor> aClass;
 
-	if (Inventory(Other) != none && !bool(Other.Location))
+	if (Inventory(Other) != none && (!bool(Other.Location) || Pawn(Other.Owner) != none))
 		return false;
 
 	aClass = class<Actor>(DynamicLoadObject(ClassName, class'Class'));

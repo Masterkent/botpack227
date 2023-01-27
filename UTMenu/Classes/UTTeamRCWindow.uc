@@ -81,7 +81,6 @@ function Created()
 function SetupNetworkOptions()
 {
 	local int ControlWidth, ControlLeft, ControlRight;
-	local int CenterWidth, CenterPos, ButtonWidth, ButtonLeft;
 
 	// don't call UTRulesCWindow's version (force respawn)
 	Super(UMenuGameRulesBase).SetupNetworkOptions();
@@ -89,9 +88,6 @@ function SetupNetworkOptions()
 	ControlWidth = WinWidth/2.5;
 	ControlLeft = (WinWidth/2 - ControlWidth)/2;
 	ControlRight = WinWidth/2 + ControlLeft;
-
-	CenterWidth = (WinWidth/4)*3;
-	CenterPos = (WinWidth - CenterWidth)/2;
 
 	if(BotmatchParent.bNetworkGame)
 	{
@@ -136,7 +132,7 @@ function SetupNetworkOptions()
 function BeforePaint(Canvas C, float X, float Y)
 {
 	local int ControlWidth, ControlLeft, ControlRight;
-	local int CenterWidth, CenterPos, ButtonWidth, ButtonLeft;
+	local int CenterWidth, CenterPos;
 
 	Super.BeforePaint(C, X, Y);
 

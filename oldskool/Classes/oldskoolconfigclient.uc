@@ -31,68 +31,73 @@ var UWindowCheckBox item0,
 
 function Created()
 {
+  local float ControlXOffset;
+
   Super.Created();
-  item0 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 10, 210, 1));
+
+  ControlXOffset = class'OldskoolConfigWindow'.static.B227_ControlXOffset();
+
+  item0 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 10, 210, 1));
   item0.SetText("Make Default: Dispersion Pistol");
   item0.SetFont(F_Normal);
   item0.Align = TA_Left;
   item0.bChecked = class'Oldskool.oldskool'.default.bPistol;
 
-  item1 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 25, 210, 1));
+  item1 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 25, 210, 1));
   item1.SetText("Enforcer to Automag");
   item1.SetFont(F_Normal);
   item1.Align = TA_Left;
   item1.bChecked = class'Oldskool.oldskool'.default.bMag;
 
-  item2 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 40, 210, 1));
+  item2 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 40, 210, 1));
   item2.SetText("Unreal I BioRifle");
   item2.SetFont(F_Normal);
   item2.Align = TA_Left;
   item2.bChecked = class'Oldskool.oldskool'.default.bBioRifle;
 
-  item3 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 70, 210, 1));
+  item3 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 70, 210, 1));
   item3.SetText("Make ShockRifle ASMD");
   item3.SetFont(F_Normal);
   item3.Align = TA_Left;
   item3.bChecked = class'Oldskool.oldskool'.default.bASMD;
 
-  item4 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 85, 210, 1));
+  item4 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 85, 210, 1));
   item4.SetText("Make Pulse Gun Stinger");
   item4.SetFont(F_Normal);
   item4.Align = TA_Left;
   item4.bChecked = class'Oldskool.oldskool'.default.bStingy;
 
-  item5 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10,100, 210, 1));
+  item5 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10,100, 210, 1));
   item5.SetText("Make Ripper Razorjack");
   item5.SetFont(F_Normal);
   item5.Align = TA_Left;
   item5.bChecked = class'Oldskool.oldskool'.default.bRazor;
 
-  item6 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10,115, 210, 1));
+  item6 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10,115, 210, 1));
   item6.SetText("Unreal I Minigun");
   item6.SetFont(F_Normal);
   item6.Align = TA_Left;
   item6.bChecked = class'Oldskool.oldskool'.default.bmini;
 
-  item7 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 130, 210, 1));
+  item7 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 130, 210, 1));
   item7.SetText("Unreal I Flak Cannon");
   item7.SetFont(F_Normal);
   item7.Align = TA_Left;
   item7.bChecked = class'Oldskool.oldskool'.default.bFlak;
 
-  item8 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 145, 210, 1));
+  item8 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 145, 210, 1));
   item8.SetText("Make Rocket Launcher Eightball");
   item8.SetFont(F_Normal);
   item8.Align = TA_Left;
   item8.bChecked = class'Oldskool.oldskool'.default.bEball;
 
-  item9 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 160, 210, 1));
+  item9 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 160, 210, 1));
   item9.SetText("Unreal I Sniper Rifle");
   item9.SetFont(F_Normal);
   item9.Align = TA_Left;
   item9.bChecked = class'Oldskool.oldskool'.default.bRifle;
 
-  item10 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 175, 210, 1));
+  item10 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 175, 210, 1));
   item10.SetText("Chainsaw Disperion Power-up");
   item10.SetFont(F_Normal);
   item10.Align = TA_Left;
@@ -104,7 +109,7 @@ function Created()
   item11.Align = TA_Left;
   item11.bChecked = class'Oldskool.oldskool'.default.bSuperASMD;
     */
-  redeemcombo = UWindowcombocontrol(CreateControl(class'UWindowcombocontrol', 10, 190, 210, 1));
+  redeemcombo = UWindowcombocontrol(CreateControl(class'UWindowcombocontrol', ControlXOffset + 10, 190, 210, 1));
   redeemcombo.SetText("Remeemer to:");
   redeemcombo.SetHelpText("What do you want to change the redeemer into?");
   redeemCombo.SetButtons(False);
@@ -116,37 +121,37 @@ function Created()
   redeemcombo.additem("SMP");
   redeemCombo.SetSelectedIndex(class'Oldskool.oldskool'.default.redeemmode);
 
-  item13 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 205, 210, 1));
+  item13 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 205, 210, 1));
   item13.SetText("Unreal I Jumpboots");
   item13.SetFont(F_Normal);
   item13.Align = TA_Left;
   item13.bChecked = class'Oldskool.oldskool'.default.bJump;
 
-item14 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 220, 210, 1));
+item14 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 220, 210, 1));
   item14.SetText("Damage to Amplifier");
   item14.SetFont(F_Normal);
   item14.Align = TA_Left;
   item14.bChecked = class'Oldskool.oldskool'.default.bdamage;
 
-item15 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 235, 210, 1));
+item15 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 235, 210, 1));
   item15.SetText("Thigh Pad to Kevlar");
   item15.SetFont(F_Normal);
   item15.Align = TA_Left;
   item15.bChecked = class'Oldskool.oldskool'.default.bpad;
 
-item16 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 250, 210, 1));
+item16 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 250, 210, 1));
   item16.SetText("Unreal I Megahealth");
   item16.SetFont(F_Normal);
   item16.Align = TA_Left;
   item16.bChecked = class'Oldskool.oldskool'.default.bmegahealth;
 
-item17 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 265, 210, 1));
+item17 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 265, 210, 1));
   item17.SetText("Unreal I Armor");
   item17.SetFont(F_Normal);
   item17.Align = TA_Left;
   item17.bChecked = class'Oldskool.oldskool'.default.barmor;
 
-item18 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 280, 210, 1));
+item18 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 280, 210, 1));
   item18.SetText("Vial to bandage");
   item18.SetFont(F_Normal);
   item18.Align = TA_Left;
@@ -165,7 +170,7 @@ item20 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10,325, 210, 1));
   item20.Align = TA_Left;
   item20.bChecked = class'Oldskool.oldskool'.default.bpshield;  */
 
-  ShieldCombo = UWindowComboControl(CreateControl(class'UWindowComboControl', 10, 295, 210, 1));
+  ShieldCombo = UWindowComboControl(CreateControl(class'UWindowComboControl', ControlXOffset + 10, 295, 210, 1));
   ShieldCombo.SetButtons(False);
   ShieldCombo.SetText("ShieldBelt to:");
   ShieldCombo.SetHelpText("What do you want to make the shieldbelt?");
@@ -177,25 +182,25 @@ item20 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10,325, 210, 1));
   ShieldCombo.AddItem("PowerShield (200)");
   ShieldCombo.SetSelectedIndex(class'Oldskool.oldskool'.default.shieldmode);
 
-item21 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10,310, 210, 1));
+item21 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10,310, 210, 1));
   item21.SetText("Unreal I HealthPack");
   item21.SetFont(F_Normal);
   item21.Align = TA_Left;
   item21.bChecked = class'Oldskool.oldskool'.default.bmed;
 
-item22 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 325, 210, 1));
+item22 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 325, 210, 1));
   item22.SetText("Full Invisibility");
   item22.SetFont(F_Normal);
   item22.Align = TA_Left;
   item22.bChecked = class'Oldskool.oldskool'.default.binvis;
 
-item23 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 55, 210, 1));
+item23 = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 55, 210, 1));
   item23.SetText("Start off with automag");
   item23.SetFont(F_Normal);
   item23.Align = TA_Left;
   item23.bChecked = class'Oldskool.oldskool'.default.bdefauto;
 
-quadshotcombo = UWindowcombocontrol(CreateControl(class'UWindowcombocontrol', 10, 340, 210, 1));
+quadshotcombo = UWindowcombocontrol(CreateControl(class'UWindowcombocontrol', ControlXOffset + 10, 340, 210, 1));
   quadshotcombo.SetText("Weapon to Quadshot:");
   quadshotcombo.SetHelpText("What weapon should become the Quadshot?  Note that the Unreal I equivilents will also change with this option....");
   quadshotcombo.seteditable(False);
@@ -215,7 +220,7 @@ quadshotcombo = UWindowcombocontrol(CreateControl(class'UWindowcombocontrol', 10
   quadshotcombo.additem("Redeemer");
   quadshotCombo.SetSelectedIndex(class'Oldskool.oldskool'.default.quadmode);
 
-  arenacombo = UWindowcombocontrol(CreateControl(class'UWindowcombocontrol', 10, 355, 210, 1));
+  arenacombo = UWindowcombocontrol(CreateControl(class'UWindowcombocontrol', ControlXOffset + 10, 355, 210, 1));
   arenacombo.SetText("Arena:");
   arenacombo.SetHelpText("Select the weapon you wish to act as an arena.  Select No Arena for OldSkool to use all the above options.");
   arenacombo.seteditable(False);

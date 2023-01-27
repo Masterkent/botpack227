@@ -22,18 +22,12 @@ var bool ClassChanging;
 
 function Created()
 {
-	local int ControlWidth, ControlLeft, ControlRight;
 	local int CenterWidth, CenterPos;
-	local int I, Num;
 
 	Super.Created();
 
 	DesiredWidth = 220;
 	DesiredHeight = 80;
-
-	ControlWidth = WinWidth/2.5;
-	ControlLeft = (WinWidth/2 - ControlWidth)/2;
-	ControlRight = WinWidth/2 + ControlLeft;
 
 	CenterWidth = (WinWidth/4)*3;
 	CenterPos = (WinWidth - CenterWidth)/2;
@@ -165,32 +159,13 @@ function IterateVoices()
 
 function BeforePaint(Canvas C, float X, float Y)
 {
-	local float W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset, XL, YL;
-	local int ControlWidth, ControlLeft, ControlRight;
+	local float W;
 	local int CenterWidth, CenterPos;
 
 	W = Min(WinWidth, 220);
 
-	ControlWidth = W/3;
-	ControlLeft = (W/2 - ControlWidth)/2;
-	ControlRight = W/2 + ControlLeft;
-
 	CenterWidth = (W/7)*6;
 	CenterPos = (W - CenterWidth)/2;
-
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
-
 
 	Super.BeforePaint(C, X, Y);
 

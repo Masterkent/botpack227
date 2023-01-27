@@ -26,9 +26,14 @@ var bool bswaptrack;  //music bug related vars
 var float swaptime;
 //var vool cshpcheck;
 
+var bool B227_bEnabled;
+
 function Created()
 {
+  default.B227_bEnabled = true;
+
   Super(UwindowRootWindow).Created();
+
   if (ticky==None){                        //music ticker.....
   ticky=getEntryLevel().spawn (class'olroot.ticky');
   ticky.root=self;} //set me...
@@ -140,6 +145,4 @@ defaultproperties
 {
      Backround="olroot.utbackround"
      musicclass="utmenu23.utmenu23"
-     force=True
-     savedroot="umenu.UMenuRootWindow"
 }

@@ -65,9 +65,6 @@ function NextPressed()
 
 function EvaluateMatch(optional bool bTrophyVictory)
 {
-	local int Pos;
-	local string MapName;
-
 	if (LadderObj.PendingPosition > LadderObj.DOMPosition)
 	{
 		if (class'UTLadderStub'.Static.IsDemo() && LadderObj.PendingPosition > 1)

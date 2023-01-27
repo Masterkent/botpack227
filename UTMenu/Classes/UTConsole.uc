@@ -125,18 +125,19 @@ state Typing
 
 function LaunchUWindow()
 {
+	if (bShowMessage)
+	{
+		bWasShowingMessage = True;
+		Root.bIgnoreHidesNow = true; // B227: prevents calling CloseUWindow from HideMessage
+		HideMessage();
+	}
+
 	Super.LaunchUWindow();
 
 	if( !bQuickKeyEnable &&
 	    ( Left(Viewport.Actor.Level.GetLocalURL(), 9) ~= "cityintro" ||
 	      Left(Viewport.Actor.Level.GetLocalURL(), 9) ~= "utcredits") )
 		Viewport.Actor.ClientTravel( "?entry", TRAVEL_Absolute, False );
-
-	if (bShowMessage)
-	{
-		bWasShowingMessage = True;
-		HideMessage();
-	}
 }
 
 function CloseUWindow()
@@ -466,9 +467,97 @@ function PrintTimeDemoResult()
 }
 */
 
+static function B227_EvaluateMatch(WindowConsole Console, int PendingChange, bool Evaluate)
+{
+	local UTLadderStub LadderMenu;
+	local ManagerWindowStub ManagerMenu;
+	local UWindowRootWindow Root;
+
+	Root = Console.Root;
+
+	Console.LaunchUWindow();
+	Console.bNoDrawWorld = True;
+	Console.bLocked = True;
+	UMenuRootWindow(Root).MenuBar.HideWindow();
+
+	switch (PendingChange)
+	{
+		case 0:
+			ManagerMenu = ManagerWindowStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.ManagerWindowClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			break;
+		case 1:
+			LadderMenu = UTLadderStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.UTLadderDMClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			if (Evaluate)
+				LadderMenu.EvaluateMatch();
+			break;
+		case 2:
+			LadderMenu = UTLadderStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.UTLadderCTFClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			if (Evaluate)
+				LadderMenu.EvaluateMatch();
+			break;
+		case 3:
+			LadderMenu = UTLadderStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.UTLadderDOMClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			if (Evaluate)
+				LadderMenu.EvaluateMatch();
+			break;
+		case 4:
+			LadderMenu = UTLadderStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.UTLadderASClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			if (Evaluate)
+				LadderMenu.EvaluateMatch();
+			break;
+		case 5:
+			LadderMenu = UTLadderStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.UTLadderChalClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			if (Evaluate)
+				LadderMenu.EvaluateMatch();
+			break;
+		case 6:
+			LadderMenu = UTLadderStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.UTLadderDMTestClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			if (Evaluate)
+				LadderMenu.EvaluateMatch();
+			break;
+		case 7:
+			LadderMenu = UTLadderStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(default.UTLadderDOMTestClass, Class'Class')), 100, 100, 200, 200, Root, True));
+			if (Evaluate)
+				LadderMenu.EvaluateMatch();
+			break;
+	}
+}
+
+static function B227_StartNewGame(WindowConsole Console)
+{
+	local class<Info> InterimObjectClass;
+
+	Log("Starting a new game...");
+	InterimObjectClass = Class<Info>(DynamicLoadObject(default.InterimObjectType, Class'Class'));
+	Console.Root.GetPlayerOwner().Spawn(InterimObjectClass, Console.Root.GetPlayerOwner());
+}
+
+static function B227_LoadGame(WindowConsole Console)
+{
+	local PlayerPawn PlayerOwner;
+
+	PlayerOwner = Console.Root.GetPlayerOwner();
+
+	// Clear all slots.
+	PlayerOwner.PlaySound(sound'LadderSounds.ladvance', SLOT_None, 0.1);
+	PlayerOwner.PlaySound(sound'LadderSounds.ladvance', SLOT_Misc, 0.1);
+	PlayerOwner.PlaySound(sound'LadderSounds.ladvance', SLOT_Pain, 0.1);
+	PlayerOwner.PlaySound(sound'LadderSounds.ladvance', SLOT_Interact, 0.1);
+	PlayerOwner.PlaySound(sound'LadderSounds.ladvance', SLOT_Talk, 0.1);
+	PlayerOwner.PlaySound(sound'LadderSounds.ladvance', SLOT_Interface, 0.1);
+
+	// Create load game dialog.
+	Console.bNoDrawWorld = True;
+	Console.bLocked = True;
+	UMenuRootWindow(Console.Root).MenuBar.HideWindow();
+
+	// Go to the slot window.
+	Console.Root.CreateWindow(Class<UWindowWindow>(DynamicLoadObject(default.SlotWindowType, class'Class')), 100, 100, 200, 200, Console.Root, True);
+}
+
 defaultproperties
 {
-     SpeechKey=77
+     SpeechKey=86
      ManagerWindowClass="UTMenu.ManagerWindow"
      UTLadderDMClass="UTMenu.UTLadderDM"
      UTLadderCTFClass="UTMenu.UTLadderCTF"

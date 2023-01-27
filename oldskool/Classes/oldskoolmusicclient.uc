@@ -15,113 +15,119 @@ var bool initialized; //to prevent accccessed nones......
 var bool requestNoCD;  //to allaw turning off of CD trackz......
 var float nocdtimer;  //can't set a timer in Uwindows so we do it the ugly way :P
 
-function created(){
-local int i, k;
-local string musicclass, musicdesc, amount, selection;
-local bool foundmusicclass; //if we find it stop searching D:
-super.created();
-i=0; //ensure.....
-force = UWindowCheckBox(CreateControl(class'UWindowCheckBox', 10, 10, 90, 1));
-force.SetText("Force Music");
-force.SethelpText("If unchecked, the music choice will only run if there is no music in the level, a menu is running, or you select 'Play'.");
-force.SetFont(F_Normal);
-force.Align = TA_Left;
-force.bChecked = class'Olroot.oldskoolrootwindow'.default.force;
-CDcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', winwidth-95, 10, 90, 1));
-CDcheck.SetText("Use CD music");
-CDcheck.SethelpText("If checked, music will be played off a CD in the CDROM.");
-CDcheck.SetFont(F_Normal);
-CDcheck.Align = TA_Left;
-CDcheck.bChecked = bool(GetPlayerOwner().ConsoleCommand("get ini:Engine.Engine.AudioDevice UseCDMusic")); //bool needs to be run, as this stuff is saved in strings
-if (cdcheck.bchecked){
-force.bchecked=true;
-force.bdisabled=true;}
-//volume ripped from umenuaudioclient purely for convenience.....
-Volume = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', 10, 35, 210, 1));
-Volume.SetRange(0, 255, 32);
-Volume.SetValue(int(GetPlayerOwner().ConsoleCommand("get ini:Engine.Engine.AudioDevice MusicVolume")));   //saved in strings.....
-Volume.SetText(class'umenu.umenuaudioclientwindow'.default.MusicVolumeText);               //allow localization
-Volume.SetHelpText(class'umenu.umenuaudioclientwindow'.default.MusicVolumeHelp);
-Volume.SetFont(F_Normal);
-Volume.Align = TA_Left;
-musicselect = UWindowComboControl(CreateControl(class'UWindowComboControl', 10, 60, 210, 1));
-musicselect.SetButtons(false);      //option debatable......
-musicselect.SetText("Select Song");
-musicselect.Align = TA_Left;
-musicselect.SetHelpText("Select the song that you wish to have played.");
-musicselect.SetFont(F_Normal);
-musicselect.SetEditable(False);
-musicselect.editboxwidth = 150;
-GetPlayerOwner().GetNextIntDesc("engine.music", 0, musicclass, musicDesc); //load's the first one... I used engine.music as it looked good (any valid class would have worked fine)
-while (musicclass != "")      //while allows for infine amounts of songz....       (ok..10,000 actually..hardcoded into lists)
-  {
-  k = InStr(musicDesc, ",");      //search for the comma to ID the description and the amount of songs in the music...
-    if(k == -1)
-    {
-      amount=","$1;         //default to 1 track.....
-    }
-    else
-    {
-      amount = ","$Mid(musicDesc, k+1);
-      musicdesc = Left(musicDesc, k);       //split off....
-    }
-  if (!foundmusicclass&&musicclass==class'olroot.oldskoolrootwindow'.default.musicclass){
-  foundmusicclass=true;
-  selection=musicclass$amount;}
-  musicselect.AddItem(musicDesc, musicclass$amount);  //the first item will show.. second stores the class and song amount that may be called later... (not shown to user)
-  i++;
-  GetPlayerOwner().GetNextIntDesc("engine.music", i, musicclass, musicDesc);
-  }
-musicselect.sort(); //alphabatize :D
-k=musicselect.FindItemIndex2(selection, True);
-musicselect.SetSelectedIndex(Max(k, 0));   //set it as we found it above....
-Reset = UWindowSmallButton(CreateControl(class'UWindowSmallButton', 10, 83, 70, 1));
-Reset.SetText("RESET");
-Reset.SetFont(F_Bold);
-Reset.Align = TA_Left;
-Reset.SetHelpText("Reset the music to the level's default");
-reset.bdisabled=(getplayerowner().myhud.isa('oldskoolhud')); //disable if force is checked or we are in SP....
-Playbutton = playButton(CreateControl(class'playButton', winwidth-78, 83, 70, 1));
-Playbutton.SetText("");    //nothing is written as the graphic is self-explanitory...
-Playbutton.SetFont(F_Normal);
-Playbutton.Align = TA_Right;
-Playbutton.SetHelpText("Play the selected music!");
-if (!cdcheck.bchecked&&getplayerowner().myhud.isa('oldskoolhud'))
-playbutton.bdisabled=true;
-track = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', 10, 108, 210, 1));
-if (cdcheck.bchecked){             //disable and hide stuff.....
-track.SetText("CD Track");
-track.SetHelpText("Select the CD track number you wish to play");
-reset.bdisabled=true;           //can't reset if CD is playing :D
-reset.sethelptext("You cannot reset to level music while CD music is enabled");
-musicselect.hidewindow(); //don't show music if CD is checked....
-track.SetRange(1, 32, 1); } //up to 32 trackz.....
-else{ //set it as music sayz it.....
-musicdesc=musicselect.GetValue2();  //read selection amount item
-k = InStr(musicDesc, ","); //read comma
-amount = Mid(musicDesc, k+1); //read the amount....
-track.SetRange(0, INT(amount)-1, 1);
-track.SetText("Song Number");
-track.SetHelpText("Select the song number you wish to play");} //set range to amount of trackz songs have.....
-track.SetValue(class'olroot.oldskoolrootwindow'.default.track);   //what track we saved at?
-track.SetFont(F_Normal);
-track.Align = TA_Left;
-tracklabel=UMenuLabelControl(CreateWindow(class'UMenuLabelControl', 10, 121,210, 1));
-tracklabel.Align = TA_Center;
-track.SetFont(F_Bold);
-if (cdcheck.bchecked)
-tracklabel.SetText("CD Track "$string(class'olroot.oldskoolrootwindow'.default.track)$" selected");
-else
-tracklabel.SetText("Song Number "$string(class'olroot.oldskoolrootwindow'.default.track)$" selected");
-tracklabel.SethelpText("01d5k001 0wnz j00!!!!"); // :D
-If (amount=="1"){        //hide as we only have amount of one (it is set to 0 for CD's always)
-track.hidewindow();
-tracklabel.SetText("Only One Song Available");}
-if (k==-1&&!cdcheck.bchecked)//music not found in int's
-tracklabel.SetText("Level's song, "$Left(string(getplayerowner().song),InStr(string(getplayerowner().song), "."))$" has no INT reference!");
-initialized=true;
-  DesiredWidth = 220;
-  DesiredHeight = 146;
+function created()
+{
+	local int i, k;
+	local string musicclass, musicdesc, amount, selection;
+	local bool foundmusicclass; //if we find it stop searching D:
+	local float ControlXOffset;
+
+	super.created();
+
+	ControlXOffset = class'OldskoolConfigWindow'.static.B227_ControlXOffset();
+
+	i=0; //ensure.....
+	force = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 10, 10, 90, 1));
+	force.SetText("Force Music");
+	force.SethelpText("If unchecked, the music choice will only run if there is no music in the level, a menu is running, or you select 'Play'.");
+	force.SetFont(F_Normal);
+	force.Align = TA_Left;
+	force.bChecked = class'Olroot.oldskoolrootwindow'.default.force;
+	CDcheck = UWindowCheckBox(CreateControl(class'UWindowCheckBox', ControlXOffset + 192 - 95, 10, 90, 1));
+	CDcheck.SetText("Use CD music");
+	CDcheck.SethelpText("If checked, music will be played off a CD in the CDROM.");
+	CDcheck.SetFont(F_Normal);
+	CDcheck.Align = TA_Left;
+	CDcheck.bChecked = bool(GetPlayerOwner().ConsoleCommand("get ini:Engine.Engine.AudioDevice UseCDMusic")); //bool needs to be run, as this stuff is saved in strings
+	if (cdcheck.bchecked){
+	force.bchecked=true;
+	force.bdisabled=true;}
+	//volume ripped from umenuaudioclient purely for convenience.....
+	Volume = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', ControlXOffset + 10, 35, 210, 1));
+	Volume.SetRange(0, 255, 32);
+	Volume.SetValue(int(GetPlayerOwner().ConsoleCommand("get ini:Engine.Engine.AudioDevice MusicVolume")));   //saved in strings.....
+	Volume.SetText(class'umenu.umenuaudioclientwindow'.default.MusicVolumeText);               //allow localization
+	Volume.SetHelpText(class'umenu.umenuaudioclientwindow'.default.MusicVolumeHelp);
+	Volume.SetFont(F_Normal);
+	Volume.Align = TA_Left;
+	musicselect = UWindowComboControl(CreateControl(class'UWindowComboControl', ControlXOffset + 10, 60, 210, 1));
+	musicselect.SetButtons(false);      //option debatable......
+	musicselect.SetText("Select Song");
+	musicselect.Align = TA_Left;
+	musicselect.SetHelpText("Select the song that you wish to have played.");
+	musicselect.SetFont(F_Normal);
+	musicselect.SetEditable(False);
+	musicselect.editboxwidth = 150;
+	GetPlayerOwner().GetNextIntDesc("engine.music", 0, musicclass, musicDesc); //load's the first one... I used engine.music as it looked good (any valid class would have worked fine)
+	while (musicclass != "")      //while allows for infine amounts of songz....       (ok..10,000 actually..hardcoded into lists)
+	  {
+	  k = InStr(musicDesc, ",");      //search for the comma to ID the description and the amount of songs in the music...
+		if(k == -1)
+		{
+		  amount=","$1;         //default to 1 track.....
+		}
+		else
+		{
+		  amount = ","$Mid(musicDesc, k+1);
+		  musicdesc = Left(musicDesc, k);       //split off....
+		}
+	  if (!foundmusicclass&&musicclass==class'olroot.oldskoolrootwindow'.default.musicclass){
+	  foundmusicclass=true;
+	  selection=musicclass$amount;}
+	  musicselect.AddItem(musicDesc, musicclass$amount);  //the first item will show.. second stores the class and song amount that may be called later... (not shown to user)
+	  i++;
+	  GetPlayerOwner().GetNextIntDesc("engine.music", i, musicclass, musicDesc);
+	  }
+	musicselect.sort(); //alphabatize :D
+	k=musicselect.FindItemIndex2(selection, True);
+	musicselect.SetSelectedIndex(Max(k, 0));   //set it as we found it above....
+	Reset = UWindowSmallButton(CreateControl(class'UWindowSmallButton', ControlXOffset + 10, 83, 70, 1));
+	Reset.SetText("RESET");
+	Reset.SetFont(F_Bold);
+	Reset.Align = TA_Left;
+	Reset.SetHelpText("Reset the music to the level's default");
+	reset.bdisabled=(getplayerowner().myhud.isa('oldskoolhud')); //disable if force is checked or we are in SP....
+	Playbutton = playButton(CreateControl(class'playButton', ControlXOffset + 192 - 78, 83, 70, 1));
+	Playbutton.SetText("");    //nothing is written as the graphic is self-explanitory...
+	Playbutton.SetFont(F_Normal);
+	Playbutton.Align = TA_Right;
+	Playbutton.SetHelpText("Play the selected music!");
+	if (!cdcheck.bchecked&&getplayerowner().myhud.isa('oldskoolhud'))
+	playbutton.bdisabled=true;
+	track = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', ControlXOffset + 10, 108, 210, 1));
+	if (cdcheck.bchecked){             //disable and hide stuff.....
+	track.SetText("CD Track");
+	track.SetHelpText("Select the CD track number you wish to play");
+	reset.bdisabled=true;           //can't reset if CD is playing :D
+	reset.sethelptext("You cannot reset to level music while CD music is enabled");
+	musicselect.hidewindow(); //don't show music if CD is checked....
+	track.SetRange(1, 32, 1); } //up to 32 trackz.....
+	else{ //set it as music sayz it.....
+	musicdesc=musicselect.GetValue2();  //read selection amount item
+	k = InStr(musicDesc, ","); //read comma
+	amount = Mid(musicDesc, k+1); //read the amount....
+	track.SetRange(0, INT(amount)-1, 1);
+	track.SetText("Song Number");
+	track.SetHelpText("Select the song number you wish to play");} //set range to amount of trackz songs have.....
+	track.SetValue(class'olroot.oldskoolrootwindow'.default.track);   //what track we saved at?
+	track.SetFont(F_Normal);
+	track.Align = TA_Left;
+	tracklabel=UMenuLabelControl(CreateWindow(class'UMenuLabelControl', ControlXOffset + 10, 121,210, 1));
+	tracklabel.Align = TA_Center;
+	track.SetFont(F_Bold);
+	if (cdcheck.bchecked)
+	tracklabel.SetText("CD Track "$string(class'olroot.oldskoolrootwindow'.default.track)$" selected");
+	else
+	tracklabel.SetText("Song Number "$string(class'olroot.oldskoolrootwindow'.default.track)$" selected");
+	tracklabel.SethelpText("01d5k001 0wnz j00!!!!"); // :D
+	If (amount=="1"){        //hide as we only have amount of one (it is set to 0 for CD's always)
+	track.hidewindow();
+	tracklabel.SetText("Only One Song Available");}
+	if (k==-1&&!cdcheck.bchecked)//music not found in int's
+	tracklabel.SetText("Level's song, "$Left(string(getplayerowner().song),InStr(string(getplayerowner().song), "."))$" has no INT reference!");
+	initialized=true;
+	  DesiredWidth = 220;
+	  DesiredHeight = 146;
 }
 function Notify(UWindowDialogControl C, byte E)          //notifification!!1
 {

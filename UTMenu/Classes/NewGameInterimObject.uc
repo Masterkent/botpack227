@@ -8,6 +8,7 @@ function PostBeginPlay()
 {
 	local LadderInventory LadderObj;
 	local int EmptySlot, j;
+	local WindowConsole Console;
 
 	EmptySlot = -1;
 	for (j=0; j<5; j++)
@@ -18,17 +19,19 @@ function PostBeginPlay()
 		}
 	}
 
+	Console = WindowConsole(PlayerPawn(Owner).Player.Console);
+
 	if (EmptySlot < 0)
 	{
 		// Create "You must first free a slot..." dialog.
-		TournamentConsole(PlayerPawn(Owner).Player.Console).Root.CreateWindow(class'FreeSlotsWindow', 100, 100, 200, 200);
+		Console.Root.CreateWindow(class'FreeSlotsWindow', 100, 100, 200, 200);
 		return;
 	}
 
 	// Create new game dialog.
-	TournamentConsole(PlayerPawn(Owner).Player.Console).bNoDrawWorld = True;
-	TournamentConsole(PlayerPawn(Owner).Player.Console).bLocked = True;
-	UMenuRootWindow(TournamentConsole(PlayerPawn(Owner).Player.Console).Root).MenuBar.HideWindow();
+	Console.bNoDrawWorld = True;
+	Console.bLocked = True;
+	UMenuRootWindow(Console.Root).MenuBar.HideWindow();
 
 	// Make them a ladder object.
 	LadderObj = LadderInventory(PlayerPawn(Owner).FindInventoryType(class'LadderInventory'));
@@ -57,7 +60,7 @@ function PostBeginPlay()
 	Owner.PlaySound(sound'LadderSounds.ladvance', SLOT_Interface, 0.1);
 
 	// Go to the character creation screen.
-	TournamentConsole(PlayerPawn(Owner).Player.Console).Root.CreateWindow(Class<UWindowWindow>(DynamicLoadObject(GameWindowType, Class'Class')), 100, 100, 200, 200, TournamentConsole(PlayerPawn(Owner).Player.Console).Root, True);
+	Console.Root.CreateWindow(Class<UWindowWindow>(DynamicLoadObject(GameWindowType, Class'Class')), 100, 100, 200, 200, Console.Root, True);
 }
 
 defaultproperties

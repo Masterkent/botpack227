@@ -31,16 +31,12 @@ function Created()
 function BeforePaint(Canvas C, float X, float Y)
 {
 	local int ControlWidth, ControlLeft, ControlRight;
-	local int CenterWidth, CenterPos, ButtonWidth, ButtonLeft;
 
 	Super.BeforePaint(C, X, Y);
 
 	ControlWidth = WinWidth/2.5;
 	ControlLeft = (WinWidth/2 - ControlWidth)/2;
 	ControlRight = WinWidth/2 + ControlLeft;
-
-	CenterWidth = (WinWidth/4)*3;
-	CenterPos = (WinWidth - CenterWidth)/2;
 
 	if(ForceRespawnCheck != None)
 	{

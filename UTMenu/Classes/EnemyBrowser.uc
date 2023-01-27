@@ -30,8 +30,6 @@ function SetNumNames()
 function Notify(UWindowWindow B, byte E)
 {
 	local int i;
-	local string MeshName, SkinName;
-	local Class<TournamentPlayer> TournamentClass;
 
 	switch (E)
 	{

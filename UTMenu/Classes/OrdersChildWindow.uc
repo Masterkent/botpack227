@@ -10,24 +10,12 @@ var PlayerReplicationInfo TargetPRI;
 function Created()
 {
 	local int i, j;
-	local int W, H;
 	local float XMod, YMod;
-	local color TextColor;
 	local class<ChallengeVoicePack> V;
 
 	V = class<ChallengeVoicePack>(GetPlayerOwner().PlayerReplicationInfo.VoiceType);
 
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
+	B227_CalcXYMod(XMod, YMod);
 
 	CurrentType = SpeechWindow(ParentWindow).CurrentType;
 
@@ -65,24 +53,12 @@ function Created()
 
 function BeforePaint(Canvas C, float X, float Y)
 {
-	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset, BottomTop, XL, YL;
-	local color TextColor;
+	local float XWidth, YHeight, XMod, YMod;
 	local int i;
 
 	Super(NotifyWindow).BeforePaint(C, X, Y);
 
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
+	B227_CalcXYMod(XMod, YMod);
 
 	XWidth = 256.0/1024.0 * XMod;
 	YHeight = 32.0/768.0 * YMod;

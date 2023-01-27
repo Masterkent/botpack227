@@ -29,7 +29,7 @@ function AcceptInventory(pawn PlayerPawn)
 		Inv.Destroy();
 	}
 
-	TournamentConsole(PlayerPawn(PlayerPawn).Player.Console).StartNewGame();
+	class'TournamentConsole'.static.UTSF_StartNewGame(PlayerPawn(PlayerPawn).Player.Console);
 	PlayerPawn.Weapon = None;
 	PlayerPawn.SelectedItem = None;
 }

@@ -35,11 +35,13 @@ function AcceptInventory(pawn PlayerPawn)
 			if (LadderObj != None) 
 			{
 				if (LadderObj.PendingChange > 0)
-					TournamentConsole(PlayerPawn(PlayerPawn).Player.Console).EvaluateMatch(LadderObj.PendingChange, True);
+					class'TournamentConsole'.static.UTSF_EvaluateMatch(
+						PlayerPawn(PlayerPawn).Player.Console, LadderObj.PendingChange, True);
 				else
-					TournamentConsole(PlayerPawn(PlayerPawn).Player.Console).EvaluateMatch(LadderObj.LastMatchType, False);
+					class'TournamentConsole'.static.UTSF_EvaluateMatch(
+						PlayerPawn(PlayerPawn).Player.Console, LadderObj.LastMatchType, False);
 			}
-		} else {	
+		} else {
 			Inv.Destroy();
 		}
 	}

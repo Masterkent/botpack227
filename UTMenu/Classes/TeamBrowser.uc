@@ -25,8 +25,6 @@ function SetNumNames()
 function Notify(UWindowWindow B, byte E)
 {
 	local int i;
-	local string MeshName, SkinName;
-	local Class<TournamentPlayer> TournamentClass;
 
 	switch (E)
 	{
@@ -92,7 +90,6 @@ function NextPressed()
 function NameSelected(int i)
 {
 	local Class<Bot> SelectedMate;
-	local Class<RatedMatchInfo> MatchInfo;
 
 	//-MeshWindow.bRotate = False;
 	MeshWindow.FaceButton.ShowWindow();

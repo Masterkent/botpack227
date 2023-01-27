@@ -63,8 +63,6 @@ var globalconfig int DOMDoorOpen[5], CTFDoorOpen[5], ASDoorOpen[5], ChalDoorOpen
 
 function Created()
 {
-	local float Xs, Ys;
-	local int i;
 	local int W, H;
 	local float XWidth, YHeight, XMod, YMod, XPos, YPos;
 	local color TextColor;
@@ -408,9 +406,6 @@ function Created()
 
 function BeforePaint(Canvas C, float X, float Y)
 {
-	local LadderInventory LadderObj;
-	local float Xs, Ys;
-	local int i;
 	local int W, H;
 	local float XWidth, YHeight, XMod, YMod, XPos, YPos;
 
@@ -1024,29 +1019,4 @@ defaultproperties
      RankString(2)="CTF Rank:"
      RankString(3)="Assault Rank:"
      MatchesString="Matches Completed:"
-     DOMDoorOpen(0)=1
-     DOMDoorOpen(1)=1
-     DOMDoorOpen(2)=1
-     DOMDoorOpen(3)=1
-     DOMDoorOpen(4)=1
-     CTFDoorOpen(0)=1
-     CTFDoorOpen(1)=1
-     CTFDoorOpen(2)=1
-     CTFDoorOpen(3)=1
-     CTFDoorOpen(4)=1
-     ASDoorOpen(0)=1
-     ASDoorOpen(1)=1
-     ASDoorOpen(2)=1
-     ASDoorOpen(3)=1
-     ASDoorOpen(4)=1
-     ChalDoorOpen(0)=1
-     ChalDoorOpen(1)=1
-     ChalDoorOpen(2)=1
-     ChalDoorOpen(3)=1
-     ChalDoorOpen(4)=1
-     TrophyDoorOpen(0)=1
-     TrophyDoorOpen(1)=1
-     TrophyDoorOpen(2)=1
-     TrophyDoorOpen(3)=1
-     TrophyDoorOpen(4)=1
 }

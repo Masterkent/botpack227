@@ -14,24 +14,36 @@ var localized string SaveName;
 var localized string QuitText;
 var class<mappack> packclass;
 var UWindowMessageBox ConfirmQuit;
-/*-
+
 function Created()
 {
-  Super.Created();
+	Super.Created();
 
-  // Add menu items.
-  NewGame = AddMenuItem(class'utmenu.utgamemenu'.default.NewGameName, None);
-  Botmatch = AddMenuItem(class'utmenu.utgamemenu'.default.BotmatchName, None);
-  AddMenuItem("-", None);
-  NewSP = AddMenuItem(NewSPName, None);
-  Load = AddMenuItem(LoadName, None);
-  Save = AddMenuItem(SaveName, None);
-  AddMenuItem("-", None);
-  LoadGame = AddMenuItem(class'utmenu.utgamemenu'.default.LoadGameName, None);
-  ReturnToGame = AddMenuItem(class'utmenu.utgamemenu'.default.ReturnToGameName, None);
-  AddMenuItem("-", None);
-  Quit = AddMenuItem(class'utmenu.utgamemenu'.default.QuitName, None);
-
+	// Add menu items.
+	if (DynamicLoadObject("UTMenu.UTGameMenu", class'Class') != none)
+	{
+		NewGame = AddMenuItem(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu NewGameName"), None);
+		Botmatch = AddMenuItem(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu BotmatchName"), None);
+		AddMenuItem("-", None);
+		NewSP = AddMenuItem(NewSPName, None);
+		Load = AddMenuItem(LoadName, None);
+		Save = AddMenuItem(SaveName, None);
+		AddMenuItem("-", None);
+		LoadGame = AddMenuItem(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu LoadGameName"), None);
+		ReturnToGame = AddMenuItem(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu ReturnToGameName"), None);
+		AddMenuItem("-", None);
+		Quit = AddMenuItem(class'UMenu.UMenuGameMenu'.default.QuitName, None);
+	}
+	else
+	{
+		NewSP = AddMenuItem(NewSPName, None);
+		Load = AddMenuItem(LoadName, None);
+		Save = AddMenuItem(SaveName, None);
+		AddMenuItem("-", None);
+		Botmatch = AddMenuItem(class'UMenu.UMenuGameMenu'.default.BotmatchName, None);
+		AddMenuItem("-", None);
+		Quit = AddMenuItem(class'UMenu.UMenuGameMenu'.default.QuitName, None);
+	}
 }
 
 function ShowWindow()
@@ -69,7 +81,7 @@ function ExecuteItem(UWindowPulldownMenuItem I)
      AnalyzeSaves();
      break;
   case Quit:
-    ConfirmQuit = MessageBox(class'utmenu.utgamemenu'.default.QuitTitle, QuitText, MB_YesNo, MR_No, MR_Yes);
+    ConfirmQuit = MessageBox(class'UMenu.UMenuGameMenu'.default.QuitTitle, QuitText, MB_YesNo, MR_No, MR_Yes);
     break;
   case ReturnToGame:
     Root.Console.CloseUWindow();
@@ -106,13 +118,13 @@ function Select(UWindowPulldownMenuItem I)
   switch(I)
   {
   case NewGame:
-    UMenuMenuBar(GetMenuBar()).SetHelp(class'utmenu.utgamemenu'.default.NewGameHelp);
+    UMenuMenuBar(GetMenuBar()).SetHelp(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu NewGameHelp"));
     return;
   case LoadGame:
-    UMenuMenuBar(GetMenuBar()).SetHelp(class'utmenu.utgamemenu'.default.LoadGameHelp);
+    UMenuMenuBar(GetMenuBar()).SetHelp(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu LoadGameHelp"));
     return;
   case Botmatch:
-    UMenuMenuBar(GetMenuBar()).SetHelp(class'utmenu.utgamemenu'.default.BotmatchHelp);
+    UMenuMenuBar(GetMenuBar()).SetHelp(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu BotmatchHelp"));
     break;
   case NewSP:
     UMenuMenuBar(GetMenuBar()).SetHelp(NewSPHelp);
@@ -127,7 +139,7 @@ function Select(UWindowPulldownMenuItem I)
     UMenuMenuBar(GetMenuBar()).SetHelp(class'umenu.umenugamemenu'.default.QuitHelp);
     break;
   case returntogame:
-    UMenuMenuBar(GetMenuBar()).SetHelp(class'utmenu.utgamemenu'.default.returntogameHelp);
+    UMenuMenuBar(GetMenuBar()).SetHelp(GetLevel().ConsoleCommand("get UTMenu.UTGameMenu ReturnToGameHelp"));
     break;
 
   }
@@ -142,4 +154,3 @@ defaultproperties
      SaveName="&Save Current Game"
      QuitText="Select yes to return to your puny, miserable, useless real life, if you can't handle UNREALity."
 }
-*/

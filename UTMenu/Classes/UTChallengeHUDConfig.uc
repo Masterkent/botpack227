@@ -114,7 +114,7 @@ function Created()
 {
 	local int ControlWidth, ControlLeft, ControlRight;
 	local int CenterWidth, CenterPos;
-	local int I, S;
+	local int i;
 
 	Super.Created();
 

@@ -22,8 +22,7 @@ simulated function PostRender( canvas Canvas )
 		return;
 	}
 
-	//- if ( TournamentConsole(PlayerPawn(Owner).Player.Console).bShowSpeech == True )
-	if (TournamentPlayer(Owner) != none && TournamentPlayer(Owner).B227_SpeechMenu != none && TournamentPlayer(Owner).B227_SpeechMenu.bShowSpeech)
+	if (class'B227_SpeechMenu'.static.HasActiveSpeechWindow(PlayerPawn(Owner)))
 	{
 		B227_ResetUpscale(Canvas);
 		return;

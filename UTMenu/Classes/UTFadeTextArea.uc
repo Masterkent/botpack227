@@ -37,7 +37,7 @@ function BeforePaint( Canvas C, float X, float Y)
 
 function Paint( Canvas C, float X, float Y )
 {
-	local int i, j, Line;
+	local int i, Line;
 	local int TempHead, TempTail;
 	local float XL, YL;
 	local bool bNextLine;
@@ -101,7 +101,6 @@ function AddString(Canvas C, int Index)
 	local int WordBoundary, TotalPos;
 	local float W, H;
 	local float X, Y;
-	local float LineSize;
 	local bool bSentry;
 
 	S = PendingString[Index];

@@ -81,7 +81,6 @@ function MessageBoxDone(UWindowMessageBox W, MessageBoxResult Result)
 function DedicatedPressed()
 {
 	local string URL;
-	local GameInfo NewGame;
 	local string LanPlay;
 
 	if(UTServerSetupPage(UTServerSetupSC(ServerTab.Page).ClientArea).bLanPlay)

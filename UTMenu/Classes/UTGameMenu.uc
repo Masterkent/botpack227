@@ -46,9 +46,6 @@ function MessageBoxDone(UWindowMessageBox W, MessageBoxResult Result)
 
 function ExecuteItem(UWindowPulldownMenuItem I)
 {
-	local string StartMap;
-	local int EmptySlot, j;
-
 	switch(I)
 	{
 	case NewGame:

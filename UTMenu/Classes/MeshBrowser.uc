@@ -377,8 +377,8 @@ function BeforePaint(Canvas C, float X, float Y)
 function Paint(Canvas C, float X, float Y)
 {
 	local int XOffset, YOffset;
-	local int W, H, i;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos;
+	local int W, H;
+	local float XMod, YMod;
 
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 

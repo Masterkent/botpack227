@@ -19,7 +19,7 @@ function Created()
 {
 	local int i, j, Selection, BestCategory, CategoryCount;
 	local class<GameInfo> TempClass;
-	local string TempGame, NextGame;
+	local string NextGame;
 	local string TempGames[256];
 	local string NextEntry, NextCategory;
 	local string Categories[256];

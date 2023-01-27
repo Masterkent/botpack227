@@ -38,9 +38,7 @@ var byte currentkey;
 
 function Created()
 {
-	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset, BottomTop;
-	local color TextColor;
+	local float XMod, YMod;
 	local int i;
 
 	bAlwaysOnTop = True;
@@ -48,17 +46,7 @@ function Created()
 
 	Super.Created();
 
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
+	B227_CalcXYMod(XMod, YMod);
 
 	WinTop = 0;
 	WinLeft = 0;
@@ -111,24 +99,12 @@ function Created()
 
 function BeforePaint(Canvas C, float X, float Y)
 {
-	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset, BottomTop, XL, YL;
-	local color TextColor;
+	local float XWidth, YHeight, XMod, YMod, YPos;
 	local int i;
 
 	Super.BeforePaint(C, X, Y);
 
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
+	B227_CalcXYMod(XMod, YMod);
 
 	WinTop = 0;
 	WinLeft = 0;
@@ -172,22 +148,9 @@ function SlideOutWindow()
 
 function SlideInWindow()
 {
-	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset, BottomTop;
-	local color TextColor;
-	local int i;
+	local float XMod, YMod;
 
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
+	B227_CalcXYMod(XMod, YMod);
 
 	XOffset = -256.0/1024.0 * XMod;
 	bSlideIn = True;
@@ -227,22 +190,9 @@ function FadeOut()
 
 function Tick(float Delta)
 {
-	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset, BottomTop;
-	local color TextColor;
-	local int i;
+	local float XMod, YMod;
 
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
+	B227_CalcXYMod(XMod, YMod);
 
 	if (bSlideIn)
 	{
@@ -290,7 +240,6 @@ function Tick(float Delta)
 			FadeFactor = 0;
 			bFadeOut = False;
 			HideWindow();
-
 		}
 	}
 }
@@ -340,23 +289,6 @@ event bool KeyEvent( byte Key, byte Action, FLOAT Delta )
 
 function Notify(UWindowWindow B, byte E)
 {
-	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset, BottomTop;
-	local color TextColor;
-	local int i;
-
-	W = Root.WinWidth / 4;
-	H = W;
-
-	if(W > 256 || H > 256)
-	{
-		W = 256;
-		H = 256;
-	}
-
-	XMod = 4*W;
-	YMod = 3*H;
-
 	switch (E)
 	{
 		case DE_Click:
@@ -433,6 +365,14 @@ function SetButtonTextures(int i, optional bool bLeft, optional bool bRight, opt
 			}
 		}
 	}
+}
+
+function B227_CalcXYMod(out float XMod, out float YMod)
+{
+	YMod = FMin(Root.WinHeight, Root.WinWidth * 3 / 4);
+	if (YMod * Root.GUIScale > 1536)
+		YMod = 1536 / Root.GUIScale;
+	XMod = YMod * 4 / 3;
 }
 
 defaultproperties

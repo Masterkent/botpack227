@@ -89,3 +89,22 @@ function HideSpeech()
 	if (MenuWindow != none && MenuWindow.bWindowVisible)
 		MenuWindow.HideWindow();
 }
+
+static function bool HasActiveSpeechWindow(PlayerPawn Player)
+{
+	local TournamentPlayer TPlayer;
+	local TournamentConsole TConsole;
+
+	if (Player == none)
+		return false;
+
+	TPlayer = TournamentPlayer(Player);
+	if (TPlayer != none && TPlayer.B227_SpeechMenu != none && TPlayer.B227_SpeechMenu.bShowSpeech)
+		return true;
+
+	TConsole = TournamentConsole(Player.Player.Console);
+	if (TConsole != none && TConsole.bShowSpeech)
+		return true;
+
+	return false;
+}

@@ -23,7 +23,7 @@ var config bool B227_ngSecretSet;
 
 function Created()
 {
-	local int XOffset, Num;
+	local int XOffset;
 	local int CenterWidth, CenterPos;
 
 	CenterWidth = (WinWidth/4)*3;

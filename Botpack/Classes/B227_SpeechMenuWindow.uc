@@ -1,6 +1,17 @@
 class B227_SpeechMenuWindow expands UWindowWindow;
 
-#exec OBJ LOAD FILE="UTMenuSpeechResources.u" PACKAGE=Botpack.B227_Speech
+#exec TEXTURE IMPORT NAME=B227_OrdersTop FILE=Textures\B227_Speech\OrdersTop.pcx GROUP=B227_Speech MIPS=OFF
+#exec TEXTURE IMPORT NAME=B227_OrdersTop2 FILE=Textures\B227_Speech\OrdersTop2.pcx GROUP=B227_Speech MIPS=OFF
+#exec TEXTURE IMPORT NAME=B227_OrdersMid FILE=Textures\B227_Speech\Ordersmid.pcx GROUP=B227_Speech MIPS=OFF
+#exec TEXTURE IMPORT NAME=B227_OrdersMidL FILE=Textures\B227_Speech\OrdersmidL.pcx GROUP=B227_Speech MIPS=OFF
+#exec TEXTURE IMPORT NAME=B227_OrdersMidLR FILE=Textures\B227_Speech\OrdersmidLR.pcx GROUP=B227_Speech MIPS=OFF
+#exec TEXTURE IMPORT NAME=B227_OrdersMidR FILE=Textures\B227_Speech\OrdersmidR.pcx GROUP=B227_Speech MIPS=OFF
+#exec TEXTURE IMPORT NAME=B227_OrdersBtm FILE=Textures\B227_Speech\Ordersbtm.pcx GROUP=B227_Speech MIPS=OFF
+
+#exec TEXTURE IMPORT NAME=B227_OrdersTopArrow FILE=Textures\B227_Speech\OrdersTopArow.pcx GROUP=B227_Speech MIPS=OFF
+#exec TEXTURE IMPORT NAME=B227_OrdersBtmArrow FILE=Textures\B227_Speech\OrdersbtmArow.pcx GROUP=B227_Speech MIPS=OFF
+
+#exec AUDIO IMPORT NAME=B227_SpeechWindowClick FILE=Sounds\B227_Speech\SpeechWindowClick.wav GROUP=B227_Speech
 
 struct MenuButton
 {
@@ -88,6 +99,8 @@ function BeforePaint(Canvas C, float X, float Y)
 	local int PageIndex;
 
 	YMod = FMin(Root.WinHeight, Root.WinWidth * 3 / 4);
+	if (YMod * Root.GUIScale > 1536)
+		YMod = 1536 / Root.GUIScale;
 	XMod = YMod * 4 / 3;
 
 	WinWidth = Root.WinWidth;
@@ -411,7 +424,7 @@ function TargetChildPageButtonClicked(int OptionIndex)
 
 function PlayClickSound()
 {
-	GetPlayerOwner().PlaySound(sound'Botpack.B227_Speech.SpeechWindow.SpeechWindowClick', SLOT_Interact);
+	GetPlayerOwner().PlaySound(sound'B227_SpeechWindowClick', SLOT_Interact);
 }
 
 function UpdateSelectedOption(float X, float Y)
@@ -519,10 +532,10 @@ function InitPage(
 	MenuPages[PageIndex].OptionOffset = 0;
 
 	if (PageIndex == 0)
-		MenuPages[PageIndex].TopButton = MakeDecorativeButton(XMod, Texture'Botpack.B227_Speech.Skins.OrdersTop', Texture'Botpack.B227_Speech.Skins.OrdersTop');
+		MenuPages[PageIndex].TopButton = MakeDecorativeButton(XMod, Texture'B227_OrdersTop', Texture'B227_OrdersTop');
 	else
-		MenuPages[PageIndex].TopButton = MakeDecorativeButton(XMod, Texture'Botpack.B227_Speech.Skins.OrdersTop2', Texture'Botpack.B227_Speech.Skins.OrdersTop2');
-	MenuPages[PageIndex].BottomButton = MakeDecorativeButton(XMod, Texture'Botpack.B227_Speech.Skins.OrdersBtm', Texture'Botpack.B227_Speech.Skins.OrdersBtm');
+		MenuPages[PageIndex].TopButton = MakeDecorativeButton(XMod, Texture'B227_OrdersTop2', Texture'B227_OrdersTop2');
+	MenuPages[PageIndex].BottomButton = MakeDecorativeButton(XMod, Texture'B227_OrdersBtm', Texture'B227_OrdersBtm');
 
 	InitOptionButtons(PageIndex, MenuPages[PageIndex].NumOptions, XMod);
 
@@ -546,7 +559,7 @@ function InitOptionButtons(int PageIndex, int NumOptions, float XMod)
 function InitOrdersButton(int PageIndex, int Index, float XMod)
 {
 	MenuPages[PageIndex].OptionButtons[Index] =
-		MakeOptionButton(XMod, texture'Botpack.B227_Speech.Skins.OrdersMid', Index);
+		MakeOptionButton(XMod, texture'B227_OrdersMid', Index);
 }
 
 function InitMainPage()
@@ -620,9 +633,9 @@ function InitPlainChildPage()
 		}
 	}
 
-	MenuPages[1].TopButton.Texture = texture'Botpack.B227_Speech.OrdersTopArrow';
+	MenuPages[1].TopButton.Texture = texture'B227_OrdersTopArrow';
 	MenuPages[1].TopButton.WinLeft = 0;
-	MenuPages[1].BottomButton.Texture = texture'Botpack.B227_Speech.OrdersBtmArrow';
+	MenuPages[1].BottomButton.Texture = texture'B227_OrdersBtmArrow';
 	MenuPages[1].BottomButton.WinLeft = 0;
 
 	MenuPages[1].Y = (32.0/768.0 * YMod) * MenuPages[1].CurrentType;
@@ -659,9 +672,9 @@ function InitOrdersChildPage()
 	for (i = 0; i < NumOptions; i++)
 		MenuPages[1].OptionButtons[i].Text = V.Static.GetOrderString(MenuPages[1].OtherOffset[i], GetPlayerOwner().GameReplicationInfo.GameName);
 
-	MenuPages[1].TopButton.Texture = texture'Botpack.B227_Speech.OrdersTopArrow';
+	MenuPages[1].TopButton.Texture = texture'B227_OrdersTopArrow';
 	MenuPages[1].TopButton.WinLeft = 0;
-	MenuPages[1].BottomButton.Texture = texture'Botpack.B227_Speech.OrdersBtmArrow';
+	MenuPages[1].BottomButton.Texture = texture'B227_OrdersBtmArrow';
 	MenuPages[1].BottomButton.WinLeft = 0;
 
 	MenuPages[1].Y = (32.0/768.0 * YMod) * MenuPages[1].CurrentType;
@@ -687,9 +700,9 @@ function InitPhysicalChildPage()
 	for (i = 0; i < NumOptions; i++)
 		MenuPages[1].OptionButtons[i].Text = PhysicalTaunts[i];
 
-	MenuPages[1].TopButton.Texture = texture'Botpack.B227_Speech.OrdersTopArrow';
+	MenuPages[1].TopButton.Texture = texture'B227_OrdersTopArrow';
 	MenuPages[1].TopButton.WinLeft = 0;
-	MenuPages[1].BottomButton.Texture = texture'Botpack.B227_Speech.OrdersBtmArrow';
+	MenuPages[1].BottomButton.Texture = texture'B227_OrdersBtmArrow';
 	MenuPages[1].BottomButton.WinLeft = 0;
 
 	MenuPages[1].Y = (32.0/768.0 * YMod) * MenuPages[1].CurrentType;
@@ -736,9 +749,9 @@ function InitTargetChildPage()
 	MiniDisplay.WinWidth = 256.0/1024.0 * XMod;
 	MiniDisplay.WinHeight = 256.0/768.0 * YMod;
 
-	MenuPages[2].TopButton.Texture = texture'Botpack.B227_Speech.OrdersTopArrow';
+	MenuPages[2].TopButton.Texture = texture'B227_OrdersTopArrow';
 	MenuPages[2].TopButton.WinLeft = 0;
-	MenuPages[2].BottomButton.Texture = texture'Botpack.B227_Speech.OrdersBtmArrow';
+	MenuPages[2].BottomButton.Texture = texture'B227_OrdersBtmArrow';
 	MenuPages[2].BottomButton.WinLeft = 0;
 
 	MenuPages[2].Y = MenuPages[1].Y + (32.0/768.0 * YMod) * MenuPages[1].Selected;
@@ -914,14 +927,14 @@ function SetButtonTextures(
 		if (j == i)
 		{
 			if (bLeft && bRight)
-				MenuPages[PageIndex].OptionButtons[j].Texture = texture'Botpack.B227_Speech.Skins.OrdersMidLR';
+				MenuPages[PageIndex].OptionButtons[j].Texture = texture'B227_OrdersMidLR';
 			else if (bRight)
-				MenuPages[PageIndex].OptionButtons[j].Texture = texture'Botpack.B227_Speech.Skins.OrdersMidR';
+				MenuPages[PageIndex].OptionButtons[j].Texture = texture'B227_OrdersMidR';
 			else if (bLeft)
-				MenuPages[PageIndex].OptionButtons[j].Texture = texture'Botpack.B227_Speech.Skins.OrdersMidL';
+				MenuPages[PageIndex].OptionButtons[j].Texture = texture'B227_OrdersMidL';
 		}
 		else if (!(bPreserve && j == 0))
-			MenuPages[PageIndex].OptionButtons[j].Texture = texture'Botpack.B227_Speech.Skins.OrdersMid';
+			MenuPages[PageIndex].OptionButtons[j].Texture = texture'B227_OrdersMid';
 	}
 }
 

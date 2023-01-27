@@ -41,7 +41,6 @@ var AssaultInfo AI;
 
 function Created()
 {
-	local class<Bot> InitialMate;
 	local int i;
 	local int W, H;
 	local float XWidth, YHeight, XMod, YMod, XPos, YPos, YOffset;

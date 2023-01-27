@@ -80,9 +80,6 @@ function StartMap(string StartMap, int Rung, string GameType)
 
 function EvaluateMatch(optional bool bTrophyVictory)
 {
-	local int Pos;
-	local string MapName;
-
 	if (LadderObj.PendingPosition > LadderObj.DMPosition)
 	{
 		if (class'UTLadderStub'.Static.IsDemo() && LadderObj.PendingPosition > 4)

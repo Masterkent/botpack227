@@ -119,7 +119,7 @@ function Created()
 
 function SetSaveText(int i, Canvas C)
 {
-	local string Temp, Sex, Name;
+	local string Temp, Name;
 	local int Pos, DMRank, DOMRank, CTFRank, ASRank, ChalRank, AvgRank;
 	local int DMPosition, DOMPosition, CTFPosition, ASPosition, ChalPosition, TotPosition;
 	local float XL, YL;
@@ -378,7 +378,6 @@ function Paint(Canvas C, float X, float Y)
 
 function Notify(UWindowWindow B, byte E)
 {
-	local LadderInventory LadderObj;
 	local int i;
 
 	switch (E)
@@ -432,7 +431,7 @@ function RestoreGame(int i)
 	local LadderInventory LadderObj;
 	local string Temp, Name, PlayerSkin;
 	local Class<TournamentPlayer> PlayerClass;
-	local int Pos, Team, j, Face;
+	local int Pos, Team, Face;
 
 	if (Saves[i] == "")
 		return;
@@ -551,8 +550,7 @@ function RestoreGame(int i)
 
 function IterateFaces(string InSkinName, string MeshName)
 {
-	local string SkinName, SkinDesc, TestName, Temp, FaceName;
-	local bool bNewFormat;
+	local string SkinName, SkinDesc, TestName, Temp;
 	local int i, Pos;
 
 	for (i=0; i<16; i++)
@@ -604,11 +602,6 @@ defaultproperties
      BGName3(2)="UTMenu.Save33"
      BGName3(3)="UTMenu.Save34"
      EmptyText="UNUSED"
-     Saves(0)="7\0\6\13\6\9\6\9\6\6\6\3\M\3\MK"
-     Saves(1)="7\0\6\13\6\9\6\9\6\6\6\3\M\3\Kent"
-     Saves(2)="7\0\6\13\6\9\6\9\6\6\6\3\M\0\Player"
-     Saves(3)="7\0\6\13\6\9\6\9\6\6\6\3\M\3\MK"
-     Saves(4)="7\0\6\13\6\9\6\9\6\6\6\3\M\3\MK"
      AvgRankStr="Average Rank:"
      CompletedStr="Matches Won:"
 }

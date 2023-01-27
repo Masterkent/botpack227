@@ -88,16 +88,12 @@ function Created()
 function SetupNetworkOptions()
 {
 	local int ControlWidth, ControlLeft, ControlRight;
-	local int CenterWidth, CenterPos, ButtonWidth, ButtonLeft;
 
 	Super.SetupNetworkOptions();
 
 	ControlWidth = WinWidth/2.5;
 	ControlLeft = (WinWidth/2 - ControlWidth)/2;
 	ControlRight = WinWidth/2 + ControlLeft;
-
-	CenterWidth = (WinWidth/4)*3;
-	CenterPos = (WinWidth - CenterWidth)/2;
 
 	if(BotmatchParent.bNetworkGame && !ClassIsChildOf( BotmatchParent.GameClass, class'LastManStanding'))
 	{
@@ -177,16 +173,12 @@ function B227_BeforePaint(Canvas C, float X, float Y)
 function BeforePaint(Canvas C, float X, float Y)
 {
 	local int ControlWidth, ControlLeft, ControlRight;
-	local int CenterWidth, CenterPos, ButtonWidth, ButtonLeft;
 
 	B227_BeforePaint(C, X, Y);
 
 	ControlWidth = WinWidth/2.5;
 	ControlLeft = (WinWidth/2 - ControlWidth)/2;
 	ControlRight = WinWidth/2 + ControlLeft;
-
-	CenterWidth = (WinWidth/4)*3;
-	CenterPos = (WinWidth - CenterWidth)/2;
 
 	TourneyCheck.SetSize(ControlWidth, 1);
 	TourneyCheck.WinLeft = ControlRight;

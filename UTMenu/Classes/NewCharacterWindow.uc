@@ -73,8 +73,6 @@ var float FlashTime;
 
 function Created()
 {
-	local string MeshName, SkinDesc, Temp;
-	local int i;
 	local int W, H;
 	local float XWidth, YHeight, XMod, YMod, XPos, YPos;
 	local color TextColor;
@@ -508,7 +506,6 @@ function Created()
 
 function BeforePaint(Canvas C, float X, float Y)
 {
-	local int i;
 	local int W, H;
 	local float XWidth, YHeight, XMod, YMod, XPos, YPos;
 
@@ -735,7 +732,7 @@ function Paint(Canvas C, float X, float Y)
 {
 	local int XOffset, YOffset;
 	local int W, H;
-	local float XWidth, YHeight, XMod, YMod, XPos, YPos;
+	local float XMod, YMod;
 
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 
@@ -997,7 +994,6 @@ function BackPressed()
 
 function NextPressed()
 {
-	local int i;
 	local ManagerWindow ManagerWindow;
 
 	if (LadderObj.Sex ~= "F")
@@ -1044,8 +1040,7 @@ function HideWindow()
 
 function IterateFaces(string InSkinName, string MeshName)
 {
-	local string SkinName, SkinDesc, TestName, Temp, FaceName;
-	local bool bNewFormat;
+	local string SkinName, SkinDesc, TestName, Temp;
 	local int i, Pos;
 
 	for (i=0; i<16; i++)

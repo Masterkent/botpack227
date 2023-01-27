@@ -301,7 +301,6 @@ function IterateVoices()
 function LoadCurrent()
 {
 	local int i;
-	local string Voice;
 
 	NameEdit.SetValue(BotInfo.GetBotName(ConfigureBot));
 	i = TeamCombo.FindItemIndex2(string(BotInfo.BotTeams[ConfigureBot]));

@@ -43,6 +43,8 @@ function Paint(Canvas C, float X, float Y)
 			HUDColor.B *= 15.9;
 		}
 	}
+	else
+		C.Style = 3;
 	C.DrawColor = HUDColor;
 	if (MouseIsOver() && bHighlightButton)
 	{

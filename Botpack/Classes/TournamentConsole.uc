@@ -84,6 +84,49 @@ function PrintActionMessage( Canvas C, string BigMessage )
 	C.DrawText( BigMessage, false );
 }
 
+
+static function UTSF_EvaluateMatch(Console Console, int PendingChange, bool Evaluate)
+{
+	local class<TournamentConsole> UTConsoleClass;
+
+	if (TournamentConsole(Console) != none)
+		TournamentConsole(Console).EvaluateMatch(PendingChange, Evaluate);
+	else if (WindowConsole(Console) != none)
+	{
+		UTConsoleClass = class<TournamentConsole>(DynamicLoadObject("UTMenu.UTConsole", class'Class'));
+		if (UTConsoleClass != none)
+			UTConsoleClass.static.B227_EvaluateMatch(WindowConsole(Console), PendingChange, Evaluate);
+	}
+}
+
+static function UTSF_StartNewGame(Console Console)
+{
+	local class<TournamentConsole> UTConsoleClass;
+
+	if (TournamentConsole(Console) != none)
+		TournamentConsole(Console).StartNewGame();
+	else if (WindowConsole(Console) != none)
+	{
+		UTConsoleClass = class<TournamentConsole>(DynamicLoadObject("UTMenu.UTConsole", class'Class'));
+		if (UTConsoleClass != none)
+			UTConsoleClass.static.B227_StartNewGame(WindowConsole(Console));
+	}
+}
+
+static function UTSF_LoadGame(Console Console)
+{
+	local class<TournamentConsole> UTConsoleClass;
+
+	if (TournamentConsole(Console) != none)
+		TournamentConsole(Console).LoadGame();
+	else if (WindowConsole(Console) != none)
+	{
+		UTConsoleClass = class<TournamentConsole>(DynamicLoadObject("UTMenu.UTConsole", class'Class'));
+		if (UTConsoleClass != none)
+			UTConsoleClass.static.B227_LoadGame(WindowConsole(Console));
+	}
+}
+
 static function UTSF_ShowMessage(Console Console)
 {
 	local B227_MessageOverlay MessageOverlay;
@@ -125,6 +168,11 @@ static function UTSF_AddMessage(Console Console, string NewMessage)
 			MessageOverlay.AddMessage(NewMessage);
 	}
 }
+
+
+static function B227_EvaluateMatch(WindowConsole Console, int PendingChange, bool Evaluate);
+static function B227_StartNewGame(WindowConsole Console);
+static function B227_LoadGame(WindowConsole Console);
 
 defaultproperties
 {

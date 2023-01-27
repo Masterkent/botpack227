@@ -49,7 +49,7 @@ function Created()
 function BeforePaint(Canvas C, float X, float Y)
 {
 	local int ControlWidth, ControlLeft, ControlRight;
-	local int CenterWidth, CenterPos, ButtonWidth, ButtonLeft;
+	local int CenterWidth, CenterPos;
 
 	Super.BeforePaint(C, X, Y);
 

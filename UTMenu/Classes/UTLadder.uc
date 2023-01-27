@@ -3,6 +3,7 @@ class UTLadder extends UTLadderStub
 
 // Ladder
 #exec OBJ LOAD FILE="UTMenuResources.u" PACKAGE=UTMenu
+#exec OBJ LOAD FILE="LadrArrow.utx"
 
 // Arrows
 
@@ -843,18 +844,18 @@ function NextPressed()
 
 defaultproperties
 {
-     BGName1(0)="UTMenu.Ladr11"
-     BGName1(1)="UTMenu.Ladr12"
-     BGName1(2)="UTMenu.Ladr13"
-     BGName1(3)="UTMenu.Ladr14"
-     BGName2(0)="UTMenu.Ladr21"
-     BGName2(1)="UTMenu.Ladr22"
-     BGName2(2)="UTMenu.Ladr23"
-     BGName2(3)="UTMenu.Ladr24"
-     BGName3(0)="UTMenu.Ladr31"
-     BGName3(1)="UTMenu.Ladr32"
-     BGName3(2)="UTMenu.Ladr33"
-     BGName3(3)="UTMenu.Ladr34"
+     BGName1(0)="UTMenu.Skins.Ladr11"
+     BGName1(1)="UTMenu.Skins.Ladr12"
+     BGName1(2)="UTMenu.Skins.Ladr13"
+     BGName1(3)="UTMenu.Skins.Ladr14"
+     BGName2(0)="UTMenu.Skins.Ladr21"
+     BGName2(1)="UTMenu.Skins.Ladr22"
+     BGName2(2)="UTMenu.Skins.Ladr23"
+     BGName2(3)="UTMenu.Skins.Ladr24"
+     BGName3(0)="UTMenu.Skins.Ladr31"
+     BGName3(1)="UTMenu.Skins.Ladr32"
+     BGName3(2)="UTMenu.Skins.Ladr33"
+     BGName3(3)="UTMenu.Skins.Ladr34"
      ArrowTex=Texture'LadrArrow.LadrArrow.arrow_a00'
      StaticTex=Texture'Botpack.LadrStatic.Static.Static_A00'
      MapText="Map:"
