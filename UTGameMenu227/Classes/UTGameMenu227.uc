@@ -32,8 +32,13 @@ function Created()
 
 function WindowShown()
 {
+	local GameInfo Game;
+
 	super.WindowShown();
-	ReturnToGame.bDisabled = GetLevel().Game != None && GetLevel().Game.IsA('UTIntro');
+
+	Game = GetLevel().Game;
+	Save.bDisabled = Game == none || Game.bDeathMatch || Game.IsA('UTIntro');
+	ReturnToGame.bDisabled = Game != none && Game.IsA('UTIntro');
 }
 
 function MessageBoxDone(UWindowMessageBox W, MessageBoxResult Result)
@@ -113,7 +118,7 @@ function Select(UWindowPulldownMenuItem I)
 
 defaultproperties
 {
-     NewGameName="&Start Unreal Tournament"
+     NewGameName="Start Unreal &Tournament"
      NewGameHelp="Select to start a new Unreal Tournament game!"
      LoadGameName="&Resume Saved Tournament"
      LoadGameHelp="Select to resume a saved Unreal Tournament game."

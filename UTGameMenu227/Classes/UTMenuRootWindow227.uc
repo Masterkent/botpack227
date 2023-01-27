@@ -22,6 +22,6 @@ function Created()
 
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v1.0 [2023-01-27]"
-	Version="1.0"
+	VersionInfo="UTGameMenu227 v1.1 [2023-01-27]"
+	Version="1.1"
 }
