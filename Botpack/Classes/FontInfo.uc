@@ -1,10 +1,8 @@
-class FontInfo expands Info
-	config(Botpack);
+class FontInfo expands Info;
 
 var float SavedWidth[7];
 var font SavedFont[7];
 
-var config bool B227_bUseTahomaFonts;
 var int B227_NoLadderFonts;
 
 var string B227_FontName_Tahoma10;
@@ -39,7 +37,7 @@ function font GetHugeFont(float Width)
 
 static function font GetStaticHugeFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
+	if (B227_ShouldUseTahomaFonts() || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 512)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -79,7 +77,7 @@ function font GetBigFont(float Width)
 
 static function font GetStaticBigFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
+	if (B227_ShouldUseTahomaFonts() || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 512)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -121,7 +119,7 @@ function font GetMediumFont(float Width)
 
 static function font GetStaticMediumFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
+	if (B227_ShouldUseTahomaFonts() || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 512)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -157,7 +155,7 @@ function font GetSmallFont(float Width)
 
 static function font GetStaticSmallFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
+	if (B227_ShouldUseTahomaFonts() || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 800)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -195,7 +193,7 @@ function font GetSmallestFont(float Width)
 
 static function font GetStaticSmallestFont(float Width)
 {
-	if (default.B227_bUseTahomaFonts || default.B227_NoLadderFonts > 0)
+	if (B227_ShouldUseTahomaFonts() || default.B227_NoLadderFonts > 0)
 	{
 		if (Width < 800)
 			return B227_LoadTahomaFont(default.B227_FontName_Tahoma10);
@@ -304,6 +302,11 @@ function B227_CheckLadderFonts()
 			return;
 		}
 	}
+}
+
+static function bool B227_ShouldUseTahomaFonts()
+{
+	return class'B227_Config'.default.bUseTahomaFonts;
 }
 
 static function Font B227_LoadTahomaFont(string FontName)

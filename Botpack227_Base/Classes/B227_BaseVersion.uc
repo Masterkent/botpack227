@@ -5,6 +5,6 @@ var const string Version;
 
 defaultproperties
 {
-	VersionInfo="Botpack227_Base v1.21 [2023-01-27]"
-	Version="1.21"
+	VersionInfo="Botpack227_Base v2.0 [2023-01-30]"
+	Version="2.0"
 }

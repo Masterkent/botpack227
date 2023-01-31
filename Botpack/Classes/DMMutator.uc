@@ -2,14 +2,9 @@
 // DMMutator.
 //=============================================================================
 
-class DMMutator expands UTC_Mutator
-	config(Botpack);
+class DMMutator expands UTC_Mutator;
 
 var DeathMatchPlus MyGame;
-
-var config bool B227_bAutoActivatePickups;
-var config bool B227_bFlakShellAmmo;
-var globalconfig bool B227_bLogNonUTInventory;
 
 function PostBeginPlay()
 {
@@ -65,7 +60,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		if ( Other.IsA('TournamentWeapon') )
 			return true;
 
-		if (B227_bLogNonUTInventory)
+		if (class'B227_Config'.default.bLogNonUTInventory)
 			log("Found "$Other$" at "$Other.location);
 		//Assert(false);
 		if ( Other.IsA('Stinger') )
@@ -131,7 +126,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		if ( Other.IsA('TournamentAmmo') )
 			return true;
 
-		if (B227_bLogNonUTInventory)
+		if (class'B227_Config'.default.bLogNonUTInventory)
 			log("Found "$Other$" at "$Other.location);
 		//Assert(false);
 
@@ -169,7 +164,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		{
 			if (Other.IsA('FlakShellAmmo') &&
 				class'B227_Config'.default.bEnableExtensions &&
-				B227_bFlakShellAmmo)
+				class'B227_Config'.default.bUseFlakShellAmmo)
 			{
 				if (ReplaceWith(Other, "Botpack.B227_FlakShellAmmo") && UTC_Ammo(B227_ReplacingActor) != none)
 					B227_ReplacingActor.SetRotation(B227_ReplacingActor.Rotation + rot(16384, 0, 0));
@@ -199,7 +194,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 
 	if (Pickup(Other) != none)
 	{
-		if (B227_bAutoActivatePickups &&
+		if (class'B227_Config'.default.bAutoActivatePickups &&
 			!Pickup(Other).bCanHaveMultipleCopies &&
 			!Other.IsA('ForceField') &&
 			!Other.IsA('SCUBAGear') &&
@@ -219,7 +214,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 
 	if (Pickup(Other) != none)
 	{
-		if (B227_bLogNonUTInventory)
+		if (class'B227_Config'.default.bLogNonUTInventory)
 			log("Found "$Other$" at "$Other.location);
 		if ( Other.IsA('JumpBoots') )
 		{
@@ -304,11 +299,4 @@ function B227_ModifyDefaultWeapon()
 		Level.Game.DefaultWeapon = class'SniperRifle';
 	else if (ClassIsChildOf(Level.Game.DefaultWeapon, class'Minigun'))
 		Level.Game.DefaultWeapon = class'Minigun2';
-}
-
-defaultproperties
-{
-	B227_bAutoActivatePickups=True
-	B227_bFlakShellAmmo=True
-	B227_bLogNonUTInventory=True
 }

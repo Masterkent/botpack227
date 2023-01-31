@@ -93,7 +93,7 @@ simulated event Timer()
 	if (Level.bHighDetailMode)
 	{
 		B227_SetRocketTrail(Region.Zone);
-		if (!class'UTSmokeTrail'.default.B227_bReplaceWithEmitter)
+		if (!class'UTSmokeTrail'.static.B227_ShouldReplaceWithEmitter())
 		{
 			if ( Level.bDropDetail || ((NumExtraRockets > 0) && (FRand() < 0.5)) )
 				Spawn(class'LightSmokeTrail');
@@ -118,7 +118,7 @@ simulated event Timer()
 // This is why it was replaced with a more well-looking smoke generator here.
 simulated function B227_SetRocketTrail(ZoneInfo Zone)
 {
-	if (!class'UTSmokeTrail'.default.B227_bReplaceWithEmitter || Zone.bWaterZone)
+	if (!class'UTSmokeTrail'.static.B227_ShouldReplaceWithEmitter() || Zone.bWaterZone)
 		B227_StopSmokeTrail();
 	else if (Level.bHighDetailMode && (B227_SmokeTrail == none || B227_SmokeTrail.bDeleteMe))
 	{

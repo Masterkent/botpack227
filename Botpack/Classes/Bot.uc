@@ -2,8 +2,7 @@
 // Bot.
 //=============================================================================
 class Bot expands UTC_Pawn
-	abstract
-	config(Botpack);
+	abstract;
 
 var(Pawn) class<carcass> CarcassType;
 
@@ -128,7 +127,6 @@ var texture StatusDoll, StatusBelt;
 // allowed voices
 var string VoicePackMetaClass;
 
-var globalconfig float B227_DodgeEndTime;
 var int B227_Handedness;
 
 // Auxiliary
@@ -1903,9 +1901,9 @@ function TryToDuck(vector duckDir, bool bReversed)
 		return;
 
 	if (class'B227_Config'.default.bEnableExtensions &&
-		default.B227_DodgeEndTime > 0 &&
+		class'B227_Config'.default.BotDodgeEndTime > 0 &&
 		B227_DodgeDoneTimestamp > 0 &&
-		Level.TimeSeconds - B227_DodgeDoneTimestamp <= default.B227_DodgeEndTime)
+		Level.TimeSeconds - B227_DodgeDoneTimestamp <= class'B227_Config'.default.BotDodgeEndTime)
 	{
 		return;
 	}
@@ -7600,6 +7598,5 @@ defaultproperties
 	Buoyancy=100.000000
 	RotationRate=(Pitch=3072,Yaw=30000,Roll=2048)
 	NetPriority=3.000000
-	B227_DodgeEndTime=0.35
 	B227_Handedness=-1
 }

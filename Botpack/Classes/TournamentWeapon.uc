@@ -2,8 +2,7 @@
 // TournamentWeapon.
 //=============================================================================
 class TournamentWeapon extends UTC_Weapon
-	abstract
-	config(Botpack);
+	abstract;
 
 var TournamentPickup Affector;
 var float FireAdjust;
@@ -14,10 +13,6 @@ var bool bCanClientFire;
 var bool bForceFire, bForceAltFire;
 var() float FireTime, AltFireTime; //used to synch server and client firing up
 var float FireStartTime;
-
-var() globalconfig bool B227_bAdjustNPCFirePosition;
-var() globalconfig bool B227_bTraceFireThroughWarpZones;
-var() globalconfig bool B227_bUseEnergyAmplifier;
 
 function ForceFire()
 {
@@ -653,17 +648,17 @@ function float B227_AmplifyDamage(int UseCharge)
 
 static function bool B227_ShouldAdjustNPCFirePosition()
 {
-	return class'B227_Config'.default.bEnableExtensions && default.B227_bAdjustNPCFirePosition;
+	return class'B227_Config'.default.bEnableExtensions && class'B227_Config'.default.bAdjustNPCFirePosition;
 }
 
 static function bool B227_ShouldTraceFireThroughWarpZones()
 {
-	return class'B227_Config'.default.bEnableExtensions && default.B227_bTraceFireThroughWarpZones;
+	return class'B227_Config'.default.bEnableExtensions && class'B227_Config'.default.bTraceFireThroughWarpZones;
 }
 
 static function bool B227_ShouldUseEnergyAmplifier()
 {
-	return class'B227_Config'.default.bEnableExtensions && default.B227_bUseEnergyAmplifier;
+	return class'B227_Config'.default.bEnableExtensions && class'B227_Config'.default.bUseEnergyAmplifier;
 }
 
 function B227_AdjustNPCFirePosition();
@@ -697,7 +692,4 @@ defaultproperties
 	MyDamageType=Unspecified
 	AltDamageType=Unspecified
 	PickupMessageClass=Class'Botpack.PickupMessagePlus'
-	B227_bAdjustNPCFirePosition=True
-	B227_bTraceFireThroughWarpZones=True
-	B227_bUseEnergyAmplifier=True
 }

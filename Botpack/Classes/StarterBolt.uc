@@ -55,7 +55,7 @@ simulated event Tick(float DeltaTime)
 		AnimTime,
 		B227_Location,
 		B227_Rotation(),
-		class'PulseGun'.default.B227_bAdjustNPCAccuracy);
+		class'PulseGun'.static.B227_ShouldAdjustNPCAccuracy());
 }
 
 // Auxiliary

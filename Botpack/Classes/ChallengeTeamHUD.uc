@@ -63,70 +63,8 @@ simulated function DrawTeam(Canvas Canvas, TeamInfo TI)
 // Entry point for string messages.
 simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name MsgType )
 {
-	local int i;
-	local Class<LocalMessage> MessageClass;
-
-	switch (MsgType)
-	{
-		case 'Say':
-			MessageClass = class'SayMessagePlus';
-			break;
-		case 'TeamSay':
-			MessageClass = class'TeamSayMessagePlus';
-			break;
-		case 'CriticalEvent':
-			MessageClass = class'CriticalStringPlus';
-			LocalizedMessage( MessageClass, 0, None, None, None, Msg );
-			return;
-		default:
-			MessageClass= class'StringMessagePlus';
-			break;
-	}
-	if ( ClassIsChildOf(MessageClass, class'SayMessagePlus') || 
-				     ClassIsChildOf(MessageClass, class'TeamSayMessagePlus') )
-	{
-		FaceTexture = PRI.TalkTexture;
-		if (PRI.Team < 4)
-			FaceTeam = TeamColor[PRI.Team];
-		else
-			FaceTeam = FavoriteHUDColor;
-		if ( FaceTexture != None )
-			FaceTime = Level.TimeSeconds + 3;
-		if ( Msg == "" )
-			return;
-	} 
-
-	for (i=0; i<4; i++)
-	{
-		if ( ShortMessageQueue[i].Message == None )
-		{
-			// Add the message here.
-			ShortMessageQueue[i].Message = MessageClass;
-			ShortMessageQueue[i].Switch = 0;
-			ShortMessageQueue[i].RelatedPRI = PRI;
-			ShortMessageQueue[i].OptionalObject = None;
-			ShortMessageQueue[i].EndOfLife = MessageClass.Default.Lifetime + Level.TimeSeconds;
-			if ( MessageClass.Default.bComplexString )
-				ShortMessageQueue[i].StringMessage = Msg;
-			else
-				ShortMessageQueue[i].StringMessage = MessageClass.Static.AssembleString(self,0,PRI,Msg);
-			return;
-		}
-	}
-
-	// No empty slots.  Force a message out.
-	for (i=0; i<3; i++)
-		CopyMessage(ShortMessageQueue[i],ShortMessageQueue[i+1]);
-
-	ShortMessageQueue[3].Message = MessageClass;
-	ShortMessageQueue[3].Switch = 0;
-	ShortMessageQueue[3].RelatedPRI = PRI;
-	ShortMessageQueue[3].OptionalObject = None;
-	ShortMessageQueue[3].EndOfLife = MessageClass.Default.Lifetime + Level.TimeSeconds;
-	if ( MessageClass.Default.bComplexString )
-		ShortMessageQueue[3].StringMessage = Msg;
-	else
-		ShortMessageQueue[3].StringMessage = MessageClass.Static.AssembleString(self,0,PRI,Msg);
+	// TeamSay messages are handled in B227_HandleTeamSayMessage
+	super.Message(PRI, Msg, MsgType);
 }
 
 simulated function SetIDColor( Canvas Canvas, int type )
@@ -176,6 +114,15 @@ function DrawTalkFace(Canvas Canvas, int i, float YPos)
 		Canvas.DrawTile(texture'Botpack.LadrStatic.Static.Static_a00', YPos + 7*Scale, YPos + 7*Scale, 0, 0, texture'Botpack.LadrStatic.Static.Static_a00'.USize, texture'Botpack.LadrStatic.Static.Static_a00'.VSize);
 		Canvas.DrawColor = WhiteColor;
 	}
+}
+
+function B227_HandleTeamSayMessage(PlayerReplicationInfo PRI, out class<LocalMessage> MessageClass)
+{
+	MessageClass = class'TeamSayMessagePlus';
+	if (PRI.Team < 4)
+		FaceTeam = TeamColor[PRI.Team];
+	else
+		FaceTeam = FavoriteHUDColor;
 }
 
 defaultproperties

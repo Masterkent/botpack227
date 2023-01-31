@@ -38,7 +38,7 @@ simulated function Timer()
 	if (Level.bHighDetailMode)
 	{
 		B227_SetRocketTrail(Region.Zone);
-		if (!class'UTSmokeTrail'.default.B227_bReplaceWithEmitter)
+		if (!class'UTSmokeTrail'.static.B227_ShouldReplaceWithEmitter())
 		{
 			b = Spawn(class'ut_SpriteSmokePuff');
 			if (b != none)

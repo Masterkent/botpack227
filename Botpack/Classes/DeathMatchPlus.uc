@@ -78,6 +78,7 @@ var int LadderTypeIndex;
 var LadderInventory RatedGameLadderObj;
 
 var globalconfig bool B227_bFixedBotCount;
+var globalconfig bool B227_bMapFixMutator;
 
 var int B227_ElapsedTime; // Actual match time without waiting at startup phase
 var bool B227_bGenderedMessagesSupported;
@@ -208,6 +209,9 @@ event InitGame( string Options, out string Error )
 		bRequireReady = true;
 		bNetReady = true;
 	}
+
+	if (B227_bMapFixMutator)
+		B227_AddMapFixMutator();
 }
 
 // Set game settings based on ladder information.
@@ -500,7 +504,7 @@ function Killed(pawn killer, pawn Other, name damageType)
 				LastTaunt[i-1] = LastTaunt[i];
 		}
 		LastTaunt[3] = NextTaunt;
- 		class'UTC_Pawn'.static.UTSF_SendGlobalMessage(killer, none, 'AUTOTAUNT', NextTaunt, 5);
+		class'UTC_Pawn'.static.UTSF_SendGlobalMessage(killer, none, 'AUTOTAUNT', NextTaunt, 5);
 	}
 	if ( bRatedGame )
 		RateVs(Other, Killer);
@@ -1594,6 +1598,23 @@ function bool NeverStakeOut(bot Other)
 	return false;
 }
 
+function B227_AddMapFixMutator()
+{
+	local class<Mutator> MutatorClass;
+	local Mutator Mutator;
+
+	MutatorClass = class<Mutator>(DynamicLoadObject("B227_MapFix.B227_MapFix", class'Class', true));
+	if (MutatorClass == none)
+		return;
+
+	foreach AllActors(class'Mutator', Mutator)
+		if (Mutator.Class == MutatorClass)
+			return;
+	Mutator = Spawn(MutatorClass);
+	if (Mutator != none)
+		BaseMutator.AddMutator(Mutator);
+}
+
 function B227_UpdateGRILimits()
 {
 	if (TournamentGameReplicationInfo(GameReplicationInfo) == none)
@@ -1682,4 +1703,6 @@ defaultproperties
 	MutatorClass=Class'Botpack.DMMutator'
 	GameReplicationInfoClass=Class'Botpack.TournamentGameReplicationInfo'
 	bLoggingGame=True
+	B227_KillerMessageClass=Class'Botpack.KillerMessagePlus'
+	B227_bMapFixMutator=True
 }

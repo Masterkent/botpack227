@@ -342,7 +342,7 @@ simulated function vector B227_PlayerViewOffset()
 
 	ViewOffset *= 100;
 
-	if (B227_ViewOffsetMode == 2 && PlayerPawn(Owner) != none)
+	if (B227_ViewOffsetMode() == 2 && PlayerPawn(Owner) != none)
 		return ViewOffset * PlayerPawn(Owner).FOVAngle / 90;
 	return ViewOffset;
 }

@@ -944,7 +944,7 @@ static function font GetBigFont(UWindowRootWindow Root)
 
 	SizeX = FMin(Root.WinWidth, Root.WinHeight * 4 / 3) * Root.GUIScale;
 
-	if (class'FontInfo'.default.B227_bUseTahomaFonts)
+	if (class'FontInfo'.static.B227_ShouldUseTahomaFonts())
 	{
 		if (SizeX < 640)
 			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma10);
@@ -978,7 +978,7 @@ static function font GetSmallFont(UWindowRootWindow Root)
 
 	SizeX = FMin(Root.WinWidth, Root.WinHeight * 4 / 3) * Root.GUIScale;
 
-	if (class'FontInfo'.default.B227_bUseTahomaFonts)
+	if (class'FontInfo'.static.B227_ShouldUseTahomaFonts())
 	{
 		if (SizeX < 800)
 			return class'FontInfo'.static.B227_LoadTahomaFont(class'FontInfo'.default.B227_FontName_Tahoma10);

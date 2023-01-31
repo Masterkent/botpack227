@@ -1,8 +1,7 @@
 //=============================================================================
 // Translocator.
 //=============================================================================
-class Translocator extends TournamentWeapon
-	config(Botpack);
+class Translocator extends TournamentWeapon;
 
 #exec MESH  IMPORT MESH=Transloc ANIVFILE=MODELS\Translocator_a.3D DATAFILE=MODELS\Translocator_d.3D UNMIRROR=1
 #exec MESH ORIGIN MESH=Transloc X=0 Y=0 Z=0 YAW=-61 PITCH=0 ROLL=-5
@@ -69,8 +68,6 @@ var Weapon PreviousWeapon;
 var Actor DesiredTarget;
 var float MaxTossForce;
 var bool bBotMoveFire, bTTargetOut;
-
-var globalconfig bool B227_bCanRecoverDisruptedModule;
 
 replication
 {
@@ -190,7 +187,7 @@ function Fire( float Value )
 	else if ( TTarget.SpawnTime < Level.TimeSeconds - 0.8 )
 	{
 		if (TTarget.Disrupted() &&
-			!B227_bCanRecoverDisruptedModule &&
+			!B227_HasEnabledModuleRecovery() &&
 			!TTarget.B227_bIsRecoverable)
 		{
 			if (Level.Game.LocalLog != None)
@@ -489,6 +486,13 @@ function PlayPostSelect()
 		TTarget.DesiredTarget = DesiredTarget;
 		DesiredTarget = None;
 	}
+}
+
+static function bool B227_HasEnabledModuleRecovery()
+{
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bTranslocatorModuleRecovery;
 }
 
 defaultproperties

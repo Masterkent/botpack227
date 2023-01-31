@@ -35,9 +35,12 @@ function Killed( pawn Killer, pawn Other, name damageType )
 	local int NextTaunt, i;
 	local bool bAutoTaunt;
 
-	if ( Other.bIsPlayer && (Other.PlayerReplicationInfo.HasFlag != None) )
+	if (Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.HasFlag != none)
 	{
-		if ( (Killer != None) && Killer.bIsPlayer && Other.bIsPlayer && (Killer.PlayerReplicationInfo.Team != Other.PlayerReplicationInfo.Team) )
+		if (Killer != none &&
+			Killer.PlayerReplicationInfo != none &&
+			Other.PlayerReplicationInfo != none &&
+			Killer.PlayerReplicationInfo.Team != Other.PlayerReplicationInfo.Team)
 		{
 			killer.PlayerReplicationInfo.Score += 4;
 			bAutoTaunt = ((TournamentPlayer(Killer) != None) && TournamentPlayer(Killer).bAutoTaunt);
@@ -50,7 +53,7 @@ function Killed( pawn Killer, pawn Other, name damageType )
 						NextTaunt = Rand(class<ChallengeVoicePack>(Killer.PlayerReplicationInfo.VoiceType).Default.NumTaunts);
 					if ( i > 0 )
 						LastTaunt[i-1] = LastTaunt[i];
-				}	
+				}
 				LastTaunt[3] = NextTaunt;
 				class'UTC_Pawn'.static.UTSF_SendGlobalMessage(killer, none, 'AUTOTAUNT', NextTaunt, 5);
 			}
@@ -69,16 +72,20 @@ function ScoreKill(pawn Killer, pawn Other)
 	else if ( killer != None )
 	{
 		killer.killCount++;
-		if ( Killer.bIsPlayer && Other.bIsPlayer && (Killer.PlayerReplicationInfo.Team != Other.PlayerReplicationInfo.Team) )
+		if (Killer.PlayerReplicationInfo != none &&
+			Other.PlayerReplicationInfo != none &&
+			Killer.PlayerReplicationInfo.Team != Other.PlayerReplicationInfo.Team)
+		{
 			Killer.PlayerReplicationInfo.Score += 1;
+		}
 	}
-	if ( bAltScoring && (Killer != Other) && (killer != None) && Other.bIsPlayer )
+	if ( bAltScoring && Killer != Other && Killer != none && Other.PlayerReplicationInfo != none )
 		Other.PlayerReplicationInfo.Score -= 1;
 
 	Other.DieCount++;
 
 	class'UTC_Mutator'.static.UTSF_ScoreKill(BaseMutator, Killer, Other);
-}	
+}
 
 function bool SetEndCams(string Reason)
 {
@@ -98,7 +105,7 @@ function bool SetEndCams(string Reason)
 		{
 			BroadcastLocalizedMessage(DMMessageClass, 0);
 			return false;
-		}		
+		}
 
 	// find winner
 	ForEach AllActors(class'CTFFlag', BestFlag)
@@ -227,7 +234,7 @@ function bool FindPathToBase(Bot aBot, FlagBase aBase)
 			}
 		}
 	}
-	else						
+	else
 		aBot.MoveTarget = aBot.FindPathToward(aBase);
 
 	return (aBot.bNoClearSpecial || (aBot.MoveTarget != None));
@@ -237,7 +244,7 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 {
 	if ( aBot.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team )
 		return 3; //teammate
-	else if ( (Other.bIsPlayer && (Other.PlayerReplicationInfo.HasFlag != None)) 
+	else if ( (Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.HasFlag != None)
 				|| (aBot.PlayerReplicationInfo.HasFlag != None) )
 		return 1;
 	else 
@@ -254,9 +261,9 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		return false;
 	aBot.LastAttractCheck = Level.TimeSeconds;
 
-	//log(aBot@"find special attraction in state"@aBot.GetStateName()@"at"@Level.TimeSeconds);	
+	//log(aBot@"find special attraction in state"@aBot.GetStateName()@"at"@Level.TimeSeconds);
 	FriendlyFlag = CTFReplicationInfo(GameReplicationInfo).FlagList[aBot.PlayerReplicationInfo.Team];
-	
+
 	if ( aBot.PlayerReplicationInfo.Team == 0 )
 		EnemyFlag = CTFReplicationInfo(GameReplicationInfo).FlagList[1];
 	else
@@ -464,7 +471,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		}
 	}
 	return false;
-}		
+}
 
 function bool RestartPlayer(Pawn aPlayer)
 {
@@ -473,7 +480,7 @@ function bool RestartPlayer(Pawn aPlayer)
 	local bool bResult, bPowerPlay;
 	local bot B;
 	local Pawn P;
-	
+
 	bResult = Super.RestartPlayer(aPlayer);
 
 	B = Bot(aPlayer);
@@ -495,7 +502,7 @@ function bool RestartPlayer(Pawn aPlayer)
 			// check for bot only team and already a valid defender
 			for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 			{
-				if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == B.PlayerReplicationInfo.Team) )
+				if ( P.PlayerReplicationInfo != none && P.PlayerReplicationInfo.Team == B.PlayerReplicationInfo.Team )
 				{
 					if ( P.IsA('PlayerPawn') )
 					{
@@ -548,18 +555,22 @@ function SetBotOrders(Bot NewBot)
 		CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Freelance';
 	else 
 	{
-		CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Defend';		
+		CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Defend';
 		if ( bNoviceMode )
 			for ( P=Level.PawnList; P!=None; P= P.NextPawn )
-				if ( P.bIsPlayer && (P != NewBot) && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
-					&& P.IsA('Bot') && (BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Defend') && (FRand() < 0.5) )
-					{	
-						CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Attack';
-						break;
-					}
-	}		
+				if (P.PlayerReplicationInfo != none &&
+					P != NewBot &&
+					P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team &&
+					Bot(P) != none &&
+					BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Defend' &&
+					FRand() < 0.5)
+				{
+					CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Attack';
+					break;
+				}
+	}
 
-	if ( ((CurrentOrders[NewBot.PlayerReplicationInfo.Team] == 'Attack') || (CurrentOrders[NewBot.PlayerReplicationInfo.Team] == 'Freelance'))	
+	if ( ((CurrentOrders[NewBot.PlayerReplicationInfo.Team] == 'Attack') || (CurrentOrders[NewBot.PlayerReplicationInfo.Team] == 'Freelance'))
 		&& (NumSupportingPlayer == 0) )
 	{
 		For ( P=Level.PawnList; P!=None; P=P.NextPawn )
@@ -606,10 +617,10 @@ function SetBotOrders(Bot NewBot)
 			}
 		}
 	}
-	
+
 	if ( CurrentOrders[NewBot.PlayerReplicationInfo.Team] == 'Freelance' )
 		NewBot.SetOrders('Attack', None, true);
-	else	
+	else
 		NewBot.SetOrders(CurrentOrders[NewBot.PlayerReplicationInfo.Team], None, true);
 }
 

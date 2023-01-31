@@ -8,6 +8,8 @@ var class<LocalMessage> DMMessageClass;
 
 var localized bool bAlternateMode;
 
+var class<LocalMessage> B227_KillerMessageClass;
+
 // Auxiliary
 // public:
 var Pawn B227_Player; // is used as the first argument for UTF_FindPlayerStart
@@ -223,6 +225,13 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 						SpecialDamageString
 						),
 					false, 'DeathMessage');
+				if (B227_KillerMessageClass != none)
+					class'UTC_Pawn'.static.UTSF_ReceiveLocalizedMessage(
+						Killer,
+						B227_KillerMessageClass,
+						0,
+						Killer.PlayerReplicationInfo,
+						Other.PlayerReplicationInfo);
 			}
 			else
 			{
@@ -278,7 +287,7 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 				else
 					BroadcastLocalizedMessage(DeathMessageClass, 1, Other.PlayerReplicationInfo, None);
 			}
-		} 
+		}
 		else
 		{
 			if (Killer.PlayerReplicationInfo != none)
@@ -326,15 +335,7 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 						);
 				}
 				if (!bSpecialDamage && (Other != None))
-				{
-					if (Killer.Weapon != none)
-						BroadcastRegularDeathMessage(Killer, Other, damageType);
-					else
-					{
-						super.Killed(Killer, Other, damageType);
-						return;
-					}
-				}
+					BroadcastRegularDeathMessage(Killer, Other, damageType);
 			}
 		}
 	}
@@ -343,7 +344,10 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 
 function BroadcastRegularDeathMessage(pawn Killer, pawn Other, name damageType)
 {
-	BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, Killer.Weapon.Class);
+	if (Killer.Weapon != none)
+		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, Killer.Weapon.Class);
+	else
+		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, none);
 }
 
 static function UTSF_BroadcastRegularDeathMessage(

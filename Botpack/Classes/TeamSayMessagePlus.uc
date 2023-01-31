@@ -1,5 +1,7 @@
 class TeamSayMessagePlus expands StringMessagePlus;
 
+var Color B227_YellowColor;
+
 static function RenderComplexMessage( 
 	Canvas Canvas, 
 	out float XL,
@@ -15,7 +17,10 @@ static function RenderComplexMessage(
 	if (RelatedPRI_1 == None)
 		return;
 
-	Canvas.DrawColor = default.GreenColor;
+	if (class'B227_Config'.default.bEnableExtensions && class'B227_Config'.default.bYellowTeamSayMessages)
+		Canvas.DrawColor = default.B227_YellowColor;
+	else
+		Canvas.DrawColor = default.GreenColor;
 	Canvas.DrawText(RelatedPRI_1.PlayerName $ " ", false);
 	Canvas.SetPos(Canvas.CurX, Canvas.CurY - YL);
 	if (UTC_PlayerReplicationInfo(RelatedPRI_1) != none && UTC_PlayerReplicationInfo(RelatedPRI_1).PlayerLocation != none)
@@ -26,7 +31,7 @@ static function RenderComplexMessage(
 	if (LocationName != "")
 	{
 		Canvas.DrawColor = default.CyanColor;
-		Canvas.DrawText(" ("$LocationName$"):", false);
+		Canvas.DrawText(" ("$LocationName$"): ", false);
 	}
 	else
 		Canvas.DrawText(": ", false);
@@ -59,5 +64,6 @@ static function string AssembleString(
 defaultproperties
 {
 	bComplexString=True
-	DrawColor=(R=0,B=0)
+	DrawColor=(B=0)
+	B227_YellowColor=(R=255,G=255)
 }

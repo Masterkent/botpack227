@@ -1,8 +1,7 @@
 //=============================================================================
 // ShockRifle.
 //=============================================================================
-class ShockRifle extends TournamentWeapon
-	config(Botpack);
+class ShockRifle extends TournamentWeapon;
 
 #exec MESH IMPORT MESH=ASMD2M ANIVFILE=MODELS\ASMD2_a.3D DATAFILE=MODELS\ASMD2_d.3D X=0 Y=0 Z=0
 #exec MESH ORIGIN MESH=ASMD2M X=0 Y=0 Z=0 YAW=64 PITCH=0
@@ -52,8 +51,6 @@ var() int HitDamage;
 var Projectile Tracked;
 var bool bBotSpecialMove;
 var float TapTime;
-
-var config bool B227_bModifyComboDamage;
 
 var int B227_ShockBeamNumPoints;
 
@@ -266,7 +263,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 
 	if (ShockProj(Other) != none)
 	{ 
-		if (B227_bModifyComboDamage)
+		if (B227_ShouldModifyComboDamage())
 		{
 			ShockProj(Other).Damage *= (2 + int(AmmoType.UseAmmo(1)) + int(AmmoType.UseAmmo(1))) / 4.0;
 			Other.Instigator = Pawn(Owner);
@@ -431,6 +428,13 @@ state ClientFiring
 }
 */
 
+static function bool B227_ShouldModifyComboDamage()
+{
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bModifyShockComboDamage;
+}
+
 function B227_AdjustNPCFirePosition()
 {
 	if (Instigator.IsA('SkaarjTrooper'))
@@ -552,5 +556,4 @@ defaultproperties
 	CollisionRadius=34.000000
 	CollisionHeight=8.000000
 	Mass=50.000000
-	B227_bModifyComboDamage=True
 }

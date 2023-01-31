@@ -1,8 +1,7 @@
 //=============================================================================
 // UTSmokeTrail.
 //=============================================================================
-class UTSmokeTrail extends Effects
-	config(Botpack);
+class UTSmokeTrail extends Effects;
 
 #exec MESH IMPORT MESH=Smokebm ANIVFILE=MODELS\strail_a.3D DATAFILE=MODELS\strail_d.3D
 #exec MESH ORIGIN MESH=Smokebm X=-600 Y=0 Z=0 YAW=128
@@ -13,14 +12,11 @@ var int Curr;
 var bool bRandomize, bEven;
 var int Vert[8];
 
-var config bool B227_bReplaceWithEmitter;    // Use B227_UTSmokeTrailEmitter for projectiles that support such replacement
-var config bool B227_bReplaceWithSmokePuffs; // Simulate particles using ut_SpriteSmokePuff actors
-
 var int B227_NumSmokePuffs;
 
 function PostBeginPlay()
 {
-	if (B227_bReplaceWithSmokePuffs)
+	if (B227_ShouldReplaceWithSmokePuffs())
 		B227_SpawnSmokePuffs();
 	else
 	{
@@ -29,6 +25,27 @@ function PostBeginPlay()
 		if ( bRandomize && (FRand() < 0.4) )
 			MultiSkins[5 + Rand(2)] = Texture'Botpack.utsmoke.us3_a00';
 	}
+}
+
+function Timer()
+{
+	if ( Curr >= 0 )
+	{
+		MultiSkins[Vert[Curr]] = None;
+		Curr--;
+		if ( Curr >= 0 )
+			SetTimer(0.025, false);
+	}
+}
+
+static function bool B227_ShouldReplaceWithEmitter()
+{
+	return class'B227_Config'.default.bUseEmitterSmokeTrails;
+}
+
+static function bool B227_ShouldReplaceWithSmokePuffs()
+{
+	return class'B227_Config'.default.bUseSpriteSmokeTrails;
 }
 
 function B227_SpawnSmokePuffs()
@@ -42,17 +59,6 @@ function B227_SpawnSmokePuffs()
 		Particle = Spawn(class'ut_SpriteSmokePuff', self,, Location - vector(Rotation) * i * 22.5);
 		if (Particle != none)
 			Particle.RemoteRole = ROLE_None;
-	}
-}
-
-function Timer()
-{
-	if ( Curr >= 0 )
-	{
-		MultiSkins[Vert[Curr]] = None;
-		Curr--;
-		if ( Curr >= 0 )
-			SetTimer(0.025, false);
 	}
 }
 
@@ -89,6 +95,4 @@ defaultproperties
 	MultiSkins(6)=Texture'Botpack.utsmoke.us1_a00'
 	MultiSkins(7)=Texture'Botpack.utsmoke.us8_a00'
 	B227_NumSmokePuffs=8
-	B227_bReplaceWithEmitter=True
-	B227_bReplaceWithSmokePuffs=True
 }

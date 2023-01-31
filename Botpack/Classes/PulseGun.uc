@@ -1,8 +1,7 @@
 //=============================================================================
 // PulseGun.
 //=============================================================================
-class PulseGun extends TournamentWeapon
-	config(Botpack);
+class PulseGun extends TournamentWeapon;
 
 #exec MESH IMPORT MESH=PulseGunL ANIVFILE=MODELS\PulseGun_a.3d DATAFILE=MODELS\PulseGun_d.3d X=0 Y=0 Z=0
 #exec MESH ORIGIN MESH=PulseGunL X=0 Y=0 Z=0 YAW=64 ROLL=0 PITCH=0
@@ -106,12 +105,6 @@ class PulseGun extends TournamentWeapon
 var float Angle, Count;
 var PBolt PlasmaBeam;
 var() sound DownSound;
-
-var() globalconfig bool B227_bAdjustNPCAccuracy; // Reduce accuracy for pawns with low Skill
-var() globalconfig bool B227_bGuideBeam;
-var() globalconfig bool B227_bHardcoreDamage; // 150% damage in non-deathmatch games
-var() globalconfig bool B227_bLimitWallEffect;
-var() globalconfig bool B227_bModifyPlasmaLighting;
 
 // Auxiliary
 var private int B227_Handedness;
@@ -550,7 +543,7 @@ simulated function vector B227_PlayerViewOffset()
 	ViewOffset = default.PlayerViewOffset;
 	ViewOffset.Y = -1.81;
 
-	if (B227_ViewOffsetMode == 2 && Pawn(Owner) != none)
+	if (B227_ViewOffsetMode() == 2 && Pawn(Owner) != none)
 		ViewOffset.Y *= Pawn(Owner).FOVAngle / 90.0;
 	return ViewOffset * 100;
 }
@@ -610,14 +603,16 @@ simulated function B227_GuidePlasmaBeam(PBolt Beam)
 
 static function bool B227_ShouldGuideBeam()
 {
-	return class'B227_Config'.default.bEnableExtensions && default.B227_bGuideBeam;
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bPulseGunGuideBeam;
 }
 
 static function bool B227_ShouldUseHardcoreDamage(Projectile Proj)
 {
 	return
 		class'B227_Config'.default.bEnableExtensions &&
-		default.B227_bHardcoreDamage &&
+		class'B227_Config'.default.bPulseGunHardcoreDamage &&
 		!Proj.Level.Game.bDeathMatch &&
 		PlayerPawn(Proj.Instigator) != none;
 }
@@ -629,17 +624,23 @@ static function int B227_ModifyDamage(Projectile Proj, int Damage)
 	return Damage;
 }
 
+static function bool B227_ShouldAdjustNPCAccuracy()
+{
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bPulseGunAdjustNPCAccuracy;
+}
+
 static function bool B227_ShouldLimitWallEffect()
 {
-	return class'B227_Config'.default.bEnableExtensions && default.B227_bLimitWallEffect;
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bPulseGunLimitWallEffect;
 }
 
 static function bool B227_ShouldModifyPlasmaLighting()
 {
-	return
-		class'B227_Config'.default.bEnableExtensions &&
-		class'B227_Config'.default.bModifyProjectilesLighting &&
-		default.B227_bModifyPlasmaLighting;
+	return class'B227_Config'.static.ShouldModifyProjectilesLighting();
 }
 
 function B227_AdjustNPCFirePosition()
@@ -697,9 +698,4 @@ defaultproperties
 	SoundRadius=64
 	SoundVolume=255
 	CollisionRadius=32.000000
-	B227_bAdjustNPCAccuracy=True
-	B227_bGuideBeam=True
-	B227_bHardcoreDamage=False
-	B227_bLimitWallEffect=True
-	B227_bModifyPlasmaLighting=True
 }

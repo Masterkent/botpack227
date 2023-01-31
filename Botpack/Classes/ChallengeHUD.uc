@@ -1565,9 +1565,10 @@ simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name M
 			break;
 	}
 
-	if (ClassIsChildOf(MessageClass, class'SayMessagePlus') || 
-		ClassIsChildOf(MessageClass, class'TeamSayMessagePlus'))
+	if (MessageClass == class'SayMessagePlus')
 	{
+		if (MsgType == 'TeamSay')
+			B227_HandleTeamSayMessage(PRI, MessageClass);
 		FaceTexture = PRI.TalkTexture;
 		if ( FaceTexture != None )
 			FaceTime = Level.TimeSeconds + 3;
@@ -1906,6 +1907,8 @@ function B227_DrawTranslator(Canvas Canvas)
 			return;
 		}
 }
+
+function B227_HandleTeamSayMessage(PlayerReplicationInfo PRI, out class<LocalMessage> MessageClass);
 
 defaultproperties
 {

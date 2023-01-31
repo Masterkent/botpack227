@@ -1,8 +1,7 @@
 //=============================================================================
 // Minigun.
 //=============================================================================
-class Minigun2 extends TournamentWeapon
-	config(Botpack);
+class Minigun2 extends TournamentWeapon;
 
 #exec MESH IMPORT MESH=Minigun2m ANIVFILE=MODELS\minigun_a.3D DATAFILE=MODELS\minigun_d.3D X=0 Y=0 Z=0
 #exec MESH ORIGIN MESH=Minigun2m X=0 Y=0 Z=0 YAW=64 PITCH=0 ROLL=0
@@ -95,8 +94,6 @@ var float ShotAccuracy, LastShellSpawn;
 var int Count;
 var bool bOutOfAmmo, bFiredShot;
 var() texture MuzzleFlashVariations[10];
-
-var() config bool B227_bAdjustMuzzleFlashOffset;
 
 // set which hand is holding weapon
 function setHand(float Hand)
@@ -632,17 +629,23 @@ function B227_AdjustNPCFirePosition()
 	}
 }
 
+static function bool B227_ShouldAdjustMuzzleFlashOffset()
+{
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bAdjustMinigunMuzzleFlashOffset;
+}
+
 simulated function float B227_GetMuzzleFlashOffset(bool bCentered)
 {
-	if (!bCentered ||
-		!class'B227_Config'.default.bEnableExtensions ||
-		!B227_bAdjustMuzzleFlashOffset ||
-		B227_ViewOffsetMode == 2 ||
-		default.FlashO != class'Minigun2'.default.FlashO)
+	if (bCentered &&
+		B227_ShouldAdjustMuzzleFlashOffset() &&
+		B227_ViewOffsetMode() != 2 &&
+		default.FlashO == class'Minigun2'.default.FlashO)
 	{
-		return default.FlashO;
+		return 0.019;
 	}
-	return 0.019;
+	return default.FlashO;
 }
 
 simulated function B227_SpawnShellCase()
@@ -730,5 +733,4 @@ defaultproperties
 	LightHue=28
 	LightSaturation=32
 	LightRadius=6
-	B227_bAdjustMuzzleFlashOffset=True
 }

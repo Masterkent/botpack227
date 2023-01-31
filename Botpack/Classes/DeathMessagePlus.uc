@@ -32,16 +32,12 @@ static function string GetString(
 			if (RelatedPRI_2.PlayerName == "")
 				return "";
 			if (Class<Weapon>(OptionalObject) == None)
-			{
-				return "";
-			}
+				return RelatedPRI_2.PlayerName @ default.KilledString @ RelatedPRI_1.PlayerName;
 			return class'GameInfo'.Static.ParseKillMessage(
 				RelatedPRI_1.PlayerName, 
 				RelatedPRI_2.PlayerName,
 				Class<Weapon>(OptionalObject).Default.ItemName,
-				Class<Weapon>(OptionalObject).Default.DeathMessage
-			);
-			break;
+				Class<Weapon>(OptionalObject).Default.DeathMessage);
 		case 1: // Suicided
 			if (RelatedPRI_1 == None)
 				return "";
@@ -49,37 +45,30 @@ static function string GetString(
 				return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.FemaleSuicideMessage;
 			else
 				return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.MaleSuicideMessage;
-			break;
 		case 2: // Fell
 			if (RelatedPRI_1 == None)
 				return "";
 			return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.FallMessage;
-			break;
 		case 3: // Eradicated (Used for runes, but not in UT)
 			if (RelatedPRI_1 == None)
 				return "";
 			return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.ExplodeMessage;
-			break;
 		case 4:	// Drowned
 			if (RelatedPRI_1 == None)
 				return "";
 			return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.DrownedMessage;
-			break;
 		case 5: // Burned
 			if (RelatedPRI_1 == None)
 				return "";
 			return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.BurnedMessage;
-			break;
 		case 6: // Corroded
 			if (RelatedPRI_1 == None)
 				return "";
 			return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.CorrodedMessage;
-			break;
 		case 7: // Mortared
 			if (RelatedPRI_1 == None)
 				return "";
 			return RelatedPRI_1.PlayerName$class'TournamentGameInfo'.Default.MortarMessage;
-			break;
 		case 8: // Telefrag
 			if (RelatedPRI_1 == None)
 				return "";
@@ -89,9 +78,7 @@ static function string GetString(
 				RelatedPRI_1.PlayerName,
 				RelatedPRI_2.PlayerName,
 				class'Translocator'.Default.ItemName,
-				class'Translocator'.Default.DeathMessage
-			);
-			break;
+				class'Translocator'.Default.DeathMessage);
 	}
 	return "";
 }

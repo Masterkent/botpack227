@@ -14,8 +14,6 @@ class ShockBeam extends Effects
 var vector MoveAmount;
 var int NumPuffs;
 
-var config bool B227_bModifyLighting;
-
 var float B227_Pitch, B227_Yaw, B227_Roll;
 
 replication
@@ -81,10 +79,7 @@ simulated event PostNetBeginPlay()
 
 static function bool B227_ShouldModifyLighting()
 {
-	return
-		class'B227_Config'.default.bEnableExtensions &&
-		class'B227_Config'.default.bModifyProjectilesLighting &&
-		default.B227_bModifyLighting;
+	return class'B227_Config'.static.ShouldModifyProjectilesLighting();
 }
 
 simulated function B227_ModifyLighting()
@@ -113,5 +108,4 @@ defaultproperties
 	bFixedRotationDir=True
 	RotationRate=(Roll=1000000)
 	DesiredRotation=(Roll=20000)
-	B227_bModifyLighting=True
 }
