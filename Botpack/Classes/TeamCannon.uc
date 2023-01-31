@@ -2,21 +2,7 @@
 // TeamCannon.
 //=============================================================================
 class TeamCannon extends StationaryPawn;
-
-#exec MESH IMPORT MESH=cdgunmainM ANIVFILE=MODELS\cdgunmain_a.3D DATAFILE=MODELS\cdgunmain_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=cdgunmainM X=0 Y=150 Z=0 PITCH=0 YAW=-64 ROLL=-64
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=All    STARTFRAME=0   NUMFRAMES=44
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Error  STARTFRAME=0   NUMFRAMES=2
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Activate   STARTFRAME=2   NUMFRAMES=18
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Fire1  STARTFRAME=21   NUMFRAMES=4
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Fire2  STARTFRAME=25   NUMFRAMES=4
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Fire3  STARTFRAME=29   NUMFRAMES=4
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Fire4  STARTFRAME=33   NUMFRAMES=4
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Fire5  STARTFRAME=37   NUMFRAMES=4
-#exec MESH SEQUENCE MESH=cdgunmainM SEQ=Fire6  STARTFRAME=41   NUMFRAMES=3
-#exec TEXTURE IMPORT NAME=jcdgunmain FILE=MODELS\cdgunmain.pcx GROUP=Skins 
-#exec MESHMAP SCALE MESHMAP=cdgunmainM X=0.08 Y=0.08 Z=0.16
-#exec MESHMAP SETTEXTURE MESHMAP=cdgunmainM NUM=1 TEXTURE=jcdgunmain
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() sound FireSound;
 var() sound ActivateSound;

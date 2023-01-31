@@ -2,8 +2,7 @@
 // ut_spark.
 //=============================================================================
 class UT_Spark extends Effects;
-
-#exec TEXTURE IMPORT NAME=Sparky FILE=MODELS\spark.pcx GROUP=Effects
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function PostBeginPlay()
 {

@@ -1,6 +1,5 @@
 class EnergyImpact expands UnrealShare.Scorch;
-
-#exec TEXTURE IMPORT NAME=shockmark FILE=TEXTURES\DECALS\scorch1.PCX LODSET=2
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

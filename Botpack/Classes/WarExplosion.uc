@@ -2,9 +2,7 @@
 // WarExplosion.
 //=============================================================================
 class WarExplosion extends AnimSpriteEffect;
-
-#exec OBJ LOAD FILE=textures\WarExplo.utx PACKAGE=BotPack.WarExplosionS
-#exec AUDIO IMPORT FILE="sounds\Warhead\warheadEXPLO.wav" NAME="WarExplo" GROUP="Redeemer"
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function PostBeginPlay()
 {

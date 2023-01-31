@@ -2,11 +2,7 @@
 // UTSmokeTrail.
 //=============================================================================
 class UTSmokeTrail extends Effects;
-
-#exec MESH IMPORT MESH=Smokebm ANIVFILE=MODELS\strail_a.3D DATAFILE=MODELS\strail_d.3D
-#exec MESH ORIGIN MESH=Smokebm X=-600 Y=0 Z=0 YAW=128
-#exec MESH SEQUENCE MESH=Smokebm SEQ=All       STARTFRAME=0   NUMFRAMES=1
-#exec MESHMAP SCALE MESHMAP=Smokebm X=0.1 Y=0.001 Z=0.001
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int Curr;
 var bool bRandomize, bEven;

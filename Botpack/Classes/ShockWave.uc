@@ -2,15 +2,7 @@
 // ShockWave.
 //=============================================================================
 class ShockWave extends Effects;
-
-#exec MESH IMPORT MESH=ShockWavem ANIVFILE=MODELS\SW_a.3D DATAFILE=MODELS\SW_d.3D X=0 Y=0 Z=0 
-#exec MESH ORIGIN MESH=ShockWavem X=0 Y=0 Z=0 YAW=0 PITCH=64
-#exec MESH SEQUENCE MESH=ShockWavem SEQ=All       STARTFRAME=0   NUMFRAMES=2
-#exec MESH SEQUENCE MESH=ShockWavem SEQ=Explosion STARTFRAME=0   NUMFRAMES=2
-#exec MESH SEQUENCE MESH=ShockWavem SEQ=Implode   STARTFRAME=0   NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=Shockt1 FILE=MODELS\shockw.PCX GROUP="Skins"
-#exec MESHMAP SCALE MESHMAP=ShockWavem X=1.0 Y=1.0 Z=2.0 
-#exec MESHMAP SETTEXTURE MESHMAP=ShockWavem NUM=1 TEXTURE=Shockt1
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float OldShockDistance, ShockSize;
 var int ICount;

@@ -1,6 +1,5 @@
 class BoltScorch expands EnergyImpact;
-
-#exec TEXTURE IMPORT NAME=energymark FILE=TEXTURES\DECALS\Shadow_1.PCX LODSET=2
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function Timer()
 {

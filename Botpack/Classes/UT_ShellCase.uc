@@ -2,13 +2,7 @@
 // ut_ShellCase.
 //=============================================================================
 class UT_ShellCase extends Projectile;
-
-#exec MESH IMPORT MESH=Shellc ANIVFILE=MODELS\shellcase_a.3D DATAFILE=MODELS\shellcase_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=Shellc X=0 Y=0 Z=0 YAW=192 ROLL=64
-#exec MESH SEQUENCE MESH=Shellc SEQ=All  STARTFRAME=0  NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=Shellcase1 FILE=MODELS\shellcase.PCX
-#exec MESHMAP SCALE MESHMAP=Shellc X=0.007 Y=0.007 Z=0.014
-#exec MESHMAP SETTEXTURE MESHMAP=Shellc NUM=1 TEXTURE=Shellcase1 TLOD=30
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bHasBounced;
 var int numBounces;

@@ -2,11 +2,7 @@
 // TranslocGlow.
 //=============================================================================
 class TranslocGlow extends Effects;
-
-#exec TEXTURE IMPORT NAME=Tranglow FILE=TEXTURES\Tranglow.PCX GROUP="Translocator"
-#exec TEXTURE IMPORT NAME=Tranglowg FILE=TEXTURES\Tranglowg.PCX GROUP="Translocator"
-#exec TEXTURE IMPORT NAME=Tranglowb FILE=TEXTURES\Tranglowb.PCX GROUP="Translocator"
-#exec TEXTURE IMPORT NAME=Tranglowy FILE=TEXTURES\Tranglowy.PCX GROUP="Translocator"
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 event BeginPlay()
 {

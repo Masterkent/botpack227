@@ -2,13 +2,7 @@
 // ut_ShieldBelt.
 //=============================================================================
 class UT_ShieldBelt extends TournamentPickup;
-
-#exec MESH IMPORT MESH=ShieldBeltMeshM ANIVFILE=MODELS\shieldbelt_a.3D DATAFILE=MODELS\shieldbelt_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=ShieldBeltMeshM X=0 Y=0 Z=0 YAW=64
-#exec MESH SEQUENCE MESH=ShieldBeltMeshM SEQ=All    STARTFRAME=0  NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=AUbelt1 FILE=MODELS\shieldbelt.PCX GROUP="Skins"
-#exec MESHMAP SCALE MESHMAP=ShieldBeltMeshM X=0.05 Y=0.05 Z=0.1
-#exec MESHMAP SETTEXTURE MESHMAP=ShieldBeltMeshM NUM=1 TEXTURE=AUbelt1
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_UT_ShieldBelt FILE=Textures\Hud\B227_i_UT_ShieldBelt.pcx GROUP="Icons" MIPS=OFF
 
 var UT_ShieldBeltEffect MyEffect;

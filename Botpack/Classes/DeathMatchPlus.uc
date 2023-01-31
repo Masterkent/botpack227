@@ -4,8 +4,7 @@
 class DeathMatchPlus extends TournamentGameInfo
 	config;
 
-// Sounds
-#exec OBJ LOAD FILE=..\Sounds\Announcer.uax
+// Sounds#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() globalconfig int  MinPlayers;		// bots fill in to guarantee this level in net game 
 var() globalconfig float AirControl; 

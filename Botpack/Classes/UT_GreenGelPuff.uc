@@ -2,8 +2,7 @@
 // ut_GreenGelPuff.
 //=============================================================================
 class UT_GreenGelPuff expands UT_SpriteSmokePuff;
-
-#exec OBJ LOAD FILE=textures\Goopex.utx PACKAGE=Botpack.GoopEx
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int numBlobs;
 var vector SurfaceNormal;

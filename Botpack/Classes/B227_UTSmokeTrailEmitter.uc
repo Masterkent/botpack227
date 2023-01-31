@@ -1,8 +1,7 @@
 class B227_UTSmokeTrailEmitter expands XEmitter
-	transient
-	config(Botpack);
+	transient;
 
-#exec OBJ LOAD FILE=textures\utSmoke.utx PACKAGE=botpack.utsmoke
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float StartTimestamp;
 var float OffsetDistance;

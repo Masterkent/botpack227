@@ -4,8 +4,7 @@
 // 10-16-98  Erik de Neve
 //=============================================================================
 class StudMetal extends Decoration;
-
-#exec TEXTURE IMPORT NAME=StudMap  FILE=MODELS\Gold.PCX GROUP=Skins
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

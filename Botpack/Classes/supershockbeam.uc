@@ -2,13 +2,7 @@
 // SuperShockBeam.
 //=============================================================================
 class SuperShockBeam extends Effects;
-
-#exec MESH IMPORT MESH=SShockbm ANIVFILE=MODELS\asmdeffect_a.3D DATAFILE=MODELS\asmdeffect_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=SShockbm X=0 Y=-400 Z=0 YAW=-64
-#exec MESH SEQUENCE MESH=SShockbm SEQ=All       STARTFRAME=0   NUMFRAMES=1
-#exec MESHMAP SCALE MESHMAP=SShockbm X=0.09 Y=0.21 Z=0.18 YAW=128
-#exec TEXTURE IMPORT NAME=jenergy3 FILE=MODELS\energy3.pcx GROUP=Effects
-#exec MESHMAP SETTEXTURE MESHMAP=SShockbm NUM=1 TEXTURE=jenergy3
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var vector MoveAmount;
 var int NumPuffs;

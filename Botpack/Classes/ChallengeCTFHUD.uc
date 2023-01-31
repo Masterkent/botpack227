@@ -3,10 +3,7 @@
 //=============================================================================
 class ChallengeCTFHUD extends ChallengeTeamHUD;
 
-// Blue
-#exec TEXTURE IMPORT NAME=I_Capt FILE=TEXTURES\HUD\I_Capt.PCX GROUP="Icons" FLAGS=2 MIPS=OFF
-#exec TEXTURE IMPORT NAME=I_Down FILE=TEXTURES\HUD\I_Down.PCX GROUP="Icons" FLAGS=2 MIPS=OFF
-#exec TEXTURE IMPORT NAME=I_Home FILE=TEXTURES\HUD\I_Home.PCX GROUP="Icons" FLAGS=2 MIPS=OFF
+// Blue#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var CTFFlag MyFlag;
 

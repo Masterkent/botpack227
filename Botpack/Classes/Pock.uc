@@ -2,10 +2,7 @@
 // pock.
 //=============================================================================
 class Pock expands UnrealShare.Scorch;
-
-#exec TEXTURE IMPORT NAME=pock0_t FILE=TEXTURES\DECALS\pock0_t.PCX LODSET=2
-#exec TEXTURE IMPORT NAME=pock2_t FILE=TEXTURES\DECALS\pock2_t.PCX LODSET=2
-#exec TEXTURE IMPORT NAME=pock4_t FILE=TEXTURES\DECALS\pock4_t.PCX LODSET=2
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() texture PockTex[3];
 

@@ -2,8 +2,7 @@
 // ut_spritesmokepuff.
 //=============================================================================
 class UT_SpriteSmokePuff extends AnimSpriteEffect;
-
-#exec OBJ LOAD FILE=textures\utSmoke.utx PACKAGE=botpack.utsmoke
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() Texture SSprites[4];
 var() float RisingRate;

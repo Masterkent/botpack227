@@ -3,16 +3,7 @@
 // A human modified RazorBlade
 //=============================================================================
 class Razor2 extends B227_SyncedProjectile;
-
-#exec MESH IMPORT MESH=razorblade ANIVFILE=MODELS\razorblade_a.3D DATAFILE=MODELS\razorblade_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=razorblade X=0 Y=0 Z=0 YAW=-64
-#exec MESH SEQUENCE MESH=razorblade SEQ=All    STARTFRAME=0   NUMFRAMES=30
-#exec MESH SEQUENCE MESH=razorblade SEQ=Spin  STARTFRAME=0   NUMFRAMES=29
-#exec MESHMAP SCALE MESHMAP=razorblade X=0.09 Y=0.09 Z=0.18
-#exec TEXTURE IMPORT NAME=RazTrail FILE=MODELS\raztrail.PCX GROUP="Skins"
-#exec TEXTURE IMPORT NAME=RazSkin FILE=MODELS\razorskin.PCX GROUP="Skins"
-#exec MESHMAP SETTEXTURE MESHMAP=razorblade NUM=1 TEXTURE=RazSkin
-#exec MESHMAP SETTEXTURE MESHMAP=razorblade NUM=2 TEXTURE=RazTrail
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int NumWallHits;
 var bool bCanHitInstigator, bHitWater;

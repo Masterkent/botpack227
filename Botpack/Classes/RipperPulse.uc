@@ -1,6 +1,5 @@
 class RipperPulse extends AnimSpriteEffect;
-
-#exec OBJ LOAD FILE=textures\RipperPulse.utx PACKAGE=Botpack.RipperPulse
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function MakeSound()
 {

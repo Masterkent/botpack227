@@ -4,12 +4,7 @@
 class TournamentPlayer extends UTC_PlayerPawn
 	config(User)
 	abstract;
-
-#exec AUDIO IMPORT FILE="Sounds\chatsound\chat8a.WAV" NAME="NewBeep" GROUP="ChatSound"
-#exec AUDIO IMPORT FILE="Sounds\chatsound\spree-sound.WAV" NAME="SpreeSound" GROUP="ChatSound"
-
-#exec TEXTURE IMPORT NAME=Man FILE=TEXTURES\HUD\IMale2.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=ManBelt FILE=TEXTURES\HUD\IMaleSBelt.PCX GROUP="Icons" MIPS=OFF
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var(Messages)	localized string spreenote[10];
 var(Sounds)		Sound Deaths[6];

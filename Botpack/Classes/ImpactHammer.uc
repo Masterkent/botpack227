@@ -2,51 +2,7 @@
 // ImpactHammer.
 //=============================================================================
 class ImpactHammer extends TournamentWeapon;
-
-#exec MESH IMPORT  MESH=ImpactHammer ANIVFILE=MODELS\impact_a.3D DATAFILE=MODELS\impact_d.3D X=0 Y=0 Z=0 
-#exec MESH ORIGIN MESH=ImpactHammer X=0 Y=0 Z=0 YAW=64 PITCH=0 ROLL=-56
-#exec MESH SEQUENCE MESH=ImpactHammer SEQ=All         STARTFRAME=0   NUMFRAMES=56
-#exec MESH SEQUENCE MESH=ImpactHammer SEQ=Select      STARTFRAME=0   NUMFRAMES=17
-#exec MESH SEQUENCE MESH=ImpactHammer SEQ=Still       STARTFRAME=17  NUMFRAMES=1
-#exec MESH SEQUENCE MESH=ImpactHammer SEQ=Pull        STARTFRAME=17  NUMFRAMES=5
-#exec MESH SEQUENCE MESH=ImpactHammer SEQ=Shake       STARTFRAME=22  NUMFRAMES=10
-#exec MESH SEQUENCE MESH=ImpactHammer SEQ=Fire        STARTFRAME=35  NUMFRAMES=16
-#exec MESH SEQUENCE MESH=ImpactHammer SEQ=Down        STARTFRAME=51  NUMFRAMES=5
-#exec TEXTURE IMPORT NAME=JImpactHammer1 FILE=MODELS\imp1.PCX GROUP=Skins LODSET=2
-#exec TEXTURE IMPORT NAME=JImpactHammer2 FILE=MODELS\imp2.PCX GROUP=Skins LODSET=2
-#exec TEXTURE IMPORT NAME=JImpactHammer3 FILE=MODELS\imp3.pCX GROUP=Skins LODSET=2
-#exec TEXTURE IMPORT NAME=JImpactHammer4 FILE=MODELS\imp4.PCX GROUP=Skins LODSET=2
-#exec MESHMAP SCALE MESHMAP=ImpactHammer X=0.006 Y=0.006 Z=0.007
-#exec MESHMAP SETTEXTURE MESHMAP=ImpactHammer NUM=0 TEXTURE=JImpactHammer1
-#exec MESHMAP SETTEXTURE MESHMAP=ImpactHammer NUM=1 TEXTURE=JImpactHammer2
-#exec MESHMAP SETTEXTURE MESHMAP=ImpactHammer NUM=2 TEXTURE=JImpactHammer3
-#exec MESHMAP SETTEXTURE MESHMAP=ImpactHammer NUM=3 TEXTURE=JImpactHammer4
-
-#exec MESH IMPORT MESH=ImpPick ANIVFILE=MODELS\imppick_a.3D DATAFILE=MODELS\imppick_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=ImpPick X=0 Y=0 Z=0 YAW=0 ROLL=-64
-#exec MESH SEQUENCE MESH=ImpPick SEQ=All         STARTFRAME=0   NUMFRAMES=1
-#exec MESH SEQUENCE MESH=ImpPick SEQ=Still       STARTFRAME=0   NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=JImpPick1 FILE=MODELS\imp0.PCX GROUP=Skins LODSET=2
-#exec MESHMAP SCALE MESHMAP=ImpPick X=0.1 Y=0.1 Z=0.2
-#exec MESHMAP SETTEXTURE MESHMAP=ImpPick NUM=1 TEXTURE=JImpPick1
-
-#exec MESH IMPORT MESH=ImpactHandm ANIVFILE=MODELS\impacthand_a.3D DATAFILE=MODELS\impacthand_d.3D
-#exec MESH ORIGIN MESH=ImpactHandm X=30 Y=-130 Z=-157 YAW=64 ROLL=-64 
-#exec MESH SEQUENCE MESH=ImpactHandm SEQ=All  STARTFRAME=0   NUMFRAMES=13
-#exec MESH SEQUENCE MESH=ImpactHandm SEQ=Pull  STARTFRAME=1   NUMFRAMES=10 
-#exec MESH SEQUENCE MESH=ImpactHandm SEQ=Shake STARTFRAME=12   NUMFRAMES=1 
-#exec MESH SEQUENCE MESH=ImpactHandm SEQ=Still STARTFRAME=0   NUMFRAMES=1 
-#exec MESHMAP SCALE MESHMAP=ImpactHandm X=0.06 Y=0.06 Z=0.12
-#exec MESHMAP SETTEXTURE MESHMAP=ImpactHandm NUM=1 TEXTURE=JImpPick1
-
-#exec TEXTURE IMPORT NAME=IconHammer FILE=TEXTURES\HUD\WpnMpact.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=UseHammer FILE=TEXTURES\HUD\UseMpact.PCX GROUP="Icons" MIPS=OFF
-
-#exec AUDIO IMPORT FILE="Sounds\ImpactHammer\impact-regularfire.WAV" NAME="ImpactFire" GROUP="ASMD"
-#exec AUDIO IMPORT FILE="Sounds\ImpactHammer\impact-altfireSTART.WAV" NAME="ImpactAltFireStart" GROUP="ASMD"
-#exec AUDIO IMPORT FILE="Sounds\ImpactHammer\impact-altfireRELEASE.WAV" NAME="ImpactAltFireRelease" GROUP="ASMD"
-#exec AUDIO IMPORT FILE="Sounds\ImpactHammer\impacthammerloop.WAV" NAME="ImpactLoop" GROUP="ASMD"
-#exec AUDIO IMPORT FILE="Sounds\ImpactHammer\impactpickup.WAV" NAME="ImpactPickup" GROUP="ASMD"
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float ChargeSize, Count;
 var() sound AltFireSound;

@@ -2,15 +2,7 @@
 // flakslug.
 //=============================================================================
 class flakslug extends B227_Projectile;
-
-#exec MESH IMPORT MESH=flakslugm ANIVFILE=MODELS\flakslug_a.3D DATAFILE=MODELS\flakslug_d.3D
-#exec MESH LODPARAMS MESH=flakslugm STRENGTH=0.3
-#exec MESH ORIGIN MESH=flakslugm X=0 Y=0 Z=0 YAW=128 PITCH=64
-#exec MESH SEQUENCE MESH=flakslugm SEQ=All    STARTFRAME=0   NUMFRAMES=1
-#exec MESH SEQUENCE MESH=flakslugm SEQ=Still  STARTFRAME=0   NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=Jflakslugel1 FILE=MODELS\flakslug.PCX
-#exec MESHMAP SCALE MESHMAP=flakslugm X=0.019 Y=0.019 Z=0.038
-#exec MESHMAP SETTEXTURE MESHMAP=flakslugm NUM=1 TEXTURE=Jflakslugel1 TLOD=50
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var	chunktrail trail;
 var vector initialDir;

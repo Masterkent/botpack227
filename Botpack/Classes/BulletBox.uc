@@ -2,13 +2,7 @@
 // BulletBox.
 //=============================================================================
 class BulletBox extends TournamentAmmo;
-
-#exec MESH IMPORT MESH=BulletBoxM ANIVFILE=MODELS\rifleammo_a.3D DATAFILE=MODELS\rifleammo_d.3D LODSTYLE=10
-#exec MESH ORIGIN MESH=BulletBoxM X=0 Y=-200 Z=0 YAW=0
-#exec MESH SEQUENCE MESH=BulletBoxM SEQ=All    STARTFRAME=0  NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=BulletBoxT FILE=MODELS\rifleammo.PCX GROUP="Skins"  LODSET=2
-#exec MESHMAP SCALE MESHMAP=BulletBoxM X=0.035 Y=0.035 Z=0.07
-#exec MESHMAP SETTEXTURE MESHMAP=BulletBoxM NUM=0 TEXTURE=BulletBoxT
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_BulletBox FILE=Textures\Hud\B227_i_BulletBox.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

@@ -1,8 +1,6 @@
 class ShockExplo extends AnimSpriteEffect;
 
-
-#exec TEXTURE IMPORT NAME=ExplosionBluePal FILE=textures\expblue.pcx GROUP=Effects
-#exec OBJ LOAD FILE=textures\ShockExplo.utx PACKAGE=Botpack.ShockExplo
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function MakeSound()
 {

@@ -3,8 +3,6 @@
 //=============================================================================
 class UT_BloodPuff extends UT_SpriteSmokePuff;
 
-//-#exec OBJ LOAD FILE=..\Unrealshare\textures\BloodyPuff.utx PACKAGE=UnrealShare.BloodyPuff
-
 defaultproperties
 {
 	SSprites(0)=Texture'UnrealShare.BloodyPuff.bp_A01'

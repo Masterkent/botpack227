@@ -2,8 +2,7 @@
 // ChunkTrail.
 //=============================================================================
 class ChunkTrail extends Effects;
-
-#exec OBJ LOAD FILE=textures\flakGlow.utx PACKAGE=Botpack.FlakGlow
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

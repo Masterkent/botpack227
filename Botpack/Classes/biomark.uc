@@ -1,7 +1,5 @@
 class BioMark expands UnrealShare.Scorch;
-
-#exec TEXTURE IMPORT NAME=biosplat FILE=TEXTURES\DECALS\goo_splat.PCX LODSET=2
-#exec TEXTURE IMPORT NAME=biosplat2 FILE=TEXTURES\DECALS\goo_splat2.PCX LODSET=2
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function BeginPlay()
 {

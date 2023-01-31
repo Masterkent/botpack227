@@ -2,9 +2,7 @@
 // UT_SpriteBallExplosion.
 //=============================================================================
 class UT_SpriteBallExplosion extends AnimSpriteEffect;
-
-#exec TEXTURE IMPORT NAME=ExplosionPal FILE=Textures\UnrealShare\exppal.pcx GROUP=Effects
-#exec OBJ LOAD FILE=textures\UT_Explosion.utx PACKAGE=Botpack.UT_Explosions
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int ExpCount, MissCount;
 

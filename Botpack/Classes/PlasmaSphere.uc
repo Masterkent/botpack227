@@ -2,11 +2,7 @@
 // PlasmaSphere.
 //=============================================================================
 class PlasmaSphere extends Projectile;
-
-#exec OBJ LOAD FILE=textures\PlasmaExplo.utx PACKAGE=Botpack.PlasmaExplo
- 
-#exec AUDIO IMPORT FILE="Sounds\UnrealShare\Dispersion\DFly1.WAV" NAME="PulseFly" GROUP="PulseGun"
-#exec AUDIO IMPORT FILE="Sounds\Pulsegun\PulseExp.WAV" NAME="PulseExp" GROUP="PulseGun"
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bExploded, bExplosionEffect, bHitPawn;
 var() texture ExpType;

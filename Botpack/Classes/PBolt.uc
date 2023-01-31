@@ -2,26 +2,7 @@
 // pbolt.
 //=============================================================================
 class PBolt extends projectile;
-
-#exec TEXTURE IMPORT NAME=PalGreen FILE=Textures\UnrealShare\expgreen.pcx GROUP=Effects
-#exec OBJ LOAD FILE=textures\BoltCap.utx PACKAGE=Botpack.BoltCap
-#exec OBJ LOAD FILE=textures\BoltHit.utx PACKAGE=Botpack.BoltHit
-
-#exec MESH IMPORT MESH=pbolt ANIVFILE=MODELS\pbolt_a.3d DATAFILE=MODELS\pbolt_d.3d
-#exec MESH ORIGIN MESH=pbolt X=0 Y=-400 Z=0 YAW=192
-
-#exec MESH SEQUENCE MESH=pbolt SEQ=All                      STARTFRAME=0 NUMFRAMES=1
-#exec MESH SEQUENCE MESH=pbolt SEQ=still                    STARTFRAME=0 NUMFRAMES=1
-
-#exec MESHMAP NEW   MESHMAP=pbolt MESH=pbolt
-#exec MESHMAP SCALE MESHMAP=pbolt X=0.10125 Y=0.10125 Z=0.2025
-
-#exec TEXTURE IMPORT NAME=pbolt0 FILE=Textures\Bolta_00.bmp GROUP=Skins LODSET=2
-#exec TEXTURE IMPORT NAME=pbolt1 FILE=Textures\Bolta_01.bmp GROUP=Skins LODSET=2
-#exec TEXTURE IMPORT NAME=pbolt2 FILE=Textures\Bolta_02.bmp GROUP=Skins	LODSET=2
-#exec TEXTURE IMPORT NAME=pbolt3 FILE=Textures\Bolta_03.bmp GROUP=Skins LODSET=2
-#exec TEXTURE IMPORT NAME=pbolt4 FILE=Textures\Bolta_04.bmp GROUP=Skins LODSET=2
-#exec MESHMAP SETTEXTURE MESHMAP=pbolt NUM=0 TEXTURE=pbolt0
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() texture SpriteAnim[5];
 var int SpriteFrame;

@@ -2,13 +2,7 @@
 // FlakAmmo.
 //=============================================================================
 class FlakAmmo extends TournamentAmmo;
-
-#exec MESH IMPORT MESH=FlakAmmoM ANIVFILE=MODELS\flakammo_a.3D DATAFILE=MODELS\flakammo_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=FlakAmmoM X=0 Y=0 Z=0 YAW=0 ROLL=0
-#exec MESH SEQUENCE MESH=FlakAmmoM SEQ=All    STARTFRAME=0  NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=JFA1 FILE=MODELS\FlakAmmo.PCX GROUP="Skins"  LODSET=2
-#exec MESHMAP SCALE MESHMAP=FlakAmmoM X=0.05 Y=0.05 Z=0.1
-#exec MESHMAP SETTEXTURE MESHMAP=FlakAmmoM NUM=1 TEXTURE=JFA1
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_FlakAmmo FILE=Textures\Hud\B227_i_FlakAmmo.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

@@ -6,8 +6,7 @@
 //=============================================================================
 class TournamentGameInfo extends UTC_GameInfo
 	config;
-
-#exec AUDIO IMPORT FILE="Sounds\Generic\Resp2a.wav" NAME="Resp2A" GROUP="General"
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var(DeathMessage) localized string DeathMessage[32];    // Player name, or blank if none.
 var(DeathMessage) localized string DeathModifier[5];

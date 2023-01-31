@@ -1,7 +1,6 @@
 class RatedTeamInfoDemo1 expands RatedTeamInfo;
 
-// Raw Steel
-#exec TEXTURE IMPORT NAME=TLSteel FILE=textures\teamsymbols\TLSteel.PCX GROUP="TeamSymbols" MIPS=OFF
+// Raw Steel#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

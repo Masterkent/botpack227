@@ -4,41 +4,7 @@
 //=============================================================================
 class ChallengeHUD extends UTC_HUD
 	config;
-
-#exec TEXTURE IMPORT NAME=HudLine FILE=TEXTURES\UnrealShare\HUD\Line.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=IconSelection FILE=TEXTURES\UnrealShare\HUD\i_rim.PCX GROUP="Icons" FLAGS=2 MIPS=OFF
-
-#exec TEXTURE IMPORT NAME=CHair1  FILE=Textures\Hud\cross1.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair2  FILE=Textures\Hud\cross2.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair3  FILE=Textures\Hud\cross3.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair4  FILE=Textures\Hud\cross4.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair5  FILE=Textures\Hud\cross5.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair6  FILE=Textures\Hud\cross6.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair7  FILE=Textures\Hud\cross7.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair8  FILE=Textures\Hud\cross8.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=CHair9  FILE=Textures\Hud\cross9.PCX GROUP="Icons" MIPS=OFF
-
-#exec Font Import File=Textures\UnrealShare\TinyFont.pcx Name=TinyFont
-#exec Font Import File=Textures\UnrealShare\TinyFon3.pcx Name=TinyWhiteFont
-#exec Font Import File=Textures\UnrealShare\TinyFon2.pcx Name=TinyRedFont
-
-#exec TEXTURE IMPORT NAME=HudElements1 FILE=TEXTURES\HUD\HudElements1.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=HUDWeapons FILE=TEXTURES\HUD\HudElements2.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-
-#exec TEXTURE IMPORT NAME=FacePanel0 FILE=TEXTURES\HUD\FacePan0.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel1 FILE=TEXTURES\HUD\FacePan1.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel2 FILE=TEXTURES\HUD\FacePan2.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel3 FILE=TEXTURES\HUD\FacePan3.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel1a FILE=TEXTURES\HUD\FacePan1a.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel2a FILE=TEXTURES\HUD\FacePan2a.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel3a FILE=TEXTURES\HUD\FacePan3a.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel1b FILE=TEXTURES\HUD\FacePan1b.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel2b FILE=TEXTURES\HUD\FacePan2b.PCX GROUP="FacePanel" MIPS=OFF
-#exec TEXTURE IMPORT NAME=FacePanel3b FILE=TEXTURES\HUD\FacePan3b.PCX GROUP="FacePanel" MIPS=OFF
-
-#exec TEXTURE IMPORT NAME=DisconnectWarn FILE=TEXTURES\HUD\Disconnect.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-
-#exec OBJ LOAD FILE=..\Textures\LadrStatic.utx PACKAGE=Botpack.LadrStatic
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() int SizeY,Count;
 var string CurrentMessage;

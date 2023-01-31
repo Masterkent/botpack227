@@ -3,8 +3,6 @@
 //=============================================================================
 class UT_BlackSmoke extends UT_SpriteSmokePuff;
 
-//-#exec OBJ LOAD FILE=..\UnrealShare\textures\SmokeBlack.utx PACKAGE=UnrealShare.SmokeBlack
-
 defaultproperties
 {
 	SSprites(0)=Texture'UnrealShare.SmokeBlack.bs_a00'

@@ -2,13 +2,7 @@
 // Shock Core
 //=============================================================================
 class ShockCore extends TournamentAmmo;
-
-#exec MESH IMPORT MESH=ShockCoreM ANIVFILE=MODELS\asmdammo_a.3D DATAFILE=MODELS\asmdammo_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=ShockCoreM X=0 Y=0 Z=0 YAW=0
-#exec MESH SEQUENCE MESH=ShockCoreM SEQ=All    STARTFRAME=0  NUMFRAMES=1
-#exec TEXTURE IMPORT NAME=JShockCore FILE=MODELS\asmdammo.PCX GROUP="Skins" LODSET=2
-#exec MESHMAP SCALE MESHMAP=ShockCoreM X=0.055 Y=0.055 Z=0.11
-#exec MESHMAP SETTEXTURE MESHMAP=ShockCoreM NUM=1 TEXTURE=JShockCore
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_ShockCore FILE=Textures\Hud\B227_i_ShockCore.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

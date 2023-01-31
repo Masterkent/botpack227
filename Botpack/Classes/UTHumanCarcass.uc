@@ -3,8 +3,7 @@
 //=============================================================================
 class UTHumanCarcass extends Carcass
 	abstract;
-
-#exec AUDIO IMPORT FILE="Sounds\Male\gib01.WAV" NAME="NewGib" GROUP="Male"
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var class<UTMasterCreatureChunk> MasterReplacement;
 var() bool bGreenBlood;

@@ -1,7 +1,5 @@
 class WallCrack expands UnrealShare.Scorch;
-
-#exec TEXTURE IMPORT NAME=WallCrack1 FILE=TEXTURES\DECALS\Flak_crk1.PCX LODSET=2
-#exec TEXTURE IMPORT NAME=WallCrack2 FILE=TEXTURES\DECALS\Flak_crk2.PCX LODSET=2
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function BeginPlay()
 {

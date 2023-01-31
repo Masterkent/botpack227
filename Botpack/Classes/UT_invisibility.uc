@@ -2,15 +2,7 @@
 // UT_Invisibility.
 //=============================================================================
 class UT_Invisibility extends TournamentPickUp;
-
-#exec MESH IMPORT MESH=invis2M ANIVFILE=MODELS\invis_a.3D DATAFILE=MODELS\invis_d.3D X=0 Y=0 Z=0
-#exec MESH LODPARAMS MESH=invis2M STRENGTH=0.5
-#exec MESH ORIGIN MESH=invis2M X=0 Y=0 Z=0  YAW=0
-#exec MESH SEQUENCE MESH=invis2M SEQ=All    STARTFRAME=0  NUMFRAMES=1
-//#exec OBJ LOAD FILE=..\Textures\belt_fx.utx  PACKAGE=botpack.belt_fx
-#exec TEXTURE IMPORT NAME=jinvis FILE=MODELS\invis2.pcx GROUP=Skins  LODSET=2
-#exec MESHMAP SCALE MESHMAP=invis2M X=0.05 Y=0.05 Z=0.1
-#exec MESHMAP SETTEXTURE MESHMAP=invis2M NUM=1 TEXTURE=jinvis
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_UT_Invisibility FILE=Textures\Hud\B227_i_UT_Invisibility.pcx GROUP="Icons" MIPS=OFF
 
 state Activated

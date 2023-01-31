@@ -6,8 +6,7 @@ class UTChunk extends Projectile;
 var	chunktrail trail;
 var Texture AnimFrame[12];
 var int Count;
-
-#exec OBJ LOAD FILE=textures\ChunkGlow.utx PACKAGE=Botpack.ChunkGlow
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 	simulated function PostBeginPlay()
 	{

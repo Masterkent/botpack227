@@ -1,6 +1,5 @@
 class NuclearMark expands UnrealShare.Scorch;
-
-#exec TEXTURE IMPORT NAME=bigblast FILE=TEXTURES\DECALS\Blast6-S.PCX LODSET=2
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

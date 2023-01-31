@@ -7,7 +7,7 @@ var(DMMutator) config bool bAutoActivatePickups;
 var(DMMutator) config bool bUseFlakShellAmmo;
 var(DMMutator) config bool bLogNonUTInventory;
 var(HUD) config bool bUseTahomaFonts;
-var(HUD) config bYellowTeamSayMessages;
+var(HUD) config bool bYellowTeamSayMessages;
 var(NPC) config float BotDodgeEndTime;
 var(Player) config bool bFixLoaded;
 var(Weapon) config bool bAdjustMinigunMuzzleFlashOffset;

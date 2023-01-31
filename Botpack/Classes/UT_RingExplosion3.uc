@@ -2,8 +2,7 @@
 // RingExplosion3.
 //=============================================================================
 class UT_RingExplosion3 extends ut_RingExplosion;
-
-#exec TEXTURE IMPORT NAME=BlueRing FILE=MODELS\ring3.pcx GROUP=Effects
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool B227_bSpawnDecal;
 

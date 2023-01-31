@@ -2,8 +2,7 @@
 // utFlare.
 //=============================================================================
 class UTFlare expands ut_Decoration;
-
-#exec TEXTURE IMPORT NAME=utflareT FILE=MODELS\utflare.pcx GROUP=Skins
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

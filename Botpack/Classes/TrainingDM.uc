@@ -1,6 +1,5 @@
 class TrainingDM extends DeathMatchPlus;
-
-#exec OBJ LOAD FILE=..\Sounds\TutVoiceDM.uax PACKAGE=TutVoiceDM
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var string DM[24];
 

@@ -3,13 +3,7 @@
 //=============================================================================
 class ShockBeam extends Effects
 	config(Botpack);
-
-#exec MESH IMPORT MESH=Shockbm ANIVFILE=MODELS\asmdeffect_a.3D DATAFILE=MODELS\asmdeffect_d.3D X=0 Y=0 Z=0
-#exec MESH ORIGIN MESH=Shockbm X=0 Y=-400 Z=0 YAW=-64
-#exec MESH SEQUENCE MESH=Shockbm SEQ=All       STARTFRAME=0   NUMFRAMES=1
-#exec MESHMAP SCALE MESHMAP=Shockbm X=0.09 Y=0.21 Z=0.18 YAW=128
-#exec TEXTURE IMPORT NAME=jenergy2 FILE=MODELS\energy2.pcx GROUP=Effects
-#exec MESHMAP SETTEXTURE MESHMAP=Shockbm NUM=1 TEXTURE=jenergy2
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var vector MoveAmount;
 var int NumPuffs;

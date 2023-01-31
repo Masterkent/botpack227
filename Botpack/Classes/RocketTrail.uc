@@ -2,8 +2,7 @@
 // RocketTrail.
 //=============================================================================
 class RocketTrail extends Effects;
-
-#exec TEXTURE IMPORT NAME=JRFlare FILE=MODELS\flare9.PCX
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

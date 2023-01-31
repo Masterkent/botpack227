@@ -1,14 +1,7 @@
 // UnrealCTFScoreBoard
 //=============================================================================
 class UnrealCTFScoreBoard extends TeamScoreBoard;
-
-#exec TEXTURE IMPORT NAME=BlueFlag FILE=..\BOTPACK\TEXTURES\HUD\i_bscore.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=GreenFlag FILE=..\BOTPACK\TEXTURES\HUD\i_gscore.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=RedFlag FILE=..\BOTPACK\TEXTURES\HUD\i_rscore.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=YellowFlag FILE=..\BOTPACK\TEXTURES\HUD\i_yscore.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-
-#exec TEXTURE IMPORT NAME=I_RedBox FILE=..\BOTPACK\TEXTURES\HUD\i_redbox.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=I_BlueBox FILE=..\BOTPACK\TEXTURES\HUD\i_bluebox.PCX GROUP="Icons" MIPS=OFF
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() texture FlagIcon[4];
 

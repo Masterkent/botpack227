@@ -2,16 +2,7 @@
 // ChallengeTeamHUD
 //=============================================================================
 class ChallengeTeamHUD extends ChallengeHUD;
-
-#exec TEXTURE IMPORT NAME=I_TeamB FILE=TEXTURES\HUD\TabBluTm.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=I_TeamN FILE=TEXTURES\HUD\TabWhiteTm.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=I_TeamR FILE=TEXTURES\HUD\TabRedTm.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=I_TeamG FILE=TEXTURES\HUD\TabGrnTm.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-#exec TEXTURE IMPORT NAME=I_TeamY FILE=TEXTURES\HUD\TabYloTm.PCX GROUP="Icons" MIPS=OFF FLAGS=2
-
-#exec TEXTURE IMPORT NAME=Static1 FILE=TEXTURES\HUD\Static1.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=Static2 FILE=TEXTURES\HUD\Static2.PCX GROUP="Icons" MIPS=OFF
-#exec TEXTURE IMPORT NAME=Static3 FILE=TEXTURES\HUD\Static3.PCX GROUP="Icons" MIPS=OFF
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var Texture TeamIcon[4];
 var() color TeamColor[4];
