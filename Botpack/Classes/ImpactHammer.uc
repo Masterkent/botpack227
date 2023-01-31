@@ -2,7 +2,8 @@
 // ImpactHammer.
 //=============================================================================
 class ImpactHammer extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float ChargeSize, Count;
 var() sound AltFireSound;
@@ -139,7 +140,7 @@ function PlayAltFiring()
 
 state Firing
 {
-	function AltFire(float F) 
+	function AltFire(float F)
 	{
 	}
 
@@ -161,13 +162,13 @@ state Firing
 				Bot(Owner).bFire = 1;
 		}
 		P = Pawn(Owner);
-		if ( P == None ) 
+		if ( P == None )
 		{
 			AmbientSound = None;
 			GotoState('');
 			return;
 		}
-		else if( P.bFire==0 ) 
+		else if( P.bFire==0 )
 		{
 			TraceFire(0);
 			PlayFiring();
@@ -183,7 +184,7 @@ state Firing
 			Count = 0;
 			Owner.MakeNoise(1.0);
 		}
-		if (ChargeSize > 1) 
+		if (ChargeSize > 1)
 		{
 			if ( !P.IsA('PlayerPawn') && (P.Enemy != None) )
 			{
@@ -196,11 +197,11 @@ state Firing
 			}
 			else
 				GetAxes(P.ViewRotation, X, Y, Z);
-			StartTrace = P.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+			StartTrace = P.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 			if ( (Level.NetMode == NM_Standalone) && P.IsA('PlayerPawn') )
-				EndTrace = StartTrace + 25 * X; 
+				EndTrace = StartTrace + 25 * X;
 			else
-				EndTrace = StartTrace + 60 * X; 
+				EndTrace = StartTrace + 60 * X;
 			HitActor = Trace(HitLocation, HitNormal, EndTrace, StartTrace, true);
 			if ( (HitActor != None) && (HitActor.DrawType == DT_Mesh) )
 			{
@@ -245,10 +246,10 @@ state ClientFiring
 
 state FireBlast
 {
-	function Fire(float F) 
+	function Fire(float F)
 	{
 	}
-	function AltFire(float F) 
+	function AltFire(float F)
 	{
 	}
 
@@ -301,9 +302,9 @@ function TraceFire(float accuracy)
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation, X, Y, Z);
-	StartTrace = Owner.Location + CalcDrawOffset() + FireOffset.Y * Y + FireOffset.Z * Z; 
+	StartTrace = Owner.Location + CalcDrawOffset() + FireOffset.Y * Y + FireOffset.Z * Z;
 	AdjustedAim = pawn(owner).AdjustAim(1000000, StartTrace, AimError, False, False);
-	EndTrace = StartTrace + 120.0 * vector(AdjustedAim); 
+	EndTrace = StartTrace + 120.0 * vector(AdjustedAim);
 	Other = Pawn(Owner).TraceShot(HitLocation, HitNormal, EndTrace, StartTrace);
 	ProcessTraceHit(Other, HitLocation, HitNormal, vector(AdjustedAim), Y, Z);
 }
@@ -339,9 +340,9 @@ function TraceAltFire()
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation, X, Y, Z);
-	StartTrace = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
-	AdjustedAim = pawn(owner).AdjustAim(1000000, StartTrace, AimError, False, False);	
-	EndTrace = StartTrace + 180 * vector(AdjustedAim); 
+	StartTrace = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
+	AdjustedAim = pawn(owner).AdjustAim(1000000, StartTrace, AimError, False, False);
+	EndTrace = StartTrace + 180 * vector(AdjustedAim);
 	Other = Pawn(Owner).TraceShot(HitLocation, HitNormal, EndTrace, StartTrace);
 	ProcessAltTraceHit(Other, HitLocation, HitNormal, vector(AdjustedAim), Y, Z);
 
@@ -353,7 +354,7 @@ function TraceAltFire()
 			P.speed = VSize(P.Velocity);
 			if ( P.Velocity Dot Y > 0 )
 				P.Velocity = P.Speed * Normal(P.Velocity + (750 - VSize(P.Location - Owner.Location)) * Y);
-			else	
+			else
 				P.Velocity = P.Speed * Normal(P.Velocity - (750 - VSize(P.Location - Owner.Location)) * Y);
 		}
 }

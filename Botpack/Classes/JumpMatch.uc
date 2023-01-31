@@ -12,7 +12,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	if ( Other.IsA('UT_JumpBoots') )
 		return false;
 
-	return true; 
+	return true;
 }
 
 defaultproperties

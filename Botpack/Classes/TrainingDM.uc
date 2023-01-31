@@ -1,5 +1,6 @@
 class TrainingDM extends DeathMatchPlus;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var string DM[24];
 
@@ -36,7 +37,7 @@ event InitGame( string Options, out string Error )
 function InitRatedGame(LadderInventory LadderObj, PlayerPawn LadderPlayer)
 {
 	Super.InitRatedGame(LadderObj, LadderPlayer);
-	
+
 	RemainingBots = 0;
 	bRequireReady = False;
 }

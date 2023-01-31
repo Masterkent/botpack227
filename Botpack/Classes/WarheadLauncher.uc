@@ -2,7 +2,8 @@
 // WarHeadLauncher
 //=============================================================================
 class WarHeadLauncher extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var GuidedWarShell GuidedShell;
 var int Scroll;
@@ -58,7 +59,7 @@ simulated function PostRender( canvas Canvas )
 
 	numReadouts = OldClipY/128 + 2;
 	for ( i = 0; i < numReadouts; i++ )
-	{ 
+	{
 		Canvas.SetPos(1,Scroll + i * 128);
 		Scroll--;
 		if ( Scroll < -128 )
@@ -84,7 +85,7 @@ function float RateSelf( out int bUseAltMode )
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 		if ( P.PlayerReplicationInfo != none && (P != O) && (P != E)
 			&& (!Level.Game.bTeamGame || (O.PlayerReplicationInfo.Team != P.PlayerReplicationInfo.Team))
-			&& (VSize(E.Location - P.Location) < 650) 
+			&& (VSize(E.Location - P.Location) < 650)
 			&& (!Level.Game.IsA('TeamGamePlus') || TeamGamePlus(Level.Game).PriorityObjective(O) < 2)
 			&& FastTrace(P.Location, E.Location) )
 		{

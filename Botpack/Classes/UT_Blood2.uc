@@ -2,7 +2,8 @@
 // ut_Blood2.
 //=============================================================================
 class UT_Blood2 extends Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bGreenBlood;
 

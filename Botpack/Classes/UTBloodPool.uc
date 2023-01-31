@@ -1,5 +1,6 @@
 class UTBloodPool expands UnrealShare.Scorch;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var texture Splats[5];
 
@@ -10,7 +11,7 @@ simulated function BeginPlay()
 		destroy();
 		return;
 	}
-	
+
 	if ( Level.bDropDetail )
 		Texture = splats[2 + Rand(3)];
 	else

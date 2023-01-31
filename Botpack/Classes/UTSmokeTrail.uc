@@ -2,7 +2,8 @@
 // UTSmokeTrail.
 //=============================================================================
 class UTSmokeTrail extends Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int Curr;
 var bool bRandomize, bEven;

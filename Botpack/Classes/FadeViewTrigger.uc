@@ -4,7 +4,7 @@ var(ZoneLight) vector ViewFlash, ViewFog;
 
 
 var() vector TargetFlash;
-var() bool bTriggerOnceOnly; 
+var() bool bTriggerOnceOnly;
 var() float FadeSeconds;
 
 
@@ -15,7 +15,7 @@ event BeginPlay()
 {
 	Super.BeginPlay();
 	bTriggered = False;
-	
+
 	Disable('Tick');
 }
 

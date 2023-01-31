@@ -2,7 +2,8 @@
 // Enforcer
 //=============================================================================
 class Enforcer extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() int hitdamage;
 var  float AltAccuracy;
@@ -74,7 +75,7 @@ function SetSwitchPriority(pawn Other)
 
 // Return the switch priority of the weapon (normally AutoSwitchPriority, but may be
 // modified by environment (or by other factors for bots)
-function float SwitchPriority() 
+function float SwitchPriority()
 {
 	local int bTemp;
 
@@ -105,7 +106,7 @@ function DropFrom(vector StartLocation)
 			B227_DropSlaveEnforcer();
 		else
 			SlaveEnforcer.Destroy();
-			
+
 		SlaveEnforcer = none;
 	}
 	AIRating = default.AIRating;
@@ -159,9 +160,9 @@ event float BotDesireability(Pawn Bot)
 				return 0.25 * desire;
 
 			if ( AlreadyHas.AmmoType.AmmoAmount > 0 )
-				return FMax( 0.25 * desire, 
+				return FMax( 0.25 * desire,
 						AlreadyHas.AmmoType.MaxDesireability
-						 * FMin(1, 0.15 * AlreadyHas.AmmoType.MaxAmmo/AlreadyHas.AmmoType.AmmoAmount) ); 
+						 * FMin(1, 0.15 * AlreadyHas.AmmoType.MaxAmmo/AlreadyHas.AmmoType.AmmoAmount) );
 		}
 	}
 	if ( (Bot.Weapon == None) || (Bot.Weapon.AIRating <= 0.4) )
@@ -183,14 +184,14 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 	if (B227_ShouldTraceFireThroughWarpZones())
 		B227_WarpedTraceFire(self, B227_FireStartTrace, B227_FireEndTrace, 8, Other, HitLocation, HitNormal, X);
 
-	if (Other == Level) 
+	if (Other == Level)
 	{
 		if ( bIsSlave || (SlaveEnforcer != None) )
 			Spawn(class'UT_LightWallHitEffect',,, HitLocation+HitNormal, Rotator(HitNormal));
 		else
 			Spawn(class'UT_WallHit',,, HitLocation+HitNormal, Rotator(HitNormal));
 	}
-	else if ((Other != self) && (Other != Owner) && (Other != None) ) 
+	else if ((Other != self) && (Other != Owner) && (Other != None) )
 	{
 		if ( FRand() < 0.2 )
 			X *= 5;
@@ -207,7 +208,7 @@ function bool HandlePickupQuery(Inventory Item)
 	local Pawn P;
 	local Enforcer Copy;
 
-	if (Item.Class == Class && SlaveEnforcer == none) 
+	if (Item.Class == Class && SlaveEnforcer == none)
 	{
 		P = Pawn(Owner);
 		// spawn a double
@@ -303,7 +304,7 @@ function SetHand(float Hand)
 
 function BringUp()
 {
-	if (SlaveEnforcer != none ) 
+	if (SlaveEnforcer != none )
 	{
 		SetTwoHands();
 		SlaveEnforcer.BringUp();
@@ -400,7 +401,7 @@ state Active
 {
 	function bool PutDown()
 	{
-		if ( bWeaponUp || (AnimFrame < 0.75) ) 
+		if ( bWeaponUp || (AnimFrame < 0.75) )
 			GotoState('DownWeapon');
 		else
 			bChangeWeapon = true;
@@ -463,7 +464,7 @@ Begin:
 	FinishAnim();
 	if ( bIsSlave )
 		GotoState('Idle');
-	else 
+	else
 		Finish();
 }
 
@@ -512,7 +513,7 @@ state ClientFiring
 		Super.BeginState();
 		if ( SlaveEnforcer != None )
 			SetTimer(0.2, false);
-		else 
+		else
 			SetTimer(0.5, false);
 	}
 
@@ -570,7 +571,7 @@ state ClientAltFiring
 		Super.BeginState();
 		if ( SlaveEnforcer != None )
 			SetTimer(0.2, false);
-		else 
+		else
 			SetTimer(0.5, false);
 	}
 
@@ -604,7 +605,7 @@ Begin:
 		SetTimer(0.20, false);
 	FinishAnim();
 Repeater:
-	if (AmmoType.UseAmmo(1)) 
+	if (AmmoType.UseAmmo(1))
 	{
 		FlashCount++;
 		if ( SlaveEnforcer != None )
@@ -616,17 +617,17 @@ Repeater:
 		FinishAnim();
 	}
 
-	if ( AltAccuracy < 3 ) 
+	if ( AltAccuracy < 3 )
 		AltAccuracy += 0.5;
 	if ( bIsSlave )
 	{
-		if ( (Pawn(Owner).bAltFire!=0) 
+		if ( (Pawn(Owner).bAltFire!=0)
 			&& AmmoType.AmmoAmount>0 )
 			Goto('Repeater');
 	}
 	else if ( bChangeWeapon )
 		GotoState('DownWeapon');
-	else if ( (Pawn(Owner).bAltFire!=0) 
+	else if ( (Pawn(Owner).bAltFire!=0)
 		&& AmmoType.AmmoAmount>0 )
 	{
 		if ( PlayerPawn(Owner) == None )
@@ -716,9 +717,9 @@ function PlayIdleAnim()
 {
 	if ( Mesh == PickupViewMesh )
 		return;
-	if ( (FRand()>0.96) && (AnimSequence != 'Twiddle') ) 
+	if ( (FRand()>0.96) && (AnimSequence != 'Twiddle') )
 		PlayAnim('Twiddle',0.6,0.3);
-	else 
+	else
 		LoopAnim('Sway',0.2, 0.3);
 }
 
@@ -735,10 +736,10 @@ state Idle
 		GotoState('DownWeapon');
 		return True;
 	}
-	
+
 Begin:
 	bPointing=False;
-	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) ) 
+	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) )
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
 	//- LoopAnim('Sway',0.2, 0.1);
 	// B227 note: Calling PlayAnim right after LoopAnim doesn't work in net game

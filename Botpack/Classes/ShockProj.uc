@@ -2,7 +2,8 @@
 // ShockProj.
 //=============================================================================
 class ShockProj extends B227_Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() Sound ExploSound;
 
@@ -20,7 +21,7 @@ function SuperExplosion()
 	Spawn(Class'ut_ComboRing',,'',Location, Instigator.ViewRotation);
 	PlaySound(ExploSound,,20.0,,2000,0.6);
 
-	Destroy(); 
+	Destroy();
 }
 
 auto state Flying

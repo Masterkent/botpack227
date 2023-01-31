@@ -59,7 +59,7 @@ function Tick( float DeltaTime )
 	local Pawn P;
 	local bool bActive;
 
-	if( !bTriggered ) 
+	if( !bTriggered )
 	{
 		Disable('Tick');
 		return;
@@ -75,7 +75,7 @@ function Tick( float DeltaTime )
 		if( (P.Region.Zone == self) && (P.Health > 0) && !P.IsA('Spectator') )
 		{
 			bActive = true;
-				
+
 			// Fatness
 			P.Fatness   = byte( 128 + Int( (Float(DieFatness)-128) * ratio ));
 			P.DrawScale = 1 + (DieDrawScale-1) * ratio;
@@ -87,7 +87,7 @@ function Tick( float DeltaTime )
 				bScreamed = true;
 				P.PlaySound( P.Die, SLOT_Talk );
 			}
-		
+
 			// Fog & Field of view
 			pPawn = PlayerPawn(P);
 			if( pPawn != None )
@@ -99,15 +99,15 @@ function Tick( float DeltaTime )
 				pPawn.SetFOVAngle( (DieFOV-pPawn.default.FOVAngle)*ratio + pPawn.default.FOVAngle);
 			}
 			if ( ratio == 1.0 )
-			{	
+			{
 				Level.Game.SpecialDamageString = DamageString;
 				P.health = -1000; //make sure gibs
 				P.Died(Instigator, 'SpecialDamage', P.Location);
 				MakeNormal(P);
 			}
 		}
-	}	
-	
+	}
+
 	if( !bActive && (TimePassed >= KillTime) )
 	{
 		Disable('Tick');

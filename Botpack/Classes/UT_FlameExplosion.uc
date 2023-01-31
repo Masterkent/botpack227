@@ -2,7 +2,8 @@
 // UT_FlameExplosion.
 //=============================================================================
 class UT_FlameExplosion expands AnimSpriteEffect;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function MakeSound()
 {
@@ -14,9 +15,9 @@ simulated function PostBeginPlay()
 	Super.PostBeginPlay();
 	if ( Level.NetMode != NM_DedicatedServer )
 	{
-		if (!Level.bHighDetailMode) 
+		if (!Level.bHighDetailMode)
 			Drawscale = 1.4;
-		else 
+		else
 			Spawn(class'UT_ShortSmokeGen');
 	}
 	MakeSound();

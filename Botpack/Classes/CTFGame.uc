@@ -3,7 +3,8 @@
 //=============================================================================
 class CTFGame extends TeamGamePlus
 	config;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() sound CaptureSound[4];
 var() sound ReturnSound;
@@ -195,7 +196,7 @@ function ScoreFlag(Pawn Scorer, CTFFlag theFlag)
 	else if ( bOverTime )
 		EndGame("timelimit");
 }
- 
+
 function Actor SetDefenseFor(Bot aBot)
 {
 	return CTFReplicationInfo(GameReplicationInfo).FlagList[aBot.PlayerReplicationInfo.Team].HomeBase;
@@ -212,7 +213,7 @@ function float GameThreatAdd(Bot aBot, Pawn Other)
 
 function bool FindPathToBase(Bot aBot, FlagBase aBase)
 {
-	if ( (aBot.AlternatePath != None) 
+	if ( (aBot.AlternatePath != None)
 		&& ((aBot.AlternatePath.team == aBase.team) || bool(aBot.AlternatePath.GetPropertyText("bTwoWay"))) )
 	{
 		if ( aBot.ActorReachable(aBot.AlternatePath) )
@@ -243,7 +244,7 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 	else if ( (Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.HasFlag != None)
 				|| (aBot.PlayerReplicationInfo.HasFlag != None) )
 		return 1;
-	else 
+	else
 		return Super.AssessBotAttitude(aBot, Other);
 }
 
@@ -264,7 +265,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		EnemyFlag = CTFReplicationInfo(GameReplicationInfo).FlagList[1];
 	else
 		EnemyFlag = CTFReplicationInfo(GameReplicationInfo).FlagList[0];
-	
+
 	bOrdered = aBot.bSniping || (aBot.Orders == 'Follow') || (aBot.Orders == 'Hold');
 
 	if ( !FriendlyFlag.bHome  )
@@ -275,7 +276,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		if ( bSeeFlag && (FriendlyFlag.Holder == None) && aBot.ActorReachable(FriendlyFlag) )
 		{
 			if ( Level.TimeSeconds - LastGotFlag > 6 )
-			{	
+			{
 				LastGotFlag = Level.TimeSeconds;
 				aBot.SendTeamMessage(None, 'OTHER', 8, 20);
 			}
@@ -287,7 +288,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		if ( EnemyFlag.Holder != aBot )
 		{
 			if ( bSeeFlag && (FriendlyFlag.Holder != None) )
-			{	
+			{
 				FriendlyFlag.bKnownLocation = true;
 				if ( Level.TimeSeconds - LastSeeFlagCarrier > 6 )
 				{
@@ -308,8 +309,8 @@ function bool FindSpecialAttractionFor(Bot aBot)
 			else if ( aBot.Orders == 'Attack' )
 			{
 				// break off attack only if needed
-				if ( bSeeFlag || (EnemyFlag.Holder != None) 
-					|| (((FriendlyFlag.Position().Region.Zone != FriendlyFlag.Homebase.Region.Zone) || (VSize(FriendlyFlag.Homebase.Location - FriendlyFlag.Position().Location) > 1000)) 
+				if ( bSeeFlag || (EnemyFlag.Holder != None)
+					|| (((FriendlyFlag.Position().Region.Zone != FriendlyFlag.Homebase.Region.Zone) || (VSize(FriendlyFlag.Homebase.Location - FriendlyFlag.Position().Location) > 1000))
 						&& ((aBot.Region.Zone != EnemyFlag.Region.Zone)
 							|| (VSize(aBot.Location - EnemyFlag.Location) > 1600) || (VSize(aBot.Location - FriendlyFlag.Position().Location) < 1200))) )
 				{
@@ -323,8 +324,8 @@ function bool FindSpecialAttractionFor(Bot aBot)
 					}
 				}
 			}
-			else if ( (!bOrdered || ABot.OrderObject.IsA('Bot')) 
-				&& (FriendlyFlag.bKnownLocation || (FRand() < 0.1)) ) 
+			else if ( (!bOrdered || ABot.OrderObject.IsA('Bot'))
+				&& (FriendlyFlag.bKnownLocation || (FRand() < 0.1)) )
 			{
 				FriendlyFlag.bKnownLocation = true;
 				aBot.MoveTarget = aBot.FindPathToward(FriendlyFlag.Position());
@@ -376,7 +377,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 				aBot.MoveTarget = FriendlyFlag.HomeBase;
 			else
 				return FindPathToBase(aBot, FriendlyFlag.HomeBase);
-		}		
+		}
 		return true;
 	}
 
@@ -390,7 +391,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		}
 		else if ( (aBot.Orders == 'Attack')
 				 || ((aBot.Orders == 'Follow') && aBot.OrderObject.IsA('Bot')
-					&& ((Pawn(aBot.OrderObject).Health <= 0) 
+					&& ((Pawn(aBot.OrderObject).Health <= 0)
 						 || ((EnemyFlag.Region.Zone == aBot.Region.Zone) && (VSize(EnemyFlag.Location - aBot.Location) < 2000)))) )
 		{
 			if ( !aBot.bKamikaze
@@ -400,9 +401,9 @@ function bool FindSpecialAttractionFor(Bot aBot)
 				return false;
 			}
 
-			if ( (aBot.Enemy != None) 
+			if ( (aBot.Enemy != None)
 				&& (aBot.Enemy.IsA('PlayerPawn') || (aBot.Enemy.IsA('Bot') && (Bot(aBot.Enemy).Orders == 'Attack')))
-				&& (((aBot.Enemy.Region.Zone == FriendlyFlag.HomeBase.Region.Zone) && (EnemyFlag.HomeBase.Region.Zone != FriendlyFlag.HomeBase.Region.Zone)) 
+				&& (((aBot.Enemy.Region.Zone == FriendlyFlag.HomeBase.Region.Zone) && (EnemyFlag.HomeBase.Region.Zone != FriendlyFlag.HomeBase.Region.Zone))
 					|| (VSize(aBot.Enemy.Location - FriendlyFlag.HomeBase.Location) < 0.6 * VSize(aBot.Location - EnemyFlag.HomeBase.Location))) )
 				{
 					aBot.SendTeamMessage(None, 'OTHER', 14, 15); //"Incoming!"
@@ -484,7 +485,7 @@ function bool RestartPlayer(Pawn aPlayer)
 		return bResult;
 
 	B.AlternatePath = None;
-	
+
 	if ( B.bPowerPlay || (BotReplicationInfo(B.PlayerReplicationInfo).RealOrders == 'Defend') )
 	{
 		// if bot only team and already one defender, 50% chance of powerplay for this guy if defender
@@ -549,7 +550,7 @@ function SetBotOrders(Bot NewBot)
 		CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Attack';
 	else if ( CurrentOrders[NewBot.PlayerReplicationInfo.Team] == 'Defend' )
 		CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Freelance';
-	else 
+	else
 	{
 		CurrentOrders[NewBot.PlayerReplicationInfo.Team] = 'Defend';
 		if ( bNoviceMode )
@@ -589,7 +590,7 @@ function SetBotOrders(Bot NewBot)
 			// no players on this team - possibly support other bot
 			num = 0;
 			For ( P=Level.PawnList; P!=None; P=P.NextPawn )
-				if ( P.IsA('Bot') && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team) 
+				if ( P.IsA('Bot') && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
 					&& (Bot(P).Orders == 'Attack') )
 			{
 				num++;
@@ -598,7 +599,7 @@ function SetBotOrders(Bot NewBot)
 					// make sure P doesn't already have a follower
 					bAvailable = true;
 					for ( M=Level.PawnList; M!=None; M=M.NextPawn )
-						if ( M.IsA('Bot') && (M.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team) 
+						if ( M.IsA('Bot') && (M.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
 							&& (Bot(M).Orders == 'Follow') && (Bot(M).OrderObject == P) )
 							bAvailable = false;
 					if ( bAvailable )
@@ -640,9 +641,9 @@ function bool CanTranslocate(Bot aBot)
 
 function int ReduceDamage(int Damage, name DamageType, pawn injured, pawn instigatedBy)
 {
-	if ( (instigatedBy != None) 
+	if ( (instigatedBy != None)
 		&& (injured.PlayerReplicationInfo.Team != instigatedBy.PlayerReplicationInfo.Team)
-		&& injured.IsA('Bot') 
+		&& injured.IsA('Bot')
 		&& ((injured.health < 35) || (injured.PlayerReplicationInfo.HasFlag != None)) )
 			Bot(injured).SendTeamMessage(None, 'OTHER', 4, 15);
 
@@ -653,7 +654,7 @@ function byte PriorityObjective(Bot aBot)
 {
 	local CTFFlag FriendlyFlag;
 
-	FriendlyFlag = CTFReplicationInfo(GameReplicationInfo).FlagList[aBot.PlayerReplicationInfo.Team]; 
+	FriendlyFlag = CTFReplicationInfo(GameReplicationInfo).FlagList[aBot.PlayerReplicationInfo.Team];
 
 	if ( aBot.PlayerReplicationInfo.HasFlag != None )
 	{

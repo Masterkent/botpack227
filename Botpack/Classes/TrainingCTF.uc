@@ -2,7 +2,8 @@
 // TrainingCTF.
 //=============================================================================
 class TrainingCTF extends CTFGame;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bOldAutoTaunt;
 
@@ -33,7 +34,7 @@ event InitGame( string Options, out string Error )
 function InitRatedGame(LadderInventory LadderObj, PlayerPawn LadderPlayer)
 {
 	Super.InitRatedGame(LadderObj, LadderPlayer);
-	
+
 	RemainingBots = 0;
 	bRequireReady = False;
 }
@@ -325,7 +326,7 @@ state FreeRunning1
 	{
 		Super.Tick(DeltaTime);
 
-		if (Trainee.PlayerReplicationInfo.HasFlag != None) 
+		if (Trainee.PlayerReplicationInfo.HasFlag != None)
 		{
 			bPause = False;
 
@@ -365,7 +366,7 @@ state FreeRunning2
 	{
 		Super.Tick(DeltaTime);
 
-		if (Teams[Trainee.PlayerReplicationInfo.Team].Score > 0) 
+		if (Teams[Trainee.PlayerReplicationInfo.Team].Score > 0)
 		{
 			bPause = False;
 

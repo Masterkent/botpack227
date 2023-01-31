@@ -31,7 +31,7 @@ simulated function Landed(vector HitNormal)
 	{
 		b = Spawn(class 'UT_BloodBurst');
 		if ( bGreenBlood )
-			b.GreenBlood();		
+			b.GreenBlood();
 		b.RemoteRole = ROLE_None;
 	}
 	SetPhysics(PHYS_None);

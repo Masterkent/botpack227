@@ -19,7 +19,7 @@ simulated function SpawnSound()
 	local float decision;
 
 	decision = FRand();
-	if ( decision < 0.25 ) 
+	if ( decision < 0.25 )
 		PlaySound(sound'ricochet',, 1.5,,1200, 0.5+FRand());
 	else if ( decision < 0.5 )
 		PlaySound(sound'Impact1',, 2.5,,1000);
@@ -38,7 +38,7 @@ simulated function SpawnEffects()
 	NumSparks = rand(MaxSparks);
 	if ( !Level.bDropDetail )
 		for ( j=0; j<MaxChips; j++ )
-			if ( FRand() < ChipOdds ) 
+			if ( FRand() < ChipOdds )
 			{
 				NumSparks--;
 				A = spawn(class'Chip');
@@ -55,8 +55,8 @@ simulated function SpawnEffects()
 
 	A = Spawn(class'UT_SpriteSmokePuff');
 	A.RemoteRole = ROLE_None;
-	if ( !Region.Zone.bWaterZone && (NumSparks > 0) ) 
-		for (j=0; j<NumSparks; j++) 
+	if ( !Region.Zone.bWaterZone && (NumSparks > 0) )
+		for (j=0; j<NumSparks; j++)
 			spawn(class'UT_Spark',,,Location + 8 * Vector(Rotation));
 }
 
@@ -70,7 +70,7 @@ Auto State StartUp
 			RealRotation = Rotation;
 		else
 			SetRotation(RealRotation);
-		
+
 		if ( Level.NetMode != NM_DedicatedServer )
 			SpawnEffects();
 		Disable('Tick');

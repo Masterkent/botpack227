@@ -1,5 +1,6 @@
 class RipperPulse extends AnimSpriteEffect;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function MakeSound()
 {
@@ -13,7 +14,7 @@ simulated function PostBeginPlay()
 	if ( Level.bDropDetail )
 		LightRadius = 5;
 //	Texture = SpriteAnim[int(FRand()*5)];
-	Super.PostBeginPlay();		
+	Super.PostBeginPlay();
 }
 
 simulated function Timer()

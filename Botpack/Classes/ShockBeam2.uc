@@ -6,7 +6,7 @@ class ShockBeam2 extends ShockBeam;
 simulated function Timer()
 {
 	local ShockBeam r;
-	
+
 	if (NumPuffs>0)
 	{
 		r = Spawn(class'Shockbeam2',,,Location+MoveAmount);

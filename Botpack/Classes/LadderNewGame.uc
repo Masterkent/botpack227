@@ -14,7 +14,7 @@ event playerpawn Login
 	NewPlayer = Super.Login(Portal, Options, Error, SpawnClass);
 	NewPlayer.bHidden = True;
 
-	foreach AllActors(class'SpectatorCam', Cam) 
+	foreach AllActors(class'SpectatorCam', Cam)
 		NewPlayer.ViewTarget = Cam;
 
 	return NewPlayer;

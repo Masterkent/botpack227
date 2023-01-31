@@ -66,7 +66,7 @@ function Finish()
 			Global.Fire(0);
 		else if ( (PawnOwner.bAltFire != 0) && (FRand() < AltRefireRate) )
 			Global.AltFire(0);
-		else 
+		else
 		{
 			PawnOwner.StopFiring();
 			GotoState('Idle');
@@ -79,7 +79,7 @@ function Finish()
 		Global.Fire(0);
 	else if ( (PawnOwner.bAltFire!=0) || bForceAlt )
 		Global.AltFire(0);
-	else 
+	else
 		GotoState('Idle');
 }
 
@@ -95,7 +95,7 @@ function DropFrom(vector StartLocation)
 	SimAnim.Z = 0;
 	SimAnim.W = 0;
 	if ( !SetLocation(StartLocation) )
-		return; 
+		return;
 	AIRating = Default.AIRating;
 	bMuzzleFlash = 0;
 	if ( AmmoType != None )
@@ -316,7 +316,7 @@ function bool HandlePickupQuery( inventory Item )
 		if ( AmmoType != None )
 		{
 			OldAmmo = AmmoType.AmmoAmount;
-			if ( AmmoType.AddAmmo(Weapon(Item).PickupAmmoCount) && (OldAmmo == 0) 
+			if ( AmmoType.AddAmmo(Weapon(Item).PickupAmmoCount) && (OldAmmo == 0)
 				&& (P.Weapon.class != item.class) && !P.bNeverSwitchOnPickup )
 					WeaponSet(P);
 		}
@@ -326,7 +326,7 @@ function bool HandlePickupQuery( inventory Item )
 			Level.Game.LocalLog.LogPickup(Item, Pawn(Owner));
 		if (Level.Game.WorldLog != None)
 			Level.Game.WorldLog.LogPickup(Item, Pawn(Owner));
-		Item.SetRespawn();   
+		Item.SetRespawn();
 		return true;
 	}
 	if ( Inventory == None )
@@ -445,10 +445,10 @@ state NormalFire
 		bForceAltFire = true;
 	}
 
-	function Fire(float F) 
+	function Fire(float F)
 	{
 	}
-	function AltFire(float F) 
+	function AltFire(float F)
 	{
 	}
 
@@ -464,11 +464,11 @@ Begin:
 ////////////////////////////////////////////////////////
 state AltFiring
 {
-	function Fire(float F) 
+	function Fire(float F)
 	{
 	}
 
-	function AltFire(float F) 
+	function AltFire(float F)
 	{
 	}
 
@@ -612,7 +612,7 @@ State ClientDown
 	simulated function Tick(float DeltaTime)
 	{
 	}
-		
+
 	simulated function AnimEnd()
 	{
 		GotoState('');

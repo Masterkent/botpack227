@@ -13,7 +13,7 @@ var() bool bThrowStuff;
 		{
 			throwVect = 0.18 * Magnitude * VRand();
 			throwVect.Z = FMax(Abs(ThrowVect.Z), 120);
-		} 
+		}
 		foreach visiblecollidingactors(class'Actor', A, radius,, true)
 		{
 			if ( A.IsA('PlayerPawn') )
@@ -64,10 +64,10 @@ var() bool bThrowStuff;
 				A.Velocity = throwVect;
 			}
 		}
-			
+
 		if ( remainingTime > 0.5 )
 			SetTimer(0.5, false);
-	}	
+	}
 
 defaultproperties
 {

@@ -2,14 +2,15 @@
 // WarExplosion.
 //=============================================================================
 class WarExplosion extends AnimSpriteEffect;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	if ( !Level.bHighDetailMode ) 
+	if ( !Level.bHighDetailMode )
 		Drawscale = 1.9;
-	PlaySound (EffectSound1,,12.0,,3000);	
+	PlaySound (EffectSound1,,12.0,,3000);
     Texture = Default.Texture;
 }
 

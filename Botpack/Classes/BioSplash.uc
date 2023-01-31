@@ -5,12 +5,12 @@ class BioSplash extends UT_BioGel;
 
 auto state Flying
 {
-	function ProcessTouch (Actor Other, vector HitLocation) 
-	{ 
+	function ProcessTouch (Actor Other, vector HitLocation)
+	{
 		if ( Other.IsA('UT_BioGel') && (LifeSpan > Default.LifeSpan - 0.2) )
 			return;
-		if ( Pawn(Other)!=Instigator || bOnGround) 
-			Global.Timer(); 
+		if ( Pawn(Other)!=Instigator || bOnGround)
+			Global.Timer();
 	}
 }
 

@@ -3,7 +3,8 @@
 //=============================================================================
 class UTHumanCarcass extends Carcass
 	abstract;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var class<UTMasterCreatureChunk> MasterReplacement;
 var() bool bGreenBlood;
@@ -51,15 +52,15 @@ function CreateReplacement()
 {
 	local UTMasterCreatureChunk carc;
 	local UT_BloodBurst b;
-	
+
 	if (bHidden)
 		return;
 
 	b = Spawn(class'UT_BigBloodHit',,,Location, rot(-16384,0,0));
 	if ( bGreenBlood )
-		b.GreenBlood();		
+		b.GreenBlood();
 
-	carc = Spawn(MasterReplacement,,, Location + CollisionHeight * vect(0,0,0.5)); 
+	carc = Spawn(MasterReplacement,,, Location + CollisionHeight * vect(0,0,0.5));
 	if (carc != None)
 	{
 		carc.PlayerRep = PlayerOwner;
@@ -85,7 +86,7 @@ function Initfor(actor Other)
 	bReducedHeight = false;
 	PrePivot = vect(0,0,3);
 	for ( i=0; i<4; i++ )
-		Multiskins[i] = Pawn(Other).MultiSkins[i];	
+		Multiskins[i] = Pawn(Other).MultiSkins[i];
 
 	if ( bDecorative )
 	{
@@ -93,8 +94,8 @@ function Initfor(actor Other)
 		DeathZone.NumCarcasses++;
 	}
 	bDecorative = false;
-	bMeshCurvy = Other.bMeshCurvy;	
-	bMeshEnviroMap = Other.bMeshEnviroMap;	
+	bMeshCurvy = Other.bMeshCurvy;
+	bMeshEnviroMap = Other.bMeshEnviroMap;
 	Mesh = Other.Mesh;
 	Skin = Other.Skin;
 	Texture = Other.Texture;
@@ -139,7 +140,7 @@ function ReduceCylinder()
 		SetCollisionSize(CollisionRadius, CollisionHeight * ReducedHeightFactor);
 	else
 		SetCollisionSize(CollisionRadius + 4, CollisionHeight * ReducedHeightFactor);
-	PrePivot = vect(0,0,1) * (OldHeight - CollisionHeight); 
+	PrePivot = vect(0,0,1) * (OldHeight - CollisionHeight);
 	OldLocation = Location;
 	if ( !SetLocation(OldLocation - PrePivot) )
 	{
@@ -158,14 +159,14 @@ function ReduceCylinder()
 	Buoyancy = Buoyancy * 0.8;
 }
 
-function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, 
+function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation,
 						Vector Momentum, name DamageType)
-{	
+{
 	local UT_BloodBurst b;
 
 	b = Spawn(class'UT_BloodHit',,,HitLocation, rotator(Momentum));
 	if ( bGreenBlood )
-		b.GreenBlood();		
+		b.GreenBlood();
 	if ( !bPermanent )
 	{
 		if ( (DamageType == 'Corroded') && (Damage >= 100) )
@@ -186,7 +187,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation,
 			if ( DamageType == 'shot' )
 				Damage *= 0.4;
 			CumulativeDamage += Damage;
-			if ( (((Damage > 30) || !IsAnimating()) && (CumulativeDamage > 0.8 * Mass)) || (Damage > 0.4 * Mass) 
+			if ( (((Damage > 30) || !IsAnimating()) && (CumulativeDamage > 0.8 * Mass)) || (Damage > 0.4 * Mass)
 				|| ((Velocity.Z > 150) && !IsAnimating()) )
 				ChunkUp(Damage);
 			if ( bDecorative )
@@ -286,9 +287,9 @@ simulated function HitWall(vector HitNormal, actor Wall)
 	local UT_BloodBurst b;
 
 	b = Spawn(class 'UT_BloodBurst');
-	if ( bGreenBlood )	
+	if ( bGreenBlood )
 		b.GreenBlood();
-	b.RemoteRole = ROLE_None;		
+	b.RemoteRole = ROLE_None;
 	Velocity = 0.7 * (Velocity - 2 * HitNormal * (Velocity Dot HitNormal));
 	Velocity.Z *= 0.9;
 	if ( Abs(Velocity.Z) < 120 )
@@ -324,7 +325,7 @@ Begin:
 	GotoState('Dead');
 }
 
-state Dead 
+state Dead
 {
 	function AddFliesAndRats()
 	{
@@ -382,7 +383,7 @@ state Dead
 
 	function BeginState()
 	{
-		if ( bDecorative || bPermanent 
+		if ( bDecorative || bPermanent
 			|| ((Level.NetMode == NM_Standalone) && Level.Game.IsA('SinglePlayer')) )
 			lifespan = 0.0;
 		else
@@ -393,7 +394,7 @@ state Dead
 				SetTimer(3.0, true);
 			}
 			else
-				SetTimer(12, false); 
+				SetTimer(12, false);
 		}
 	}
 
@@ -416,7 +417,7 @@ state Corroding
 
 	function Tick( float DeltaTime )
 	{
-		local int NewFatness; 
+		local int NewFatness;
 		local float splashSize;
 		local actor splash;
 
@@ -430,24 +431,24 @@ state Corroding
 					PlaySound(Region.Zone.ExitSound, SLOT_Interact, splashSize);
 				if ( Region.Zone.ExitActor != None )
 				{
-					splash = Spawn(Region.Zone.ExitActor); 
+					splash = Spawn(Region.Zone.ExitActor);
 					if ( splash != None )
 						splash.DrawScale = splashSize;
 				}
-			}			
+			}
 			Destroy();
 		}
 		fatness = Clamp(NewFatness, 0, 255);
 	}
-	
+
 	function BeginState()
 	{
 		Disable('Tick');
 	}
-	
+
 Begin:
 	Sleep(0.5);
-	Enable('Tick');	
+	Enable('Tick');
 }
 
 defaultproperties

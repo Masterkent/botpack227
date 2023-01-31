@@ -2,7 +2,8 @@
 // ChainSaw.
 //=============================================================================
 class ChainSaw extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() float Range;
 var() sound HitSound, DownSound;
@@ -106,7 +107,7 @@ Begin:
 	if ( LastHit != None )
 	{
 		LastHit.ClientFlash( -0.38, vect(530, 90, 90));
-		LastHit.ShakeView(0.25, 600, 6); 
+		LastHit.ShakeView(0.25, 600, 6);
 	}
 	if ( Pawn(Owner).bFire == 0 )
 		Finish();
@@ -164,11 +165,11 @@ state AltFiring
 {
 	ignores AnimEnd;
 
-	function Fire(float F) 
+	function Fire(float F)
 	{
 	}
 
-	function AltFire(float F) 
+	function AltFire(float F)
 	{
 	}
 
@@ -207,11 +208,11 @@ state Idle
 
 Begin:
 	bPointing=False;
-	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) ) 
+	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) )
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
-	if ( Pawn(Owner).bFire!=0 ) 
+	if ( Pawn(Owner).bFire!=0 )
 		Fire(0.0);
-	if ( Pawn(Owner).bAltFire!=0 ) 
+	if ( Pawn(Owner).bAltFire!=0 )
 		AltFire(0.0);
 	FinishAnim();
 	AnimFrame=0;
@@ -240,7 +241,7 @@ function Finish()
 			Global.Fire(0);
 		else if ( (Pawn(Owner).bAltFire != 0) && (FRand() < AltRefireRate) )
 			Global.AltFire(0);
-		else 
+		else
 		{
 			Pawn(Owner).StopFiring();
 			GotoState('Idle');
@@ -251,7 +252,7 @@ function Finish()
 		Global.Fire(0);
 	else if ( Pawn(Owner).bAltFire!=0 )
 		Global.AltFire(0);
-	else 
+	else
 		GotoState('Idle');
 }
 
@@ -263,8 +264,8 @@ function Slash()
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation, X, Y, Z);
 	Start =  Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
-	AdjustedAim = pawn(owner).AdjustAim(1000000, Start, AimError, False, False);	
-	EndTrace = Owner.Location + (Range * vector(AdjustedAim)); 
+	AdjustedAim = pawn(owner).AdjustAim(1000000, Start, AimError, False, False);
+	EndTrace = Owner.Location + (Range * vector(AdjustedAim));
 	Other = Pawn(Owner).TraceShot(HitLocation, HitNormal, EndTrace, Start);
 
 	if ( (Other == None) || (Other == Owner) || (Other == self) )
@@ -287,8 +288,8 @@ function TraceFire(float accuracy)
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation, X, Y, Z);
 	Start =  Owner.Location + CalcDrawOffset() + FireOffset.Y * Y + FireOffset.Z * Z;
-	AdjustedAim = pawn(owner).AdjustAim(1000000, Start, 2 * AimError, False, False);	
-	EndTrace = Owner.Location + (10 + Range) * vector(AdjustedAim); 
+	AdjustedAim = pawn(owner).AdjustAim(1000000, Start, 2 * AimError, False, False);
+	EndTrace = Owner.Location + (10 + Range) * vector(AdjustedAim);
 	Other = Pawn(Owner).TraceShot(HitLocation, HitNormal, EndTrace, Start);
 
 	if ( (Other == None) || (Other == Owner) || (Other == self) )

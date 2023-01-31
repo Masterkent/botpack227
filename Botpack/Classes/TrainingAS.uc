@@ -2,7 +2,8 @@
 // TrainingAS.
 //=============================================================================
 class TrainingAS extends Assault;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec OBJ LOAD FILE="Announcer.uax"
 
 var string AS[13];
@@ -29,7 +30,7 @@ event InitGame( string Options, out string Error )
 function InitRatedGame(LadderInventory LadderObj, PlayerPawn LadderPlayer)
 {
 	Super.InitRatedGame(LadderObj, LadderPlayer);
-	
+
 	RemainingBots = 0;
 	bRequireReady = False;
 }
@@ -222,7 +223,7 @@ function ASTutEvent12()
 	}
 
 	bRatedGame = True;
-	RemainingBots = RatedMatchConfig.NumBots; 
+	RemainingBots = RatedMatchConfig.NumBots;
 
 	class'TournamentConsole'.static.UTSF_HideMessage(Trainee.Player.Console);
 }

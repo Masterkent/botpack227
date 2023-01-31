@@ -14,7 +14,7 @@ var() config string BotNames[32];
 var() config int BotTeams[32];
 var() config float BotSkills[32];
 var() config float BotAccuracy[32];
-var() config float CombatStyle[32]; 
+var() config float CombatStyle[32];
 var() config float Alertness[32];
 var() config float Camping[32];
 var() config float StrafingAbility[32];
@@ -43,13 +43,13 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	NumClasses = 0;
-	GetNextIntDesc("Bot", 0, NextBotClass, NextBotDesc); 
+	GetNextIntDesc("Bot", 0, NextBotClass, NextBotDesc);
 	while ( (NextBotClass != "") && (NumClasses < 32) )
 	{
 		AvailableClasses[NumClasses] = NextBotClass;
 		AvailableDescriptions[NumClasses] = NextBotDesc;
 		NumClasses++;
-		GetNextIntDesc("Bot", NumClasses, NextBotClass, NextBotDesc); 
+		GetNextIntDesc("Bot", NumClasses, NextBotClass, NextBotDesc);
 	}
 }
 
@@ -179,10 +179,10 @@ function CHIndividualize(bot NewBot, int n, int NumBots)
 
 	if (VoiceType[n] != "" && VoiceType[n] != "None")
 		NewBot.PlayerReplicationInfo.VoiceType = class<VoicePack>(DynamicLoadObject(VoiceType[n], class'Class'));
-	
+
 	if (NewBot.PlayerReplicationInfo.VoiceType == none)
 		NewBot.PlayerReplicationInfo.VoiceType = class<VoicePack>(DynamicLoadObject(NewBot.VoiceType, class'Class'));
-		
+
 	if (NewBot.PlayerReplicationInfo.VoiceType == none)
 	{
 		BotPawn = NewBot;
@@ -212,7 +212,7 @@ function int ChooseBotInfo()
 
 	if ( bRandomOrder )
 		n = Rand(32);
-	else 
+	else
 		n = 0;
 
 	start = n;

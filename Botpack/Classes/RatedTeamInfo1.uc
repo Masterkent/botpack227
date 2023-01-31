@@ -1,6 +1,7 @@
 class RatedTeamInfo1 expands RatedTeamInfo;
 
-// Iron Guard#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Iron Guard
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

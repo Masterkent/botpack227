@@ -21,7 +21,7 @@ event playerpawn Login
 	NewPlayer = Super.Login(Portal, Options, Error, SpawnClass);
 	NewPlayer.bHidden = True;
 
-	foreach AllActors(class'SpectatorCam', Cam) 
+	foreach AllActors(class'SpectatorCam', Cam)
 		NewPlayer.ViewTarget = Cam;
 
 	if (class<UTC_PlayerPawn>(SpawnClass) != none && Len(class<UTC_PlayerPawn>(SpawnClass).default.SpecialMesh) > 0)
@@ -55,7 +55,7 @@ function AcceptInventory(pawn PlayerPawn)
 		if (Inv.IsA('LadderInventory'))
 		{
 			LadderObj = LadderInventory(Inv);
-			if (LadderObj != None) 
+			if (LadderObj != None)
 			{
 				// Hide trophies.
 				foreach AllActors(class'DeathMatchTrophy', DMT)
@@ -138,7 +138,7 @@ function AcceptInventory(pawn PlayerPawn)
 					class'Ladder'.Static.StaticSaveConfig();
 				}
 			}
-		} else {	
+		} else {
 			Inv.Destroy();
 		}
 	}

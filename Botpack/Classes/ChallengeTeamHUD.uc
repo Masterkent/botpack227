@@ -2,7 +2,8 @@
 // ChallengeTeamHUD
 //=============================================================================
 class ChallengeTeamHUD extends ChallengeHUD;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var Texture TeamIcon[4];
 var() color TeamColor[4];

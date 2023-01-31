@@ -2,7 +2,8 @@
 // ut_Ringexplosion.
 //=============================================================================
 class UT_RingExplosion extends Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bExtraEffectsSpawned;
 
@@ -13,7 +14,7 @@ simulated function Tick( float DeltaTime )
 		if ( !bExtraEffectsSpawned )
 			SpawnExtraEffects();
 		ScaleGlow = (Lifespan/Default.Lifespan)*0.7;
-		AmbientGlow = ScaleGlow * 255;		
+		AmbientGlow = ScaleGlow * 255;
 	}
 }
 
@@ -23,7 +24,7 @@ simulated function PostBeginPlay()
 	{
 		PlayAnim( 'Explo', 0.35, 0.0 );
 		SpawnEffects();
-	}	
+	}
 	if ( Instigator != None )
 		MakeNoise(0.5);
 }

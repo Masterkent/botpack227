@@ -6,7 +6,8 @@
 //=============================================================================
 class TournamentGameInfo extends UTC_GameInfo
 	config;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var(DeathMessage) localized string DeathMessage[32];    // Player name, or blank if none.
 var(DeathMessage) localized string DeathModifier[5];
@@ -195,7 +196,7 @@ static function string UTF_PlayerKillMessage(name damageType, PlayerReplicationI
 	{
 		if ( DamageType == 'Decapitated' )
 			message = Default.HeadLossMessage[Rand(2)];
-		else 
+		else
 			message = Default.DeathMessage[Rand(32)];
 
 		if ( decision < 0.75 )
@@ -258,7 +259,7 @@ function DiscardInventory( Pawn Other )
 		dropped = Spawn(Other.DropWhenKilled,,,Other.Location);
 		Inv = Inventory(dropped);
 		if ( Inv != None )
-		{ 
+		{
 			Inv.RespawnTime = 0.0; //don't respawn
 			Inv.BecomePickup();
 		}
@@ -272,7 +273,7 @@ function DiscardInventory( Pawn Other )
 		if ( Inv != None )
 			Inv.GotoState('PickUp', 'Dropped');
 	}
-	if( (Other.Weapon!=None) && (Other.Weapon.Class!=BaseMutator.MutatedDefaultWeapon()) 
+	if( (Other.Weapon!=None) && (Other.Weapon.Class!=BaseMutator.MutatedDefaultWeapon())
 		&& ((Other.Weapon.Ammotype == None) || (Other.Weapon.Ammotype.AmmoAmount > 0))
 		&& Other.Weapon.bCanThrow )
 	{

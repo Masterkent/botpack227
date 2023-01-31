@@ -3,12 +3,13 @@
 //=============================================================================
 class TeamGamePlus extends DeathMatchPlus
 	config;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var()		 bool   bSpawnInTeamArea;
 var()		 bool	bScoreTeamKills;
 var() config bool	bNoTeamChanges;
-var			 int	NumSupportingPlayer; 
+var			 int	NumSupportingPlayer;
 var globalconfig	 bool	bBalanceTeams;	// bots balance teams
 var globalconfig	 bool	bPlayersBalanceTeams;	// players balance teams
 var			 bool	bBalancing;
@@ -39,7 +40,7 @@ function PostBeginPlay()
 		Teams[i].TeamIndex = i;
 		TournamentGameReplicationInfo(GameReplicationInfo).Teams[i] = Teams[i];
 	}
-	
+
 	Super.PostBeginPlay();
 
 	if ( bRatedGame )
@@ -423,7 +424,7 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 function int ReduceDamage(int Damage, name DamageType, pawn injured, pawn instigatedBy)
 {
 	Damage = Super.ReduceDamage(Damage, DamageType, injured, instigatedBy);
-	
+
 	if ( instigatedBy == None )
 		return Damage;
 
@@ -613,7 +614,7 @@ function bool CanSpectate( pawn Viewer, actor ViewTarget )
 		return false;
 	if ( Viewer.PlayerReplicationInfo.bIsSpectator && (Viewer.PlayerReplicationInfo.Team == 255) )
 		return true;
-	return ( (Pawn(ViewTarget) != None) && Pawn(ViewTarget).PlayerReplicationInfo != none 
+	return ( (Pawn(ViewTarget) != None) && Pawn(ViewTarget).PlayerReplicationInfo != none
 		&& (Pawn(ViewTarget).PlayerReplicationInfo.Team == Viewer.PlayerReplicationInfo.Team) );
 }
 
@@ -710,7 +711,7 @@ function SetBotOrders(Bot NewBot)
 
 	// only follow players, if there are any
 	if ( (NumSupportingPlayer == 0)
-		 || (NumSupportingPlayer < Teams[NewBot.PlayerReplicationInfo.Team].Size/2 - 1) ) 
+		 || (NumSupportingPlayer < Teams[NewBot.PlayerReplicationInfo.Team].Size/2 - 1) )
 	{
 		foreach AllActors(class'PlayerPawn', PP)
 			if (PP.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team &&
@@ -752,10 +753,10 @@ function SetBotOrders(Bot NewBot)
 function byte AssessBotAttitude(Bot aBot, Pawn Other)
 {
 	if ( (Other.PlayerReplicationInfo != none && (aBot.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team))
-		|| (Other.IsA('TeamCannon') 
-			&& (StationaryPawn(Other).SameTeamAs(aBot.PlayerReplicationInfo.Team))) ) 
+		|| (Other.IsA('TeamCannon')
+			&& (StationaryPawn(Other).SameTeamAs(aBot.PlayerReplicationInfo.Team))) )
 		return 3;
-	else 
+	else
 		return Super.AssessBotAttitude(aBot, Other);
 }
 
@@ -803,9 +804,9 @@ function PickAmbushSpotFor(Bot aBot)
 						|| (DefensePoint(N).priority > DefensePoint(aBot.Ambushspot).priority) )
 						aBot.Ambushspot = Ambushpoint(N);
 					else if ( (DefensePoint(N).priority == DefensePoint(aBot.Ambushspot).priority)
-						&& (FRand() < 0.4) ) 
+						&& (FRand() < 0.4) )
 						aBot.Ambushspot = Ambushpoint(N);
-				}		
+				}
 				else if ( (DefensePoint(aBot.AmbushSpot) == None)
 						&& (VSize(N.Location - aBot.OrderObject.Location) < 1500)
 						&& FastTrace(aBot.OrderObject.Location, N.Location)

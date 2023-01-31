@@ -1,6 +1,7 @@
 class RatedTeamInfo5 expands RatedTeamInfo;
 
-// Venom#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Venom
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

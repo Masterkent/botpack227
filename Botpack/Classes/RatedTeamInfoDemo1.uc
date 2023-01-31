@@ -1,6 +1,7 @@
 class RatedTeamInfoDemo1 expands RatedTeamInfo;
 
-// Raw Steel#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Raw Steel
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

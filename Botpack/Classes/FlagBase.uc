@@ -2,7 +2,8 @@
 // FlagBase.
 //=============================================================================
 class FlagBase extends NavigationPoint;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() byte Team;
 var() Sound TakenSound;
@@ -19,7 +20,7 @@ function PostBeginPlay()
 	bHidden = false;
 	if ( Team == 0 )
 	{
-		Skin=texture'JpflagR';	
+		Skin=texture'JpflagR';
 		myFlag = Spawn(class'RedFlag');
 	}
 	else if ( Team == 1 )

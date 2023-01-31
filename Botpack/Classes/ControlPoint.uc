@@ -2,7 +2,8 @@
 // ControlPoint.
 //=============================================================================
 class ControlPoint extends NavigationPoint;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var TeamInfo ControllingTeam;
 var Pawn Controller;
@@ -106,7 +107,7 @@ function UpdateStatus()
 					{
 						bNeedDefense = true; // only defend if at least one other player on team
 						B2 = Bot(P);
-						if ( B2 == None ) 
+						if ( B2 == None )
 							bTempDefense = true;
 						else if ( ((B2.OrderObject == self) && (B2.Orders == 'Defend'))
 								|| ((B2.OrderObject == B) && (B2.Orders == 'Follow')) )
@@ -147,7 +148,7 @@ function UpdateStatus()
 	{
 		bScoreReady = false;
 		E = '';
-		if ( bSelfDisplayed ) 
+		if ( bSelfDisplayed )
 		{
 			DrawScale=0.4;
 			Mesh = mesh'DomN';
@@ -155,7 +156,7 @@ function UpdateStatus()
 			LightHue=0;
 		    LightSaturation=255;
 		}
-	}	
+	}
 	else
 	{
 		ScoreTime = 2;
@@ -183,7 +184,7 @@ function UpdateStatus()
 			{
 				DrawScale=0.4;
 				Mesh = mesh'DomB';
-				Texture = texture'BlueSkin2'; 
+				Texture = texture'BlueSkin2';
 				LightHue=170;
 			}
 		}
@@ -194,7 +195,7 @@ function UpdateStatus()
 			{
 				DrawScale=1.0;
 				Mesh=mesh'UDamage';
-				Texture=Texture'UnrealShare.Belt_fx.ShieldBelt.NewGreen'; //FireTexture'UnrealShare.Belt_fx.ShieldBelt.Greenshield'; 
+				Texture=Texture'UnrealShare.Belt_fx.ShieldBelt.NewGreen'; //FireTexture'UnrealShare.Belt_fx.ShieldBelt.Greenshield';
 				LightHue=85;
 			}
 		}
@@ -220,7 +221,7 @@ function Timer()
 	ScoreTime--;
 	if (ScoreTime > 0)
 		bScoreReady = false;
-	else 
+	else
 	{
 		ScoreTime = 0;
 		bScoreReady = true;

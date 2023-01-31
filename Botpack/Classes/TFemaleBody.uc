@@ -26,15 +26,15 @@ function SpawnHead()
 		carc.Initfor(self);
 	}
 }
-function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, 
+function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation,
 						Vector Momentum, name DamageType)
-{	
+{
 	if ( bJerking || (AnimSequence == 'Dead9') )
 	{
 		bJerking = true;
 		if ( Damage < 23 )
 			LastHit = Level.TimeSeconds;
-		else 
+		else
 			bJerking = false;
 	}
 	Super.TakeDamage(Damage, InstigatedBy, HitLocation, Momentum, DamageType);

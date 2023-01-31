@@ -2,7 +2,8 @@
 // Pylon.
 //=============================================================================
 class Pylon extends Decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bFirstHit;
 
@@ -24,7 +25,7 @@ function Bump( actor Other )
 	{
 		bBobbing = false;
 		Velocity += 1.5 * VSize(Other.Velocity) * Normal(Location - Other.Location);
-		if ( Physics == PHYS_None ) 
+		if ( Physics == PHYS_None )
 			Velocity.Z = FMax(Velocity.Z,250);
 		SetPhysics(PHYS_Falling);
 		SetTimer(0.3,False);
@@ -38,7 +39,7 @@ function StartRotating()
 {
 	RotationRate.Yaw = 250000*FRand() - 125000;
 	RotationRate.Pitch = 250000*FRand() - 125000;
-	RotationRate.Roll = 250000*FRand() - 125000;	
+	RotationRate.Roll = 250000*FRand() - 125000;
 	DesiredRotation = RotRand();
 	bRotateToDesired=False;
 	bFixedRotationDir=True;
@@ -62,7 +63,7 @@ Auto State Animate
 
 		Velocity = 0.5*(( Velocity dot HitNormal ) * HitNormal * (-2.0) + Velocity);   // Reflect off Wall w/damping
 		speed = VSize(Velocity);
-		if (bFirstHit && speed<400) 
+		if (bFirstHit && speed<400)
 		{
 			bFirstHit=False;
 			bRotatetoDesired=True;
@@ -73,8 +74,8 @@ Auto State Animate
 		}
 		RotationRate.Yaw = RotationRate.Yaw*0.75;
 		RotationRate.Roll = RotationRate.Roll*0.75;
-		RotationRate.Pitch = RotationRate.Pitch*0.75;	
-		If (speed < 50) 
+		RotationRate.Pitch = RotationRate.Pitch*0.75;
+		If (speed < 50)
 		{
 			bBounce = False;
 			DesiredRotation.Yaw = Rotation.Yaw;
@@ -82,9 +83,9 @@ Auto State Animate
 			DesiredRotation.Pitch=18768;
 			SetRotation(DesiredRotation);
 		}
-	}	
+	}
 
-	function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation, 
+	function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 						Vector momentum, name damageType)
 	{
 		if ( StandingCount > 0 )

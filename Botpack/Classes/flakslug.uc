@@ -2,7 +2,8 @@
 // flakslug.
 //=============================================================================
 class flakslug extends B227_Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var	chunktrail trail;
 var vector initialDir;
@@ -15,17 +16,17 @@ simulated function PostBeginPlay()
 	Super.PostBeginPlay();
 	Velocity = Vector(Rotation) * Speed;
 	initialDir = Velocity;
-	Velocity.z += 200; 
+	Velocity.z += 200;
 	initialDir = Velocity;
-	if ( Level.bHighDetailMode  && !Level.bDropDetail ) 
+	if ( Level.bHighDetailMode  && !Level.bDropDetail )
 		SetTimer(0.04,True);
-	else 
+	else
 		SetTimer(0.25,True);
 }
 
 function ProcessTouch (Actor Other, vector HitLocation)
 {
-	if ( Other != instigator ) 
+	if ( Other != instigator )
 		Explode(HitLocation,Normal(HitLocation-Other.Location));
 }
 
@@ -44,7 +45,7 @@ simulated function Timer()
 	local ut_SpriteSmokePuff s;
 
 	initialDir = Velocity;
-	if (Level.NetMode!=NM_DedicatedServer) 
+	if (Level.NetMode!=NM_DedicatedServer)
 	{
 		s = Spawn(class'ut_SpriteSmokePuff');
 		s.RemoteRole = ROLE_None;

@@ -7,7 +7,7 @@ simulated function PostBeginPlay()
 {
 	LoopAnim('Shoot', 0.7);
 }
-	
+
 
 defaultproperties
 {

@@ -1,6 +1,7 @@
 class RatedTeamInfo3 expands RatedTeamInfo;
 
-// Blood Reavers#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Blood Reavers
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

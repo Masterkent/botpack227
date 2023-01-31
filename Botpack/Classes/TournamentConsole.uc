@@ -75,12 +75,12 @@ function PrintActionMessage( Canvas C, string BigMessage )
 	C.SetPos(FrameX/2 - XL/2 + 1, (FrameY/3)*2 - YL/2 + 1);
 	C.DrawColor.R = 0;
 	C.DrawColor.G = 0;
-	C.DrawColor.B = 0; 
+	C.DrawColor.B = 0;
 	C.DrawText( BigMessage, false );
 	C.SetPos(FrameX/2 - XL/2, (FrameY/3)*2 - YL/2);
 	C.DrawColor.R = 0;
 	C.DrawColor.G = 0;
-	C.DrawColor.B = 255; 
+	C.DrawColor.B = 255;
 	C.DrawText( BigMessage, false );
 }
 

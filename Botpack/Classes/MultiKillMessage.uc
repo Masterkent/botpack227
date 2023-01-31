@@ -22,9 +22,9 @@ static function int GetFontSize( int Switch )
 
 static function string GetString(
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
-	optional Object OptionalObject 
+	optional Object OptionalObject
 	)
 {
 	switch (Switch)
@@ -50,10 +50,10 @@ static function string GetString(
 	return "";
 }
 
-static simulated function ClientReceive( 
+static simulated function ClientReceive(
 	PlayerPawn P,
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)

@@ -3,7 +3,8 @@
 // A human modified RazorBlade
 //=============================================================================
 class Razor2 extends B227_SyncedProjectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int NumWallHits;
 var bool bCanHitInstigator, bHitWater;
@@ -25,7 +26,7 @@ auto state Flying
 {
 	function ProcessTouch(Actor Other, Vector HitLocation)
 	{
-		if (bCanHitInstigator || Other != Instigator) 
+		if (bCanHitInstigator || Other != Instigator)
 		{
 			if (Other.bIsPawn &&
 				HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight &&
@@ -66,7 +67,7 @@ auto state Flying
 			B227_SyncMovement();
 	}
 
-	simulated function SetRoll(vector NewVelocity) 
+	simulated function SetRoll(vector NewVelocity)
 	{
 		local rotator newRot;
 
@@ -106,7 +107,7 @@ auto state Flying
 			B227_WallHitRotation = rotator(HitNormal);
 		}
 
-		if ( NumWallHits == 1 ) 
+		if ( NumWallHits == 1 )
 		{
 			Vel2D = Velocity;
 			Vel2D.Z = 0;

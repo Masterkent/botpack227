@@ -14,7 +14,7 @@ event playerpawn Login
 	NewPlayer = Super.Login(Portal, Options, Error, SpawnClass);
 	NewPlayer.bHidden = True;
 
-	foreach AllActors(class'SpectatorCam', Cam) 
+	foreach AllActors(class'SpectatorCam', Cam)
 		NewPlayer.ViewTarget = Cam;
 
 	return NewPlayer;
@@ -32,7 +32,7 @@ function AcceptInventory(pawn PlayerPawn)
 		if (Inv.IsA('LadderInventory'))
 		{
 			LadderObj = LadderInventory(Inv);
-			if (LadderObj != None) 
+			if (LadderObj != None)
 			{
 				if (LadderObj.PendingChange > 0)
 					class'TournamentConsole'.static.UTSF_EvaluateMatch(

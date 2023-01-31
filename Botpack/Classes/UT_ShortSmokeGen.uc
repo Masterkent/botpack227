@@ -4,7 +4,7 @@
 class UT_ShortSmokeGen extends Effects;
 
 var() float SmokeDelay;		// pause between drips
-var() float SizeVariance;		// how different each drip is 
+var() float SizeVariance;		// how different each drip is
 var() float BasePuffSize;
 var() int TotalNumPuffs;
 var() float RisingVelocity;
@@ -17,10 +17,10 @@ Auto State Active
 	Simulated function Timer()
 	{
 		local Effects d;
-		
+
 		d = Spawn(GenerationType);
 		d.DrawScale = BasePuffSize+FRand()*SizeVariance;
-		d.RemoteRole = ROLE_None;	
+		d.RemoteRole = ROLE_None;
 		i++;
 		if (i>TotalNumPuffs && TotalNumPuffs!=0) Destroy();
 	}

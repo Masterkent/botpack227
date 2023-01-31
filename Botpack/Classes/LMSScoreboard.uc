@@ -38,7 +38,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 		Canvas.DrawColor = WhiteColor;
 	else if (PRI.PlayerName == Pawn(Owner).PlayerReplicationInfo.PlayerName)
 		Canvas.DrawColor = GoldColor;
-	else 
+	else
 		Canvas.DrawColor = CyanColor;
 	Canvas.SetPos(B227_MarginLeft + (B227_InnerWidth / 8) * 1.5, YOffset);
 	Canvas.DrawText(PRI.PlayerName, False);

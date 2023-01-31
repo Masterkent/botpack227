@@ -2,7 +2,8 @@
 // UT_BioRifle.
 //=============================================================================
 class UT_BioRifle extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float ChargeSize, Count;
 var bool bBurst;
@@ -13,7 +14,7 @@ function PlayIdleAnim()
 		return;
 	if ( (Owner != None) && (VSize(Owner.Velocity) > 10) )
 		PlayAnim('Walking',0.3,0.3);
-	else 
+	else
 		TweenAnim('Still', 1.0);
 	Enable('AnimEnd');
 }
@@ -81,7 +82,7 @@ function AltFire( float Value )
 		// ammocheck
 		GiveAmmo(Pawn(Owner));
 	}
-	if ( AmmoType.UseAmmo(1) ) 
+	if ( AmmoType.UseAmmo(1) )
 	{
 		GoToState('AltFiring');
 		bCanClientFire = true;
@@ -109,7 +110,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
-	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 	AdjustedAim = pawn(owner).AdjustToss(ProjSpeed, Start, 0, True, (bWarn || (FRand() < 0.4)));
 	return Spawn(ProjClass,,, Start,AdjustedAim);
 }
@@ -199,11 +200,11 @@ state ShootLoad
 		bForceAltFire = true;
 	}
 
-	function Fire(float F) 
+	function Fire(float F)
 	{
 	}
 
-	function AltFire(float F) 
+	function AltFire(float F)
 	{
 	}
 
@@ -269,7 +270,7 @@ function Finish()
 		Global.Fire(0);
 	else if ( (Pawn(Owner).bAltFire!=0) || bForceAlt )
 		Global.AltFire(0);
-	else 
+	else
 		GotoState('Idle');
 }
 

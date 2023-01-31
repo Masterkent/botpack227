@@ -25,7 +25,7 @@ simulated event Destroyed()
 {
 	if( ScriptedTexture(DestinationTexture) != None && ScriptedTexture(DestinationTexture).NotifyActor == Self)
 		ScriptedTexture(DestinationTexture).NotifyActor = None;
-	
+
 	Super.Destroyed();
 }
 

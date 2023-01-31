@@ -4,7 +4,8 @@
 class TournamentPlayer extends UTC_PlayerPawn
 	config(User)
 	abstract;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var(Messages)	localized string spreenote[10];
 var(Sounds)		Sound Deaths[6];
@@ -44,7 +45,7 @@ var bool b3DSound;
 
 ///var int WeaponUpdate; // [U227] Moved to TournamentWeapon
 
-// HUD status 
+// HUD status
 var texture StatusDoll, StatusBelt;
 
 // allowed voices
@@ -71,7 +72,7 @@ replication
 	unreliable if( Role==ROLE_Authority )
 		ClientPlayTakeHit, TimeMessage;
 	reliable if ( Role == ROLE_Authority )
-		PlayWinMessage; 
+		PlayWinMessage;
 
 	// client to server
 	reliable if ( Role < ROLE_Authority )
@@ -122,7 +123,7 @@ function DoJump( optional float F )
 		else
 			Velocity.Z = JumpZ;
 		if ( (Base != Level) && (Base != None) )
-			Velocity.Z += Base.Velocity.Z; 
+			Velocity.Z += Base.Velocity.Z;
 		SetPhysics(PHYS_Falling);
 	}
 }
@@ -171,7 +172,7 @@ simulated function UTF_ClientPlaySound(
 // Encroachment
 event bool EncroachingOn( actor Other )
 {
-	if ( GameReplicationInfo.bTeamGame && Other.bIsPawn 
+	if ( GameReplicationInfo.bTeamGame && Other.bIsPawn
 		&& (Pawn(Other).PlayerReplicationInfo != None)
 		&& (Pawn(Other).PlayerReplicationInfo.Team == PlayerReplicationInfo.Team) )
 	{
@@ -252,9 +253,9 @@ exec function KillAll(class<actor> aClass)
 /* [U227] Excluded
 function ReplicateMove
 (
-	float DeltaTime, 
-	vector NewAccel, 
-	eDodgeDir DodgeMove, 
+	float DeltaTime,
+	vector NewAccel,
+	eDodgeDir DodgeMove,
 	rotator DeltaRot
 )
 {
@@ -309,7 +310,7 @@ exec function ListBots()
 	local Pawn P;
 
 	for (P=Level.PawnList; P!=None; P=P.NextPawn)
-		if ( P.bIsPlayer && P.IsA('Bot') ) 
+		if ( P.bIsPlayer && P.IsA('Bot') )
 			log(P.PlayerReplicationInfo.PlayerName$" skill "$P.Skill$" novice "$Bot(P).bNovice);
 }
 
@@ -410,7 +411,7 @@ function Killed(pawn Killer, pawn Other, name damageType)
 {
 	Super.Killed(Killer, Other, damageType);
 
-	if ( (Killer == self) 
+	if ( (Killer == self)
 		&& (((bFire == 0) && (bAltFire == 0))
 			|| ((Weapon != None) && !Weapon.IsA('Minigun2') && !Weapon.IsA('PulseGun'))) )
 		Other.Health = FMin(Other.Health, -11); // don't let other do stagger death
@@ -439,7 +440,7 @@ exec function Loaded()
 	DM.GiveWeapon(self, "Botpack.SniperRifle");
 	DM.GiveWeapon(self, "Botpack.Ripper");
 	DM.GiveWeapon(self, "Botpack.UT_Eightball");
-	
+
 	for ( inv=inventory; inv!=None; inv=inv.inventory )
 	{
 		weap = Weapon(inv);
@@ -460,7 +461,7 @@ function PlayDodge(eDodgeDir DodgeMove)
 		TweenAnim('DodgeR', 0.25);
 	else if ( DodgeMove == DODGE_Back )
 		TweenAnim('DodgeB', 0.25);
-	else 
+	else
 		PlayAnim('Flip', 1.35 * FMax(0.35, Region.Zone.ZoneGravity.Z/Region.Zone.Default.ZoneGravity.Z), 0.06);
 }
 
@@ -528,13 +529,13 @@ function PlayWaiting()
 			LoopAnim('TreadLG');
 	}
 	else
-	{	
+	{
 		BaseEyeHeight = Default.BaseEyeHeight;
 		ViewRotation.Pitch = ViewRotation.Pitch & 65535;
-		If ( (ViewRotation.Pitch > RotationRate.Pitch) 
+		If ( (ViewRotation.Pitch > RotationRate.Pitch)
 			&& (ViewRotation.Pitch < 65536 - RotationRate.Pitch) )
 		{
-			If (ViewRotation.Pitch < 32768) 
+			If (ViewRotation.Pitch < 32768)
 			{
 				if ( (Weapon == None) || (Weapon.Mass < 20) )
 					TweenAnim('AimUpSm', 0.3);
@@ -587,7 +588,7 @@ function PlayWaiting()
 					else
 						newAnim = 'Breath2L';
 				}
-								
+
 				if ( AnimSequence == newAnim )
 					LoopAnim(newAnim, 0.4 + 0.4 * FRand());
 				else
@@ -767,7 +768,7 @@ function CheckBob(float DeltaTime, float Speed2D, vector Y)
 
 simulated function PlayFootStep()
 {
-	if ( (Level.NetMode != NM_Client) 
+	if ( (Level.NetMode != NM_Client)
 		&& ((Weapon == None) || !Weapon.bPointing) )
 		MakeNoise(0.1);
 
@@ -813,12 +814,12 @@ function UTF_PlayHit(float Damage, vector HitLocation, name damageType, vector M
 	{
 		if (damageType == 'Drowned')
 		{
-			bub = spawn(class 'Bubble1',,, Location 
+			bub = spawn(class 'Bubble1',,, Location
 				+ 0.7 * CollisionRadius * vector(ViewRotation) + 0.3 * EyeHeight * vect(0,0,1));
 			if (bub != None)
-				bub.DrawScale = FRand()*0.06+0.04; 
+				bub.DrawScale = FRand()*0.06+0.04;
 		}
-		else if ( (damageType != 'Burned') && (damageType != 'Corroded') 
+		else if ( (damageType != 'Burned') && (damageType != 'Corroded')
 					&& (damageType != 'Fell') )
 		{
 			BloodOffset = 0.2 * CollisionRadius * Normal(HitLocation - Location);
@@ -833,7 +834,7 @@ function UTF_PlayHit(float Damage, vector HitLocation, name damageType, vector M
 			else
 				spawn(class 'UT_BloodBurst',self,,hitLocation + BloodOffset);
 		}
-	}	
+	}
 
 	rnd = FClamp(Damage, 20, 60);
 	if ( damageType == 'Burned' )
@@ -842,16 +843,16 @@ function UTF_PlayHit(float Damage, vector HitLocation, name damageType, vector M
 		ClientFlash( -0.01171875 * rnd, rnd * vect(9.375, 14.0625, 4.6875));
 	else if ( damageType == 'Drowned' )
 		ClientFlash(-0.390, vect(312.5,468.75,468.75));
-	else 
+	else
 		ClientFlash( -0.019 * rnd, rnd * vect(26.5, 4.5, 4.5));
 
-	ShakeView(0.15 + 0.005 * Damage, Damage * 30, 0.3 * Damage); 
+	ShakeView(0.15 + 0.005 * Damage, Damage * 30, 0.3 * Damage);
 	PlayTakeHitSound(Damage, damageType, 1);
 	bServerGuessWeapon = ( ((Weapon != None) && Weapon.bPointing) || (GetAnimGroup(AnimSequence) == 'Dodge') );
 	iDam = Clamp(Damage,0,200);
 	if (!bIsReducedCrouch)
-		ClientPlayTakeHit(hitLocation - Location, iDam, bServerGuessWeapon ); 
-	if ( !bServerGuessWeapon 
+		ClientPlayTakeHit(hitLocation - Location, iDam, bServerGuessWeapon );
+	if ( !bServerGuessWeapon
 		&& ((Level.NetMode == NM_DedicatedServer) || (Level.NetMode == NM_ListenServer)) )
 	{
 		Enable('AnimEnd');
@@ -870,18 +871,18 @@ function UTF_PlayDeathHit(float Damage, vector HitLocation, name damageType, vec
 		Spawn(Region.Zone.ExitActor);
 	if (HeadRegion.Zone.bWaterZone)
 	{
-		bub = spawn(class 'Bubble1',,, Location 
+		bub = spawn(class 'Bubble1',,, Location
 			+ 0.3 * CollisionRadius * vector(Rotation) + 0.8 * EyeHeight * vect(0,0,1));
 		if (bub != None)
-			bub.DrawScale = FRand()*0.08+0.03; 
-		bub = spawn(class 'Bubble1',,, Location 
+			bub.DrawScale = FRand()*0.08+0.03;
+		bub = spawn(class 'Bubble1',,, Location
 			+ 0.2 * CollisionRadius * VRand() + 0.7 * EyeHeight * vect(0,0,1));
 		if (bub != None)
-			bub.DrawScale = FRand()*0.08+0.03; 
-		bub = spawn(class 'Bubble1',,, Location 
+			bub.DrawScale = FRand()*0.08+0.03;
+		bub = spawn(class 'Bubble1',,, Location
 			+ 0.3 * CollisionRadius * VRand() + 0.6 * EyeHeight * vect(0,0,1));
 		if (bub != None)
-			bub.DrawScale = FRand()*0.08+0.03; 
+			bub.DrawScale = FRand()*0.08+0.03;
 	}
 
 	if ( (!Level.bDropDetail || (FRand() < 0.67))
@@ -917,15 +918,15 @@ function PlayTakeHitSound(int damage, name damageType, int Mult)
 	}
 	damage *= FRand();
 
-	if (damage < 8) 
+	if (damage < 8)
 		PlaySound(HitSound1, SLOT_Pain,16,,,Frand()*0.15+0.9);
 	else if (damage < 25)
 	{
-		if (FRand() < 0.5) PlaySound(HitSound2, SLOT_Pain,16,,,Frand()*0.15+0.9);			
+		if (FRand() < 0.5) PlaySound(HitSound2, SLOT_Pain,16,,,Frand()*0.15+0.9);
 		else PlaySound(HitSound3, SLOT_Pain,16,,,Frand()*0.15+0.9);
 	}
 	else
-		PlaySound(HitSound4, SLOT_Pain,16,,,Frand()*0.15+0.9);			
+		PlaySound(HitSound4, SLOT_Pain,16,,,Frand()*0.15+0.9);
 }
 
 function ClientPlayTakeHit(vector HitLoc, byte Damage, bool bServerGuessWeapon)
@@ -943,7 +944,7 @@ function ClientPlayTakeHit(vector HitLoc, byte Damage, bool bServerGuessWeapon)
 	bAnimTransition = true;
 	BaseEyeHeight = Default.BaseEyeHeight;
 	PlayTakeHit(0.1, HitLoc, Damage);
-}	
+}
 
 function Gasp()
 {
@@ -972,7 +973,7 @@ function TweenToWalking(float tweentime)
 	BaseEyeHeight = Default.BaseEyeHeight;
 	if (Weapon == None)
 		TweenAnim('Walk', tweentime);
-	else if ( Weapon.bPointing || (CarriedDecoration != None) ) 
+	else if ( Weapon.bPointing || (CarriedDecoration != None) )
 	{
 		if (Weapon.Mass < 20)
 			TweenAnim('WalkSMFR', tweentime);
@@ -985,7 +986,7 @@ function TweenToWalking(float tweentime)
 			TweenAnim('WalkSM', tweentime);
 		else
 			TweenAnim('WalkLG', tweentime);
-	} 
+	}
 }
 
 function PlayWalking()
@@ -993,7 +994,7 @@ function PlayWalking()
 	BaseEyeHeight = Default.BaseEyeHeight;
 	if (Weapon == None)
 		LoopAnim('Walk');
-	else if ( Weapon.bPointing || (CarriedDecoration != None) ) 
+	else if ( Weapon.bPointing || (CarriedDecoration != None) )
 	{
 		if (Weapon.Mass < 20)
 			LoopAnim('WalkSMFR');
@@ -1034,7 +1035,7 @@ function TweenToRunning(float tweentime)
 	}
 	else if (Weapon == None)
 		PlayAnim('RunSM', 0.9, tweentime);
-	else if ( Weapon.bPointing ) 
+	else if ( Weapon.bPointing )
 	{
 		if (Weapon.Mass < 20)
 			PlayAnim('RunSMFR', 0.9, tweentime);
@@ -1047,7 +1048,7 @@ function TweenToRunning(float tweentime)
 			PlayAnim('RunSM', 0.9, tweentime);
 		else
 			PlayAnim('RunLG', 0.9, tweentime);
-	} 
+	}
 }
 
 function PlayRunning()
@@ -1071,7 +1072,7 @@ function PlayRunning()
 	}
 	else if (Weapon == None)
 		LoopAnim('RunSM');
-	else if ( Weapon.bPointing ) 
+	else if ( Weapon.bPointing )
 	{
 		if (Weapon.Mass < 20)
 			LoopAnim('RunSMFR');
@@ -1103,7 +1104,7 @@ function PlayFeignDeath()
 		TweenAnim('DeathEnd', 0.5);
 	else if ( decision < 0.67 )
 		TweenAnim('DeathEnd2', 0.5);
-	else 
+	else
 		TweenAnim('DeathEnd3', 0.5);
 }
 
@@ -1139,7 +1140,7 @@ function PlayLeftHit(float tweentime)
 		TweenAnim('GutHit', tweentime);
 	else if ( FRand() < 0.6 )
 		TweenAnim('LeftHit', tweentime);
-	else 
+	else
 		TweenAnim('Dead3', tweentime);
 }
 
@@ -1177,7 +1178,7 @@ function PlayLanded(float impactVel)
 			SetPhysics(PHYS_Walking);
 			AnimEnd();
 		}
-		else 
+		else
 		{
 			if ( (Weapon == None) || (Weapon.Mass < 20) )
 				TweenAnim('LandSMFR', 0.12);
@@ -1221,7 +1222,7 @@ function PlayInAir()
 	}
 	else if ( GetAnimGroup(AnimSequence) == 'Ducking' )
 		TweenTime = 2;
-	else 
+	else
 		TweenTime = 0.7;
 
 	if ( AnimSequence == 'StrafeL' )
@@ -1233,7 +1234,7 @@ function PlayInAir()
 	else if ( (Weapon == None) || (Weapon.Mass < 20) )
 		TweenAnim('JumpSMFR', TweenTime);
 	else
-		TweenAnim('JumpLGFR', TweenTime); 
+		TweenAnim('JumpLGFR', TweenTime);
 }
 
 function PlayDuck()
@@ -1270,7 +1271,7 @@ function TweenToWaiting(float tweentime)
 		BaseEyeHeight = Default.BaseEyeHeight;
 		if ( (Weapon == None) || (Weapon.Mass < 20) )
 			TweenAnim('StillSMFR', tweentime);
-		else 
+		else
 			TweenAnim('StillFRRP', tweentime);
 	}
 }
@@ -1322,7 +1323,7 @@ function PlayWeaponSwitch(Weapon NewWeapon)
 			if ( (AnimSequence == 'RunSM') || (AnimSequence == 'RunSMFR') )
 				AnimSequence = 'RunLG';
 			else if ( (AnimSequence == 'WalkSM') || (AnimSequence == 'WalkSMFR') )
-				AnimSequence = 'WalkLG';	
+				AnimSequence = 'WalkLG';
 		 	else if ( AnimSequence == 'JumpSMFR' )
 		 		AnimSequence = 'JumpLGFR';
 			else if ( AnimSequence == 'DuckWlkL' )
@@ -1333,10 +1334,10 @@ function PlayWeaponSwitch(Weapon NewWeapon)
 				AnimSequence = 'AimDnLg';
 			else if ( AnimSequence == 'AimUpSm' )
 				AnimSequence = 'AimUpLg';
-		 }	
+		 }
 	}
 	else if ( (NewWeapon == None) || (NewWeapon.Mass < 20) )
-	{		
+	{
 		if ( (AnimSequence == 'RunLG') || (AnimSequence == 'RunLGFR') )
 			AnimSequence = 'RunSM';
 		else if ( (AnimSequence == 'WalkLG') || (AnimSequence == 'WalkLGFR') )

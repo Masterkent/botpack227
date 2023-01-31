@@ -2,7 +2,8 @@
 // UT_Invisibility.
 //=============================================================================
 class UT_Invisibility extends TournamentPickUp;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_UT_Invisibility FILE=Textures\Hud\B227_i_UT_Invisibility.pcx GROUP="Icons" MIPS=OFF
 
 state Activated
@@ -35,7 +36,7 @@ state Activated
 	{
 		if ( !bActive )
 			return;
-		Owner.SetDisplayProperties(ERenderStyle.STY_Translucent, 
+		Owner.SetDisplayProperties(ERenderStyle.STY_Translucent,
 							 FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
 							 false,
 							 true);
@@ -53,7 +54,7 @@ state Activated
 
 		// Make new weapon invisible.
 		if (Pawn(Owner) != none && Pawn(Owner).Weapon != none)
-			Pawn(Owner).Weapon.SetDisplayProperties(ERenderStyle.STY_Translucent, 
+			Pawn(Owner).Weapon.SetDisplayProperties(ERenderStyle.STY_Translucent,
 									 FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
 									 false,
 									 true);
@@ -74,12 +75,12 @@ state Activated
 			Pawn(Owner).Visibility = Min(10, Pawn(Owner).Visibility);
 			if (Owner.Style != STY_Translucent)
 				Owner.SetDisplayProperties(
-					ERenderStyle.STY_Translucent, 
+					ERenderStyle.STY_Translucent,
 					FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
 					false,
 					true);
 			else if (Pawn(Owner).Weapon != none && Pawn(Owner).Weapon.Style != STY_Translucent)
-				Pawn(Owner).Weapon.SetDisplayProperties(ERenderStyle.STY_Translucent, 
+				Pawn(Owner).Weapon.SetDisplayProperties(ERenderStyle.STY_Translucent,
 									 FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
 									 false,
 									 true);
@@ -92,7 +93,7 @@ state Activated
 		bActive = true;
 		Owner.PlaySound(ActivateSound, SLOT_None, 4.0);
 
-		Owner.SetDisplayProperties(ERenderStyle.STY_Translucent, 
+		Owner.SetDisplayProperties(ERenderStyle.STY_Translucent,
 								   FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
 								   false,
 								   true);

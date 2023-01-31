@@ -2,7 +2,8 @@
 // Sludge.
 //=============================================================================
 class BioAmmo extends TournamentAmmo;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_BioAmmo FILE=Textures\Hud\B227_i_BioAmmo.pcx GROUP="Icons" MIPS=OFF
 
 auto state Init

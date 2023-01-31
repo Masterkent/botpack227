@@ -3,7 +3,8 @@
 // A military redesign of the rifle.
 //=============================================================================
 class SniperRifle extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int NumFire;
 var name FireAnims[5];
@@ -17,7 +18,7 @@ simulated function PostRender( canvas Canvas )
 
 	Super.PostRender(Canvas);
 	P = PlayerPawn(Owner);
-	if ( (P != None) && (P.DesiredFOV != P.DefaultFOV) ) 
+	if ( (P != None) && (P.DesiredFOV != P.DefaultFOV) )
 	{
 		bOwnsCrossHair = true;
 		Canvas.Font = class'FontInfo'.static.GetStaticSmallFont(class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 1));
@@ -61,7 +62,7 @@ function float RateSelf( out int bUseAltMode )
 		{
 			if ( dist > 2000 )
 				return (AIRating + 0.75);
-			return (AIRating + FMin(0.0001 * dist, 0.45)); 
+			return (AIRating + FMin(0.0001 * dist, 0.45));
 		}
 	}
 	return AIRating;
@@ -82,7 +83,7 @@ function PlayFiring()
 	PlaySound(FireSound, SLOT_None, Pawn(Owner).SoundDampening*3.0);
 	PlayAnim(FireAnims[Rand(5)],0.5 + 0.5 * FireAdjust, 0.05);
 
-	if ( (PlayerPawn(Owner) != None) 
+	if ( (PlayerPawn(Owner) != None)
 		&& (PlayerPawn(Owner).DesiredFOV == PlayerPawn(Owner).DefaultFOV) )
 		bMuzzleFlash++;
 }
@@ -141,7 +142,7 @@ function Timer()
 		bPointing = true;
 		Pawn(targ).WarnTarget(P, 200, FireDir);
 	}
-	else 
+	else
 	{
 		SetTimer(0.4 + 1.6 * FRand(), false);
 		if ( (P.bFire == 0) && (P.bAltFire == 0) )
@@ -154,7 +155,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 	local UT_Shellcase s;
 
 	s = Spawn(class'UT_ShellCase',, '', Owner.Location + CalcDrawOffset() + 30 * X + (2.8 * FireOffset.Y+5.0) * Y - Z * 1);
-	if ( s != None ) 
+	if ( s != None )
 	{
 		s.DrawScale = 2.0;
 		s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.2+0.2)*Y + (FRand()*0.3+1.0) * Z)*160);
@@ -163,13 +164,13 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 	if (B227_ShouldTraceFireThroughWarpZones())
 		B227_WarpedTraceFire(self, B227_FireStartTrace, B227_FireEndTrace, 8, Other, HitLocation, HitNormal, X);
 
-	if (Other == Level) 
+	if (Other == Level)
 		Spawn(class'UT_HeavyWallHitEffect',,, HitLocation+HitNormal, Rotator(HitNormal));
-	else if ( (Other != self) && (Other != Owner) && (Other != None) ) 
+	else if ( (Other != self) && (Other != Owner) && (Other != None) )
 	{
 		if ( Other.bIsPawn )
 			Other.PlaySound(Sound 'ChunkHit',, 4.0,,100);
-		if ( Other.bIsPawn && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight) 
+		if ( Other.bIsPawn && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight)
 			&& (instigator.IsA('PlayerPawn') || (instigator.IsA('Bot') && !Bot(Instigator).bNovice)) )
 			Other.TakeDamage(100, Pawn(Owner), HitLocation, 35000 * X, AltDamageType);
 		else
@@ -196,10 +197,10 @@ function TraceFire( float Accuracy )
 
 	Owner.MakeNoise(PawnOwner.SoundDampening);
 	GetAxes(PawnOwner.ViewRotation,X,Y,Z);
-	B227_FireStartTrace = B227_GetFireStartTrace(); 
+	B227_FireStartTrace = B227_GetFireStartTrace();
 	AdjustedAim = PawnOwner.AdjustAim(1000000, B227_FireStartTrace, 2 * AimError, false, false);
 	X = vector(AdjustedAim);
-	B227_FireEndTrace = B227_FireStartTrace + 10000 * X; 
+	B227_FireEndTrace = B227_FireStartTrace + 10000 * X;
 	Other = PawnOwner.TraceShot(HitLocation, HitNormal, B227_FireEndTrace, B227_FireStartTrace);
 	ProcessTraceHit(Other, HitLocation, HitNormal, X, Y, Z);
 }
@@ -249,10 +250,10 @@ state Idle
 		SetTimer(0.0, false);
 		Super.EndState();
 	}
-	
+
 Begin:
 	bPointing=False;
-	if ( AmmoType.AmmoAmount<=0 ) 
+	if ( AmmoType.AmmoAmount<=0 )
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
 	if ( Pawn(Owner).bFire!=0 ) Fire(0.0);
 	Disable('AnimEnd');

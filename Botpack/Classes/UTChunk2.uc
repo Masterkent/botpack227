@@ -2,7 +2,8 @@
 // UTchunk2.
 //=============================================================================
 class UTchunk2 extends UTchunk;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

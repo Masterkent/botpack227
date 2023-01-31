@@ -2,11 +2,12 @@
 // ut_BloodTrail.
 //=============================================================================
 class UT_BloodTrail extends ut_Blood2;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function PostBeginPlay()
 {
-	Super.PostBeginPlay();	
+	Super.PostBeginPlay();
 	LoopAnim('Trail');
 	bRandomFrame = !Level.bDropDetail;
 }

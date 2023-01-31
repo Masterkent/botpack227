@@ -18,7 +18,7 @@ simulated function Timer()
 
 	if (Level.NetMode != NM_Client)
 	{
-		if (Seeking != none && !Seeking.bDeleteMe && Seeking != Instigator) 
+		if (Seeking != none && !Seeking.bDeleteMe && Seeking != Instigator)
 		{
 			SeekingDir = Normal(Seeking.Location - Location);
 			if ( (SeekingDir Dot InitialDir) > 0 )
@@ -45,7 +45,7 @@ simulated function Timer()
 				b.RemoteRole = ROLE_None;
 		}
 	}
-	else 
+	else
 	{
 		B227_StopSmokeTrail();
 

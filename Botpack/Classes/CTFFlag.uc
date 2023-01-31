@@ -2,9 +2,10 @@
 // CTFFlag.
 //=============================================================================
 class CTFFlag extends Decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
-var byte	 	 Team;      	
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+var byte	 	 Team;
 var bool bHome;
 var bool bKnownLocation; //for bot AI
 var bool bHeld;
@@ -104,7 +105,7 @@ function Drop(vector newVel)
 	SetRotation(rotator(-1 * X));
 	bCollideWorld = true;
 	SetCollisionSize(0.5 * Default.CollisionRadius, CollisionHeight);
- 	if ( !SetLocation(OldHolder.Location - 2 * OldHolder.CollisionRadius * X + OldHolder.CollisionHeight * vect(0,0,0.5)) 
+ 	if ( !SetLocation(OldHolder.Location - 2 * OldHolder.CollisionRadius * X + OldHolder.CollisionHeight * vect(0,0,0.5))
 		&& !SetLocation(OldHolder.Location) )
 	{
 		SetCollisionSize(0.8 * OldHolder.CollisionRadius, FMin(CollisionHeight, 0.8 * OldHolder.CollisionHeight));
@@ -140,7 +141,7 @@ function SetHolderLighting()
 
 state Dropped
 {
-	function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation, 
+	function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 						Vector momentum, name damageType)
 	{
 		if ( Region.Zone.bPainZone && (Region.Zone.DamagePerSec > 0) )

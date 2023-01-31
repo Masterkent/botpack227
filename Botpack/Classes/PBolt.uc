@@ -2,7 +2,8 @@
 // pbolt.
 //=============================================================================
 class PBolt extends projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() texture SpriteAnim[5];
 var int SpriteFrame;
@@ -163,7 +164,7 @@ simulated function CheckBeam(vector X, float DeltaTime)
 		}
 		else
 			WallEffect.SetLocation(HitLocation - 4 * X);
-	
+
 		if (PlasmaBeam != none)
 		{
 			PlasmaBeam.Destroy();
@@ -181,7 +182,7 @@ simulated function CheckBeam(vector X, float DeltaTime)
 		}
 		if (PlasmaBeam == none || PlasmaBeam.bDeleteMe)
 		{
-			PlasmaBeam = Spawn(B227_PBoltClass,,, HitLocation, rotator(X)); 
+			PlasmaBeam = Spawn(B227_PBoltClass,,, HitLocation, rotator(X));
 			PlasmaBeam.Position = Position + 1;
 			PlasmaBeam.B227_BeamStarter = B227_BeamStarter;
 			PlasmaBeam.B227_bCanHitInstigator = bool(bCanHitInstigator);

@@ -2,12 +2,13 @@
 // ThighPads.
 //=============================================================================
 class ThighPads extends TournamentPickup;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_ThighPads FILE=Textures\Hud\B227_i_ThighPads.pcx GROUP="Icons" MIPS=OFF
 
 function bool HandlePickupQuery(Inventory Item)
 {
-	if (Item.Class == Class) 
+	if (Item.Class == Class)
 	{
 		Charge = Max(Charge, B227_HandleUTArmors(Pawn(Owner), 0, 0, Item.Charge));
 		if (Level.Game.LocalLog != None)

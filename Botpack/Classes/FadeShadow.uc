@@ -1,5 +1,6 @@
 class FadeShadow expands Decal;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var Actor LightSource;
 var Vector OldOwnerLocation;
@@ -7,15 +8,15 @@ var Vector OldOwnerLocation;
 function AttachToSurface()
 {
 }
-	
+
 function Destroyed()
 {
 	Super.Destroyed();
-	
+
 	//if ( PlayerShadow(Owner) != None )
 	//	PlayerShadow(Owner).FadeShadow = None;
 }
-		
+
 function Tick(float DeltaTime)
 {
 	local Actor HitActor;

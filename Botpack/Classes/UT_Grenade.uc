@@ -2,7 +2,8 @@
 // Grenade.
 //=============================================================================
 class UT_Grenade extends B227_SyncedProjectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bCanHitOwner, bHitWater;
 var float Count, SmokeRate;
@@ -51,9 +52,9 @@ simulated event PostBeginPlay()
 
 simulated function BeginPlay()
 {
-	if ( Level.bHighDetailMode && !Level.bDropDetail ) 
+	if ( Level.bHighDetailMode && !Level.bDropDetail )
 		SmokeRate = 0.03;
-	else 
+	else
 		SmokeRate = 0.15;
 }
 
@@ -165,7 +166,7 @@ simulated function B227_MakeGrenadeTrail(float DeltaTime)
 {
 	local UT_BlackSmoke b;
 
-	if (Region.Zone.bWaterZone || Level.bDropDetail) 
+	if (Region.Zone.bWaterZone || Level.bDropDetail)
 		return;
 
 	Count += DeltaTime;

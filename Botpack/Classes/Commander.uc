@@ -75,7 +75,7 @@ function PlayTakeHitSound(int damage, name damageType, int Mult)
 
 function ClientPlayTakeHit(vector HitLoc, byte Damage, bool bServerGuessWeapon)
 {
-}	
+}
 
 function Gasp()
 {
@@ -127,11 +127,11 @@ function PlayLeftHit(float tweentime)
 function PlayRightHit(float tweentime)
 {
 }
-	
+
 function PlayLanded(float impactVel)
-{	
+{
 }
-	
+
 function PlayInAir()
 {
 }
@@ -147,7 +147,7 @@ function PlayCrawling()
 function TweenToWaiting(float tweentime)
 {
 }
-	
+
 function PlayRecoil(float Rate)
 {
 }
@@ -171,13 +171,13 @@ function TweenToSwimming(float tweentime)
 event FootZoneChange(ZoneInfo newFootZone)
 {
 }
-	
+
 event HeadZoneChange(ZoneInfo newHeadZone)
 {
 }
 
 exec function Walk()
-{	
+{
 }
 
 exec function ActivateItem()
@@ -220,7 +220,7 @@ exec function Fly()
 function StartWalk()
 {
 	bCollideWorld = true;
-	ClientReStart();	
+	ClientReStart();
 }
 
 function ServerChangeSkin( coerce string SkinName, coerce string FaceName, byte TeamNum )
@@ -233,7 +233,7 @@ function ClientReStart()
 	Acceleration = vect(0,0,0);
 	BaseEyeHeight = Default.BaseEyeHeight;
 	EyeHeight = BaseEyeHeight;
-	
+
 	GotoState(PlayerReStartState);
 }
 
@@ -246,7 +246,7 @@ function Possess()
 	Weapon = None;
 	Inventory = None;
 	bCollideWorld = true;
-	ClientReStart();	
+	ClientReStart();
 }
 
 function PlayerTimeOut()
@@ -302,7 +302,7 @@ exec function AltFire( optional float F )
 
 //=================================================================================
 
-function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, 
+function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 						Vector momentum, name damageType)
 {
 }

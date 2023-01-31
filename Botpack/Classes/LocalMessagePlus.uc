@@ -17,7 +17,7 @@ static function int GetFontSize(int Switch)
 
 static function color GetColor(
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2)
 {
 	return Default.DrawColor;

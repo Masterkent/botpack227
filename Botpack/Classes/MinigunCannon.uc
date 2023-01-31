@@ -2,10 +2,11 @@
 // MinigunCannon.
 //=============================================================================
 class MinigunCannon extends TeamCannon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var Actor MuzzFlash;
- 
+
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
@@ -20,17 +21,17 @@ function Name PickAnim()
 	{
 		if ( DesiredRotation.Pitch < -4000 )
 			return 'Fire5';
-		else 
+		else
 			return 'Fire3';
 	}
-	else if (DesiredRotation.Pitch > 1000 ) 
+	else if (DesiredRotation.Pitch > 1000 )
 	{
 		if ( DesiredRotation.Pitch > 4000 )
 			return 'Fire9';
-		else 
+		else
 			return 'Fire7';
 	}
-	else 
+	else
 		return 'Fire1';
 }
 
@@ -69,10 +70,10 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 
 	s = Spawn(class'UT_ShellCase',, '', PrePivot + Location + 20 * X + 10 * Y + 30 * Z);
 	if ( s != None )
-		s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.2+0.2)*Y + (FRand()*0.3+1.0) * Z)*160);              
-	if (Other == Level) 
+		s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.2+0.2)*Y + (FRand()*0.3+1.0) * Z)*160);
+	if (Other == Level)
 		Spawn(class'UT_LightWallHitEffect',,, HitLocation+HitNormal, Rotator(HitNormal));
-	else if ( (Other!=self) && (Other != None) ) 
+	else if ( (Other!=self) && (Other != None) )
 	{
 		if ( !Other.bIsPawn && !Other.IsA('Carcass') )
 			spawn(class'UT_SpriteSmokePuff',,,HitLocation+HitNormal*9);
@@ -134,7 +135,7 @@ state ActiveCannon
 		MuzzFlash.bHidden = false;
 		if ( bShoot )
 			Shoot();
-		else 
+		else
 		{
 			TweenAnim(PickAnim(), 0.2);
 			bShoot=True;
@@ -190,7 +191,7 @@ state TrackWarhead
 
 		if ( bShoot )
 			Shoot();
-		else 
+		else
 		{
 			TweenAnim(PickAnim(), 0.2);
 			bShoot=True;

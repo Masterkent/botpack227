@@ -2,7 +2,8 @@
 // PlasmaSphere.
 //=============================================================================
 class PlasmaSphere extends Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bExploded, bExplosionEffect, bHitPawn;
 var() texture ExpType;
@@ -31,7 +32,7 @@ simulated function Timer()
 		LifeSpan = 0.5;
 }
 
-simulated function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation, 
+simulated function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 					Vector momentum, name damageType)
 {
 	bExploded = True;

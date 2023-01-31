@@ -103,7 +103,7 @@ event float BotDesireability( pawn Bot )
 
 function bool FoundTrapTarget(Pawn Bot, Pawn P)
 {
-	return ( P.bIsPlayer && (P != Bot) && (P.Health > 0) 
+	return ( P.bIsPlayer && (P != Bot) && (P.Health > 0)
 			&& (!Level.Game.bTeamGame || (P.PlayerReplicationInfo.Team != Bot.PlayerReplicationInfo.Team)) );
 }
 
@@ -158,7 +158,7 @@ auto state Pickup
 	{
 		local Actor A;
 
-		if( (Event != '') && (Pawn(Other)!=None) 
+		if( (Event != '') && (Pawn(Other)!=None)
 			&& Pawn(Other).bIsPlayer && (Pawn(Other).Health > 0) )
 			foreach AllActors( class 'Actor', A, Event )
 				A.Trigger( Other, Other.Instigator );

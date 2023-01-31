@@ -2,7 +2,8 @@
 // TeamCannon.
 //=============================================================================
 class TeamCannon extends StationaryPawn;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() sound FireSound;
 var() sound ActivateSound;
@@ -11,7 +12,7 @@ var float SampleTime; 			// How often we sample Instigator's location
 var int   TrackingRate;			// How fast Cannon tracks Instigator
 var float Drop;					// How far down to drop spawning of projectile
 var() bool bLeadTarget;
-var bool bShoot; 
+var bool bShoot;
 var() Class<Projectile> ProjectileType;
 var rotator StartingRotation;
 var() int MyTeam;
@@ -63,14 +64,14 @@ function bool SameTeamAs(int TeamNum)
 	return (MyTeam == TeamNum);
 }
 
-function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation, 
+function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 					Vector momentum, name damageType)
 {
 	MakeNoise(1.0);
 	if (instigatedBy != none)
 		NDamage *= instigatedBy.DamageScaling;
 	Health -= NDamage;
-	if (Health <= 0) 
+	if (Health <= 0)
 	{
 		PlaySound(DeActivateSound, SLOT_None,5.0);
 		NextState = 'Idle';
@@ -119,27 +120,27 @@ function Name PickAnim()
 		Drop = 35;
 		return 'Fire6';
 	}
-	else if (DesiredRotation.Pitch < -10600 ) 
+	else if (DesiredRotation.Pitch < -10600 )
 	{
 		Drop = 30;
 		return 'Fire5';
 	}
-	else if (DesiredRotation.Pitch < -7400 ) 
+	else if (DesiredRotation.Pitch < -7400 )
 	{
 		Drop = 25;
 		return 'Fire4';
 	}
-	else if (DesiredRotation.Pitch < -4200 ) 
+	else if (DesiredRotation.Pitch < -4200 )
 	{
 		Drop = 20;
 		return 'Fire3';
 	}
-	else if (DesiredRotation.Pitch < -1000 ) 
+	else if (DesiredRotation.Pitch < -1000 )
 	{
 		Drop = 15;
 		return 'Fire2';
 	}
-	else 
+	else
 	{
 		Drop = 10;
 		return 'Fire1';
@@ -208,7 +209,7 @@ state DeActivated
 	ignores SeePlayer, EnemyNotVisible, TakeDamage;
 
 Begin:
-	Health = -1; 
+	Health = -1;
 	Enemy = None;
 	StartDeactivate();
 	Sleep(0.0);
@@ -272,7 +273,7 @@ state ActiveCannon
 			&& ((Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < 1000)
 			|| (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 64535)) )
 			Shoot();
-		else 
+		else
 		{
 			TweenAnim(PickAnim(), 0.25);
 			bShoot=True;
@@ -322,7 +323,7 @@ state TrackWarhead
 			&& ((Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) < 2000)
 			|| (Abs(DesiredRotation.Yaw - (Rotation.Yaw & 65535)) > 63535)) )
 			Shoot();
-		else 
+		else
 		{
 			TweenAnim(PickAnim(), 0.25);
 			bShoot=True;

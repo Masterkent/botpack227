@@ -77,9 +77,9 @@ simulated function Timer()
 		if ( Level.bDropDetail )
 			SmokeRate = 0.07;
 		else
-			SmokeRate = 0.02; 
+			SmokeRate = 0.02;
 	}
-	else 
+	else
 	{
 		SmokeRate = 0.15;
 	}
@@ -250,12 +250,12 @@ simulated function Tick(float DeltaTime)
 // is excessive
 simulated function ClientAdjustPosition
 (
-	float TimeStamp, 
-	float NewLocX, 
-	float NewLocY, 
-	float NewLocZ, 
-	float NewVelX, 
-	float NewVelY, 
+	float TimeStamp,
+	float NewLocX,
+	float NewLocY,
+	float NewLocZ,
+	float NewVelX,
+	float NewVelY,
 	float NewVelZ
 )
 {
@@ -376,8 +376,8 @@ simulated function MoveRocket(float DeltaTime, vector CurrentVelocity, rotator G
 	// Roll Warhead based on acceleration
 	GetAxes(NewRot, X,Y,Z);
 	RollMag = int(10 * (Y Dot (Velocity - OldVelocity))/DeltaTime);
-	if ( RollMag > 0 ) 
-		NewRot.Roll = Min(12000, RollMag); 
+	if ( RollMag > 0 )
+		NewRot.Roll = Min(12000, RollMag);
 	else
 		NewRot.Roll = Max(53535, 65536 + RollMag);
 

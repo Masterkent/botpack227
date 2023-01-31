@@ -14,19 +14,19 @@ event int SpecialCost(Pawn Seeker)
 	B = Bot(Seeker);
 	if ( B == None )
 		return 100000000;
-		
-	if ( B.bCanTranslocate || (B.JumpZ > 1.5 * B.Default.JumpZ) 
+
+	if ( B.bCanTranslocate || (B.JumpZ > 1.5 * B.Default.JumpZ)
 		|| (B.Region.Zone.ZoneGravity.Z >= 0.8 * B.Region.Zone.Default.ZoneGravity.Z) )
 		return 300;
 
-	if ( bImpactJump && B.bHasImpactHammer && (B.Health > 85) && (!B.bNovice || (B.Skill > 2.5)) 
+	if ( bImpactJump && B.bHasImpactHammer && (B.Health > 85) && (!B.bNovice || (B.Skill > 2.5))
 		&& (B.DamageScaling < 1.4) )
 		return 1100;
 
 	return 100000000;
 }
 
-/* SpecialHandling is called by the navigation code when the next path has been found.  
+/* SpecialHandling is called by the navigation code when the next path has been found.
 It gives that path an opportunity to modify the result based on any special considerations
 */
 function Actor SpecialHandling(Pawn Other)
@@ -36,14 +36,14 @@ function Actor SpecialHandling(Pawn Other)
 	if ( !Other.IsA('Bot') )
 		return None;
 
-	if ( (VSize(Location - Other.Location) < 200) 
+	if ( (VSize(Location - Other.Location) < 200)
 		 && (Abs(Location.Z - Other.Location.Z) < Other.CollisionHeight) )
 		return self;
 
 	B = Bot(Other);
 	if ( (Other.JumpZ <= 1.5 * Other.Default.JumpZ) && (B.Region.Zone.ZoneGravity.Z < 0.8 * B.Region.Zone.Default.ZoneGravity.Z) )
 	{
-		if ( (B.MyTranslocator == None) || (B.MyTranslocator.TTarget != None) 
+		if ( (B.MyTranslocator == None) || (B.MyTranslocator.TTarget != None)
 			|| (Level.Game.IsA('DeathMatchPlus') && !DeathMatchPlus(Level.Game).CanTranslocate(B)) )
 		{
 			if ( bImpactJump && B.CanImpactJump() )
@@ -55,7 +55,7 @@ function Actor SpecialHandling(Pawn Other)
 			return None;
 		}
 		B.TranslocateToTarget(self);
-		return self;	
+		return self;
 	}
 
 	PendingBot = B;

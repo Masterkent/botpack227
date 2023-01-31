@@ -2,7 +2,8 @@
 // TFemale2.
 //=============================================================================
 class TFemale2 extends TournamentFemale;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

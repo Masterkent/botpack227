@@ -2,7 +2,8 @@ class RatedTeamInfoS expands RatedTeamInfo;
 
 // Surrogate Team
 
-// Thunder Crash#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Thunder Crash
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

@@ -2,7 +2,8 @@
 // ArenaCam.
 //=============================================================================
 class ArenaCam expands Decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() Sound ArmDown;
 var() Sound ArmLoop;
@@ -17,7 +18,7 @@ Auto State Camarm
 			GotoState( 'Camarm','sit');
 	}
 
-Down: 
+Down:
 	Disable('Trigger');
 	PlayAnim('down',1.2);
 	PlaySound(ArmDown,SLOT_Misc,1.0);

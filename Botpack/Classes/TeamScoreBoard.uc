@@ -25,7 +25,7 @@ function ShowScores( canvas Canvas )
 	local float r;
 
 	OwnerInfo = Pawn(Owner).PlayerReplicationInfo;
-	OwnerGame = TournamentGameReplicationInfo(PlayerPawn(Owner).GameReplicationInfo);	
+	OwnerGame = TournamentGameReplicationInfo(PlayerPawn(Owner).GameReplicationInfo);
 	Canvas.Style = ERenderStyle.STY_Normal;
 	CanvasFont = Canvas.Font;
 
@@ -89,7 +89,7 @@ function ShowScores( canvas Canvas )
 			{
 				LongLists[Ordered[I].Team] = 1;
 				DrawNameAndPing( Canvas, Ordered[I], XOffset, YOffset, bCompressed);
-			} 
+			}
 			else if (LoopCountTeam[Ordered[I].Team] < 8)
 				DrawNameAndPing( Canvas, Ordered[I], XOffset, YOffset, bCompressed);
 			if ( bCompressed )
@@ -224,7 +224,7 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 			L = PRI.PlayerLocation.LocationName;
 		else if ( PRI.PlayerZone != None )
 			L = PRI.PlayerZone.ZoneName;
-		else 
+		else
 			L = "";
 		if ( L != "" )
 		{

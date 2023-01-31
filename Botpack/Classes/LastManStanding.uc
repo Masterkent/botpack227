@@ -20,7 +20,7 @@ event InitGame( string Options, out string Error )
 
 function float GameThreatAdd(Bot aBot, Pawn Other)
 {
-	if ( !Other.bIsPlayer ) 
+	if ( !Other.bIsPlayer )
 		return 0;
 	else
 		return 0.1 * Other.PlayerReplicationInfo.Score;
@@ -75,7 +75,7 @@ function Timer()
 		if ( P.IsInState('FeigningDeath') )
 			P.GibbedBy(P);
 }
- 
+
 function bool NeedPlayers()
 {
 	if ( bGameEnded || (TotalKills > 0.15 * (NumPlayers + NumBots) * Lives) )
@@ -83,7 +83,7 @@ function bool NeedPlayers()
 	return (NumPlayers + NumBots < MinPlayers);
 }
 
-function bool IsRelevant(actor Other) 
+function bool IsRelevant(actor Other)
 {
 	local Mutator M;
 	local bool bArenaMutator;
@@ -160,11 +160,11 @@ function bool RestartPlayer( pawn aPlayer )
 			{
 				aPlayer.Style = STY_Translucent;
 				aPlayer.ScaleGlow = 0.5;
-			} 
-			else 
+			}
+			else
 				aPlayer.bHidden = true;
 			aPlayer.PlayerRestartState = 'PlayerSpectating';
-		} 
+		}
 		else
 		{
 			aPlayer.SetCollision( true, true, true );
@@ -256,13 +256,13 @@ function ScoreKill(pawn Killer, pawn Other)
 	if( (killer != Other) && (killer != None) )
 		killer.killCount++;
 	class'UTC_Mutator'.static.UTSF_ScoreKill(BaseMutator, Killer, Other);
-}	
+}
 
 function bool PickupQuery( Pawn Other, Inventory item )
 {
 	if ( Other.PlayerReplicationInfo.Score < 1 )
 		return false;
-	
+
 	return Super.PickupQuery( Other, item );
 }
 
@@ -272,7 +272,7 @@ AssessBotAttitude returns a value that translates to an attitude
 		1 = return ATTITUDE_Hate;
 		2 = return ATTITUDE_Ignore;
 		3 = return ATTITUDE_Friendly;
-*/	
+*/
 function byte AssessBotAttitude(Bot aBot, Pawn Other)
 {
 	local float Adjust;
@@ -319,7 +319,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 	{
 		// randomize order for bots so they don't always use the same weapon
 		F = FRand();
-		if ( F < 0.7 ) 
+		if ( F < 0.7 )
 		{
 			GiveWeapon(PlayerPawn, "Botpack.SniperRifle");
 			GiveWeapon(PlayerPawn, "Botpack.PulseGun");

@@ -126,7 +126,7 @@ function AddString(Canvas C, int Index)
 
 		// Find the word boundary.
 		WordBoundary = InStr(Out, " ");
-				
+
 		// Get the current word.
 		C.SetPos(0, 0);
 		if(WordBoundary == -1)

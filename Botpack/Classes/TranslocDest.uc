@@ -51,7 +51,7 @@ event int SpecialCost(Pawn Seeker)
 	return 300;
 }
 
-/* SpecialHandling is called by the navigation code when the next path has been found.  
+/* SpecialHandling is called by the navigation code when the next path has been found.
 It gives that path an opportunity to modify the result based on any special considerations
 */
 function Actor SpecialHandling(Pawn Other)
@@ -61,7 +61,7 @@ function Actor SpecialHandling(Pawn Other)
 	if ( !Other.IsA('Bot') )
 		return None;
 
-	if ( (VSize(Location - Other.Location) < 200) 
+	if ( (VSize(Location - Other.Location) < 200)
 		 && (Abs(Location.Z - Other.Location.Z) < Other.CollisionHeight) )
 		return self;
 	B = Bot(Other);
@@ -69,7 +69,7 @@ function Actor SpecialHandling(Pawn Other)
 	if ( (B.MyTranslocator == None) || (B.MyTranslocator.TTarget != None) )
 		return None;
 
-	B.TranslocateToTarget(self);	
+	B.TranslocateToTarget(self);
 	return self;
 }
 

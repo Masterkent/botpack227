@@ -21,7 +21,7 @@ function Timer()
 	DetachDecal();
 	OldOwnerLocation = vect(0,0,0);
 }
-			
+
 event Update(Actor L)
 {
 	local Actor HitActor;
@@ -51,7 +51,7 @@ event Update(Actor L)
 		{
 			if ( FadeShadow == None )
 				FadeShadow = spawn(class'FadeShadow',self);
-		
+
 			FadeShadow.LightSource = OldLight;
 		}
 		OldLight = L;

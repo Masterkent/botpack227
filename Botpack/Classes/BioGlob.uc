@@ -8,20 +8,20 @@ var vector SpawnPoint;
 
 auto state Flying
 {
-	function ProcessTouch (Actor Other, vector HitLocation) 
-	{ 
+	function ProcessTouch (Actor Other, vector HitLocation)
+	{
 		if ( Other.IsA('BioSplash') )
 			return;
-		if ( Pawn(Other)!=Instigator || bOnGround) 
-			Global.Timer(); 
+		if ( Pawn(Other)!=Instigator || bOnGround)
+			Global.Timer();
 	}
 	simulated function HitWall( vector HitNormal, actor Wall )
 	{
 
-		SetPhysics(PHYS_None);		
-		MakeNoise(1);	
+		SetPhysics(PHYS_None);
+		MakeNoise(1);
 		bOnGround = True;
-		PlaySound(ImpactSound);	
+		PlaySound(ImpactSound);
 		SetWall(HitNormal, Wall);
 		if ( DrawScale > 1 )
 			NumSplash = int(2 * DrawScale) - 1;
@@ -42,7 +42,7 @@ function SpawnSplash()
 	local vector Start;
 
 	NumSplash--;
-	Start = SpawnPoint + 4 * VRand(); 
+	Start = SpawnPoint + 4 * VRand();
 	Spawn(class'BioSplash',,,Start,Rotator(Start - Location));
 }
 

@@ -3,7 +3,8 @@
 //=============================================================================
 class ChallengeCTFHUD extends ChallengeTeamHUD;
 
-// Blue#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Blue
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var CTFFlag MyFlag;
 
@@ -52,7 +53,7 @@ simulated function PostRender( canvas Canvas )
 
 				if (Flag.Team == PawnOwner.PlayerReplicationInfo.Team)
 					MyFlag = Flag;
-				if ( Flag.bHome ) 
+				if ( Flag.bHome )
 					Canvas.DrawIcon(texture'I_Home', Scale * 2);
 				else if ( Flag.bHeld )
 					Canvas.DrawIcon(texture'I_Capt', Scale * 2);

@@ -2,7 +2,8 @@
 // barrel3.
 //=============================================================================
 class Barrel3 extends ut_Decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

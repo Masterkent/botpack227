@@ -66,7 +66,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		if ( Other.IsA('Stinger') )
 		{
 			ReplaceWith(Other, "Botpack.PulseGun");
-			return false; 
+			return false;
 		}
 		if ( Other.IsA('Rifle') )
 		{
@@ -230,7 +230,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 			return false;
 		}
 		if ( Other.IsA('WeaponPowerUp') )
-			return false; 
+			return false;
 
 		if ( Other.IsA('KevlarSuit') )
 		{

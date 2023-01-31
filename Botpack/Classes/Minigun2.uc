@@ -2,7 +2,8 @@
 // Minigun.
 //=============================================================================
 class Minigun2 extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float ShotAccuracy, LastShellSpawn;
 var int Count;
@@ -68,13 +69,13 @@ function float RateSelf( out int bUseAltMode )
 		return AIRating;
 	}
 
-	dist = VSize(Pawn(Owner).Enemy.Location - Owner.Location); 
+	dist = VSize(Pawn(Owner).Enemy.Location - Owner.Location);
 	bUseAltMode = 1;
 	if ( dist > 1200 )
 	{
 		if ( dist > 1700 )
 			bUseAltMode = 0;
-		return (AIRating * FMin(Pawn(Owner).DamageScaling, 1.5) + FMin(0.0001 * dist, 0.3)); 
+		return (AIRating * FMin(Pawn(Owner).DamageScaling, 1.5) + FMin(0.0001 * dist, 0.3));
 	}
 	AIRating *= FMin(Pawn(Owner).DamageScaling, 1.5);
 	return AIRating;
@@ -120,7 +121,7 @@ function GenerateBullet()
 	bFiredShot = true;
 	if ( PlayerPawn(Owner) != None )
 		PlayerPawn(Owner).ClientInstantFlash( -0.2, vect(325, 225, 95));
-	if ( AmmoType.UseAmmo(1) ) 
+	if ( AmmoType.UseAmmo(1) )
 		TraceFire(ShotAccuracy);
 	else
 		GotoState('FinishFire');
@@ -138,7 +139,7 @@ function TraceFire( float Accuracy )
 	B227_FireEndTrace = B227_FireStartTrace + Accuracy * (FRand() - 0.5 )* Y * 1000
 		+ Accuracy * (FRand() - 0.5 ) * Z * 1000;
 	AimDir = vector(AdjustedAim);
-	B227_FireEndTrace += (10000 * AimDir); 
+	B227_FireEndTrace += (10000 * AimDir);
 	Other = Pawn(Owner).TraceShot(HitLocation,HitNormal,B227_FireEndTrace,B227_FireStartTrace);
 
 	Count++;
@@ -158,12 +159,12 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 	if (B227_ShouldTraceFireThroughWarpZones())
 		B227_WarpedTraceFire(self, B227_FireStartTrace, B227_FireEndTrace, 8, Other, HitLocation, HitNormal, X);
 
-	if (Other == Level) 
+	if (Other == Level)
 		Spawn(class'UT_LightWallHitEffect',,, HitLocation+HitNormal, Rotator(HitNormal));
-	else if ( (Other!=self) && (Other!=Owner) && (Other != None) ) 
+	else if ( (Other!=self) && (Other!=Owner) && (Other != None) )
 	{
 		if ( !Other.bIsPawn && !Other.IsA('Carcass') )
-			spawn(class'UT_SpriteSmokePuff',,,HitLocation+HitNormal*9); 
+			spawn(class'UT_SpriteSmokePuff',,,HitLocation+HitNormal*9);
 		else
 			Other.PlaySound(Sound 'ChunkHit',, 4.0,,100);
 
@@ -278,7 +279,7 @@ state NormalFire
 {
 	function Tick( float DeltaTime )
 	{
-		if (Owner==None) 
+		if (Owner==None)
 			AmbientSound = None;
 	}
 
@@ -289,7 +290,7 @@ state NormalFire
 			Global.Fire(0);
 		else if ( Pawn(Owner).bAltFire!=0 && AmmoType.AmmoAmount>0)
 			Global.AltFire(0);
-		else 
+		else
 			GotoState('FinishFire');
 	}
 
@@ -299,7 +300,7 @@ state NormalFire
 		AmbientSound = FireSound;
 		bSteadyFlash3rd = true;
 		Super.BeginState();
-	}	
+	}
 
 	function EndState()
 	{
@@ -417,7 +418,7 @@ state ClientAltFiring
 		else if ( Pawn(Owner).bAltFire != 0 )
 		{
 			if ( (AnimSequence != 'Shoot2') || !bAnimLoop )
-			{	
+			{
 				AmbientSound = AltFireSound;
 				SoundVolume = 255*Pawn(Owner).SoundDampening;
 				LoopAnim('Shoot2',1.9);
@@ -458,7 +459,7 @@ state AltFiring
 {
 	function Tick( float DeltaTime )
 	{
-		if (Owner==None) 
+		if (Owner==None)
 		{
 			AmbientSound = None;
 			GotoState('Pickup');
@@ -521,7 +522,7 @@ Begin:
 	if (Pawn(Owner).bAltFire!=0 && AmmoType.AmmoAmount>0) AltFire(0.0);
 	LoopAnim('Idle',0.2,0.9);
 	bPointing=False;
-	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) ) 
+	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) )
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
 	Disable('AnimEnd');
 }
@@ -572,11 +573,11 @@ simulated function B227_SpawnShellCase()
 
 	if ( PlayerViewOffset.Y >= 0 )
 		dir = 1;
-	else 
+	else
 		dir = -1;
 
 	s = Spawn(class'MiniShellCase',Owner, '', Owner.Location + CalcDrawOffset() + 30 * X + (0.4 * PlayerViewOffset.Y+5.0) * Y - Z * 5);
-	if (s != none) 
+	if (s != none)
 		s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.3+0.2)*dir*Y + (FRand()*0.3+1.0) * Z)*160);
 }
 

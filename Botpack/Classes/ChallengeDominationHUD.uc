@@ -15,7 +15,7 @@ simulated function PostRender( canvas Canvas )
 
 	B227_InitUpscale(Canvas);
 
-	if ( bHideHud 
+	if ( bHideHud
 		|| ((Canvas.ClipX <= 400) && ((PlayerPawn(Owner).bShowScores) || bForceScores)) )
 	{
 		B227_ResetUpscale(Canvas);
@@ -37,7 +37,7 @@ simulated function PostRender( canvas Canvas )
 		if ( N.IsA('ControlPoint') )
 		{
 			CP = ControlPoint(N);
-			if (CP.ControllingTeam != None) 
+			if (CP.ControllingTeam != None)
 				CPTexture = TeamIcon[CP.ControllingTeam.TeamIndex];
 			else
 				CPTexture = texture'I_TeamN';
@@ -54,7 +54,7 @@ simulated function PostRender( canvas Canvas )
 		if ( N.IsA('ControlPoint') )
 		{
 			CP = ControlPoint(N);
-			if (CP.ControllingTeam != None) 
+			if (CP.ControllingTeam != None)
 				Canvas.DrawColor = TeamColor[CP.ControllingTeam.TeamIndex];
 			else
 				Canvas.DrawColor = WhiteColor;

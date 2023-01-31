@@ -2,7 +2,8 @@
 // ut_ShieldBelt.
 //=============================================================================
 class UT_ShieldBelt extends TournamentPickup;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_UT_ShieldBelt FILE=Textures\Hud\B227_i_UT_ShieldBelt.pcx GROUP="Icons" MIPS=OFF
 
 var UT_ShieldBeltEffect MyEffect;
@@ -25,14 +26,14 @@ event float BotDesireability( pawn Bot )
 
 function bool HandlePickupQuery(Inventory Item)
 {
-	if (Item.Class == Class) 
+	if (Item.Class == Class)
 		B227_HandleUTArmors(Pawn(Owner), Item.Charge, 0, 0);
 
 	return super.HandlePickupQuery(Item);
 }
 
 function ArmorImpactEffect(vector HitLocation)
-{ 
+{
 	if (PlayerPawn(Owner) != none)
 		PlayerPawn(Owner).ClientFlash(-0.05, vect(400, 400, 400));
 
@@ -66,7 +67,7 @@ function Destroyed()
 
 function PickupFunction(Pawn Other)
 {
-	MyEffect = Spawn(class'UT_ShieldBeltEffect', Other,,Other.Location, Other.Rotation); 
+	MyEffect = Spawn(class'UT_ShieldBeltEffect', Other,,Other.Location, Other.Rotation);
 	MyEffect.Mesh = Owner.Mesh;
 	MyEffect.DrawScale = Owner.Drawscale;
 

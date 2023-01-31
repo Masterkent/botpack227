@@ -3,7 +3,8 @@
 // A human modification of the Skaarj Razorjack.
 //=============================================================================
 class Ripper extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed, bool bWarn)
 {
@@ -11,7 +12,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
-	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 	AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
 	return Spawn(ProjClass,,, Start,AdjustedAim);
 }
@@ -33,7 +34,7 @@ function float RateSelf( out int bUseAltMode )
 	P = Pawn(Owner);
 	if ( (P.Enemy == None ) || (P.Enemy.Location.Z < Owner.Location.Z - 60) || (FRand() < 0.5) )
 		bUseAltMode = 1;
-	else 
+	else
 		bUseAltMode = 0;
 
 	if ( P.Enemy != None )

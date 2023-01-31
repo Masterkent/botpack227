@@ -2,7 +2,8 @@
 // TrainingDOM.
 //=============================================================================
 class TrainingDOM extends Domination;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bOldAutoTaunt;
 
@@ -34,7 +35,7 @@ event InitGame( string Options, out string Error )
 function InitRatedGame(LadderInventory LadderObj, PlayerPawn LadderPlayer)
 {
 	Super.InitRatedGame(LadderObj, LadderPlayer);
-	
+
 	RemainingBots = 0;
 	bRequireReady = False;
 	GoalTeamScore = 0;
@@ -275,7 +276,7 @@ state FreeRunning1
 				TutorialSound(DOM[10]);
 				class'TournamentConsole'.static.UTSF_AddMessage(Trainee.Player.Console, TutMessage[10]);
 				SoundIndex++;
-				
+
 				GotoState('');
 			}
 		}

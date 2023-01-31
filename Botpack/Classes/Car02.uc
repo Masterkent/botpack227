@@ -3,7 +3,8 @@
 //=============================================================================
 class Car02 extends Decoration;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

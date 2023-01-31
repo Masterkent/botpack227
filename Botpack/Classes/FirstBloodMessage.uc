@@ -4,7 +4,7 @@ var localized string FirstBloodString;
 
 static function string GetString(
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)
@@ -16,10 +16,10 @@ static function string GetString(
 	return RelatedPRI_1.PlayerName@Default.FirstBloodString;
 }
 
-static simulated function ClientReceive( 
+static simulated function ClientReceive(
 	PlayerPawn P,
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)

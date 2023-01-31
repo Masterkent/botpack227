@@ -10,7 +10,7 @@ function Explode(vector HitLocation, vector HitNormal)
 	local vector start;
 	local FlameExplosion F;
 
-	HurtRadiusProj(damage, BlastRadius, 'mortared', MomentumTransfer, HitLocation);	
+	HurtRadiusProj(damage, BlastRadius, 'mortared', MomentumTransfer, HitLocation);
 	start = Location + 10 * HitNormal;
 	F = Spawn( class'FlameExplosion',,,Start);
 	if ( Level.NetMode != NM_DedicatedServer )

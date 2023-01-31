@@ -14,7 +14,7 @@ event PreBeginPlay()
 	{
 		HUDType = class<HUD>( DynamicLoadObject(CityIntroHUDClass, class'Class') );
 		Log("Using CityIntro HUD: "$HUDType);
-	}		
+	}
 	Super.PreBeginPlay();
 }
 
@@ -38,7 +38,7 @@ event playerpawn Login
 	bRatedGame = false;
 	NewPlayer.bHidden = True;
 
-	foreach AllActors(class'SpectatorCam', Cam) 
+	foreach AllActors(class'SpectatorCam', Cam)
 		NewPlayer.ViewTarget = Cam;
 
 	return NewPlayer;
@@ -66,8 +66,8 @@ function AcceptInventory(pawn PlayerPawn)
 		if (Inv.IsA('LadderInventory'))
 		{
 			LadderObj = LadderInventory(Inv);
-		} 
-		else 	
+		}
+		else
 			Inv.Destroy();
 	}
 	PlayerPawn.Weapon = None;

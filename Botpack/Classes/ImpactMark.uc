@@ -16,7 +16,7 @@ simulated function SpawnEffects()
 
 	NumSparks = rand(MaxSparks);
 	for ( j=0; j<MaxChips; j++ )
-		if ( FRand() < ChipOdds ) 
+		if ( FRand() < ChipOdds )
 		{
 			NumSparks--;
 			A = spawn(class'Chip');
@@ -34,8 +34,8 @@ simulated function SpawnEffects()
 		return;
 	if ( FRand() < 0.4 )
 		Spawn(class'UT_Sparks');
-	if ( NumSparks > 0 ) 
-		for (j=0; j<NumSparks; j++) 
+	if ( NumSparks > 0 )
+		for (j=0; j<NumSparks; j++)
 			spawn(class'UT_Spark',,,Location + 8 * Vector(Rotation));
 }
 

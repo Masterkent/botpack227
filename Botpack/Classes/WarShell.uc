@@ -2,7 +2,8 @@
 // WarShell.
 //=============================================================================
 class WarShell extends B227_Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float CannonTimer, SmokeRate;
 var	RedeemerTrail Trail;
@@ -37,7 +38,7 @@ simulated event Timer()
 			Spawn(class'LightSmokeTrail');
 		else
 			Spawn(class'UTSmokeTrail');
-		SmokeRate = 152/Speed; 
+		SmokeRate = 152/Speed;
 	}
 	else
 	{
@@ -102,7 +103,7 @@ auto state Flying
 
 	function ProcessTouch (Actor Other, Vector HitLocation)
 	{
-		if ( Other != instigator ) 
+		if ( Other != instigator )
 			Explode(HitLocation,Normal(HitLocation-Other.Location));
 	}
 

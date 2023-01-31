@@ -22,7 +22,7 @@ function PlayDying(name DamageType, vector HitLoc)
 {
 	BaseEyeHeight = Default.BaseEyeHeight;
 	PlayDyingSound();
-			
+
 	if ( DamageType == 'Suicided' )
 	{
 		PlayAnim('Dead8',, 0.1);
@@ -58,7 +58,7 @@ function PlayDying(name DamageType, vector HitLoc)
 		PlayAnim('Dead9',, 0.1);
 		return;
 	}
-		
+
 	if ( (HitLoc.Z - Location.Z > 0.7 * CollisionHeight) && !Level.Game.bVeryLowGore )
 	{
 		if ( FRand() < 0.5 )
@@ -67,7 +67,7 @@ function PlayDying(name DamageType, vector HitLoc)
 			PlayAnim('Dead7',, 0.1);
 		return;
 	}
-	
+
 	if ( Region.Zone.bWaterZone || (FRand() < 0.5) ) //then hit in front or back
 		PlayAnim('Dead3',, 0.1);
 	else
@@ -123,7 +123,7 @@ function PlayLeftHit(float tweentime)
 		TweenAnim('GutHit', tweentime);
 	else if ( FRand() < 0.6 )
 		TweenAnim('LeftHit', tweentime);
-	else 
+	else
 		TweenAnim('Dead9', tweentime);
 }
 

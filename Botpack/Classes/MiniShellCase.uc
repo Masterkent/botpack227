@@ -2,7 +2,7 @@
 // MiniShellCase.
 //=============================================================================
 class MiniShellCase extends UT_ShellCase;
-	
+
 simulated function HitWall( vector HitNormal, actor Wall )
 {
 	Super.HitWall(HitNormal, Wall);

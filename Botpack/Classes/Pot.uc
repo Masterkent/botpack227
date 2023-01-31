@@ -2,7 +2,8 @@
 // pot.
 //=============================================================================
 class Pot extends UT_Decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

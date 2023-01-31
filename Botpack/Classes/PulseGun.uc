@@ -2,7 +2,8 @@
 // PulseGun.
 //=============================================================================
 class PulseGun extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float Angle, Count;
 var PBolt PlasmaBeam;
@@ -204,7 +205,7 @@ state NormalFire
 
 		Owner.MakeNoise(Pawn(Owner).SoundDampening);
 		GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
-		Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+		Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 		AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
 		Start = Start - Sin(Angle)*Y*4 + (Cos(Angle)*4 - 10.78)*Z;
 		Angle += 1.8;
@@ -221,7 +222,7 @@ state NormalFire
 
 	function Tick( float DeltaTime )
 	{
-		if (Owner==None) 
+		if (Owner==None)
 			GotoState('Pickup');
 	}
 
@@ -387,7 +388,7 @@ state Idle
 {
 Begin:
 	bPointing=False;
-	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) ) 
+	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) )
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
 	if ( Pawn(Owner).bFire!=0 ) Fire(0.0);
 	if ( Pawn(Owner).bAltFire!=0 ) AltFire(0.0);

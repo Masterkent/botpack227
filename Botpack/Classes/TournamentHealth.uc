@@ -21,7 +21,7 @@ event float BotDesireability(Pawn Bot)
 	{
 		if ( desire > 6 )
 			desire = FMax(desire,25);
-		return ( FMin(0.017 * desire, 2.0) ); 
+		return ( FMin(0.017 * desire, 2.0) );
 	}
 }
 
@@ -39,12 +39,12 @@ auto state Pickup
 		local int HealMax;
 		local Pawn P;
 
-		if ( ValidTouch(Other) ) 
+		if ( ValidTouch(Other) )
 		{
 			P = Pawn(Other);
 			HealMax = P.default.health;
 			if (bSuperHeal) HealMax = Min(199, HealMax * 2.0);
-			if (P.Health < HealMax) 
+			if (P.Health < HealMax)
 			{
 				if (Level.Game.LocalLog != None)
 					Level.Game.LocalLog.LogPickup(Self, P);

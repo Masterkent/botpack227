@@ -2,7 +2,8 @@
 // UTTeleportEffect.
 //=============================================================================
 class UTTeleportEffect extends PawnTeleportEffect;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bSpawnEffects;
 var UTTeleEffect T1, T2;
@@ -26,7 +27,7 @@ auto state Explode
 			return;
 		}
 
-		ScaleGlow = (Lifespan/Default.Lifespan);	
+		ScaleGlow = (Lifespan/Default.Lifespan);
 		LightBrightness = ScaleGlow*210.0;
 
 		if ( !Level.bHighDetailMode )

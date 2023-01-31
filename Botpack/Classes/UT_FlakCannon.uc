@@ -2,7 +2,8 @@
 // UT_FlakCannon.
 //=============================================================================
 class UT_FlakCannon extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 // return delta to combat style
 function float SuggestAttackStyle()
@@ -178,7 +179,7 @@ function AltFire( float Value )
 		GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
 		Start = Owner.Location + CalcDrawOffset();
 		Spawn(class'WeaponLight',,'',Start+X*20,rot(0,0,0));
-		Start = Start + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+		Start = Start + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 		AdjustedAim = pawn(owner).AdjustToss(AltProjectileSpeed, Start, AimError, True, bAltWarnTarget);
 		Spawn(class'FlakSlug',,, Start,AdjustedAim);
 		ClientAltFire(Value);
@@ -345,7 +346,7 @@ function PlayIdleAnim()
 function PlayPostSelect()
 {
 	PlayAnim('Loading', 1.3, 0.05);
-	PlaySound(Misc2Sound, SLOT_None, 1.3 * Pawn(Owner).SoundDampening);	
+	PlaySound(Misc2Sound, SLOT_None, 1.3 * Pawn(Owner).SoundDampening);
 }
 
 defaultproperties

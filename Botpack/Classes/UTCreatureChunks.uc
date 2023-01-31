@@ -7,7 +7,7 @@ var		UT_Bloodtrail		trail;
 var		float			TrailSize;
 var		bool			bGreenBlood;
 var		class<UTHumanCarcass>	CarcassClass;
-var		name			CarcassAnim;	   	
+var		name			CarcassAnim;
 var		Vector			CarcLocation;
 var		float			CarcHeight;
 var		Sound	HitSounds[4];
@@ -21,7 +21,7 @@ replication
 
 simulated function BeginPlay()
 {
-	if ( Region.Zone.bDestructive 
+	if ( Region.Zone.bDestructive
 		|| ((Level.NetMode == NM_Standalone) && class'GameInfo'.Default.bLowGore) )
 	{
 		Destroy();
@@ -69,7 +69,7 @@ simulated function ZoneChange( ZoneInfo NewZone )
 				PlaySound(NewZone.EntrySound, SLOT_Interact, splashSize);
 			if ( NewZone.EntryActor != None )
 			{
-				splash = Spawn(NewZone.EntryActor); 
+				splash = Spawn(NewZone.EntryActor);
 				if ( splash != None )
 					splash.DrawScale = splashSize;
 			}
@@ -80,7 +80,7 @@ simulated function ZoneChange( ZoneInfo NewZone )
 	if ( NewZone.bDestructive || (NewZone.bPainZone  && (NewZone.DamagePerSec > 0)) )
 		Destroy();
 }
-	
+
 simulated function Destroyed()
 {
 	if ( trail != None )
@@ -117,7 +117,7 @@ function Initfor(actor Other)
 		else if ( (UTCreatureChunks(Other) != None) )
 			bGreenBlood = UTCreatureChunks(Other).bGreenBlood;
 	}
-			
+
 	if ( FRand() < 0.3 )
 		Buoyancy = 1.06 * Mass; // float corpse
 	else
@@ -131,8 +131,8 @@ function ChunkUp(int Damage)
 	if (bHidden)
 		return;
 	b = Spawn(class 'UT_BloodBurst',,,,rot(16384,0,0));
-	if ( bGreenBlood )		
-		b.GreenBlood();	
+	if ( bGreenBlood )
+		b.GreenBlood();
 	if (bPlayerCarcass)
 	{
 		bHidden = true;
@@ -166,7 +166,7 @@ simulated function Landed(vector HitNormal)
 	{
 		b = Spawn(class 'UT_BloodBurst',,,,rot(0,0,0));
 		if ( bGreenBlood )
-			b.GreenBlood();		
+			b.GreenBlood();
 		b.RemoteRole = ROLE_None;
 		if ( !bGreenBlood )
 			Spawn(class'BloodSplat',,,Location,rotator(HitNormal));
@@ -209,10 +209,10 @@ simulated function HitWall(vector HitNormal, actor Wall)
 	if ( (Level.NetMode != NM_DedicatedServer) )
 	{
 		if ( (trail == None) && !Level.bDropDetail )
-		{ 
+		{
 			b = Spawn(class 'UT_BloodBurst',,,,Rot(0,0,0));
 			if ( bGreenBlood )
-				b.GreenBlood();		
+				b.GreenBlood();
 			b.RemoteRole = ROLE_None;
 		}
 		if ( !bGreenBlood && (!Level.bDropDetail || (FRand() < 0.65)) )
@@ -220,7 +220,7 @@ simulated function HitWall(vector HitNormal, actor Wall)
 	}
 }
 
-function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, 
+function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 						Vector momentum, name damageType)
 {
 	SetPhysics(PHYS_Falling);
@@ -230,7 +230,7 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 	If ( Damage > FMin(15, Mass) || (CumulativeDamage > Mass) )
 		ChunkUp(Damage);
 }
-			
+
 auto state Dying
 {
 	ignores TakeDamage;
@@ -247,9 +247,9 @@ Begin:
 	Sleep(0.35);
 	SetCollision(true, false, false);
 	GotoState('Dead');
-}	
+}
 
-state Dead 
+state Dead
 {
 	function Timer()
 	{
@@ -258,7 +258,7 @@ state Dead
 			if ( !PlayerCanSeeMe() )
 				Destroy();
 			else
-				SetTimer(2.0, false);	
+				SetTimer(2.0, false);
 		}
 		else
 			Destroy();

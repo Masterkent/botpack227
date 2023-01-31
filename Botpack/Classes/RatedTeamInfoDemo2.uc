@@ -1,6 +1,7 @@
 class RatedTeamInfoDemo2 expands RatedTeamInfo;
 
-// Thunder Crash#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Thunder Crash
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

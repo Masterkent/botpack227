@@ -1,7 +1,8 @@
 // UnrealCTFScoreBoard
 //=============================================================================
 class UnrealCTFScoreBoard extends TeamScoreBoard;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() texture FlagIcon[4];
 

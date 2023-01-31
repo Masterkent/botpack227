@@ -2,12 +2,13 @@
 // Armor2 powerup.
 //=============================================================================
 class Armor2 extends TournamentPickup;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_Armor2 FILE=Textures\Hud\B227_i_Armor2.pcx GROUP="Icons" MIPS=OFF
 
 function bool HandlePickupQuery(Inventory Item)
 {
-	if (Item.Class == Class) 
+	if (Item.Class == Class)
 	{
 		Charge = Max(Charge, B227_HandleUTArmors(Pawn(Owner), 0, Item.Charge, 0));
 		if (Level.Game.LocalLog != None)

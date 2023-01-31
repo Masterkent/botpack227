@@ -45,7 +45,7 @@ simulated function DrawTimeAt(Canvas Canvas, float X, float Y)
 		Minutes = 0;
 		Seconds = 0;
 	}
-	
+
 	if ( Minutes > 0 )
 	{
 		if ( Minutes >= 10 )

@@ -2,7 +2,8 @@
 // FortStandard.
 //=============================================================================
 class FortStandard extends StationaryPawn;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() bool bSelfDisplayed;
 var() bool bTriggerOnly;
@@ -22,7 +23,7 @@ var NavigationPoint NearestPath;
 var() name EndCamTag;
 var() localized string FortName;
 var() localized string DestroyedMessage;
- 
+
 var() name DamageEvent[8];
 var() float DamageEventThreshold[8];
 var	  int DamagePointer;
@@ -69,14 +70,14 @@ function Destroyed()
 
 function Touch( Actor Other )
 {
-	if ( bTriggerOnly && Other.bIsPawn && Pawn(Other).bIsPlayer 
+	if ( bTriggerOnly && Other.bIsPawn && Pawn(Other).bIsPlayer
 		&& (Pawn(Other).PlayerReplicationInfo.Team != Assault(Level.Game).Defender.TeamIndex) )
 		DestroyFort(Pawn(Other));
 }
 
 function Trigger( actor Other, pawn EventInstigator )
 {
-	if ( EventInstigator.bIsPlayer 
+	if ( EventInstigator.bIsPlayer
 		&& (EventInstigator.PlayerReplicationInfo.Team != Assault(Level.Game).Defender.TeamIndex) )
 		DestroyFort(EventInstigator);
 }
@@ -90,7 +91,7 @@ function DestroyFort(pawn InstigatedBy)
 	AmbientSound = None;
 	if ( FallBackFort != '' )
 		Assault(Level.Game).FallBackTo(FallBackFort, DefensePriority);
-		
+
 	if ( Event != '' )
 		ForEach AllActors(class'Actor', A, Event)
 			A.Trigger( self, instigatedBy );
@@ -98,7 +99,7 @@ function DestroyFort(pawn InstigatedBy)
 	Destroy();
 }
 
-function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, 
+function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 						Vector momentum, name damageType)
 {
 	local Actor A;
@@ -119,15 +120,15 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 	if ( Health < 0 )
 		DestroyFort(instigatedBy);
 	else
-	{	
+	{
 		TotalDamage += Damage;
 		if ( (DamageEvent[DamagePointer] != '') && (TotalDamage >= DamageEventThreshold[DamagePointer]) )
 		{
 			ForEach AllActors(class'Actor', A, DamageEvent[DamagePointer] )
 				A.Trigger(self, instigatedBy);
 			DamagePointer++;
-		}	
-		AmbientSound = sound'WarningSound'; 
+		}
+		AmbientSound = sound'WarningSound';
 		if ( bFlashing && ((TimerRate == 0) || (TimerRate - TimerCounter > 0.01 * Health)) )
 			SetTimer(FClamp(0.006 * Health,0.2,1.5), true);
 	}

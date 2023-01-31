@@ -6,7 +6,8 @@ class UTChunk extends Projectile;
 var	chunktrail trail;
 var Texture AnimFrame[12];
 var int Count;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 	simulated function PostBeginPlay()
 	{
@@ -49,7 +50,7 @@ var int Count;
 		}
 	}
 
-	simulated function Timer() 
+	simulated function Timer()
 	{
 		Count++;
 		Texture = AnimFrame[Count];
@@ -74,10 +75,10 @@ var int Count;
 			Destroy();
 			return;
 		}
-		if ( Physics != PHYS_Falling ) 
+		if ( Physics != PHYS_Falling )
 		{
 			SetPhysics(PHYS_Falling);
-			if ( !Level.bDropDetail && (Level.Netmode != NM_DedicatedServer) && !Region.Zone.bWaterZone ) 
+			if ( !Level.bDropDetail && (Level.Netmode != NM_DedicatedServer) && !Region.Zone.bWaterZone )
 			{
 				if ( FRand() < 0.5 )
 				{
@@ -91,11 +92,11 @@ var int Count;
 		Velocity = 0.8*(( Velocity dot HitNormal ) * HitNormal * (-1.8 + FRand()*0.8) + Velocity);   // Reflect off Wall w/damping
 		SetRotation(rotator(Velocity));
 		speed = VSize(Velocity);
-		if ( speed > 100 ) 
+		if ( speed > 100 )
 		{
 			MakeNoise(0.3);
 			Rand = FRand();
-			if (Rand < 0.33)	PlaySound(sound 'Hit1', SLOT_Misc,0.6,,1000);	
+			if (Rand < 0.33)	PlaySound(sound 'Hit1', SLOT_Misc,0.6,,1000);
 			else if (Rand < 0.66) PlaySound(sound 'Hit3', SLOT_Misc,0.6,,1000);
 			else PlaySound(sound 'Hit5', SLOT_Misc,0.6,,1000);
 		}

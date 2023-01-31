@@ -2,7 +2,8 @@
 // ut_BioGel.
 //=============================================================================
 class UT_BioGel extends Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var vector SurfaceNormal;
 var bool bOnGround;
@@ -30,7 +31,7 @@ function Timer()
 {
 	local ut_GreenGelPuff f;
 
-	f = spawn(class'ut_GreenGelPuff',,,Location + SurfaceNormal*8); 
+	f = spawn(class'ut_GreenGelPuff',,,Location + SurfaceNormal*8);
 	f.numBlobs = numBio;
 	if ( numBio > 0 )
 		f.SurfaceNormal = SurfaceNormal;
@@ -56,7 +57,7 @@ simulated function SetWall(vector HitNormal, Actor Wall)
 		SetBase(Wall);
 }
 
-singular function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation, 
+singular function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 						vector momentum, name damageType )
 {
 	if ( damageType == MyDamageType )
@@ -66,10 +67,10 @@ singular function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation
 
 auto state Flying
 {
-	function ProcessTouch (Actor Other, vector HitLocation) 
-	{ 
-		if ( Pawn(Other)!=Instigator || bOnGround) 
-			Global.Timer(); 
+	function ProcessTouch (Actor Other, vector HitLocation)
+	{
+		if ( Pawn(Other)!=Instigator || bOnGround)
+			Global.Timer();
 	}
 
 	simulated function HitWall( vector HitNormal, actor Wall )
@@ -87,10 +88,10 @@ auto state Flying
 	simulated function ZoneChange( Zoneinfo NewZone )
 	{
 		local waterring w;
-		
+
 		if (!NewZone.bWaterZone) Return;
-	
-		if (!bOnGround) 
+
+		if (!bOnGround)
 		{
 			w = Spawn(class'WaterRing',,,,rot(16384,0,0));
 			w.DrawScale = 0.1;
@@ -105,7 +106,7 @@ auto state Flying
 	}
 
 	function BeginState()
-	{	
+	{
 		if ( Role == ROLE_Authority )
 		{
 			Velocity = Vector(Rotation) * Speed;
@@ -145,7 +146,7 @@ state OnSurface
 		DotProduct = SurfaceNormal dot vect(0,0,-1);
 		If( DotProduct > 0.7 )
 			PlayAnim('Drip',0.1);
-		else if (DotProduct > -0.5) 
+		else if (DotProduct > -0.5)
 			PlayAnim('Slide',0.2);
 	}
 
@@ -166,14 +167,14 @@ state OnSurface
 	function BeginState()
 	{
 		wallTime = 3.8;
-		
+
 		MyFear = Spawn(class'BioFear');
 		if ( Mover(Base) != None )
 		{
 			BaseOffset = VSize(Location - Base.Location);
 			SetTimer(0.2, true);
 		}
-		else 
+		else
 			SetTimer(wallTime, false);
 	}
 

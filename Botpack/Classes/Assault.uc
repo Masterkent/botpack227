@@ -51,12 +51,12 @@ function PostBeginPlay()
 
 	if (GameCode == "")
 	{
-		while (i<8) 
+		while (i<8)
 		{
 			Num = Rand(123);
-			if ( ((Num >= 48) && (Num <= 57)) || 
+			if ( ((Num >= 48) && (Num <= 57)) ||
 				 ((Num >= 65) && (Num <= 91)) ||
-				((Num >= 97) && (Num <= 123)) ) 
+				((Num >= 97) && (Num <= 123)) )
 			{
 				GameCode = GameCode$Chr(Num);
 				i++;
@@ -161,14 +161,14 @@ function bool SuccessfulGame()
 	}
 }
 
-function bool RestartPlayer( pawn aPlayer )	
+function bool RestartPlayer( pawn aPlayer )
 {
 	local Bot B;
 
 	// boost attacker AI a little
 	B = Bot(aPlayer);
 	if ( (B != None) && (B.PlayerReplicationInfo.Team != Defender.TeamIndex)
-		&& (Bot(Leader[B.PlayerReplicationInfo.Team]) != None) ) 
+		&& (Bot(Leader[B.PlayerReplicationInfo.Team]) != None) )
 	{
 		if ( bNoviceMode && (Level.Game.Difficulty == 3) )
 		{
@@ -176,7 +176,7 @@ function bool RestartPlayer( pawn aPlayer )
 			B.skill = 0;
 		}
 		else
-			B.skill = FClamp(Level.Game.Difficulty + 1, B.skill, 3); 
+			B.skill = FClamp(Level.Game.Difficulty + 1, B.skill, 3);
 	}
 	return Super.RestartPlayer(aPlayer);
 }
@@ -191,8 +191,8 @@ function RestartGame()
 
 	// If a team has defended and attacked, the game is over
 	// Or in a rated game if the player failed on attack
-	if ( bDefenseSet 
-		|| (bRatedGame && (RatedPlayer.PlayerReplicationInfo.TeamID == Attacker.TeamIndex) && !bAssaultWon) ) 
+	if ( bDefenseSet
+		|| (bRatedGame && (RatedPlayer.PlayerReplicationInfo.TeamID == Attacker.TeamIndex) && !bAssaultWon) )
 	{
 		ResetGame();
 		Super.RestartGame();
@@ -200,7 +200,7 @@ function RestartGame()
 	}
 
 	bDontRestart = true; // don't restart more than once
-	bDefenseSet = true;	
+	bDefenseSet = true;
 	if ( Defender.TeamIndex == 1 )
 		CurrentDefender = 0;
 	else
@@ -225,7 +225,7 @@ function PlayStartUpMessage(PlayerPawn NewPlayer)
 	Super.PlayStartupMessage(NewPlayer);
 }
 
-// Defenders always use team 0 labelled starts, attackers use team 1 labelled starts	
+// Defenders always use team 0 labelled starts, attackers use team 1 labelled starts
 function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, optional string incomingName)
 {
 	local Pawn P;
@@ -247,7 +247,7 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 				d = CurrentDefender;
 			else if ( Team == 0 )
 				d = 1;
-			else 
+			else
 				d = 0;
 
 			Defender = Teams[d];
@@ -265,7 +265,7 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 				if ( d == 0 )
 					Fort[i].Skin = texture'JFlag11';
 				else if ( d == 1 )
-					Fort[i].Skin = texture'JFlag12'; 
+					Fort[i].Skin = texture'JFlag12';
 			}
 			if (WorldLog != None)
 			{
@@ -490,14 +490,14 @@ function bool BestFortFor(Bot aBot, FortStandard oldFort, FortStandard currentFo
 			oldFort.Defender = None;
 		return true;
 	}
-	
+
 	return false;
 }
 
 function FortStandard AttackFort(Bot aBot, out byte bMultiSame)
 {
 	local int i;
-	
+
 	BestFort = Fort[0];
 	bMultiSame = 0;
 	for ( i=1; i<numForts; i++ )
@@ -529,7 +529,7 @@ function Actor SetDefenseFor(Bot aBot)
 	for ( i=0; i<numForts; i++ )
 		if ( (F == None) || BestFortFor(aBot, F, Fort[i])  )
 			F = Fort[i];
-	
+
 	if ( F != None )
 		F.Defender = aBot;
 	else
@@ -610,7 +610,7 @@ function bool AttackOnlyLocalFort(Bot aBot)
 					return FindPathToFortFor(aBot, F);
 				}
 		}
-		else if ( dist < 2 * F.ChargeDist ) 
+		else if ( dist < 2 * F.ChargeDist )
 		{
 			bVisible = aBot.LineOfSightTo(F);
 			if ( F.bForceRadius || bVisible || (bPressOn  && ((bMultiSame == 1) || (aBot.Region.Zone == F.Region.Zone))) )
@@ -671,9 +671,9 @@ function bool FindSpecialAttractionFor(Bot aBot)
 				return true;
 			}
 		}
-		else if ( aBot.Orders == 'Hold' ) 
+		else if ( aBot.Orders == 'Hold' )
 			return AttackOnlyLocalFort(aBot);
-		else if ( (aBot.Orders == 'Follow')	&& ((TimeLimit == 0) || (RemainingTime > 100)) 
+		else if ( (aBot.Orders == 'Follow')	&& ((TimeLimit == 0) || (RemainingTime > 100))
 				&& (!aBot.Region.Zone.IsA('KillingField') || aBot.OrderObject.IsA('PlayerPawn') || (Pawn(aBot.OrderObject).Health <= 0)) )
 		{
 			if ( !aBot.CloseToPointMan(Pawn(aBot.OrderObject)) )
@@ -756,7 +756,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		{
 			LastIncoming = Level.TimeSeconds;
 			aBot.SendTeamMessage(None, 'OTHER', 14, 15); //"Incoming!"
-		}			
+		}
 		if ( !aBot.bKamikaze && (aBot.Health < 40) )
 		{
 			aBot.bKamikaze = ( FRand() < 0.1 );
@@ -785,7 +785,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 				if ( aBot.LineOfSightTo(aBot.AmbushSpot) )
 					return false;
 				else if ( aBot.Enemy == None )
-				{ 
+				{
 					aBot.MoveTarget = aBot.FindPathToward(aBot.Ambushspot);
 					if ( aBot.MoveTarget != None )
 					{
@@ -834,7 +834,7 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 		else
 			return 1;
 	}
-	else if ( BotReplicationInfo(aBot.PlayerReplicationInfo).RealOrders == 'Attack' ) 
+	else if ( BotReplicationInfo(aBot.PlayerReplicationInfo).RealOrders == 'Attack' )
 	{
 		if ( (aBot == Leader[aBot.PlayerReplicationInfo.Team])
 			&& ((Other.Location.Z > aBot.Location.Z + 512) || Other.IsA('TeamCannon')) )
@@ -867,13 +867,13 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 		}
 		else if ( Other.bIsPlayer && (aBot.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team) )
 			return 3;
-		else 
+		else
 			return 1;
 	}
-	else 
+	else
 		return Super.AssessBotAttitude(aBot, Other);
 }
- 
+
 function float GameThreatAdd(Bot aBot, Pawn Other)
 {
 	if ( Other.IsA('FortStandard') && (aBot.PlayerReplicationInfo.Team != Defender.TeamIndex) )
@@ -905,8 +905,8 @@ function SetBotOrders(Bot NewBot)
 		if ( (L == None) || (FRand() < 1.0/float(num)) )
 			L = P;
 	}
-	
-	if ( L != None ) 
+
+	if ( L != None )
 	{
 		Leader[NewBot.PlayerReplicationInfo.Team] = L;
 		NumSupportingPlayer++;
@@ -925,9 +925,9 @@ function SetBotOrders(Bot NewBot)
 		NewBot.bLeading = true;
 		return;
 	}
-		
+
 	NewBot.SetOrders('Follow',Leader[NewBot.PlayerReplicationInfo.Team],true);
-}	
+}
 
 
 function bool IsOnTeam(Pawn Other, int TeamNum)
@@ -967,9 +967,9 @@ function PickAmbushSpotFor(Bot aBot)
 					if ( DefensePoint(N).priority > DefensePoint(aBot.Ambushspot).priority )
 						aBot.Ambushspot = Ambushpoint(N);
 					else if ( (DefensePoint(N).priority == DefensePoint(aBot.Ambushspot).priority)
-						&& (FRand() < 0.4) ) 
+						&& (FRand() < 0.4) )
 						aBot.Ambushspot = Ambushpoint(N);
-				}		
+				}
 			}
 			else if ( (aBot.AmbushSpot == None)
 					|| (VSize(aBot.Location - aBot.Ambushspot.Location)
@@ -1032,10 +1032,10 @@ function bool HandleTieUp(Bot Bumper, Bot Bumpee)
 	local Pawn P;
 
 	if ( (Bumper == Leader[Bumper.PlayerReplicationInfo.Team])
-		&& (FRand() < 0.35) 
+		&& (FRand() < 0.35)
 		&& (VSize(Bumpee.Velocity) < 100) )
 	{
-		Leader[Bumper.PlayerReplicationInfo.Team] = Bumpee;	
+		Leader[Bumper.PlayerReplicationInfo.Team] = Bumpee;
 		Bumper.SetOrders('Follow', Bumpee);
 		Bumpee.SetOrders('Attack', None);
 		Bumpee.GotoState('Attacking');

@@ -10,7 +10,7 @@ var(Messages)	localized string EndSpreeNote, EndSelfSpree, EndFemaleSpree, Multi
 var(Messages)	localized string SpreeNote[10];
 var(Messages)	sound SpreeSound[10];
 var(Messages)	localized string EndSpreeNoteTrailer;
- 
+
 static function string GetString(
 	optional int Switch,
 	optional PlayerReplicationInfo RelatedPRI_1,
@@ -28,7 +28,7 @@ static function string GetString(
 
 		if (RelatedPRI_1.PlayerName != "")
 			return RelatedPRI_1.PlayerName@Default.SpreeNote[Switch];
-	} 
+	}
 	else
 	{
 		if (RelatedPRI_1 == None)
@@ -49,10 +49,10 @@ static function string GetString(
 	return "";
 }
 
-static simulated function ClientReceive( 
+static simulated function ClientReceive(
 	PlayerPawn P,
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)

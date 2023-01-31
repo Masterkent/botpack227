@@ -2,7 +2,8 @@
 // EnhancedRespawn.
 //=============================================================================
 class EnhancedRespawn expands Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function BeginPlay()
 {
@@ -48,12 +49,12 @@ auto state Explode
 			{
 				Destroy();
 				Return;
-			} 
+			}
 			SetRotation(Owner.Rotation);
 		}
 		if ( Level.bDropDetail )
 			LifeSpan -= DeltaTime;
-		ScaleGlow = (Lifespan/Default.Lifespan);	
+		ScaleGlow = (Lifespan/Default.Lifespan);
 		LightBrightness = ScaleGlow*210.0;
 		DrawScale = 0.03 + 0.77 * ScaleGlow;
 	}

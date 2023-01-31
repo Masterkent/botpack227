@@ -2,7 +2,8 @@
 // SuperShockBeam.
 //=============================================================================
 class SuperShockBeam extends Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var vector MoveAmount;
 var int NumPuffs;
@@ -50,7 +51,7 @@ simulated function PostBeginPlay()
 simulated function Timer()
 {
 	local SuperShockBeam r;
-	
+
 	if (NumPuffs>0)
 	{
 		r = Spawn(class'SuperShockbeam',,,Location+MoveAmount);

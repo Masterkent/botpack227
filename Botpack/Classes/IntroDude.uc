@@ -2,7 +2,8 @@
 // IntroDude.
 //=============================================================================
 class IntroDude expands decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 Auto State IntroDude
 {
@@ -15,11 +16,11 @@ function Trigger( actor Other, pawn EventInstigator )
 		GotoState( 'IntroDude','stand');
 }
 
-shake: 
+shake:
 	Disable('Trigger');
 	PlayAnim('shake',1);
 	FinishAnim();
-	Enable('Trigger');	
+	Enable('Trigger');
 	Stop;
 
 stand:
@@ -29,7 +30,7 @@ stand:
 	Sleep(1.0);
 	Enable('Trigger');
 	Stop;
-	
+
 Begin:
 	PlayAnim('stand',0.4);
 }

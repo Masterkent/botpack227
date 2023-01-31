@@ -2,7 +2,8 @@
 // ut_spark.
 //=============================================================================
 class UT_Spark extends Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function PostBeginPlay()
 {

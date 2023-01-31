@@ -2,7 +2,8 @@
 // GrBase.
 //=============================================================================
 class GrBase extends ut_Decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 // Steve:  The gun base and the grmock gun must both be played in unison at the same origin for the down animation.
 // once down, destroy the mock gun and replace it with the grfinal gun.  It has an origin about it's pivot point

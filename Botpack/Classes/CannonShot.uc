@@ -2,7 +2,8 @@
 // CannonShot.
 //=============================================================================
 class CannonShot extends B227_Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() texture SpriteAnim[6];
 var int i;
@@ -52,7 +53,7 @@ simulated function ProcessTouch (Actor Other, Vector HitLocation)
 function Explode(vector HitLocation, vector HitNormal)
 {
 	if (FRand() < 0.5)
-		MakeNoise(1.0); 
+		MakeNoise(1.0);
 	B227_SetupProjectileExplosion(Location, HitLocation, HitNormal);
 	Destroy();
 }

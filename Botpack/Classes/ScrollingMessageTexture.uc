@@ -92,8 +92,8 @@ simulated event RenderTexture(ScriptedTexture Tex)
 simulated function string Replace(string Text, string Match, string Replacement)
 {
 	local int i;
-	
-	i = InStr(Text, Match);	
+
+	i = InStr(Text, Match);
 
 	if(i != -1)
 		return Left(Text, i) $ Replacement $ Replace(Mid(Text, i+Len(Match)), Match, Replacement);

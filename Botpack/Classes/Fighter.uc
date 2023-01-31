@@ -3,12 +3,13 @@
 //=============================================================================
 class Fighter extends UT_Decoration;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 function beginPlay()
 {
 		loopanim('sway',0.4);
-		animframe = FRand();		
+		animframe = FRand();
 }
 
 defaultproperties

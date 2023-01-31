@@ -2,7 +2,8 @@
 // UDamage.
 //=============================================================================
 class UDamage extends TournamentPickup;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var Weapon UDamageWeapon;
 var sound ExtraFireSound;
@@ -29,7 +30,7 @@ simulated function FireEffect()
 		return;
 	if (!bActive || Charge * 0.1 - default.FinalCount < 5)
 		class'UTC_Actor'.static.B227_PlaySound(Pawn(Owner).Weapon, EndFireSound, SLOT_Interact, 8);
-	else 
+	else
 		class'UTC_Actor'.static.B227_PlaySound(Pawn(Owner).Weapon, ExtraFireSound, SLOT_Interact, 8);
 }
 
@@ -279,13 +280,13 @@ function B227_SetUDamageWeaponLook()
 
 	if (Level.bHighDetailMode)
 		UDamageWeapon.SetDisplayProperties(
-			ERenderStyle.STY_Translucent, 
+			ERenderStyle.STY_Translucent,
 			FireTexture'Botpack227_Base.Belt_fx.UDamageFX',
 			true,
 			true);
 	else
 		UDamageWeapon.SetDisplayProperties(
-			ERenderStyle.STY_Normal, 
+			ERenderStyle.STY_Normal,
 			FireTexture'Botpack227_Base.Belt_fx.UDamageFX',
 			true,
 			true);

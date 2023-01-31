@@ -7,16 +7,16 @@ simulated function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 	Velocity = Vector(Rotation) * Speed;
-	Velocity.z += 200; 
-	if ( Level.bHighDetailMode  && !Level.bDropDetail ) 
+	Velocity.z += 200;
+	if ( Level.bHighDetailMode  && !Level.bDropDetail )
 		SetTimer(0.05,True);
-	else 
+	else
 		SetTimer(0.25,True);
 }
 
 function ProcessTouch (Actor Other, vector HitLocation)
 {
-	if ( Other != instigator ) 
+	if ( Other != instigator )
 		Explode(HitLocation,Normal(HitLocation-Other.Location));
 }
 

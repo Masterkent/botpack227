@@ -2,7 +2,8 @@
 // FlakAmmo.
 //=============================================================================
 class FlakAmmo extends TournamentAmmo;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_FlakAmmo FILE=Textures\Hud\B227_i_FlakAmmo.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

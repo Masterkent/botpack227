@@ -2,7 +2,8 @@
 // ShockWave.
 //=============================================================================
 class ShockWave extends Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float OldShockDistance, ShockSize;
 var int ICount;
@@ -38,21 +39,21 @@ simulated function Timer()
 				{
 					dir = Victims.Location - Location;
 					dist = FMax(1,VSize(dir));
-					dir = dir/dist +vect(0,0,0.3); 
+					dir = dir/dist +vect(0,0,0.3);
 					if ( (dist> OldShockDistance) || (dir dot Victims.Velocity <= 0))
 					{
 						MoScale = FMax(0, 1100 - 1.1 * Dist);
-						Victims.Velocity = Victims.Velocity + dir * (MoScale + 20);	
+						Victims.Velocity = Victims.Velocity + dir * (MoScale + 20);
 						Victims.TakeDamage
 						(
 							MoScale,
-							Instigator, 
+							Instigator,
 							Victims.Location - 0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * dir,
 							(1000 * dir),
 							'RedeemerDeath'
 						);
 					}
-				}	
+				}
 			return;
 		}
 	}
@@ -61,32 +62,32 @@ simulated function Timer()
 	{
 		dir = Victims.Location - Location;
 		dist = FMax(1,VSize(dir));
-		dir = dir/dist + vect(0,0,0.3); 
+		dir = dir/dist + vect(0,0,0.3);
 		if (dist> OldShockDistance || (dir dot Victims.Velocity < 0))
 		{
 			MoScale = FMax(0, 1100 - 1.1 * Dist);
 			if ( Victims.bIsPawn )
 				Pawn(Victims).AddVelocity(dir * (MoScale + 20));
 			else
-				Victims.Velocity = Victims.Velocity + dir * (MoScale + 20);	
+				Victims.Velocity = Victims.Velocity + dir * (MoScale + 20);
 			Victims.TakeDamage
 			(
 				MoScale,
-				Instigator, 
+				Instigator,
 				Victims.Location - 0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * dir,
 				(1000 * dir),
 				'RedeemerDeath'
 			);
 		}
-	}	
-	OldShockDistance = ShockSize*29;	
+	}
+	OldShockDistance = ShockSize*29;
 }
 
 simulated function PostBeginPlay()
 {
 	local Pawn P;
 
-	if ( Role == ROLE_Authority ) 
+	if ( Role == ROLE_Authority )
 	{
 		for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 			if ( P.IsA('PlayerPawn') && (VSize(P.Location - Location) < 3000) )

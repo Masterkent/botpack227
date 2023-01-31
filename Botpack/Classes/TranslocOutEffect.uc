@@ -2,7 +2,8 @@
 // TranslocOutEffect.
 //=============================================================================
 class TranslocOutEffect extends Effects;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function PostBeginPlay()
 {
@@ -24,7 +25,7 @@ auto state Explode
 			return;
 		}
 		ScaleGlow = Lifespan;
-		DrawScale = 0.1 + 0.2 * (Scaleglow);	
+		DrawScale = 0.1 + 0.2 * (Scaleglow);
 		LightBrightness = (ScaleGlow) * 210.0;
 		if ( LifeSpan < 0.3 )
 			SetPhysics(PHYS_Projectile);

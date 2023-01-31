@@ -2,7 +2,8 @@
 // TranslocatorTarget.
 //=============================================================================
 class TranslocatorTarget extends B227_SyncedProjectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float Disruption, SpawnTime;
 var() float DisruptionThreshold;
@@ -47,7 +48,7 @@ function bool Disrupted()
 function DropFrom(vector StartLocation)
 {
 	if ( !SetLocation(StartLocation) )
-		return; 
+		return;
 
 	SetPhysics(PHYS_Falling);
 	GotoState('PickUp');
@@ -69,7 +70,7 @@ simulated singular function ZoneChange( ZoneInfo NewZone )
 				PlaySound(NewZone.EntrySound, SLOT_Interact, splashSize);
 			if( NewZone.EntryActor != None )
 			{
-				splash = Spawn(NewZone.EntryActor); 
+				splash = Spawn(NewZone.EntryActor);
 				if ( splash != None )
 				{
 					splash.DrawScale = splashSize;
@@ -247,7 +248,7 @@ auto state Pickup
 			}
 			return;
 		}
-		if ( bMasterTouch || !Other.bBlockActors && !Other.bBlockPlayers) 
+		if ( bMasterTouch || !Other.bBlockActors && !Other.bBlockPlayers)
 			return;
 		NewPos = Other.Location;
 		NewPos.Z = Location.Z;
@@ -317,7 +318,7 @@ auto state Pickup
 			&& (Abs(Location.Y - DesiredTarget.Location.Y) < Instigator.CollisionRadius) )
 		{
 			if ( !FastTrace(DesiredTarget.Location, Location) )
-				return;	
+				return;
 
 			Instigator.StopWaiting();
 			Master.Translocate();

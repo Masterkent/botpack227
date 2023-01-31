@@ -2,7 +2,8 @@
 // RingExplosion4.
 //=============================================================================
 class UT_ComboRing extends UT_RingExplosion;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function PostBeginPlay()
 {
@@ -10,7 +11,7 @@ simulated function PostBeginPlay()
 	{
 		PlayAnim( 'Explo', 0.1, 0.0 );
 		SpawnEffects();
-	}	
+	}
 	if ( Instigator != None )
 		MakeNoise(0.5);
 }
@@ -30,10 +31,10 @@ simulated function SpawnEffects()
 	a = Spawn(class'shockexplo');
 	a.RemoteRole = ROLE_None;
 
-	a =	Spawn(class'shockrifleWave');	
+	a =	Spawn(class'shockrifleWave');
 	a.RemoteRole = ROLE_None;
 }
-	
+
 
 defaultproperties
 {

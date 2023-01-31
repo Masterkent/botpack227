@@ -2,7 +2,8 @@
 // SuperShockRifle.
 //=============================================================================
 class SuperShockRifle extends ShockRifle;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() bool B227_bUseAmmo;
 
@@ -67,7 +68,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 	else
 		Spawn(class'ut_SuperRing2',,, HitLocation+HitNormal*8,rotator(HitNormal));
 
-	if ( (Other != self) && (Other != Owner) && (Other != None) ) 
+	if ( (Other != self) && (Other != Owner) && (Other != None) )
 		Other.TakeDamage(HitDamage, Pawn(Owner), HitLocation, 60000.0*X, MyDamageType);
 }
 

@@ -34,10 +34,10 @@ function PlayDodge(bool bDuckLeft)
 	Velocity.Z = 200;
 	if ( bDuckLeft )
 		PlayAnim('LeftDodge', 1.35, 0.06);
-	else 
+	else
 		PlayAnim('RightDodge', 1.35, 0.06);
 }
-		
+
 function PlayTurning()
 {
 	BaseEyeHeight = Default.BaseEyeHeight;
@@ -57,7 +57,7 @@ function TweenToWalking(float tweentime)
 	BaseEyeHeight = Default.BaseEyeHeight;
 	if (Weapon == None)
 		TweenAnim('Walk', tweentime);
-	else if ( Weapon.bPointing || (CarriedDecoration != None) ) 
+	else if ( Weapon.bPointing || (CarriedDecoration != None) )
 		TweenAnim('WalkFire', tweentime);
 	else
 		TweenAnim('Walk', tweentime);
@@ -96,7 +96,7 @@ function PlayWalking()
 	BaseEyeHeight = Default.BaseEyeHeight;
 	if (Weapon == None)
 		LoopAnim('Walk');
-	else if ( Weapon.bPointing || (CarriedDecoration != None) ) 
+	else if ( Weapon.bPointing || (CarriedDecoration != None) )
 		LoopAnim('WalkFire');
 	else
 		LoopAnim('Walk');
@@ -116,7 +116,7 @@ function PlayRunning()
 	BaseEyeHeight = Default.BaseEyeHeight;
 	if (Weapon == None)
 		LoopAnim('Jog');
-	else if ( Weapon.bPointing ) 
+	else if ( Weapon.bPointing )
 		LoopAnim('JogFire');
 	else
 		LoopAnim('Jog');
@@ -141,7 +141,7 @@ function PlayDying(name DamageType, vector HitLoc)
 
 	BaseEyeHeight = Default.BaseEyeHeight;
 	PlayDyingSound();
-			
+
 	if ( FRand() < 0.15 )
 	{
 		PlayAnim('Death',0.7,0.1);
@@ -164,7 +164,7 @@ function PlayDying(name DamageType, vector HitLoc)
 		return;
 	}
 
-	
+
 	if ( FRand() < 0.15)
 	{
 		PlayAnim('Death3', 0.7, 0.1);
@@ -177,7 +177,7 @@ function PlayDying(name DamageType, vector HitLoc)
 	HitVec2D= HitVec;
 	HitVec2D.Z = 0;
 	dotp = HitVec2D dot X;
-	
+
 	if (Abs(dotp) > 0.71) //then hit in front or back
 		PlayAnim('Death3', 0.7, 0.1);
 	else
@@ -226,9 +226,9 @@ function PlayRightHit(float tweentime)
 	else
 		TweenAnim('RightHit', tweentime);
 }
-	
+
 function PlayLanded(float impactVel)
-	{	
+	{
 		impactVel = impactVel/JumpZ;
 		impactVel = 0.1 * impactVel * impactVel;
 		BaseEyeHeight = Default.BaseEyeHeight;
@@ -253,7 +253,7 @@ function PlayLanded(float impactVel)
 				TweenAnim('Land', 0.12);
 		}
 	}
-	
+
 function PlayInAir()
 {
 	BaseEyeHeight =  Default.BaseEyeHeight;
@@ -285,7 +285,7 @@ function TweenToWaiting(float tweentime)
 		TweenAnim('Firing', tweentime);
 	}
 }
-	
+
 function PlayWaiting()
 {
 	local name newAnim;
@@ -296,7 +296,7 @@ function PlayWaiting()
 		LoopAnim('Swim');
 	}
 	else
-	{	
+	{
 		BaseEyeHeight = Default.BaseEyeHeight;
 		if ( (Weapon != None) && Weapon.bPointing )
 			TweenAnim('Firing', 0.3);
@@ -306,14 +306,14 @@ function PlayWaiting()
 				newAnim = 'Breath';
 			else
 				newAnim = 'Breath2';
-			
+
 			if ( AnimSequence == newAnim )
 				LoopAnim(newAnim, 0.3 + 0.7 * FRand());
 			else
 				PlayAnim(newAnim, 0.3 + 0.7 * FRand(), 0.25);
 		}
 	}
-}	
+}
 
 function PlayFiring()
 {
@@ -325,12 +325,12 @@ function PlayFiring()
 	else if ( AnimSequence == 'InAir' )
 		TweenAnim('JogFire', 0.03);
 	else if ( (GetAnimGroup(AnimSequence) != 'Attack')
-			&& (GetAnimGroup(AnimSequence) != 'MovingAttack') 
+			&& (GetAnimGroup(AnimSequence) != 'MovingAttack')
 			&& (GetAnimGroup(AnimSequence) != 'Dodge')
 			&& (AnimSequence != 'Swim') )
 		TweenAnim('Firing', 0.02);
 }
-	
+
 function PlayChallenge()
 {
 	local float decision;
@@ -340,7 +340,7 @@ function PlayChallenge()
 		TweenToWaiting(0.1);
 	else
 		PlayAnim('Button1');
-}	
+}
 
 function PlayWeaponSwitch(Weapon NewWeapon)
 {

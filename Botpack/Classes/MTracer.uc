@@ -2,7 +2,8 @@
 // MTracer.
 //=============================================================================
 class MTracer extends Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function PostBeginPlay()
 {

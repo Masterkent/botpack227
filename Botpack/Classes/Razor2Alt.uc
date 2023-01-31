@@ -2,7 +2,8 @@
 // RazorBladeAlt.
 //=============================================================================
 class Razor2Alt extends Razor2;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 simulated function PostBeginPlay()
 {
@@ -54,17 +55,17 @@ auto state Flying
 				dir = Victims.Location - HitLocation;
 				dist = FMax(1,VSize(dir));
 				dir = dir/dist;
-				dir.Z = FMin(0.45, dir.Z); 
+				dir.Z = FMin(0.45, dir.Z);
 				damageScale = 1 - FMax(0,(dist - Victims.CollisionRadius)/180);
 				Victims.TakeDamage
 				(
 					damageScale * Damage,
-					Instigator, 
+					Instigator,
 					Victims.Location - 0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * dir,
 					damageScale * MomentumTransfer * dir,
 					MyDamageType
 				);
-			} 
+			}
 		}
 		bHurtEntry = false;
 		MakeNoise(1.0);

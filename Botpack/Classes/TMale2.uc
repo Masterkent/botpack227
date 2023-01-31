@@ -2,7 +2,8 @@
 // TMale2.
 //=============================================================================
 class TMale2 extends TournamentMale;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

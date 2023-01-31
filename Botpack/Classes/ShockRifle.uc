@@ -2,7 +2,8 @@
 // ShockRifle.
 //=============================================================================
 class ShockRifle extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() int HitDamage;
 var Projectile Tracked;
@@ -14,14 +15,14 @@ var int B227_ShockBeamNumPoints;
 function AltFire( float Value )
 {
 	local actor HitActor;
-	local vector HitLocation, HitNormal, Start; 
+	local vector HitLocation, HitNormal, Start;
 
 	if ( Owner == None )
 		return;
 
 	if ( Owner.IsA('Bot') ) //make sure won't blow self up
 	{
-		Start = Owner.Location + CalcDrawOffset() + FireOffset.Z * vect(0,0,1); 
+		Start = Owner.Location + CalcDrawOffset() + FireOffset.Z * vect(0,0,1);
 		if ( Pawn(Owner).Enemy != None )
 			HitActor = Trace(HitLocation, HitNormal, Start + 250 * Normal(Pawn(Owner).Enemy.Location - Start), Start, false, vect(12,12,12));
 		else
@@ -67,8 +68,8 @@ function TraceFire( float Accuracy )
 		B227_FireEndTrace += 10000 * Normal(Tracked.Location - B227_FireStartTrace);
 	else
 	{
-		AdjustedAim = pawn(owner).AdjustAim(1000000, B227_FireStartTrace, 2.75 * AimError, false, false);	
-		B227_FireEndTrace += (10000 * vector(AdjustedAim)); 
+		AdjustedAim = pawn(owner).AdjustAim(1000000, B227_FireStartTrace, 2.75 * AimError, false, false);
+		B227_FireEndTrace += (10000 * vector(AdjustedAim));
 	}
 
 	Tracked = None;
@@ -107,13 +108,13 @@ function float RateSelf( out int bUseAltMode )
 	else if ( !bNovice && (VSize(P.Enemy.Location - P.Location) > 1200) )
 	{
 		bUseAltMode = 0;
-		return (AIRating + 0.05 + FMin(0.00009 * VSize(P.Enemy.Location - P.Location), 0.3)); 
+		return (AIRating + 0.05 + FMin(0.00009 * VSize(P.Enemy.Location - P.Location), 0.3));
 	}
 	else if ( P.Enemy.Location.Z > P.Location.Z + 200 )
 	{
 		bUseAltMode = int( FRand() < 0.6 );
 		return (AIRating + 0.15);
-	} 
+	}
 	else
 		bUseAltMode = int( FRand() < 0.4 );
 
@@ -142,7 +143,7 @@ function Timer()
 		Pawn(targ).WarnTarget(P, 300, FireDir);
 		SetTimer(1 + 4 * FRand(), false);
 	}
-	else 
+	else
 	{
 		SetTimer(0.5 + 2 * FRand(), false);
 		if ( (P.bFire == 0) && (P.bAltFire == 0) )
@@ -154,9 +155,9 @@ function Finish()
 {
 	if ( (Pawn(Owner).bFire!=0) && (FRand() < 0.6) )
 		Timer();
-	if ( !bChangeWeapon && (Tracked != None) && !Tracked.bDeleteMe && (Owner != None) 
+	if ( !bChangeWeapon && (Tracked != None) && !Tracked.bDeleteMe && (Owner != None)
 		&& (Owner.IsA('Bot')) && (Pawn(Owner).Enemy != None) && (FRand() < 0.3 + 0.35 * Pawn(Owner).skill)
-		&& (AmmoType.AmmoAmount > 0) ) 
+		&& (AmmoType.AmmoAmount > 0) )
 	{
 		if ( (Owner.Acceleration == vect(0,0,0)) ||
 			(Abs(Normal(Owner.Velocity) dot Normal(Tracked.Velocity)) > 0.95) )
@@ -187,7 +188,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
-	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 	AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
 
 	PlayerOwner = PlayerPawn(Owner);
@@ -219,7 +220,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 		DamageMult = B227_AmplifyDamage(100);
 
 	if (ShockProj(Other) != none)
-	{ 
+	{
 		if (B227_ShouldModifyComboDamage())
 		{
 			ShockProj(Other).Damage *= (2 + int(AmmoType.UseAmmo(1)) + int(AmmoType.UseAmmo(1))) / 4.0;
@@ -245,7 +246,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 			Spawn(class'UT_RingExplosion5',,, HitLocation + HitNormal * 8, rotator(HitNormal));
 	}
 
-	if (Other != self && Other != Owner && Other != none) 
+	if (Other != self && Other != Owner && Other != none)
 		Other.TakeDamage(HitDamage * DamageMult, Pawn(Owner), HitLocation, 60000.0 * X, MyDamageType);
 }
 
@@ -300,8 +301,8 @@ state Idle
 
 state ComboMove
 {
-	function Fire(float F); 
-	function AltFire(float F); 
+	function Fire(float F);
+	function AltFire(float F);
 
 	function Tick(float DeltaTime)
 	{
@@ -312,8 +313,8 @@ state ComboMove
 			Finish();
 			return;
 		}
-		if ( (Tracked == None) || Tracked.bDeleteMe 
-			|| (((Tracked.Location - Owner.Location) 
+		if ( (Tracked == None) || Tracked.bDeleteMe
+			|| (((Tracked.Location - Owner.Location)
 				dot (Tracked.Location - Pawn(Owner).Enemy.Location)) >= 0)
 			|| (VSize(Tracked.Location - Pawn(Owner).Enemy.Location) < 100) )
 			Global.Fire(0);

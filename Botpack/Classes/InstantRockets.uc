@@ -18,7 +18,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
 	if (UT_Eightball(Other) != none)
 		UT_Eightball(Other).bAlwaysInstant = true;
-	return true; 
+	return true;
 }
 
 defaultproperties

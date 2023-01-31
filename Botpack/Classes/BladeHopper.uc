@@ -2,7 +2,8 @@
 // BladeHopper.
 //=============================================================================
 class BladeHopper extends TournamentAmmo;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_BladeHopper FILE=Textures\Hud\B227_i_BladeHopper.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

@@ -2,7 +2,8 @@
 // Translocator.
 //=============================================================================
 class Translocator extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var TranslocatorTarget TTarget;
 var float TossForce, FireDelay;
@@ -36,7 +37,7 @@ function setHand(float Hand)
 
 function float RateSelf( out int bUseAltMode )
 {
-	return -2; 
+	return -2;
 }
 
 function BringUp()
@@ -195,7 +196,7 @@ function Translocate()
 	if ( TTarget.Physics == PHYS_None )
 		Dest += vect(0,0,40);
 
-	if ( Level.Game.IsA('DeathMatchPlus') 
+	if ( Level.Game.IsA('DeathMatchPlus')
 		&& !DeathMatchPlus(Level.Game).AllowTranslocation(Pawn(Owner), Dest) )
 		return;
 
@@ -232,8 +233,8 @@ function Translocate()
 			Pawn(Owner).SetLocation(Start);
 			Owner.PlaySound(AltFireSound, SLOT_None, 4 * Pawn(Owner).SoundDampening);
 		}
-		else 
-		{ 
+		else
+		{
 			if (Level.Game.LocalLog != None)
 				Level.Game.LocalLog.LogSpecialEvent("translocate", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 			if (Level.Game.WorldLog != None)
@@ -261,8 +262,8 @@ function Translocate()
 			Level.Game.PlayTeleportEffect(Owner, true, true);
 			SpawnEffect(Start, Dest);
 		}
-	} 
-	else 
+	}
+	else
 	{
 		Owner.PlaySound(AltFireSound, SLOT_None, 4 * Pawn(Owner).SoundDampening);
 		if (Level.Game.LocalLog != None)
@@ -321,7 +322,7 @@ function ThrowTarget()
 	if ( Owner.IsA('Bot') )
 		bBotMoveFire = true;
 	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
-	Pawn(Owner).ViewRotation = Pawn(Owner).AdjustToss(TossForce, Start, 0, true, true); 
+	Pawn(Owner).ViewRotation = Pawn(Owner).AdjustToss(TossForce, Start, 0, true, true);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
 	TTarget = Spawn(class'TranslocatorTarget',,, Start);
 	if (TTarget!=None)
@@ -329,7 +330,7 @@ function ThrowTarget()
 		bTTargetOut = true;
 		TTarget.Master = self;
 		if ( Owner.IsA('Bot') )
-			TTarget.SetCollisionSize(0,0); 
+			TTarget.SetCollisionSize(0,0);
 		TTarget.Throw(Pawn(Owner), MaxTossForce, Start);
 	}
 	else GotoState('Idle');
@@ -384,7 +385,7 @@ function PlayIdleAnim()
 		return;
 	if ( bTTargetOut )
 		LoopAnim('Idle', 0.4);
-	else  
+	else
 		LoopAnim('Idle2',0.2,0.1);
 	Enable('AnimEnd');
 }

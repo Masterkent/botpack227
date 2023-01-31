@@ -4,7 +4,8 @@
 //=============================================================================
 class ChallengeHUD extends UTC_HUD
 	config;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var() int SizeY,Count;
 var string CurrentMessage;
@@ -22,7 +23,7 @@ var HUDLocalizedMessage LocalMessages[10];
 var texture FaceTexture;
 var float FaceTime;
 var color FaceTeam;
- 
+
 var() localized string VersionMessage, PlayerCountString;
 var localized string MapTitleString, AuthorString;
 var localized string MapTitleString2, AuthorString2;
@@ -70,7 +71,7 @@ var color BaseColor, WhiteColor, RedColor, GreenColor, CyanColor, UnitColor, Blu
 var localized string IdentifyName, IdentifyHealth, IdentifyCallsign;
 var localized string LiveFeed;
 
-// scoring 
+// scoring
 var float ScoreTime;
 var int rank, lead;
 
@@ -213,7 +214,7 @@ exec function GrowHUD()
 		bHideAllWeapons = false;
 	else if ( bHideStatus )
 		bHideStatus = false;
-	else 
+	else
 		WeaponScale = 1.0;
 
 	SaveConfig();
@@ -389,8 +390,8 @@ simulated function DrawStatus(Canvas Canvas)
 	i = 0;
 	BestArmor=None;
 	for( Inv=PawnOwner.Inventory; Inv!=None; Inv=Inv.Inventory )
-	{ 
-		if (Inv.bIsAnArmor) 
+	{
+		if (Inv.bIsAnArmor)
 		{
 			if ( Inv.IsA('UT_Shieldbelt') )
 				bShieldbelt = true;
@@ -400,7 +401,7 @@ simulated function DrawStatus(Canvas Canvas)
 				bThighArmor = true;
 			}
 			else
-			{ 
+			{
 				bChestArmor = true;
 				ChestAmount += Inv.Charge;
 			}
@@ -590,7 +591,7 @@ simulated function DrawFragCount(Canvas Canvas)
 		X = 0.5 * Canvas.ClipX - 256 * Scale;
 	Canvas.CurX = X;
 	Canvas.CurY = Y;
-	Canvas.DrawColor = HUDColor; 
+	Canvas.DrawColor = HUDColor;
 	Whiten = Level.TimeSeconds - ScoreTime;
 	if ( Whiten < 3.0 )
 	{
@@ -622,8 +623,8 @@ simulated function DrawGameSynopsis(Canvas Canvas)
 	local float XL, YL, YOffset;
 	local string Spread;
 
-	if ( (PawnOwner.PlayerReplicationInfo == None) 
-		|| PawnOwner.PlayerReplicationInfo.bIsSpectator 
+	if ( (PawnOwner.PlayerReplicationInfo == None)
+		|| PawnOwner.PlayerReplicationInfo.bIsSpectator
 		|| (PlayerCount == 1) )
 		return;
 
@@ -691,7 +692,7 @@ simulated function DrawWeapons(Canvas Canvas)
 		else
 			Canvas.DrawTile(Texture'BotPack.HudElements1', 0.75 * WeapScale * 25, 0.75 * WeapScale * 64, 25*W.InventoryGroup, 0, 25.0, 64.0);
 
-		WeaponSlot[W.InventoryGroup] = W;  
+		WeaponSlot[W.InventoryGroup] = W;
 		Canvas.CurX = WeaponX;
 		Canvas.CurY = BaseY;
 		Canvas.DrawTile(Texture'BotPack.HUDWeapons', 128 * WeapScale, 64 * WeapScale, 128, 64, 128, 64);
@@ -700,7 +701,7 @@ simulated function DrawWeapons(Canvas Canvas)
 	{
 		Pending = PawnOwner.PendingWeapon.InventoryGroup;
 		Canvas.CurX = BaseX + (Pending - 1) * WeaponOffset - 64 * WeapScale;
-		Canvas.CurY = Canvas.ClipY - 96 * WeapScale; 
+		Canvas.CurY = Canvas.ClipY - 96 * WeapScale;
 		Canvas.Style = ERenderStyle.STY_Translucent;
 		Canvas.DrawColor = GoldColor;
 		Canvas.DrawTile(Texture'BotPack.HUDWeapons', 256 * WeapScale, 128 * WeapScale, 0, 128, 256.0, 128.0);
@@ -738,7 +739,7 @@ simulated function DrawWeapons(Canvas Canvas)
 			Canvas.DrawColor =  B227_MultiplyColor(HUDColor, 0.5);
 			Canvas.CurX = BaseX + (i - 1) * WeaponOffset;
 			Canvas.CurY = BaseY;
-			
+
 			WeapX = ((i-1)%4) * 64;
 			WeapY = ((i-1)/4) * 32;
 			Canvas.DrawTile(Texture'BotPack.HUDWeapons',TexX,TexY,WeapX,WeapY,64.0,32.0);
@@ -758,7 +759,7 @@ simulated function DrawWeapons(Canvas Canvas)
 			}
 			Canvas.CurX = BaseX + (i - 1) * WeaponOffset;
 			Canvas.CurY = BaseY;
-			
+
 			if (UTC_Weapon(WeaponSlot[i]) != none && UTC_Weapon(WeaponSlot[i]).bSpecialIcon)
 				Canvas.DrawIcon(WeaponSlot[i].StatusIcon, WeapScale);
 			else
@@ -812,7 +813,7 @@ simulated function DisplayProgressMessage( canvas Canvas )
 	local GameReplicationInfo GRI;
 
 	PlayerOwner.ProgressTimeOut = FMin(PlayerOwner.ProgressTimeOut, Level.TimeSeconds + 8);
-	Canvas.Style = ERenderStyle.STY_Normal;	
+	Canvas.Style = ERenderStyle.STY_Normal;
 
 	Canvas.bCenter = True;
 	Canvas.Font = MyFonts.GetBigFont(B227_ScaledFontScreenWidth(Canvas));
@@ -885,12 +886,12 @@ function bool DrawSpeechArea( Canvas Canvas, float XL, float YL )
 	WackNumber = 512*Scale - 64 + FaceAreaOffset; // 256*Scale - (512*Scale - (768*Scale - 64 + FaceAreaOffset));
 	if ( !PlayerOwner.Player.Console.bTyping )
 		paneltype = 0;
-	else 
+	else
 	{
 		Canvas.StrLen("(>"@PlayerOwner.Player.Console.TypedStr$"_", XL, YL);
 		if (XL < 768*Scale)
 			paneltype = 1;
-		else 
+		else
 			paneltype = 2;
 	}
 
@@ -935,7 +936,7 @@ simulated function PostRender( canvas Canvas )
 	Canvas.StrLen("TEST", XL, YL);
 	Canvas.SetClip(768*Scale - 10, Canvas.ClipY);
 	bDrawFaceArea = false;
-	if ( !bHideFaces && !PlayerOwner.bShowScores && !bForceScores && !bHideHUD 
+	if ( !bHideFaces && !PlayerOwner.bShowScores && !bForceScores && !bHideHUD
 			&& !PawnOwner.PlayerReplicationInfo.bIsSpectator && (Scale >= 0.4) )
 	{
 		DrawSpeechArea(Canvas, XL, YL);
@@ -956,11 +957,11 @@ simulated function PostRender( canvas Canvas )
 			if ( bResChanged || (ShortMessageQueue[i].XL == 0) )
 			{
 				if ( ShortMessageQueue[i].Message.Default.bComplexString )
-					Canvas.StrLen(ShortMessageQueue[i].Message.Static.AssembleString( 
+					Canvas.StrLen(ShortMessageQueue[i].Message.Static.AssembleString(
 											self,
 											ShortMessageQueue[i].Switch,
 											ShortMessageQueue[i].RelatedPRI,
-											ShortMessageQueue[i].StringMessage), 
+											ShortMessageQueue[i].StringMessage),
 								   ShortMessageQueue[i].XL, ShortMessageQueue[i].YL);
 				else
 					Canvas.StrLen(ShortMessageQueue[i].StringMessage, ShortMessageQueue[i].XL, ShortMessageQueue[i].YL);
@@ -981,12 +982,12 @@ simulated function PostRender( canvas Canvas )
 			Canvas.SetPos(6, 2 + YL * YPos);
 			YPos += ShortMessageQueue[i].numLines;
 			if ( YPos > 4 )
-				break; 
+				break;
 
 			if ( ShortMessageQueue[i].Message.Default.bComplexString )
 			{
 				// Use this for string messages with multiple colors.
-				ShortMessageQueue[i].Message.Static.RenderComplexMessage( 
+				ShortMessageQueue[i].Message.Static.RenderComplexMessage(
 					Canvas,
 					ShortMessageQueue[i].XL,  YL,
 					ShortMessageQueue[i].StringMessage,
@@ -995,7 +996,7 @@ simulated function PostRender( canvas Canvas )
 					None,
 					ShortMessageQueue[i].OptionalObject
 					);
-			} 
+			}
 			else
 			{
 				Canvas.DrawColor = ShortMessageQueue[i].Message.Default.DrawColor;
@@ -1013,7 +1014,7 @@ simulated function PostRender( canvas Canvas )
 		if ( (PlayerOwner.Scoring == None) && (PlayerOwner.ScoringType != None) )
 			PlayerOwner.Scoring = Spawn(PlayerOwner.ScoringType, PlayerOwner);
 		if ( PlayerOwner.Scoring != None )
-		{ 
+		{
 			PlayerOwner.Scoring.OwnerHUD = self;
 			PlayerOwner.Scoring.ShowScores(Canvas);
 			if ( PlayerOwner.Player.Console.bTyping )
@@ -1026,12 +1027,12 @@ simulated function PostRender( canvas Canvas )
 	YPos = FMax(YL*4 + 8, 70*Scale);
 	if ( bDrawFaceArea )
 		DrawTalkFace( Canvas,0, YPos );
-	if (j > 0) 
+	if (j > 0)
 	{
 		bDrawMessageArea = True;
 		MessageFadeCount = 2;
-	} 
-	else 
+	}
+	else
 		bDrawMessageArea = False;
 
 	if ( !bHideCenterMessages )
@@ -1062,8 +1063,8 @@ simulated function PostRender( canvas Canvas )
 						Canvas.SetPos( 0.5 * (Canvas.ClipX - LocalMessages[i].XL), LocalMessages[i].YPos );
 						Canvas.DrawText( LocalMessages[i].StringMessage, False );
 					}
-				} 
-				else 
+				}
+				else
 				{
 					if ( bResChanged || (LocalMessages[i].XL == 0) )
 					{
@@ -1182,7 +1183,7 @@ simulated function PostRender( canvas Canvas )
 		if ( HUDMutator != None )
 			HUDMutator.PostRender(Canvas);
 
-		if ( (PlayerOwner.GameReplicationInfo != None) && (PlayerPawn(Owner).GameReplicationInfo.RemainingTime > 0) ) 
+		if ( (PlayerOwner.GameReplicationInfo != None) && (PlayerPawn(Owner).GameReplicationInfo.RemainingTime > 0) )
 		{
 			if ( TimeMessageClass == None )
 				TimeMessageClass = class<CriticalEventPlus>(DynamicLoadObject("Botpack.TimeMessage", class'Class'));
@@ -1339,7 +1340,7 @@ simulated function Tick(float DeltaTime)
 
 	IdentifyFadeTime = FMax(0.0, IdentifyFadeTime - DeltaTime);
 	MOTDFadeOutTime = FMax(0.0, MOTDFadeOutTime - DeltaTime * 55);
-	
+
 	TutIconBlink += DeltaTime;
 	if (TutIconBlink >= 0.5)
 		TutIconBlink = 0.0;
@@ -1350,7 +1351,7 @@ simulated function Tick(float DeltaTime)
 			FaceAreaOffset += DeltaTime * 600;
 		if ( FaceAreaOffset > 0 )
 			FaceAreaOffset = 0.0;
-	} 
+	}
 	else if ( FaceAreaOffset > MinFaceAreaOffset )
 		FaceAreaOffset = FMax(FaceAreaOffset - DeltaTime * 600, MinFaceAreaOffset );
 
@@ -1362,7 +1363,7 @@ simulated function Tick(float DeltaTime)
 			if (MessageFadeTime > 1.0)
 				MessageFadeTime = 1.0;
 		}
-	} 
+	}
 	else if ( (MessageFadeTime > 0.0) && (MessageFadeCount == 0) )
 	{
 		MessageFadeTime -= DeltaTime * 2;
@@ -1379,7 +1380,7 @@ simulated function DrawMOTD(Canvas Canvas)
 	local float InitialY;
 
 	GRI = PlayerPawn(Owner).GameReplicationInfo;
-	if ( (GRI == None) || (GRI.GameName == "Game") || (MOTDFadeOutTime <= 0) ) 
+	if ( (GRI == None) || (GRI.GameName == "Game") || (MOTDFadeOutTime <= 0) )
 		return;
 
 	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
@@ -1540,7 +1541,7 @@ simulated function Message( PlayerReplicationInfo PRI, coerce string Msg, name M
 			FaceTime = Level.TimeSeconds + 3;
 		if ( Msg == "" )
 			return;
-	} 
+	}
 	for (i=0; i<4; i++)
 	{
 		if ( ShortMessageQueue[i].Message == None )
@@ -1678,13 +1679,13 @@ simulated function LocalizedMessage( class<LocalMessage> Message, optional int S
 
 	if ( !Message.Default.bIsSpecial )
 	{
-		if ( ClassIsChildOf(Message, class'SayMessagePlus') || 
+		if ( ClassIsChildOf(Message, class'SayMessagePlus') ||
 						 ClassIsChildOf(Message, class'TeamSayMessagePlus') )
 		{
 			FaceTexture = RelatedPRI_1.TalkTexture;
 			if ( FaceTexture != None )
 				FaceTime = Level.TimeSeconds + 3;
-		} 
+		}
 		// Find an empty slot.
 		for (i=0; i<4; i++)
 		{
@@ -1717,8 +1718,8 @@ simulated function LocalizedMessage( class<LocalMessage> Message, optional int S
 		else
 			ShortMessageQueue[3].StringMessage = Message.Static.GetString(Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 		return;
-	} 
-	else 
+	}
+	else
 	{
 		if ( CriticalString == "" )
 			CriticalString = Message.Static.GetString(Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
@@ -1728,9 +1729,9 @@ simulated function LocalizedMessage( class<LocalMessage> Message, optional int S
 			{
 				if (LocalMessages[i].Message != None)
 				{
-					if ((LocalMessages[i].Message == Message) 
-						|| (LocalMessages[i].Message.Static.GetOffset(LocalMessages[i].Switch, 24, 640) 
-								== Message.Static.GetOffset(Switch, 24, 640)) ) 
+					if ((LocalMessages[i].Message == Message)
+						|| (LocalMessages[i].Message.Static.GetOffset(LocalMessages[i].Switch, 24, 640)
+								== Message.Static.GetOffset(Switch, 24, 640)) )
 					{
 						LocalMessages[i].Message = Message;
 						LocalMessages[i].Switch = Switch;

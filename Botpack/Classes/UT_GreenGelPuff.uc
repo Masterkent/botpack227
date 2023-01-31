@@ -2,7 +2,8 @@
 // ut_GreenGelPuff.
 //=============================================================================
 class UT_GreenGelPuff expands UT_SpriteSmokePuff;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var int numBlobs;
 var vector SurfaceNormal;
@@ -27,7 +28,7 @@ simulated function Timer()
 	if ( (Level.NetMode != NM_DedicatedServer) && (numBlobs > 0) && Level.bHighDetailMode && !Level.bDropDetail )
 	{
 		numBlobs = FMin(numBlobs, 5);
-		for (j=0; j<numBlobs; j++) 
+		for (j=0; j<numBlobs; j++)
 		{
 			GB = Spawn(class'GreenBlob',,,Location+SurfaceNormal*(FRand()*8-4));
 			if (GB != None)

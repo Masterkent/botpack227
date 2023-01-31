@@ -15,9 +15,9 @@ var localized string KilledString;
 
 static function string GetString(
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
-	optional Object OptionalObject 
+	optional Object OptionalObject
 	)
 {
 	switch (Switch)
@@ -34,7 +34,7 @@ static function string GetString(
 			if (Class<Weapon>(OptionalObject) == None)
 				return RelatedPRI_2.PlayerName @ default.KilledString @ RelatedPRI_1.PlayerName;
 			return class'GameInfo'.Static.ParseKillMessage(
-				RelatedPRI_1.PlayerName, 
+				RelatedPRI_1.PlayerName,
 				RelatedPRI_2.PlayerName,
 				Class<Weapon>(OptionalObject).Default.ItemName,
 				Class<Weapon>(OptionalObject).Default.DeathMessage);
@@ -83,10 +83,10 @@ static function string GetString(
 	return "";
 }
 
-static function ClientReceive( 
+static function ClientReceive(
 	PlayerPawn P,
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)
@@ -111,7 +111,7 @@ static function ClientReceive(
 				{
 					TournamentPlayer(P).MultiLevel++;
 					TournamentPlayer(P).ReceiveLocalizedMessage( class'MultiKillMessage', TournamentPlayer(P).MultiLevel );
-				} 
+				}
 				else
 					TournamentPlayer(P).MultiLevel = 0;
 				TournamentPlayer(P).LastKillTime = TournamentPlayer(P).Level.TimeSeconds;
@@ -121,12 +121,12 @@ static function ClientReceive(
 		}
 		if (ChallengeHUD(P.MyHUD) != none)
 			ChallengeHUD(P.MyHUD).ScoreTime = P.Level.TimeSeconds;
-	} 
-	else if (RelatedPRI_2 == P.PlayerReplicationInfo) 
+	}
+	else if (RelatedPRI_2 == P.PlayerReplicationInfo)
 	{
 		class'UTC_Pawn'.static.UTSF_ReceiveLocalizedMessage(P, class'VictimMessage', 0, RelatedPRI_1);
 		super.ClientReceive(P, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
-	} 
+	}
 	else
 		super.ClientReceive(P, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 }

@@ -5,7 +5,7 @@ var travel int			Slot;					// Savegame slot.
 
 // Ladder
 var travel int			TournamentDifficulty;
-var travel int			PendingChange;			// Pending Change 
+var travel int			PendingChange;			// Pending Change
 												// 0 = None  1 = DM
 												// 2 = CTF   3 = DOM
 												// 4 = AS
@@ -41,7 +41,7 @@ var travel int			Face;
 var travel string		Sex;
 
 var travel string		SkillText;
-		
+
 function Reset()
 {
 	TournamentDifficulty = 0;

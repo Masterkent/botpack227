@@ -4,11 +4,12 @@
 class DeathMatchPlus extends TournamentGameInfo
 	config;
 
-// Sounds#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Sounds
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
-var() globalconfig int  MinPlayers;		// bots fill in to guarantee this level in net game 
-var() globalconfig float AirControl; 
-var() config int	FragLimit; 
+var() globalconfig int  MinPlayers;		// bots fill in to guarantee this level in net game
+var() globalconfig float AirControl;
+var() config int	FragLimit;
 var() config int	TimeLimit; // time limit in minutes
 var() globalconfig bool bChangeLevels;
 var() globalconfig bool bHardCoreMode;
@@ -193,7 +194,7 @@ event InitGame( string Options, out string Error )
 		TimeLimit = 0;
 		RemainingTime = 0;
 	}
-	if ( bTournament ) 
+	if ( bTournament )
 	{
 		bRequireReady = true;
 		CheckReady();
@@ -235,13 +236,13 @@ function InitRatedGame(LadderInventory LadderObj, PlayerPawn LadderPlayer)
 	ForEach AllActors(class'Weapon', W)
 		W.bWeaponStay = false;
 
-	RatedPlayer = LadderPlayer; 
+	RatedPlayer = LadderPlayer;
 
 	// Set up RatedBotConfig for this game
 	BotConfig.bAdjustSkill = false;
 	RMI = LadderObj.CurrentLadder.Static.GetMatchConfigType(IDnum);
 	RatedMatchConfig = spawn(RMI);
-	RemainingBots = RatedMatchConfig.NumBots; 
+	RemainingBots = RatedMatchConfig.NumBots;
 	Difficulty = LadderObj.TournamentDifficulty + RatedMatchConfig.ModifiedDifficulty;
 	if ( Difficulty >= 4 )
 	{
@@ -297,8 +298,8 @@ function AcceptInventory(pawn PlayerPawn)
 		if (Inv.IsA('LadderInventory'))
 		{
 			LadderObj = LadderInventory(Inv);
-		} 
-		else 	
+		}
+		else
 			Inv.Destroy();
 	}
 	PlayerPawn.Weapon = None;
@@ -426,7 +427,7 @@ function Killed(pawn killer, pawn Other, name damageType)
 	Super.Killed(killer, Other, damageType);
 
 	if ( Other.Spree > 4 )
-		EndSpree(Killer, Other); 
+		EndSpree(Killer, Other);
 	Other.Spree = 0;
 
 	if ( !bTeamGame )
@@ -479,13 +480,13 @@ function Killed(pawn killer, pawn Other, name damageType)
 			BotConfig.AdjustSkill(Bot(Other),false);
 	}
 
-	if ( Other.PlayerReplicationInfo != none && (Killer != None) && Killer.PlayerReplicationInfo != none && (Killer != Other) 
+	if ( Other.PlayerReplicationInfo != none && (Killer != None) && Killer.PlayerReplicationInfo != none && (Killer != Other)
 		&& (!bTeamGame || (Other.PlayerReplicationInfo.Team != Killer.PlayerReplicationInfo.Team)) )
 	{
 		Killer.Spree++;
 		if ( Killer.Spree > 4 )
 			NotifySpree(Killer, Killer.Spree);
-	} 
+	}
 
 	bAutoTaunt = ((TournamentPlayer(Killer) != None) && TournamentPlayer(Killer).bAutoTaunt);
 	if ( ((Bot(Killer) != None && !class'TournamentPlayer'.default.bNoAutoTaunts) || bAutoTaunt)
@@ -591,7 +592,7 @@ function int ReduceDamage(int Damage, name DamageType, pawn injured, pawn instig
 		//skill level modification
 		if ( instigatedBy.IsA('Bot') && injured.IsA('PlayerPawn') )
 		{
-			if ( ((instigatedBy.Weapon != None) && instigatedBy.Weapon.bMeleeWeapon) 
+			if ( ((instigatedBy.Weapon != None) && instigatedBy.Weapon.bMeleeWeapon)
 				|| ((injured.Weapon != None) && injured.Weapon.bMeleeWeapon && (VSize(injured.location - instigatedBy.Location) < 600)) )
 				Damage = Damage * (0.76 + 0.08 * instigatedBy.skill);
 			else
@@ -698,7 +699,7 @@ function Timer()
 		for (P=Level.PawnList; P!=None; P=P.NextPawn )
 			if ( P.IsA('PlayerPawn') )
 				PlayerPawn(P).SetProgressTime(2);
-		if ( ((NumPlayers == MaxPlayers) || (Level.NetMode == NM_Standalone)) 
+		if ( ((NumPlayers == MaxPlayers) || (Level.NetMode == NM_Standalone))
 				&& (RemainingBots <= 0) )
 		{
 			bReady = true;
@@ -726,7 +727,7 @@ function Timer()
 						}
 				}
 			}
-			else if ( StartCount > 8 ) 
+			else if ( StartCount > 8 )
 			{
 				for ( P = Level.PawnList; P!=None; P=P.nextPawn )
 					if ( P.IsA('PlayerPawn') )
@@ -813,7 +814,7 @@ function bool RestartPlayer( pawn aPlayer )
 
 	aPlayer.DamageScaling = aPlayer.Default.DamageScaling;
 	B = Bot(aPlayer);
-	if ( (B != None) 
+	if ( (B != None)
 		&& (Level.NetMode != NM_Standalone)
 		&& TooManyBots() )
 	{
@@ -1125,7 +1126,7 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 		skillmod = 0.2 - aBot.skill * 0.06;
 	if ( aBot.bKamikaze )
 		return 1;
-	else if ( Other.IsA('TeamCannon') 
+	else if ( Other.IsA('TeamCannon')
 		|| (aBot.RelativeStrength(Other) > aBot.Aggressiveness + skillmod) )
 		return 0;
 	else
@@ -1148,14 +1149,14 @@ function bool CanTranslocate(Bot aBot)
 	if ( !bUseTranslocator || (bRatedGame && !bRatedTranslocator) )
 		return false;
 	return ( (aBot.MyTranslocator != None) && (aBot.MyTranslocator.TTarget == None) );
-} 
+}
 
 function PickAmbushSpotFor(Bot aBot)
 {
 	local NavigationPoint N;
 
 	for ( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
-		if ( N.IsA('Ambushpoint') && !N.taken 
+		if ( N.IsA('Ambushpoint') && !N.taken
 			&& ((aBot.AmbushSpot == None)
 				|| (VSize(aBot.Location - aBot.Ambushspot.Location)
 					 > VSize(aBot.Location - N.Location))) )
@@ -1191,10 +1192,10 @@ function RateVs(Pawn Other, Pawn Killer)
 		oppRating = FMin(B.GetRating(), PlayerRating + 400);
 
 	numopp++;
-	AvgOpponentRating = (AvgOpponentRating * (numopp - 1) + oppRating)/numopp;  	
+	AvgOpponentRating = (AvgOpponentRating * (numopp - 1) + oppRating)/numopp;
 	if ( numopp < 20 )
 	{
-		PlayerRating = AvgOpponentRating + 400 * (WinCount - LoseCount)/numopp;			
+		PlayerRating = AvgOpponentRating + 400 * (WinCount - LoseCount)/numopp;
 	}
 	else
 	{
@@ -1205,18 +1206,18 @@ function RateVs(Pawn Other, Pawn Killer)
 			K = 32;
 		else if ( PlayerRating < 2400 )
 			K = 24;
-		else 
-			K = 16; 
+		else
+			K = 16;
 
 		We = 1/(10^((PlayerRating - opprating)/400) + 1);
 		PlayerRating = PlayerRating + K * (Win - We);
 
 		/* FOLLOWING NOT DONE - do at end of level FIXME
-		Pre-tournament Rating Post-tournament Rating   
-		0-2099  2100-2399 Ra = 2100 + (Rn-2100) x 0.75  
-		2100-2399 0-2099  Ra = 2100 + (Rn-2100) x 1.33  
-		2100-2399 2400-3000 Ra = 2400 + (Rn-2400) x 0.66  
-		2400-3000  2100-2399  Ra = 2400 + (Rn-2400) x 1.50 
+		Pre-tournament Rating Post-tournament Rating
+		0-2099  2100-2399 Ra = 2100 + (Rn-2100) x 0.75
+		2100-2399 0-2099  Ra = 2100 + (Rn-2100) x 1.33
+		2100-2399 2400-3000 Ra = 2400 + (Rn-2400) x 0.66
+		2400-3000  2100-2399  Ra = 2400 + (Rn-2400) x 1.50
 		*/
 	}
 }
@@ -1514,7 +1515,7 @@ function LogGameParameters(StatLog StatLog)
 	// hack to make sure weapon stay logging is correct for multiplayer games
 	bTemp = bCoopWeaponMode;
 	if ( Level.Netmode != NM_Standalone )
-		bCoopWeaponMode = bMultiWeaponStay;	
+		bCoopWeaponMode = bMultiWeaponStay;
 	Super.LogGameParameters(StatLog);
 	bCoopWeaponMode = bTemp;
 
@@ -1585,7 +1586,7 @@ function bool OneOnOne()
 
 function float SpawnWait(bot B)
 {
-	if ( bRatedGame && bNoviceMode && !bTeamGame && (Difficulty <= 2) 
+	if ( bRatedGame && bNoviceMode && !bTeamGame && (Difficulty <= 2)
 		&& (NumBots > 1)
 		&& (B.PlayerReplicationInfo.Score > RatedPlayer.PlayerReplicationInfo.Score) )
 		return ( 7 + NumBots * FRand() );

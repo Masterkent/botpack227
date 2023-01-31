@@ -2,7 +2,8 @@
 // TBoss.
 //=============================================================================
 class TBoss extends TournamentMale;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, byte TeamNum)
 {
@@ -43,7 +44,7 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 		SetSkinElement(SkinActor, 3, SkinName$"4", SkinName$"4");
 	}
 
-	if( Pawn(SkinActor) != None ) 
+	if( Pawn(SkinActor) != None )
 		Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = Texture(DynamicLoadObject(SkinName$"5Xan", class'Texture'));
 }
 

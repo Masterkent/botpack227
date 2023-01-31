@@ -2,7 +2,8 @@
 // starterbolt.
 //=============================================================================
 class StarterBolt extends PBolt;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float OldError, NewError, StartError, AimError; //used for bot aiming
 var rotator AimRotation;
@@ -86,12 +87,12 @@ static function B227_BoltTick(
 		if (Proj.Level.NetMode == NM_Client &&
 			(PlayerPawn(Proj.Instigator) == none || PlayerPawn(Proj.Instigator).Player == none))
 		{
-			Proj.SetRotation(AimRotation); 
+			Proj.SetRotation(AimRotation);
 			Proj.Instigator.ViewRotation = AimRotation;
 			DrawOffset = ((0.01 * class'PulseGun'.Default.PlayerViewOffset) >> Proj.Rotation);
 			DrawOffset += (Proj.Instigator.EyeHeight * vect(0,0,1));
 		}
-		else 
+		else
 		{
 			if (PlayerPawn(Proj.Instigator) == none)
 				B227_SetInstigatorRotation(
@@ -118,7 +119,7 @@ static function B227_BoltTick(
 			Proj.FireOffset.Z = Proj.default.FireOffset.Z * 1.5;
 			Proj.FireOffset.Y = 0;
 		}
-		else 
+		else
 		{
 			Proj.FireOffset.Z = Proj.default.FireOffset.Z;
 			if (Proj.bRight)

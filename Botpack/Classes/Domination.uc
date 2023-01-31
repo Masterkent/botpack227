@@ -29,7 +29,7 @@ function ScoreKill(pawn Killer, pawn Other)
 {
 	Super.ScoreKill(Killer, Other);
 
-	if ( Other.bIsPlayer && (Killer != None) && Killer.bIsPlayer 
+	if ( Other.bIsPlayer && (Killer != None) && Killer.bIsPlayer
 		&& (Killer != Other) && (Killer.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team)
 		&& (FriendlyFireScale > 0) )
 			Killer.PlayerReplicationInfo.Score -= 1;
@@ -157,7 +157,7 @@ function Timer()
 					if (Level.Game.WorldLog != None)
 						Level.Game.WorldLog.LogSpecialEvent("dom_playerscore_update", PRI.PlayerID, int(PRI.Score));
 					if (Level.Game.LocalLog != None)
-						Level.Game.LocalLog.LogSpecialEvent("dom_playerscore_update", PRI.PlayerID, int(PRI.Score));				
+						Level.Game.LocalLog.LogSpecialEvent("dom_playerscore_update", PRI.PlayerID, int(PRI.Score));
 				}
 			}
 		}
@@ -174,7 +174,7 @@ function bool CanTranslocate(Bot aBot)
 	if ( aBot.bNovice && (aBot.Skill < 2) )
 		return false;
 	return Super.CanTranslocate(aBot);
-} 
+}
 
 function ClearControl(Pawn Other)
 {
@@ -210,7 +210,7 @@ function Logout( pawn Exiting )
 	Super.Logout(Exiting);
 }
 
-function bool RestartPlayer( pawn aPlayer )	
+function bool RestartPlayer( pawn aPlayer )
 {
 	local Bot B;
 
@@ -238,11 +238,11 @@ function Actor SetDefenseFor(Bot aBot)
 			j++;
 			if ( (Result == None) || ( FRand() < 1.0/float(j)) )
 				Result = N;
-		}	
+		}
 		i++;
 	}
 
-	return Result;		
+	return Result;
 }
 
 function bool FindSpecialAttractionFor(Bot aBot)
@@ -288,9 +288,9 @@ function bool FindSpecialAttractionFor(Bot aBot)
 			return false;
 		}
 		else
-			return false;					
+			return false;
 	}
-	// also "no movetarget"	in fallback		
+	// also "no movetarget"	in fallback
 	bOrdered = (aBot.Orders == 'Follow') || (aBot.Orders == 'Hold');
 	if ( !bOrdered && bDumbdown && aBot.bDumbdown && !bNeutralPoints )
 	{
@@ -300,8 +300,8 @@ function bool FindSpecialAttractionFor(Bot aBot)
 				bBehind = true;
 		bOrdered = !bBehind;
 	}
-				
-	if ( bOrdered || (aBot.Enemy != None) || (aBot.Weapon == None) 
+
+	if ( bOrdered || (aBot.Enemy != None) || (aBot.Weapon == None)
 		|| (aBot.Weapon.AIRating < 0.5) || (aBot.Health < 70) )
 	{
 		if ( bOrdered )
@@ -313,7 +313,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		bNeutralPoints = false;
 		while ( (i<16) && (ControlPoints[i] != None) )
 		{
-			if ( ((ControlPoints[i].ControllingTeam == None) 
+			if ( ((ControlPoints[i].ControllingTeam == None)
 				|| (ControlPoints[i].ControllingTeam.TeamIndex != aBot.PlayerReplicationInfo.Team))
 				&& (VSize(aBot.Location - ControlPoints[i].Location) < MaxDist)
 				&& aBot.LineOfSightTo(ControlPoints[i]) )
@@ -323,11 +323,11 @@ function bool FindSpecialAttractionFor(Bot aBot)
 					bNeutralPoints = true;
 					if ( bOrdered && (aBot.Orders != 'Follow') && (aBot.Orders != 'Hold') )
 					{
-						aBot.bDumbDown = false; 
+						aBot.bDumbDown = false;
 						bOrdered = false;
 					}
 				}
-									
+
 				if ( VSize(ControlPoints[i].Location - aBot.Location) < 20 )
 				{
 					ControlPoints[i].Touch(aBot);
@@ -352,7 +352,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 					SetAttractionStateFor(aBot);
 					return true;
 				}
-			}	
+			}
 			i++;
 		}
 		if ( bOrdered || (aBot.Enemy == None) )
@@ -361,7 +361,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		i = 0;
 		while ( (i<16) && (ControlPoints[i] != None) )
 		{
-			if ( (ControlPoints[i].ControllingTeam == None) 
+			if ( (ControlPoints[i].ControllingTeam == None)
 				|| (ControlPoints[i].ControllingTeam.TeamIndex != aBot.PlayerReplicationInfo.Team) )
 				Count--;
 			else
@@ -389,7 +389,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 				newweight = VSize(ControlPoints[i].location - aBot.location) + 2 * Abs(ControlPoints[i].Location.Z - aBot.Location.Z);
 				newweight *= (0.8 + 0.4 * FRand());
 			}
-			else 
+			else
 				newweight = 90000000;
 
 			if ( newweight < bestweight )
@@ -423,14 +423,14 @@ function bool FindSpecialAttractionFor(Bot aBot)
 			SetAttractionStateFor(aBot);
 			return true;
 		}
-		else 
+		else
 		{
 			if ( FRand() < 0.3 )
 				aBot.OrderObject = None;
 			if ( aBot.bVerbose )
 				log(aBot@"no path to"@Best.PointName);
 		}
-			
+
 	}
 	else if ( aBot.bVerbose )
 		log(aBot@"found no best control point");
@@ -444,7 +444,7 @@ function SetBotOrders(Bot NewBot)
 	local Bot B;
 
 	// only follow players, if there are any
-	if ( NumSupportingPlayer == 0 ) 
+	if ( NumSupportingPlayer == 0 )
 	{
 		For ( P=Level.PawnList; P!=None; P= P.NextPawn )
 			if ( P.IsA('PlayerPawn') && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
@@ -467,7 +467,7 @@ function SetBotOrders(Bot NewBot)
 		if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team) )
 		{
 			total++;
-			if ( (P != NewBot) && P.IsA('Bot') )	
+			if ( (P != NewBot) && P.IsA('Bot') )
 			{
 				B = Bot(P);
 				if ( B.Orders == 'FreeLance' )
@@ -480,14 +480,14 @@ function SetBotOrders(Bot NewBot)
 					L = None;
 			}
 		}
-				
+
 	if ( (L != None) && (total > 3) && (FRand() < (float(num) - 2.0)/(float(total) - 2.5)) )
 	{
 		NewBot.SetOrders('Follow',L,true);
 		return;
 	}
 	NewBot.SetOrders('Freelance', None,true);
-}				 
+}
 
 function EndGame( string Reason )
 {
@@ -513,7 +513,7 @@ function EndGame( string Reason )
 			if (Level.Game.WorldLog != None)
 				Level.Game.WorldLog.LogSpecialEvent("dom_playerscore_update", PRI.PlayerID, int(PRI.Score));
 			if (Level.Game.LocalLog != None)
-				Level.Game.LocalLog.LogSpecialEvent("dom_playerscore_update", PRI.PlayerID, int(PRI.Score));				
+				Level.Game.LocalLog.LogSpecialEvent("dom_playerscore_update", PRI.PlayerID, int(PRI.Score));
 		}
 	}
 

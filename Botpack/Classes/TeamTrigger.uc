@@ -26,13 +26,13 @@ function Timer()
 
 function bool IsRelevant( actor Other )
 {
-	if( !bInitiallyActive || !Level.Game.IsA('TeamGamePlus') || (Other.Instigator == None) 
+	if( !bInitiallyActive || !Level.Game.IsA('TeamGamePlus') || (Other.Instigator == None)
 		|| TeamGamePlus(Level.Game).IsOnTeam(Other.Instigator, Team) )
 		return false;
 	return Super.IsRelevant(Other);
 }
 
-function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, 
+function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 						Vector momentum, name damageType)
 {
 	if ( (InstigatedBy != None) && Level.Game.IsA('TeamGamePlus')

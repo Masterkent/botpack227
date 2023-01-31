@@ -112,7 +112,7 @@ function DrawTrailer( canvas Canvas )
 	{
 		if ( DeathMatchPlus(Level.Game).bRatedGame )
 			Canvas.DrawText(DeathMatchPlus(Level.Game).RatedGameLadderObj.SkillText@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$LevelTitle$MapTitleQuote, true);
-		else if ( DeathMatchPlus(Level.Game).bNoviceMode ) 
+		else if ( DeathMatchPlus(Level.Game).bNoviceMode )
 			Canvas.DrawText(class'ChallengeBotInfo'.static.B227_SkillString(Level.Game.Difficulty)@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$LevelTitle$MapTitleQuote, true);
 		else
 			Canvas.DrawText(class'ChallengeBotInfo'.static.B227_SkillString(Level.Game.Difficulty + 4)@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$LevelTitle$MapTitleQuote, true);
@@ -212,9 +212,9 @@ function DrawNameAndPing(Canvas Canvas, UTC_PlayerReplicationInfo PRI, float XOf
 	// Draw Name
 	if ( PRI.bAdmin )
 		Canvas.DrawColor = WhiteColor;
-	else if ( bLocalPlayer ) 
+	else if ( bLocalPlayer )
 		Canvas.DrawColor = GoldColor;
-	else 
+	else
 		Canvas.DrawColor = CyanColor;
 
 	Canvas.SetPos(B227_MarginLeft + B227_InnerWidth * 0.1875, YOffset);
@@ -262,7 +262,7 @@ function SortScores(int N)
 {
 	local int I, J, Max;
 	local UTC_PlayerReplicationInfo TempPRI;
-	
+
 	for ( I=0; I<N-1; I++ )
 	{
 		Max = I;

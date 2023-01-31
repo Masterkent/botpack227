@@ -195,7 +195,7 @@ function string GetBotFace(int n, optional bool bTeamGame, optional bool bEnemy,
 				return EnemyTeam.Default.BotFaces[n];
 		} else {
 			LadderObj = LadderInventory(RatedPlayer.FindInventoryType(class'LadderInventory'));
-			return LadderObj.Team.Default.BotFaces[n];			
+			return LadderObj.Team.Default.BotFaces[n];
 		}
 	}
 }
@@ -210,7 +210,7 @@ function string GetBotClassName(int n, optional bool bTeamGame, optional bool bE
 		if (bEnemy)
 		{
 			LadderObj = LadderInventory(RatedPlayer.FindInventoryType(class'LadderInventory'));
-		
+
 			if (EnemyTeam == LadderObj.Team)
 				return class'RatedTeamInfoS'.Default.BotClasses[n];
 			else
@@ -300,8 +300,8 @@ function Individualize(bot NewBot, int n, int NumBots, optional bool bTeamGame, 
 		NewBot.bJumpy = ( BotJumpy[n] != 0 );
 		NewBot.PlayerReplicationInfo.VoiceType = class<VoicePack>(DynamicLoadObject(NewBot.VoiceType, class'Class'));
 		NewBot.StrafingAbility = StrafingAbility[n];
-	} 
-	else 
+	}
+	else
 	{
 		if ( bEnemy )
 		{
@@ -313,8 +313,8 @@ function Individualize(bot NewBot, int n, int NumBots, optional bool bTeamGame, 
 			else
 				RTI = Spawn(EnemyTeam);
 			RTI.Individualize(NewBot, n, NumBots, bEnemy, LadderObj.TournamentDifficulty + ModifiedDifficulty);
-		} 
-		else 
+		}
+		else
 		{
 			RatedPlayer = DeathMatchPlus(Level.Game).RatedPlayer;
 			LadderObj = LadderInventory(RatedPlayer.FindInventoryType(class'LadderInventory'));

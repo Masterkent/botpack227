@@ -5,7 +5,7 @@ class HumanBotPlus extends Bot
 	abstract;
 
 //-----------------------------------------------------------------------------
-// Sound functions 
+// Sound functions
 
 
 //-----------------------------------------------------------------------------
@@ -39,11 +39,11 @@ function TweenToWalking(float tweentime)
 			else
 				TweenToWaiting(tweentime);
 		}
-		
+
 		BaseEyeHeight = Default.BaseEyeHeight;
 		if (Weapon == None)
 			TweenAnim('Walk', tweentime);
-		else if ( Weapon.bPointing ) 
+		else if ( Weapon.bPointing )
 		{
 			if (Weapon.Mass < 20)
 				TweenAnim('WalkSMFR', tweentime);
@@ -56,7 +56,7 @@ function TweenToWalking(float tweentime)
 				TweenAnim('WalkSM', tweentime);
 			else
 				TweenAnim('WalkLG', tweentime);
-		} 
+		}
 	}
 
 function TweenToRunning(float tweentime)
@@ -76,7 +76,7 @@ function TweenToRunning(float tweentime)
 
 	if (Weapon == None)
 		newAnim = 'RunSM';
-	else if ( Weapon.bPointing ) 
+	else if ( Weapon.bPointing )
 	{
 		if (Weapon.Mass < 20)
 			newAnim = 'RunSMFR';
@@ -89,7 +89,7 @@ function TweenToRunning(float tweentime)
 			newAnim = 'RunSM';
 		else
 			newAnim = 'RunLG';
-	} 
+	}
 
 	if ( (newAnim == AnimSequence) && (Acceleration != vect(0,0,0)) && IsAnimating() )
 		return;
@@ -110,7 +110,7 @@ function PlayWalking()
 	BaseEyeHeight = Default.BaseEyeHeight;
 	if (Weapon == None)
 		LoopAnim('Walk');
-	else if ( Weapon.bPointing ) 
+	else if ( Weapon.bPointing )
 	{
 		if (Weapon.Mass < 20)
 			LoopAnim('WalkSMFR');
@@ -181,7 +181,7 @@ function PlayRunning()
 
 	if (Weapon == None)
 		newAnim = 'RunSM';
-	else if ( Weapon.bPointing ) 
+	else if ( Weapon.bPointing )
 	{
 		if (Weapon.Mass < 20)
 			newAnim = 'RunSMFR';
@@ -216,7 +216,7 @@ function PlayFeignDeath()
 		TweenAnim('DeathEnd', 0.5);
 	else if ( decision < 0.67 )
 		TweenAnim('DeathEnd2', 0.5);
-	else 
+	else
 		TweenAnim('DeathEnd3', 0.5);
 }
 
@@ -259,7 +259,7 @@ function PlayLeftHit(float tweentime)
 		TweenAnim('GutHit', tweentime);
 	else if ( FRand() < 0.6 )
 		TweenAnim('LeftHit', tweentime);
-	else 
+	else
 		TweenAnim('Dead3', tweentime);
 }
 
@@ -271,10 +271,10 @@ function PlayRightHit(float tweentime)
 		TweenAnim('RightHit', tweentime);
 	else
 		TweenAnim('Dead5', tweentime);
-}	
-	
+}
+
 function PlayLanded(float impactVel)
-{	
+{
 	impactVel = impactVel/JumpZ;
 	impactVel = 0.1 * impactVel * impactVel;
 	BaseEyeHeight = Default.BaseEyeHeight;
@@ -295,7 +295,7 @@ function PlayLanded(float impactVel)
 	{
 		if ( GetAnimGroup(AnimSequence) == 'TakeHit' )
 			AnimEnd();
-		else 
+		else
 		{
 			if ( (Weapon == None) || (Weapon.Mass < 20) )
 				TweenAnim('LandSMFR', 0.12);
@@ -320,15 +320,15 @@ function FastInAir()
 	}
 	else if ( GetAnimGroup(AnimSequence) == 'Ducking' )
 		TweenTime = 1;
-	else 
+	else
 		TweenTime = 0.3;
 
 	if ( (Weapon == None) || (Weapon.Mass < 20) )
 		TweenAnim('JumpSMFR', TweenTime);
 	else
-		TweenAnim('JumpLGFR', TweenTime); 
+		TweenAnim('JumpLGFR', TweenTime);
 }
-	
+
 function PlayInAir()
 {
 	local float TweenTime;
@@ -344,13 +344,13 @@ function PlayInAir()
 	}
 	else if ( GetAnimGroup(AnimSequence) == 'Ducking' )
 		TweenTime = 2;
-	else 
+	else
 		TweenTime = 0.7;
 
 	if ( (Weapon == None) || (Weapon.Mass < 20) )
 		TweenAnim('JumpSMFR', TweenTime);
 	else
-		TweenAnim('JumpLGFR', TweenTime); 
+		TweenAnim('JumpLGFR', TweenTime);
 }
 
 function PlayDodge(bool bDuckLeft)
@@ -402,10 +402,10 @@ function TweenToWaiting(float tweentime)
 			ViewRotation.Pitch = 0;
 		}
 		ViewRotation.Pitch = ViewRotation.Pitch & 65535;
-		If ( (ViewRotation.Pitch > RotationRate.Pitch) 
+		If ( (ViewRotation.Pitch > RotationRate.Pitch)
 			&& (ViewRotation.Pitch < 65536 - RotationRate.Pitch) )
 		{
-			If (ViewRotation.Pitch < 32768) 
+			If (ViewRotation.Pitch < 32768)
 			{
 				if ( (Weapon == None) || (Weapon.Mass < 20) )
 					TweenAnim('AimUpSm', 0.3);
@@ -431,18 +431,18 @@ function TweenToFighter(float tweentime)
 {
 	TweenToWaiting(tweentime);
 }
-	
+
 
 function PlayChallenge()
 {
 	TweenToWaiting(0.17);
-}	
+}
 
 function PlayLookAround()
 {
 	LoopAnim('Look', 0.3 + 0.7 * FRand(), 0.1);
 }
-	
+
 function PlayWaiting()
 {
 	local name newAnim;
@@ -456,7 +456,7 @@ function PlayWaiting()
 			LoopAnim('TreadLG');
 	}
 	else
-	{	
+	{
 		BaseEyeHeight = Default.BaseEyeHeight;
 		if ( (Weapon != None) && Weapon.bPointing )
 		{
@@ -470,7 +470,7 @@ function PlayWaiting()
 		else
 		{
 			if ( Level.Game.bTeamGame
-				&& ((FRand() < 0.04) 
+				&& ((FRand() < 0.04)
 					|| ((AnimSequence == 'Chat1') && (FRand() < 0.75))) )
 			{
 				newAnim = 'Chat1';
@@ -502,7 +502,7 @@ function PlayWaiting()
 					else
 						newAnim = 'Breath2L';
 				}
-								
+
 				if ( AnimSequence == newAnim )
 					LoopAnim(newAnim, 0.4 + 0.4 * FRand());
 				else
@@ -510,7 +510,7 @@ function PlayWaiting()
 			}
 		}
 	}
-}	
+}
 
 function PlayRecoil(float Rate)
 {
@@ -523,10 +523,10 @@ function PlayRecoil(float Rate)
 	}
 	else if ( AnimSequence == 'StillSmFr' )
 		PlayAnim('StillSmFr', Rate, 0.02);
-	else if ( (AnimSequence == 'StillLgFr') || (AnimSequence == 'StillFrRp') )	
+	else if ( (AnimSequence == 'StillLgFr') || (AnimSequence == 'StillFrRp') )
 		PlayAnim('StillLgFr', Rate, 0.02);
 }
-	
+
 function PlayFiring()
 {
 	// switch animation sequence mid-stream if needed
@@ -544,7 +544,7 @@ function PlayFiring()
 		TweenAnim('JumpSMFR', 0.03);
 	else if ( AnimSequence == 'JumpLGFR' )
 		TweenAnim('JumpLGFR', 0.03);
-	else if ( (GetAnimGroup(AnimSequence) == 'Waiting') || (GetAnimGroup(AnimSequence) == 'Gesture') 
+	else if ( (GetAnimGroup(AnimSequence) == 'Waiting') || (GetAnimGroup(AnimSequence) == 'Gesture')
 		&& (AnimSequence != 'TreadLG') && (AnimSequence != 'TreadSM') )
 	{
 		if ( Weapon.Mass < 20 )
@@ -565,7 +565,7 @@ function PlayWeaponSwitch(Weapon NewWeapon)
 			if ( (AnimSequence == 'RunSM') || (AnimSequence == 'RunSMFR') )
 				AnimSequence = 'RunLG';
 			else if ( (AnimSequence == 'WalkSM') || (AnimSequence == 'WalkSMFR') )
-				AnimSequence = 'WalkLG';	
+				AnimSequence = 'WalkLG';
 		 	else if ( AnimSequence == 'JumpSMFR' )
 		 		AnimSequence = 'JumpLGFR';
 			else if ( AnimSequence == 'DuckWlkL' )
@@ -576,10 +576,10 @@ function PlayWeaponSwitch(Weapon NewWeapon)
 				AnimSequence = 'AimDnLg';
 			else if ( AnimSequence == 'AimUpSm' )
 				AnimSequence = 'AimUpLg';
-		 }	
+		 }
 	}
 	else if ( (NewWeapon == None) || (NewWeapon.Mass < 20) )
-	{		
+	{
 		if ( (AnimSequence == 'RunLG') || (AnimSequence == 'RunLGFR') )
 			AnimSequence = 'RunSM';
 		else if ( (AnimSequence == 'WalkLG') || (AnimSequence == 'WalkLGFR') )

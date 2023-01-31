@@ -7,7 +7,7 @@ var Sound TimeSound[16];
 
 static function string GetString(
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)
@@ -15,10 +15,10 @@ static function string GetString(
 	return Default.TimeMessage[Switch];
 }
 
-static simulated function ClientReceive( 
+static simulated function ClientReceive(
 	PlayerPawn P,
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)

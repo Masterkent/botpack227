@@ -2,7 +2,8 @@
 // BulletBox.
 //=============================================================================
 class BulletBox extends TournamentAmmo;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_BulletBox FILE=Textures\Hud\B227_i_BulletBox.pcx GROUP="Icons" MIPS=OFF
 
 defaultproperties

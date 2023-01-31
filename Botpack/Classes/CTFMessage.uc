@@ -12,7 +12,7 @@
 // Switch 2: Dropped Message
 //	RelatedPRI_1 is the holder.
 //	OptionalObject is the flag's team teaminfo.
-//	
+//
 // Switch 3: Was Returned Message
 //	OptionalObject is the flag's team teaminfo.
 //
@@ -37,7 +37,7 @@ var localized string HasBlue,HasRed;
 
 static function string GetString(
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)

@@ -1,6 +1,7 @@
 class RatedTeamInfo8 expands RatedTeamInfo;
 
-// Dark Phalanx#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Dark Phalanx
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

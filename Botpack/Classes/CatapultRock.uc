@@ -9,7 +9,7 @@ auto state Flying
 	{
 		local int hitdamage;
 
-		PlaySound(ImpactSound, SLOT_Interact, DrawScale/10);	
+		PlaySound(ImpactSound, SLOT_Interact, DrawScale/10);
 
 		if ( !Other.IsA('BigRock') )
 		{

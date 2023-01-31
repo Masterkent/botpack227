@@ -20,7 +20,7 @@ function BeginPlay()
 function Timer()
 {
 	LaunchShell();
-	PlaySound(FireSound, SLOT_None, 4.0);	
+	PlaySound(FireSound, SLOT_None, 4.0);
 }
 
 function LaunchShell()
@@ -37,7 +37,7 @@ function LaunchShell()
 	else
 		NewRot = Rotation;
 	shell = Spawn(class'MortarShell',,, Location+Vector(Rotation)*20, NewRot);
-	
+
 	shell.speed = ShellSpeed;
 	shell.damage = ShellDamage;
 	shell.momentumtransfer = ShellMomentumTransfer;

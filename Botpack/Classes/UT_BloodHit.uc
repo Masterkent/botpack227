@@ -24,10 +24,10 @@ Auto State StartUp
 		if ( Level.NetMode != NM_DedicatedServer )
 		{
 			WallActor = Trace(WallHit, WallNormal, Location + 300 * vector(Rotation), Location, false);
-			if ( WallActor != None )	
+			if ( WallActor != None )
 				spawn(class'BloodSplat',,,WallHit + 20 * (WallNormal + VRand()), rotator(WallNormal));
 		}
-				
+
 		Disable('Tick');
 	}
 }

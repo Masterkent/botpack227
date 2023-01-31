@@ -1,12 +1,12 @@
 class SayMessagePlus expands StringMessagePlus;
 
-static function RenderComplexMessage( 
-	Canvas Canvas, 
+static function RenderComplexMessage(
+	Canvas Canvas,
 	out float XL,
 	out float YL,
 	optional string MessageString,
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)
@@ -24,7 +24,7 @@ static function RenderComplexMessage(
 static function string AssembleString(
 	HUD myHUD,
 	optional int Switch,
-	optional PlayerReplicationInfo RelatedPRI_1, 
+	optional PlayerReplicationInfo RelatedPRI_1,
 	optional String MessageString
 	)
 {

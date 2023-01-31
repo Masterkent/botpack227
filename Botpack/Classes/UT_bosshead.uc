@@ -3,7 +3,8 @@
 //=============================================================================
 class UT_bosshead extends UTHeads;
 
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {

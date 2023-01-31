@@ -2,7 +2,8 @@
 // ut_ShellCase.
 //=============================================================================
 class UT_ShellCase extends Projectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var bool bHasBounced;
 var int numBounces;
@@ -45,7 +46,7 @@ simulated function HitWall( vector HitNormal, actor Wall )
 	RealHitNormal = HitNormal;
 	HitNormal = Normal(HitNormal + 0.4 * VRand());
 	if ( (HitNormal Dot RealHitNormal) < 0 )
-		HitNormal *= -0.5; 
+		HitNormal *= -0.5;
 	Velocity = 0.5 * (Velocity - 2 * HitNormal * (Velocity Dot HitNormal));
 	RandSpin(100000);
 	bHasBounced = True;
@@ -53,10 +54,10 @@ simulated function HitWall( vector HitNormal, actor Wall )
 
 simulated function ZoneChange( Zoneinfo NewZone )
 {
-	if (NewZone.bWaterZone && !Region.Zone.bWaterZone) 
+	if (NewZone.bWaterZone && !Region.Zone.bWaterZone)
 	{
-		Velocity=0.2*Velocity;	
-		PlaySound(sound 'Drip1');			
+		Velocity=0.2*Velocity;
+		PlaySound(sound 'Drip1');
 		bHasBounced=True;
 	}
 }
@@ -78,7 +79,7 @@ simulated function Landed( vector HitNormal )
 		Destroy();
 		return;
 	}
-	
+
 	SetPhysics(PHYS_None);
 	RandRot = Rotation;
 	RandRot.Pitch = 0;
@@ -90,7 +91,7 @@ function Eject(Vector Vel)
 {
 	Velocity = Vel;
 	RandSpin(100000);
-	if ( (Instigator != None) && Instigator.HeadRegion.Zone.bWaterZone ) 
+	if ( (Instigator != None) && Instigator.HeadRegion.Zone.bWaterZone )
 	{
 		Velocity += 0.85 * Instigator.Velocity;
 		Velocity = Velocity * (0.2+FRand()*0.2);

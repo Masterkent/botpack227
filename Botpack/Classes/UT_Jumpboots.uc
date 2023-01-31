@@ -2,7 +2,8 @@
 // UT_jumpBoots
 //=============================================================================
 class UT_JumpBoots extends TournamentPickup;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 #exec TEXTURE IMPORT NAME=B227_I_UT_JumpBoots FILE=Textures\Hud\B227_i_UT_JumpBoots.pcx GROUP="Icons" MIPS=OFF
 
 var int TimeCharge;
@@ -33,7 +34,7 @@ function OwnerJumped()
 	if (Pawn(Owner) != none && !Pawn(Owner).bIsWalking && IsInState('Activated'))
 	{
 		TimeCharge=0;
-		if ( Charge <= 0 ) 
+		if ( Charge <= 0 )
 		{
 			if ( Owner != None )
 			{
@@ -53,7 +54,7 @@ function OwnerJumped()
 
 function Timer()
 {
-	if ( Charge <= 0 ) 
+	if ( Charge <= 0 )
 	{
 		if ( Owner != None )
 		{

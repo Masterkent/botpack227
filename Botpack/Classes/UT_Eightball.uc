@@ -2,7 +2,8 @@
 // UT_Eightball.
 //=============================================================================
 class UT_Eightball extends TournamentWeapon;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var name LoadAnim[6], RotateAnim[6], FireAnim[6];
 var int RocketsLoaded, ClientRocketsLoaded;
@@ -40,7 +41,7 @@ simulated event RenderTexture(ScriptedTexture Tex)
 {
 	local Color C;
 	local string Temp;
-	
+
 	if ( AmmoType != None )
 		Temp = String(AmmoType.AmmoAmount);
 
@@ -145,7 +146,7 @@ function float RateSelf( out int bUseAltMode )
 		&& !P.CheckFutureSight(0.1) )
 		return 0.1;
 
-	EnemyDir = P.Enemy.Location - Owner.Location; 
+	EnemyDir = P.Enemy.Location - Owner.Location;
 	EnemyDist = VSize(EnemyDir);
 	Rating = AIRating;
 
@@ -250,7 +251,7 @@ function Fire( float Value )
 				GotoState('Idle','PendingLock');
 				return;
 			}
-			else if ( !Bot(Owner).bNovice 
+			else if ( !Bot(Owner).bNovice
 					&& (FRand() < 0.7)
 					&& IsInState('Idle') && (Instigator.Enemy != None)
 					&& ((Instigator.Enemy == Instigator.Target) || (Instigator.Target == None))
@@ -334,17 +335,17 @@ function Actor CheckTarget()
 	if ( Owner.IsA('PlayerPawn') )
 	{
 		GetAxes(PawnOwner.ViewRotation,X,Y,Z);
-		Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+		Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 		bestAim = 0.93;
 		ETarget = PawnOwner.PickTarget(bestAim, bestDist, X, Start);
 	}
 	else if ( PawnOwner.Enemy == None )
-		return None; 
+		return None;
 	else if ( Owner.IsA('Bot') && Bot(Owner).bNovice )
 		return None;
 	else if ( VSize(PawnOwner.Enemy.Location - PawnOwner.Location) < 2000 )
 	{
-		Start = Owner.Location + CalcDrawOffset() + FireOffset.Z * vect(0,0,1); 
+		Start = Owner.Location + CalcDrawOffset() + FireOffset.Z * vect(0,0,1);
 		AimRot = rotator(PawnOwner.Enemy.Location - Start);
 		diff = abs((AimRot.Yaw & 65535) - (PawnOwner.Rotation.Yaw & 65535));
 		if ( (diff > 7200) && (diff < 58335) )
@@ -411,7 +412,7 @@ state AltFiring
 	function RotateRocket()
 	{
 		if (AmmoType.AmmoAmount<=0)
-		{ 
+		{
 			GotoState('FireRockets');
 			return;
 		}
@@ -444,7 +445,7 @@ state NormalFire
 		if (Pawn(Owner) != none && PlayerPawn(Owner) == None)
 		{
 			if (Pawn(Owner).Target == none
-				||(Pawn(Owner).MoveTarget != Pawn(Owner).Target) 
+				||(Pawn(Owner).MoveTarget != Pawn(Owner).Target)
 				|| (LockedTarget != None)
 				|| (Pawn(Owner).Enemy == None)
 				|| ( Mover(Owner.Base) != None )
@@ -482,7 +483,7 @@ state NormalFire
 				Pawn(NewTarget).WarnTarget(Pawn(Owner), ProjectileSpeed, vector(Pawn(Owner).ViewRotation));
 			if ( LockedTarget != None )
 			{
-				If ( NewTarget != LockedTarget ) 
+				If ( NewTarget != LockedTarget )
 				{
 					LockedTarget = None;
 					Owner.PlaySound(Misc2Sound, SLOT_None, Pawn(Owner).SoundDampening);
@@ -517,7 +518,7 @@ state NormalFire
 				return;
 			}
 		}
-		if ( AmmoType.AmmoAmount <= 0 ) 
+		if ( AmmoType.AmmoAmount <= 0 )
 		{
 			GotoState('FireRockets');
 			return;
@@ -541,7 +542,7 @@ state Idle
 		if ( NewTarget == OldTarget )
 		{
 			LockedTarget = NewTarget;
-			If (LockedTarget != None) 
+			If (LockedTarget != None)
 			{
 				bLockedOn=True;
 				Owner.MakeNoise(Pawn(Owner).SoundDampening);
@@ -561,12 +562,12 @@ state Idle
 			else
 				bLockedOn = false;
 		}
-		else if( (OldTarget != None) && (NewTarget == None) ) 
+		else if( (OldTarget != None) && (NewTarget == None) )
 		{
 			Owner.PlaySound(Misc2Sound, SLOT_None,Pawn(Owner).SoundDampening);
 			bLockedOn = False;
 		}
-		else 
+		else
 		{
 			LockedTarget = None;
 			bLockedOn = False;
@@ -579,7 +580,7 @@ Begin:
 	if (Pawn(Owner).bFire!=0) Fire(0.0);
 	if (Pawn(Owner).bAltFire!=0) AltFire(0.0);
 	bPointing=False;
-	if (AmmoType.AmmoAmount<=0) 
+	if (AmmoType.AmmoAmount<=0)
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
 	PlayIdleAnim();
 	OldTarget = CheckTarget();
@@ -707,7 +708,7 @@ state ClientAltFiring
 		if ( (Pawn(Owner).bAltFire == 0) || (Ammotype.AmmoAmount <= 0) )
 			FiringRockets();
 	}
-	
+
 	simulated function AnimEnd()
 	{
 		if ( !bCanClientFire || (Pawn(Owner) == None) )
@@ -799,16 +800,16 @@ state FireRockets
 			bTightWad = ( FRand() * 4 < PawnOwner.skill );
 
 		GetAxes(PawnOwner.ViewRotation,X,Y,Z);
-		StartLoc = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z; 
+		StartLoc = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 
 		if ( bFireLoad )
 			AdjustedAim = PawnOwner.AdjustAim(ProjectileSpeed, StartLoc, AimError, True, bWarnTarget);
-		else 
+		else
 			AdjustedAim = PawnOwner.AdjustToss(AltProjectileSpeed, StartLoc, AimError, True, bAltWarnTarget);
-			
+
 		if ( PlayerOwner != None )
 			AdjustedAim = PawnOwner.ViewRotation;
-		
+
 		PlayRFiring(RocketsLoaded-1);
 		Owner.MakeNoise(PawnOwner.SoundDampening);
 		if ( !bFireLoad )
@@ -825,7 +826,7 @@ state FireRockets
 				bLockedOn=False;
 			}
 		}
-		else 
+		else
 			BestTarget = None;
 		bPendingLock = false;
 		bPointing = true;
@@ -858,7 +859,7 @@ state FireRockets
 					if ( Angle > 0 )
 						s.Velocity *= (0.9 + 0.2 * FRand());
 				}
-				else 
+				else
 				{
 					r = Spawn( class'rocketmk2',, '', FireLocation,FireRot);
 					r.NumExtraRockets = DupRockets;
@@ -867,7 +868,7 @@ state FireRockets
 						r.Velocity *= (0.9 + 0.2 * FRand());
 				}
 			}
-			else 
+			else
 			{
 				g = Spawn( class 'ut_Grenade',, '', FireLocation,AdjustedAim);
 				g.NumExtraGrenades = DupRockets;
@@ -889,8 +890,8 @@ state FireRockets
 
 	function AnimEnd()
 	{
-		if ( !bRotated && (AmmoType.AmmoAmount > 0) ) 
-		{	
+		if ( !bRotated && (AmmoType.AmmoAmount > 0) )
+		{
 			PlayLoading(1.5,0);
 			RocketsLoaded = 1;
 			bRotated = true;

@@ -2,7 +2,8 @@
 // rocketmk2.
 //=============================================================================
 class RocketMk2 extends B227_SyncedProjectile;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 var float SmokeRate;
 var bool bRing,bHitWater,bWaterStart;
@@ -88,9 +89,9 @@ simulated event Timer()
 			else
 				Spawn(class'UTSmokeTrail');
 		}
-		SmokeRate = 152/Speed; 
+		SmokeRate = 152/Speed;
 	}
-	else 
+	else
 	{
 		B227_StopSmokeTrail();
 
@@ -155,7 +156,7 @@ auto state Flying
 
 	function ProcessTouch(Actor Other, Vector HitLocation)
 	{
-		if ( (Other != instigator) && !Other.IsA('Projectile') ) 
+		if ( (Other != instigator) && !Other.IsA('Projectile') )
 			Explode(HitLocation,Normal(HitLocation-Other.Location));
 	}
 

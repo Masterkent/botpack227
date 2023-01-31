@@ -27,11 +27,11 @@ var   name SendType[5];
 
 var localized String LeaderSign[4];
 
-/* Orders (in same order as in Orders Menu 
-	0 = Defend, 
-	1 = Hold, 
-	2 = Attack, 
-	3 = Follow, 
+/* Orders (in same order as in Orders Menu
+	0 = Defend,
+	1 = Hold,
+	2 = Attack,
+	3 = Follow,
 	4 = FreeLance
 */
 var() Sound OrderSound[16];
@@ -90,12 +90,12 @@ function BotInitialize(PlayerReplicationInfo Sender, PlayerReplicationInfo Recip
 				m = 1;
 			}
 			DelayedResponse = GetCallSign(Recipient)$CommaText;
-		}	
+		}
 		else
 			m = 0;
 		if ( messagetype == 'FRIENDLYFIRE' )
 			SetFFireMessage(messageIndex, Recipient, MessageSound, MessageTime);
-		else if ( messagetype == 'AUTOTAUNT' ) 
+		else if ( messagetype == 'AUTOTAUNT' )
 		{
 			SetTauntMessage(messageIndex, Recipient, MessageSound, MessageTime);
 			if ( Level.NetMode != NM_Standalone )
@@ -184,7 +184,7 @@ function SetClientAckMessage(int messageIndex, PlayerReplicationInfo Recipient, 
 	MessageSound = AckSound[messageIndex];
 	MessageTime = AckTime[messageIndex];
 
-	if ( (Recipient != None) && (Level.NetMode == NM_Standalone) 
+	if ( (Recipient != None) && (Level.NetMode == NM_Standalone)
 		&& (Recipient.TeamID == 0) && PlayerPawn(Owner).GameReplicationInfo.bTeamGame && Recipient.Team < 4 )
 	{
 		Phrase[1] = NameSound[Recipient.Team];
@@ -287,7 +287,7 @@ function SetOrderMessage(int messageIndex, PlayerReplicationInfo Recipient, out 
 static function string GetOrderString(int i, string GameType )
 {
 	if ( i > 9 )
-		return ""; //high index order strings are alternates to the base orders 
+		return ""; //high index order strings are alternates to the base orders
 	if (i == 2)
 	{
 		if (GameType == "Capture the Flag")
@@ -334,7 +334,7 @@ function Timer()
 			PlayerPawn(Owner).GameReplicationInfo != none &&
 			DelayedSender != none)
 		{
-			if ( PlayerPawn(Owner).GameReplicationInfo.bTeamGame 
+			if ( PlayerPawn(Owner).GameReplicationInfo.bTeamGame
 				 && (PlayerPawn(Owner).PlayerReplicationInfo.Team == DelayedSender.Team) )
 				MessageType = 'TeamSay';
 			else
@@ -344,8 +344,8 @@ function Timer()
 	}
 	if ( Phrase[PhraseNum] != None )
 	{
-		if ( Owner.IsA('PlayerPawn') && !PlayerPawn(Owner).bNoVoices 
-			&& (Level.TimeSeconds - class'UTC_PlayerPawn'.static.B227_LastPlaySound(PlayerPawn(Owner)) > 2)  ) 
+		if ( Owner.IsA('PlayerPawn') && !PlayerPawn(Owner).bNoVoices
+			&& (Level.TimeSeconds - class'UTC_PlayerPawn'.static.B227_LastPlaySound(PlayerPawn(Owner)) > 2)  )
 		{
 			B227_PlayVoice(Phrase[PhraseNum]);
 		}
@@ -357,7 +357,7 @@ function Timer()
 			PhraseNum++;
 		}
 	}
-	else 
+	else
 		Destroy();
 }
 
@@ -438,7 +438,7 @@ static function string GetTauntString(int i)
 {
 	if ( default.TauntAbbrev[i] != "" )
 		return default.TauntAbbrev[i];
-	
+
 	return default.TauntString[i];
 }
 
@@ -446,7 +446,7 @@ static function string GetOtherString(int i)
 {
 	if ( Default.OtherAbbrev[i] != "" )
 		return default.OtherAbbrev[i];
-	
+
 	return default.OtherString[i];
 }
 

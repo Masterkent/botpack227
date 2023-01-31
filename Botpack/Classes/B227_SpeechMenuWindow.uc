@@ -414,7 +414,7 @@ function TargetChildPageButtonClicked(int OptionIndex)
 	{
 		if (OptionIndex == 0)
 			Root.GetPlayerOwner().Speech(MenuPages[1].CurrentType, Message, -1);
-		else 
+		else
 			Root.GetPlayerOwner().Speech(MenuPages[1].CurrentType, Message, MenuPages[2].OptionButtons[OptionIndex].TeamID);
 
 		if (MiniDisplay != none)

@@ -2,7 +2,8 @@
 // IntroBoss.
 //=============================================================================
 class IntroBoss expands Decoration;
-#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 Auto State IntroBoss
 {
@@ -14,11 +15,11 @@ Auto State IntroBoss
 			GotoState( 'IntroBoss','stand');
 	}
 
-wave: 
+wave:
 	Disable('Trigger');
 	PlayAnim('wave',0.5);
 	FinishAnim();
-	Enable('Trigger');	
+	Enable('Trigger');
 	Stop;
 
 stand:
@@ -28,7 +29,7 @@ stand:
 	Sleep(1.0);
 	Enable('Trigger');
 	Stop;
-	
+
 Begin:
 	PlayAnim('stand',0.4);
 }

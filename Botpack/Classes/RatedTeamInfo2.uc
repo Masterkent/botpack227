@@ -1,6 +1,7 @@
 class RatedTeamInfo2 expands RatedTeamInfo;
 
-// Black Legion#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
+// Black Legion
+#exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 defaultproperties
 {
