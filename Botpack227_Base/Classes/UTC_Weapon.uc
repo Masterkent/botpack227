@@ -66,7 +66,7 @@ simulated event RenderOverlays(Canvas Canvas)
 
 	if ( (bMuzzleFlash > 0) && bDrawMuzzleFlash && Level.bHighDetailMode && (MFTexture != None) &&
 		class'B227_BaseConfig'.default.bDrawMuzzleFlash &&
-		class'B227_BaseConfig'.default.MuzzleFlashScale > 0 )
+		B227_MuzzleFlashScale() > 0 )
 	{
 		if (B227_ViewOffsetMode() == 2)
 			ScreenHeight = Canvas.SizeY; // It's hard to calculate the correct offset for this mode anyway, so the original method is preserved for it.
@@ -74,7 +74,7 @@ simulated event RenderOverlays(Canvas Canvas)
 			ScreenHeight = Canvas.SizeX * 3 / 4;
 
 		FovScale = 1 / Tan(FClamp(PlayerOwner.FOVAngle, 1, 179) / 360 * Pi);
-		CustomScale = FClamp(class'B227_BaseConfig'.default.MuzzleFlashScale, 0, 2);
+		CustomScale = FClamp(B227_MuzzleFlashScale(), 0, 2);
 		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FovScale * CustomScale;
 		if ( !bSetFlashTime )
 		{
@@ -210,6 +210,11 @@ function TraceFire(float Accuracy)
 static function int B227_ViewOffsetMode()
 {
 	return class'B227_BaseConfig'.default.WeaponViewOffsetMode;
+}
+
+static function float B227_MuzzleFlashScale()
+{
+	return 1.0;
 }
 
 simulated function vector B227_PlayerViewOffset()

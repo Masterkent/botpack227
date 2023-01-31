@@ -1,28 +1,29 @@
-class B227_Config expands Info
+class B227_Config expands B227_BaseConfig
 	config(Botpack);
 
-var(General) config bool bEnableExtensions;
-var(General) config bool bEnableExtras;
-var(DMMutator) config bool bAutoActivatePickups;
-var(DMMutator) config bool bUseFlakShellAmmo;
-var(DMMutator) config bool bLogNonUTInventory;
-var(HUD) config bool bUseTahomaFonts;
-var(HUD) config bool bYellowTeamSayMessages;
-var(NPC) config float BotDodgeEndTime;
-var(Player) config bool bFixLoaded;
-var(Weapon) config bool bAdjustMinigunMuzzleFlashOffset;
-var(Weapon) config bool bAdjustNPCFirePosition;
-var(Weapon) config bool bModifyProjectilesLighting;
-var(Weapon) config bool bModifyShockComboDamage;
-var(Weapon) config bool bPulseGunAdjustNPCAccuracy; // Reduce accuracy for pawns with low Skill
-var(Weapon) config bool bPulseGunGuideBeam;
-var(Weapon) config bool bPulseGunHardcoreDamage; // 150% damage in non-deathmatch games
-var(Weapon) config bool bPulseGunLimitWallEffect;
-var(Weapon) config bool bTraceFireThroughWarpZones;
-var(Weapon) config bool bTranslocatorModuleRecovery;
-var(Weapon) config bool bUseEnergyAmplifier;
-var(Weapon) config bool bUseEmitterSmokeTrails;
-var(Weapon) config bool bUseSpriteSmokeTrails;
+var(General) globalconfig bool bEnableExtensions;
+var(General) globalconfig bool bEnableExtras;
+var(DMMutator) globalconfig bool bAutoActivatePickups;
+var(DMMutator) globalconfig bool bUseFlakShellAmmo;
+var(DMMutator) globalconfig bool bLogNonUTInventory;
+var(HUD) globalconfig bool bUseTahomaFonts;
+var(HUD) globalconfig bool bYellowTeamSayMessages;
+var(NPC) globalconfig float BotDodgeEndTime;
+var(Player) globalconfig bool bFixLoaded;
+var(Weapon) globalconfig bool bAdjustNPCFirePosition;
+var(Weapon) globalconfig bool bMinigunAdjustMuzzleFlashOffset;
+var(Weapon) globalconfig bool bModifyProjectilesLighting;
+var(Weapon) globalconfig bool bModifyShockComboDamage;
+var(Weapon) globalconfig bool bPulseGunAdjustNPCAccuracy; // Reduce accuracy for pawns with low Skill
+var(Weapon) globalconfig bool bPulseGunGuideBeam;
+var(Weapon) globalconfig bool bPulseGunHardcoreDamage; // 150% damage in non-deathmatch games
+var(Weapon) globalconfig bool bPulseGunLimitWallEffect;
+var(Weapon) globalconfig bool bTraceFireThroughWarpZones;
+var(Weapon) globalconfig bool bTranslocatorModuleRecovery;
+var(Weapon) globalconfig bool bUseEmitterSmokeTrails;
+var(Weapon) globalconfig bool bUseEnergyAmplifier;
+var(Weapon) globalconfig bool bUseSpriteSmokeTrails;
+var(Weapon) globalconfig float MinigunMuzzleFlashScale;
 
 static function bool ShouldModifyProjectilesLighting()
 {
@@ -40,8 +41,8 @@ defaultproperties
 	bYellowTeamSayMessages=True
 	BotDodgeEndTime=0.35
 	bFixLoaded=True
-	bAdjustMinigunMuzzleFlashOffset=True
 	bAdjustNPCFirePosition=True
+	bMinigunAdjustMuzzleFlashOffset=True
 	bModifyProjectilesLighting=True
 	bModifyShockComboDamage=True
 	bPulseGunAdjustNPCAccuracy=True
@@ -53,4 +54,5 @@ defaultproperties
 	bUseEnergyAmplifier=True
 	bUseEmitterSmokeTrails=True
 	bUseSpriteSmokeTrails=True
+	MinigunMuzzleFlashScale=1.0
 }

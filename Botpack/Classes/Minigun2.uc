@@ -548,7 +548,7 @@ static function bool B227_ShouldAdjustMuzzleFlashOffset()
 {
 	return
 		class'B227_Config'.default.bEnableExtensions &&
-		class'B227_Config'.default.bAdjustMinigunMuzzleFlashOffset;
+		class'B227_Config'.default.bMinigunAdjustMuzzleFlashOffset;
 }
 
 simulated function float B227_GetMuzzleFlashOffset(bool bCentered)
@@ -561,6 +561,11 @@ simulated function float B227_GetMuzzleFlashOffset(bool bCentered)
 		return 0.019;
 	}
 	return default.FlashO;
+}
+
+static function float B227_MuzzleFlashScale()
+{
+	return class'B227_Config'.default.MinigunMuzzleFlashScale;
 }
 
 simulated function B227_SpawnShellCase()
