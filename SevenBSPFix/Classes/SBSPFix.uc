@@ -7,9 +7,23 @@ var() config bool bSkipCutscenes;
 
 var bool bIsCutsceneMap;
 
-function PostBeginPlay()
+event PostBeginPlay()
 {
-	LevelStartupAdjustments();
+	if (!RemoveDuplicatedMutator())
+		LevelStartupAdjustments();
+}
+
+function bool RemoveDuplicatedMutator()
+{
+	local Mutator Mutator;
+
+	for (Mutator = Level.Game.BaseMutator; Mutator != none; Mutator = Mutator.NextMutator)
+		if (Mutator.Class == Class && Mutator != self)
+		{
+			Destroy();
+			return true;
+		}
+	return false;
 }
 
 function LevelStartupAdjustments()
@@ -71,11 +85,11 @@ function RemoveCutsceneActors()
 
 function string GetHumanName()
 {
-	return "SBSPFix v1.6";
+	return "SBSPFix v1.7";
 }
 
 defaultproperties
 {
-	VersionInfo="SBSPFix v1.6 [2022-12-22]"
-	Version="1.6"
+	VersionInfo="SBSPFix v1.7 [2023-01-28]"
+	Version="1.7"
 }

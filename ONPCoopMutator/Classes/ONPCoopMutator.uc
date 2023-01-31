@@ -35,6 +35,9 @@ var ONPGameRules GameRulesPtr;
 
 event PostBeginPlay()
 {
+	if (RemoveDuplicatedMutator())
+		return;
+
 	if (bDebugMode)
 		DebugChecks();
 	//hacks to access projectiles:
@@ -47,6 +50,19 @@ event PostBeginPlay()
 	RegisterClientPackage();
 
 	SaveConfig();
+}
+
+function bool RemoveDuplicatedMutator()
+{
+	local Mutator Mutator;
+
+	for (Mutator = Level.Game.BaseMutator; Mutator != none; Mutator = Mutator.NextMutator)
+		if (Mutator.Class == Class && Mutator != self)
+		{
+			Destroy();
+			return true;
+		}
+	return false;
 }
 
 function DebugChecks()
@@ -1061,13 +1077,13 @@ function AdjustRealCrouchInfo(Actor A)
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.21";
+	return "ONPCoopMutator v5.22";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.21 [2022-12-29]"
-	Version="5.21"
+	VersionInfo="ONPCoopMutator v5.22 [2023-01-28]"
+	Version="5.22"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True

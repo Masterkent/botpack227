@@ -23,11 +23,26 @@ var() config array<Remapping> MapReplacements;
 var string CurrentMap;
 var SBGameRules GameRulesPtr;
 
-function PostBeginPlay()
+event PostBeginPlay()
 {
+	if (RemoveDuplicatedMutator())
+		return;
 	LevelStartupAdjustments();
 	AddGameRules();
 	RegisterClientPackage();
+}
+
+function bool RemoveDuplicatedMutator()
+{
+	local Mutator Mutator;
+
+	for (Mutator = Level.Game.BaseMutator; Mutator != none; Mutator = Mutator.NextMutator)
+		if (Mutator.Class == Class && Mutator != self)
+		{
+			Destroy();
+			return true;
+		}
+	return false;
 }
 
 function LevelStartupAdjustments()
@@ -530,13 +545,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "SevenBCoopMutator v2.11";
+	return "SevenBCoopMutator v2.12";
 }
 
 defaultproperties
 {
-	VersionInfo="SevenBCoopMutator v2.11 [2022-12-25]"
-	Version="2.11"
+	VersionInfo="SevenBCoopMutator v2.12 [2023-01-28]"
+	Version="2.12"
 	bModifyRogueScarredOne=True
 	bUseSpeech=False
 	bUseSpeechMenuForU1Players=True

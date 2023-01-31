@@ -8,8 +8,23 @@ var() config bool bPreventFallingOutOfWorld;
 
 event PostBeginPlay()
 {
+	if (RemoveDuplicatedMutator())
+		return;
 	LevelStartupAdjustments();
 	AddGameRules();
+}
+
+function bool RemoveDuplicatedMutator()
+{
+	local Mutator Mutator;
+
+	for (Mutator = Level.Game.BaseMutator; Mutator != none; Mutator = Mutator.NextMutator)
+		if (Mutator.Class == Class && Mutator != self)
+		{
+			Destroy();
+			return true;
+		}
+	return false;
 }
 
 function LevelStartupAdjustments()
@@ -131,12 +146,12 @@ function AddGameRules()
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.16";
+	return "ONPSPFix v1.17";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.16 [2022-12-29]"
-	Version="1.16"
+	VersionInfo="ONPSPFix v1.17 [2023-01-28]"
+	Version="1.17"
 	bPreventFallingOutOfWorld=True
 }

@@ -26,10 +26,25 @@ var bool bGiveXidiaJumpBoots;
 
 function PostBeginPlay()
 {
+	if (RemoveDuplicatedMutator())
+		return;
 	LevelStartupAdjustments();
 	AddGameRules();
 	RegisterXidiaLevelInfo();
 	RegisterClientPackages();
+}
+
+function bool RemoveDuplicatedMutator()
+{
+	local Mutator Mutator;
+
+	for (Mutator = Level.Game.BaseMutator; Mutator != none; Mutator = Mutator.NextMutator)
+		if (Mutator.Class == Class && Mutator != self)
+		{
+			Destroy();
+			return true;
+		}
+	return false;
 }
 
 function LevelStartupAdjustments()
@@ -640,13 +655,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "XidiaCoopMutator v1.7";
+	return "XidiaCoopMutator v1.8";
 }
 
 defaultproperties
 {
-	VersionInfo="XidiaCoopMutator v1.7 [2022-12-25]"
-	Version="1.7"
+	VersionInfo="XidiaCoopMutator v1.8 [2023-01-28]"
+	Version="1.8"
 	bReplaceUnrealWeapons=False
 	bUseXidiaJumpBoots=True
 	bUseXidiaWeaponsSupply=True
