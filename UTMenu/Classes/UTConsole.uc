@@ -60,6 +60,7 @@ event bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			bQuickKeyEnable = False;
 			LaunchUWindow();
 			bLocked = True;
+			Root.bIgnoreHidesNow = true;
 			UMenuRootWindow(Root).MenuBar.HideWindow();
 			ManagerMenu = ManagerWindowStub(Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject(ManagerWindowClass, Class'Class')), 100, 100, 200, 200, Root, True));
 			return true;
@@ -167,6 +168,7 @@ function EvaluateMatch(int PendingChange, bool Evaluate)
 	LaunchUWindow();
 	bNoDrawWorld = True;
 	bLocked = True;
+	Root.bIgnoreHidesNow = true;
 	UMenuRootWindow(Root).MenuBar.HideWindow();
 
 	switch (PendingChange)
@@ -235,6 +237,7 @@ function LoadGame()
 	// Create load game dialog.
 	bNoDrawWorld = True;
 	bLocked = True;
+	Root.bIgnoreHidesNow = true;
 	UMenuRootWindow(Root).MenuBar.HideWindow();
 
 	// Go to the slot window.
@@ -343,6 +346,7 @@ exec function ShowObjectives()
 		{
 			bLocked = True;
 			bNoDrawWorld = True;
+			Root.bIgnoreHidesNow = true;
 			UMenuRootWindow(Root).MenuBar.HideWindow();
 			LaunchUWindow();
 			Root.CreateWindow(class<UWindowWindow>(DynamicLoadObject("UTMenu.InGameObjectives", class'Class')), 100, 100, 100, 100);
@@ -478,6 +482,7 @@ static function B227_EvaluateMatch(WindowConsole Console, int PendingChange, boo
 	Console.LaunchUWindow();
 	Console.bNoDrawWorld = True;
 	Console.bLocked = True;
+	Root.bIgnoreHidesNow = true;
 	UMenuRootWindow(Root).MenuBar.HideWindow();
 
 	switch (PendingChange)
@@ -549,6 +554,7 @@ static function B227_LoadGame(WindowConsole Console)
 	// Create load game dialog.
 	Console.bNoDrawWorld = True;
 	Console.bLocked = True;
+	Console.Root.bIgnoreHidesNow = true;
 	UMenuRootWindow(Console.Root).MenuBar.HideWindow();
 
 	// Go to the slot window.

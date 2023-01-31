@@ -25,7 +25,7 @@ function Created()
 	Root.SetScale(1);
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 	class'UTLadder'.Static.SetupWinParams(Self, Root, W, H);
 
 	YOffset2 = WinHeight;

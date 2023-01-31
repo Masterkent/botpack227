@@ -40,7 +40,7 @@ function Created()
 	 */
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 

@@ -78,6 +78,8 @@ var int RequiredRungs;
 var bool bInitialized;
 var config bool bGOTY;
 
+var ManagerWindow B227_ManagerWindow;
+
 function Created()
 {
 	local int i, C;
@@ -92,7 +94,7 @@ function Created()
 	 */
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 
 	XMod = 4*W;
@@ -228,7 +230,7 @@ function Created()
 	Scrollup.OverTexture = Texture(DynamicLoadObject("UTMenu.AroUovr", Class'Texture'));
 	Scrollup.DownTexture = Texture(DynamicLoadObject("UTMenu.AroUdwn", Class'Texture'));
 	Scrollup.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	Scrollup.bAlwaysOnTop = True;
+	//-Scrollup.bAlwaysOnTop = True;
 	Scrollup.bIgnoreLDoubleClick = True;
 
 	// Scrolldown
@@ -244,7 +246,7 @@ function Created()
 	Scrolldown.OverTexture = Texture(DynamicLoadObject("UTMenu.AroDovr", Class'Texture'));
 	Scrolldown.DownTexture = Texture(DynamicLoadObject("UTMenu.AroDdwn", Class'Texture'));
 	Scrolldown.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	Scrolldown.bAlwaysOnTop = True;
+	//-Scrolldown.bAlwaysOnTop = True;
 	Scrolldown.bIgnoreLDoubleClick = True;
 
 	// Map Info
@@ -272,7 +274,7 @@ function Created()
 	InfoScrollup.OverTexture = Texture(DynamicLoadObject("UTMenu.AroUovr", Class'Texture'));
 	InfoScrollup.DownTexture = Texture(DynamicLoadObject("UTMenu.AroUdwn", Class'Texture'));
 	InfoScrollup.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	InfoScrollup.bAlwaysOnTop = True;
+	//-InfoScrollup.bAlwaysOnTop = True;
 	InfoScrollUp.bIgnoreLDoubleClick = True;
 
 	// InfoScrolldown
@@ -288,7 +290,7 @@ function Created()
 	InfoScrolldown.OverTexture = Texture(DynamicLoadObject("UTMenu.AroDovr", Class'Texture'));
 	InfoScrolldown.DownTexture = Texture(DynamicLoadObject("UTMenu.AroDdwn", Class'Texture'));
 	InfoScrolldown.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	InfoScrolldown.bAlwaysOnTop = True;
+	//-InfoScrolldown.bAlwaysOnTop = True;
 	InfoScrolldown.bIgnoreLDoubleClick = True;
 
 	// Back Button
@@ -649,7 +651,7 @@ function Notify(UWindowWindow B, byte E)
 			}
 			for (i=0; i<LadderObj.CurrentLadder.Default.Matches; i++)
 			{
-				if (B == Matches[i])
+				if (B == Matches[i] && i != SelectedMatch)
 				{
 					SelectedMatch = i;
 					FillInfoArea(i);
@@ -676,7 +678,10 @@ function EscClose()
 
 function BackPressed()
 {
-	Root.CreateWindow(class'ManagerWindow', 100, 100, 200, 200, Root, True);
+	if (B227_ManagerWindow != none)
+		B227_ManagerWindow.ShowWindow();
+	else
+		Root.CreateWindow(class'ManagerWindow', 100, 100, 200, 200, Root, True);
 	Close();
 }
 
@@ -840,6 +845,61 @@ function SetMapShot(int i)
 
 function NextPressed()
 {
+}
+
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
+{
+	super.WindowEvent(Msg, C, X, Y, Key);
+
+	if (Msg == WM_KeyDown)
+	{
+		switch (Key)
+		{
+			case 0x0D: // IK_Enter
+				NextPressed();
+				break;
+
+			case 0xEC: // IK_MouseWheelUp
+				Notify(ScrollUp, DE_Click);
+				break;
+
+			case 0xED: // IK_MouseWheelDown
+				Notify(ScrollDown, DE_Click);
+				break;
+
+			case 0x26: // IK_Up
+				B227_ChangeSelectedMatch(1);
+				break;
+
+			case 0x28: // IK_Down
+				B227_ChangeSelectedMatch(-1);
+				break;
+
+			case 0x21: // IK_PageUp
+				Notify(InfoScrollup, DE_Click);
+				break;
+
+			case 0x22: // IK_PageDown
+				Notify(InfoScrolldown, DE_Click);
+				break;
+		}
+	}
+}
+
+function B227_ChangeSelectedMatch(int Offset)
+{
+	local int NewSelectedMatch;
+
+	NewSelectedMatch = Clamp(SelectedMatch + Offset, 0, LadderObj.CurrentLadder.default.Matches - 1);
+	BaseMatch = Clamp(BaseMatch, NewSelectedMatch - 7, NewSelectedMatch);
+
+	if (NewSelectedMatch != SelectedMatch)
+	{
+		SelectedMatch = NewSelectedMatch;
+		FillInfoArea(SelectedMatch);
+		SetMapShot(SelectedMatch);
+		GetPlayerOwner().PlaySound(sound'SpeechWindowClick', SLOT_Interact);
+	}
 }
 
 defaultproperties

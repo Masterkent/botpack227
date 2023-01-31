@@ -118,10 +118,10 @@ function Select(UWindowPulldownMenuItem I)
 
 defaultproperties
 {
-     NewGameName="Start Unreal &Tournament"
-     NewGameHelp="Select to start a new Unreal Tournament game!"
-     LoadGameName="&Resume Saved Tournament"
-     LoadGameHelp="Select to resume a saved Unreal Tournament game."
-     ReturnToGameName="Return to &Current Game"
-     ReturnToGameHelp="Leave the menus and return to your current game.  Pressing the ESC key also returns you to the current game."
+	NewGameName="Start Unreal &Tournament"
+	NewGameHelp="Select to start a new Unreal Tournament game!"
+	LoadGameName="&Resume Saved Tournament"
+	LoadGameHelp="Select to resume a saved Unreal Tournament game."
+	ReturnToGameName="Return to &Current Game"
+	ReturnToGameHelp="Leave the menus and return to your current game.  Pressing the ESC key also returns you to the current game."
 }

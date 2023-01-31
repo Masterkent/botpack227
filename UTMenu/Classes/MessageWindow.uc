@@ -10,7 +10,7 @@ function Created()
 	Super.Created();
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 
 	WinLeft = Root.WinWidth/4;
 	WinTop = Root.WinHeight/4;

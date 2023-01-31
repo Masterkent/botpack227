@@ -62,7 +62,7 @@ function Created()
 	 */
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 
 	XMod = 4*W;
@@ -184,7 +184,7 @@ function Created()
 	ObjDescArea.TextColor.G = 255;
 	ObjDescArea.TextColor.B = 0;
 	ObjDescArea.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	ObjDescArea.bAlwaysOnTop = True;
+	//-ObjDescArea.bAlwaysOnTop = True;
 	ObjDescArea.bAutoScrolling = True;
 
 	// DescScrollup
@@ -200,7 +200,7 @@ function Created()
 	DescScrollup.OverTexture = Texture(DynamicLoadObject("UTMenu.AroUovr", Class'Texture'));
 	DescScrollup.DownTexture = Texture(DynamicLoadObject("UTMenu.AroUdwn", Class'Texture'));
 	DescScrollup.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	DescScrollup.bAlwaysOnTop = True;
+	//-DescScrollup.bAlwaysOnTop = True;
 
 	// DescScrolldown
 	XPos = 923.0/1024 * XMod;
@@ -215,7 +215,7 @@ function Created()
 	DescScrolldown.OverTexture = Texture(DynamicLoadObject("UTMenu.AroDovr", Class'Texture'));
 	DescScrolldown.DownTexture = Texture(DynamicLoadObject("UTMenu.AroDdwn", Class'Texture'));
 	DescScrolldown.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	DescScrolldown.bAlwaysOnTop = True;
+	//-DescScrolldown.bAlwaysOnTop = True;
 
 	// StaticArea
 	XPos = 608.0/1024 * XMod;
@@ -479,6 +479,51 @@ function SetMapShot(texture NewShot)
 	StaticScale = 1.0;
 	MapShot = NewShot;
 	bMapStatic = True;
+}
+
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
+{
+	super.WindowEvent(Msg, C, X, Y, Key);
+
+	if (Msg == WM_KeyDown)
+	{
+		switch (Key)
+		{
+			case 0x0D: // IK_Enter
+				Notify(NextButton, DE_Click);
+				break;
+
+			case 0x26: // IK_Up
+				B227_ChangeSelectedO(1);
+				break;
+
+			case 0x28: // IK_Down
+				B227_ChangeSelectedO(-1);
+				break;
+
+			case 0x21: // IK_PageUp
+				Notify(DescScrollup, DE_Click);
+				break;
+
+			case 0x22: // IK_PageDown
+				Notify(DescScrolldown, DE_Click);
+				break;
+		}
+	}
+}
+
+function B227_ChangeSelectedO(int Offset)
+{
+	local int NewSelectedO;
+
+	if (NumNames == 0)
+		return;
+	NewSelectedO = Clamp(SelectedO + Offset, 0, NumNames - 1);
+	if (NewSelectedO != SelectedO && !Names[NewSelectedO].bDisabled)
+	{
+		NameSelected(NewSelectedO);
+		GetPlayerOwner().PlaySound(sound'SpeechWindowClick', SLOT_Interact);
+	}
 }
 
 defaultproperties

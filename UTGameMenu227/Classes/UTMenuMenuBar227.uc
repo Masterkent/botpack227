@@ -10,9 +10,9 @@ function Created()
 		GetLevel().Game.default.GameUMenuType = GameUMenuDefault;
 		super.Created();
 		GetLevel().Game.default.GameUMenuType = OldGameUMenuType;
-		return;
 	}
-	super.Created();
+	else
+		super.Created();
 }
 
 defaultproperties

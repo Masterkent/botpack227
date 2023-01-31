@@ -84,7 +84,7 @@ function Created()
 	 */
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//bAlwaysOnTop = True;
 
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 
@@ -198,7 +198,7 @@ function Created()
 	NameEdit.CharacterWindow = Self;
 	NameEdit.bCanEdit = True;
 	NameEdit.bShowCaret = True;
-	NameEdit.bAlwaysOnTop = True;
+	//-NameEdit.bAlwaysOnTop = True;
 	NameEdit.bSelectOnFocus = True;
 	NameEdit.MaxLength = 20;
 	NameEdit.TextColor.R = 255;
@@ -452,7 +452,7 @@ function Created()
 	TeamDescArea.TextColor.G = 255;
 	TeamDescArea.TextColor.B = 0;
 	TeamDescArea.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	TeamDescArea.bAlwaysOnTop = True;
+	//-TeamDescArea.bAlwaysOnTop = True;
 	TeamDescArea.bMousePassThrough = True;
 	TeamDescArea.bAutoScrolling = True;
 	TeamDescArea.Clear();
@@ -473,7 +473,7 @@ function Created()
 	DescScrollup.OverTexture = Texture(DynamicLoadObject("UTMenu.AroUovr", Class'Texture'));
 	DescScrollup.DownTexture = Texture(DynamicLoadObject("UTMenu.AroUdwn", Class'Texture'));
 	DescScrollup.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	DescScrollup.bAlwaysOnTop = True;
+	//-DescScrollup.bAlwaysOnTop = True;
 
 	// DescScrolldown
 	XPos = 799.0/1024 * XMod;
@@ -488,7 +488,7 @@ function Created()
 	DescScrolldown.OverTexture = Texture(DynamicLoadObject("UTMenu.AroDovr", Class'Texture'));
 	DescScrolldown.DownTexture = Texture(DynamicLoadObject("UTMenu.AroDdwn", Class'Texture'));
 	DescScrolldown.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	DescScrolldown.bAlwaysOnTop = True;
+	//-DescScrolldown.bAlwaysOnTop = True;
 
 	if (PreferredSex == 1)
 	{

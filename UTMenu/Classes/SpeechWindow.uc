@@ -41,7 +41,7 @@ function Created()
 	local float XMod, YMod;
 	local int i;
 
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 	bLeaveOnScreen = True;
 
 	Super.Created();

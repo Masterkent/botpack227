@@ -11,7 +11,7 @@ function Created()
 {
 	bStatusBar = False;
 	bSizable = False;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 
 	Super.Created();
 

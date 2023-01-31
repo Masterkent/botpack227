@@ -77,7 +77,7 @@ function Initialize()
 	 */
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 
 	XMod = 4*W;
@@ -224,7 +224,7 @@ function Initialize()
 	DescArea.TextColor.G = 255;
 	DescArea.TextColor.B = 0;
 	DescArea.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	DescArea.bAlwaysOnTop = True;
+	//-DescArea.bAlwaysOnTop = True;
 	DescArea.bMousePassThrough = True;
 	DescArea.bAutoScrolling = True;
 	if (Ladder.Default.bTeamGame)
@@ -250,7 +250,7 @@ function Initialize()
 	DescScrollup.OverTexture = Texture(DynamicLoadObject("UTMenu.AroUovr", Class'Texture'));
 	DescScrollup.DownTexture = Texture(DynamicLoadObject("UTMenu.AroUdwn", Class'Texture'));
 	DescScrollup.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	DescScrollup.bAlwaysOnTop = True;
+	//-DescScrollup.bAlwaysOnTop = True;
 
 	// DescScrolldown
 	XPos = 799.0/1024 * XMod;
@@ -265,7 +265,7 @@ function Initialize()
 	DescScrolldown.OverTexture = Texture(DynamicLoadObject("UTMenu.AroDovr", Class'Texture'));
 	DescScrolldown.DownTexture = Texture(DynamicLoadObject("UTMenu.AroDdwn", Class'Texture'));
 	DescScrolldown.MyFont = class'UTLadderStub'.Static.GetStubClass().Static.GetSmallFont(Root);
-	DescScrolldown.bAlwaysOnTop = True;
+	//-DescScrolldown.bAlwaysOnTop = True;
 
 	Initialized = True;
 	Root.Console.bBlackout = True;

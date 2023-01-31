@@ -74,7 +74,7 @@ function Created()
 	 */
 
 	bLeaveOnScreen = True;
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 	class'UTLadderStub'.Static.GetStubClass().Static.SetupWinParams(Self, Root, W, H);
 
 	XMod = 4*W;
@@ -313,93 +313,8 @@ function Created()
 	InfoArea.Clear();
 	if (Root.WinWidth < 512)
 		return;
-	InfoArea.AddText(RankString[0]@class'Ladder'.Static.GetRank(LadderObj.DMRank));
-	if (class'UTLadderStub'.Static.GetStubClass().Static.IsDemo())
-	{
-		if (LadderObj.DMPosition == -1)
-			InfoArea.AddText(MatchesString@"0");
-		else {
-			if (LadderObj.DMRank == 4)
-				InfoArea.AddText(MatchesString@LadderObj.DMPosition);
-			else
-				InfoArea.AddText(MatchesString@(LadderObj.DMPosition-1));
-		}
-		if (LadderObj.DMRank == 4) {
-			InfoArea.AddText(" ");
-			InfoArea.AddText(RankString[1]@class'Ladder'.Static.GetRank(LadderObj.DOMRank));
-			if (LadderObj.DOMPosition == -1)
-				InfoArea.AddText(MatchesString@"0");
-			else {
-				if (LadderObj.DOMRank == 4)
-					InfoArea.AddText(MatchesString@LadderObj.DOMPosition);
-				else
-					InfoArea.AddText(MatchesString@(LadderObj.DOMPosition-1));
-			}
-		}
-		if (LadderObj.DOMRank == 4) {
-			InfoArea.AddText(" ");
-			InfoArea.AddText(RankString[2]@class'Ladder'.Static.GetRank(LadderObj.CTFRank));
-			if (LadderObj.CTFPosition == -1)
-				InfoArea.AddText(MatchesString@"0");
-			else {
-				if (LadderObj.CTFRank == 4)
-					InfoArea.AddText(MatchesString@LadderObj.CTFPosition);
-				else
-					InfoArea.AddText(MatchesString@(LadderObj.CTFPosition-1));
-			}
-		}
-	} else {
-		if (LadderObj.DMPosition == -1)
-			InfoArea.AddText(MatchesString@"0");
-		else {
-			if (LadderObj.DMRank == 6)
-				InfoArea.AddText(MatchesString@LadderObj.DMPosition);
-			else
-				InfoArea.AddText(MatchesString@(LadderObj.DMPosition-1));
-		}
-		if (LadderObj.DMPosition >= 4) {
-			InfoArea.AddText(" ");
-			InfoArea.AddText(RankString[1]@class'Ladder'.Static.GetRank(LadderObj.DOMRank));
-			if (LadderObj.DOMPosition == -1)
-				InfoArea.AddText(MatchesString@"0");
-			else {
-				if (LadderObj.DOMRank == 6)
-					InfoArea.AddText(MatchesString@LadderObj.DOMPosition);
-				else
-					InfoArea.AddText(MatchesString@(LadderObj.DOMPosition-1));
-			}
-		}
-		if (LadderObj.DOMPosition >= 4) {
-			InfoArea.AddText(" ");
-			InfoArea.AddText(RankString[2]@class'Ladder'.Static.GetRank(LadderObj.CTFRank));
-			if (LadderObj.CTFPosition == -1)
-				InfoArea.AddText(MatchesString@"0");
-			else {
-				if (LadderObj.CTFRank == 6)
-					InfoArea.AddText(MatchesString@LadderObj.CTFPosition);
-				else
-					InfoArea.AddText(MatchesString@(LadderObj.CTFPosition-1));
-			}
-		}
-		if (LadderObj.CTFPosition >= 4) {
-			InfoArea.AddText(" ");
-			InfoArea.AddText(RankString[3]@class'Ladder'.Static.GetRank(LadderObj.ASRank));
-			if (LadderObj.ASPosition == -1)
-				InfoArea.AddText(MatchesString@"0");
-			else {
-				if (LadderObj.ASRank == 6)
-					InfoArea.AddText(MatchesString@LadderObj.ASPosition);
-				else
-					InfoArea.AddText(MatchesString@(LadderObj.ASPosition-1));
-			}
-		}
-		if ( (LadderObj.DMRank == 6) && (LadderObj.DOMRank == 6) &&
-			(LadderObj.CTFRank == 6) && (LadderObj.ASRank == 6) ) {
-			InfoArea.AddText(" ");
-			InfoArea.AddText(ChallengeString);
-			InfoArea.AddText(ChalPosString@class'Ladder'.Static.GetRank(LadderObj.ChalRank));
-		}
-	}
+
+	B227_ShowPlayerRank();
 
 	Root.Console.bBlackOut = True;
 }
@@ -644,6 +559,15 @@ function ShowWindow()
 {
 	Super.ShowWindow();
 
+	if (LadderObj == none)
+		LadderObj = LadderInventory(GetPlayerOwner().FindInventoryType(class'LadderInventory'));
+
+	if (LadderObj == none)
+	{
+		Log("ManagerWindow.ShowWindow: Player has no LadderInventory!!");
+		return;
+	}
+
 	if ((DOMDoorOpen[LadderObj.Slot] == 0) && (DOMDoor != None))
 		DOMDoor.bClosed = True;
 
@@ -664,45 +588,8 @@ function ShowWindow()
 	InfoArea.Clear();
 	if (Root.WinWidth < 512)
 		return;
-	InfoArea.AddText(RankString[0]@class'Ladder'.Static.GetRank(LadderObj.DMRank));
-	InfoArea.AddText(MatchesString@LadderObj.DMPosition-1);
-	if (class'UTLadderStub'.Static.GetStubClass().Static.IsDemo())
-	{
-		// Certain doors never open in the demo...
-		if (LadderObj.DMRank == 4) {
-			InfoArea.AddText("");
-			InfoArea.AddText(RankString[1]@class'Ladder'.Static.GetRank(LadderObj.DOMRank));
-			InfoArea.AddText(MatchesString@LadderObj.DOMPosition-1);
-		}
-		if (LadderObj.DOMRank == 4) {
-			InfoArea.AddText("");
-			InfoArea.AddText(RankString[2]@class'Ladder'.Static.GetRank(LadderObj.CTFRank));
-			InfoArea.AddText(MatchesString@LadderObj.CTFPosition-1);
-		}
-	} else {
-		// Conditions to be met for opening doors, etc...
-		if (LadderObj.DMPosition >= 4) {
-			InfoArea.AddText("");
-			InfoArea.AddText(RankString[1]@class'Ladder'.Static.GetRank(LadderObj.DOMRank));
-			InfoArea.AddText(MatchesString@LadderObj.DOMPosition-1);
-		}
-		if (LadderObj.DOMPosition >= 4) {
-			InfoArea.AddText("");
-			InfoArea.AddText(RankString[2]@class'Ladder'.Static.GetRank(LadderObj.CTFRank));
-			InfoArea.AddText(MatchesString@LadderObj.CTFPosition-1);
-		}
-		if (LadderObj.CTFPosition >= 4) {
-			InfoArea.AddText("");
-			InfoArea.AddText(RankString[3]@class'Ladder'.Static.GetRank(LadderObj.ASRank));
-			InfoArea.AddText(MatchesString@LadderObj.ASPosition-1);
-		}
-		if ( (LadderObj.DMRank == 6) && (LadderObj.DOMRank == 6) &&
-			 (LadderObj.CTFRank == 6) && (LadderObj.ASRank == 6) ) {
-			InfoArea.AddText(" ");
-			InfoArea.AddText(ChallengeString);
-			InfoArea.AddText(ChalPosString@class'Ladder'.Static.GetRank(LadderObj.ChalRank));
-		}
-	}
+
+	B227_ShowPlayerRank();
 }
 
 function Close(optional bool bByParent)
@@ -766,7 +653,7 @@ function Notify(UWindowWindow C, byte E)
 			LadderWindow = Class<UWindowWindow>(DynamicLoadObject(LadderTypes[SelectedLadder], class'Class'));
 			LadderObj = None;
 			HideWindow();
-			Root.CreateWindow(LadderWindow, 100, 100, 200, 200, Root, True);
+			B227_ShowLadderWindow(LadderWindow);
 			break;
 		case BackButton:
 			Close();
@@ -782,7 +669,7 @@ function Notify(UWindowWindow C, byte E)
 			Lite(SelectedLadder);
 			LadderWindow = Class<UWindowWindow>(DynamicLoadObject(LadderTypes[SelectedLadder], class'Class'));
 			HideWindow();
-			Root.CreateWindow(LadderWindow, 100, 100, 200, 200, Root, True);
+			B227_ShowLadderWindow(LadderWindow);
 			break;
 		case DOMLadderButton:
 			Unlite(SelectedLadder);
@@ -790,7 +677,7 @@ function Notify(UWindowWindow C, byte E)
 			Lite(SelectedLadder);
 			LadderWindow = Class<UWindowWindow>(DynamicLoadObject(LadderTypes[SelectedLadder], class'Class'));
 			HideWindow();
-			Root.CreateWindow(LadderWindow, 100, 100, 200, 200, Root, True);
+			B227_ShowLadderWindow(LadderWindow);
 			break;
 		case CTFLadderButton:
 			Unlite(SelectedLadder);
@@ -798,7 +685,7 @@ function Notify(UWindowWindow C, byte E)
 			Lite(SelectedLadder);
 			LadderWindow = Class<UWindowWindow>(DynamicLoadObject(LadderTypes[SelectedLadder], class'Class'));
 			HideWindow();
-			Root.CreateWindow(LadderWindow, 100, 100, 200, 200, Root, True);
+			B227_ShowLadderWindow(LadderWindow);
 			break;
 		case ASLadderButton:
 			Unlite(SelectedLadder);
@@ -806,7 +693,7 @@ function Notify(UWindowWindow C, byte E)
 			Lite(SelectedLadder);
 			LadderWindow = Class<UWindowWindow>(DynamicLoadObject(LadderTypes[SelectedLadder], class'Class'));
 			HideWindow();
-			Root.CreateWindow(LadderWindow, 100, 100, 200, 200, Root, True);
+			B227_ShowLadderWindow(LadderWindow);
 			break;
 		case ChallengeLadderButton:
 			Unlite(SelectedLadder);
@@ -814,7 +701,7 @@ function Notify(UWindowWindow C, byte E)
 			Lite(SelectedLadder);
 			LadderWindow = Class<UWindowWindow>(DynamicLoadObject(LadderTypes[SelectedLadder], class'Class'));
 			HideWindow();
-			Root.CreateWindow(LadderWindow, 100, 100, 200, 200, Root, True);
+			B227_ShowLadderWindow(LadderWindow);
 			break;
 		}
 		break;
@@ -985,6 +872,154 @@ function OpenDoors()
 	if (bOneOpened)
 		GetPlayerOwner().PlaySound(sound'LadderSounds.ldoorsopen1b', SLOT_Interface);
 	bOpened = True;
+}
+
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
+{
+	super.WindowEvent(Msg, C, X, Y, Key);
+
+	if (Msg == WM_KeyDown)
+	{
+		switch (Key)
+		{
+			case 0x0D: // IK_Enter
+				Notify(NextButton, DE_Click);
+				break;
+
+			case 0x26: // IK_Up
+				B227_ChangeSelectedLadder(-1);
+				break;
+
+			case 0x28: // IK_Down
+				B227_ChangeSelectedLadder(1);
+				break;
+		}
+	}
+}
+
+function B227_ShowPlayerRank()
+{
+	InfoArea.AddText(RankString[0]@class'Ladder'.Static.GetRank(LadderObj.DMRank));
+	if (class'UTLadderStub'.Static.GetStubClass().Static.IsDemo())
+	{
+		if (LadderObj.DMPosition == -1)
+			InfoArea.AddText(MatchesString@"0");
+		else {
+			if (LadderObj.DMRank == 4)
+				InfoArea.AddText(MatchesString@LadderObj.DMPosition);
+			else
+				InfoArea.AddText(MatchesString@(LadderObj.DMPosition-1));
+		}
+		if (LadderObj.DMRank == 4) {
+			InfoArea.AddText(" ");
+			InfoArea.AddText(RankString[1]@class'Ladder'.Static.GetRank(LadderObj.DOMRank));
+			if (LadderObj.DOMPosition == -1)
+				InfoArea.AddText(MatchesString@"0");
+			else {
+				if (LadderObj.DOMRank == 4)
+					InfoArea.AddText(MatchesString@LadderObj.DOMPosition);
+				else
+					InfoArea.AddText(MatchesString@(LadderObj.DOMPosition-1));
+			}
+		}
+		if (LadderObj.DOMRank == 4) {
+			InfoArea.AddText(" ");
+			InfoArea.AddText(RankString[2]@class'Ladder'.Static.GetRank(LadderObj.CTFRank));
+			if (LadderObj.CTFPosition == -1)
+				InfoArea.AddText(MatchesString@"0");
+			else {
+				if (LadderObj.CTFRank == 4)
+					InfoArea.AddText(MatchesString@LadderObj.CTFPosition);
+				else
+					InfoArea.AddText(MatchesString@(LadderObj.CTFPosition-1));
+			}
+		}
+	} else {
+		if (LadderObj.DMPosition == -1)
+			InfoArea.AddText(MatchesString@"0");
+		else {
+			if (LadderObj.DMRank == 6)
+				InfoArea.AddText(MatchesString@LadderObj.DMPosition);
+			else
+				InfoArea.AddText(MatchesString@(LadderObj.DMPosition-1));
+		}
+		if (LadderObj.DMPosition >= 4) {
+			InfoArea.AddText(" ");
+			InfoArea.AddText(RankString[1]@class'Ladder'.Static.GetRank(LadderObj.DOMRank));
+			if (LadderObj.DOMPosition == -1)
+				InfoArea.AddText(MatchesString@"0");
+			else {
+				if (LadderObj.DOMRank == 6)
+					InfoArea.AddText(MatchesString@LadderObj.DOMPosition);
+				else
+					InfoArea.AddText(MatchesString@(LadderObj.DOMPosition-1));
+			}
+		}
+		if (LadderObj.DOMPosition >= 4) {
+			InfoArea.AddText(" ");
+			InfoArea.AddText(RankString[2]@class'Ladder'.Static.GetRank(LadderObj.CTFRank));
+			if (LadderObj.CTFPosition == -1)
+				InfoArea.AddText(MatchesString@"0");
+			else {
+				if (LadderObj.CTFRank == 6)
+					InfoArea.AddText(MatchesString@LadderObj.CTFPosition);
+				else
+					InfoArea.AddText(MatchesString@(LadderObj.CTFPosition-1));
+			}
+		}
+		if (LadderObj.CTFPosition >= 4) {
+			InfoArea.AddText(" ");
+			InfoArea.AddText(RankString[3]@class'Ladder'.Static.GetRank(LadderObj.ASRank));
+			if (LadderObj.ASPosition == -1)
+				InfoArea.AddText(MatchesString@"0");
+			else {
+				if (LadderObj.ASRank == 6)
+					InfoArea.AddText(MatchesString@LadderObj.ASPosition);
+				else
+					InfoArea.AddText(MatchesString@(LadderObj.ASPosition-1));
+			}
+		}
+		if ( (LadderObj.DMRank == 6) && (LadderObj.DOMRank == 6) &&
+			(LadderObj.CTFRank == 6) && (LadderObj.ASRank == 6) ) {
+			InfoArea.AddText(" ");
+			InfoArea.AddText(ChallengeString);
+			InfoArea.AddText(ChalPosString@class'Ladder'.Static.GetRank(LadderObj.ChalRank));
+		}
+	}
+}
+
+function B227_ShowLadderWindow(class<UWindowWindow> LadderWindowClass)
+{
+	local UTLadder LadderWindow;
+
+	LadderWindow = UTLadder(Root.CreateWindow(LadderWindowClass, 100, 100, 200, 200, Root, True));
+	if (LadderWindow != none)
+		LadderWindow.B227_ManagerWindow = self;
+}
+
+function B227_ChangeSelectedLadder(int Offset)
+{
+	local int NewSelectedLadder;
+	local int MaxLadder;
+
+	MaxLadder = 0;
+	if (DOMDoorOpen[LadderObj.Slot] > 0)
+		MaxLadder++;
+	if (CTFDoorOpen[LadderObj.Slot] > 0)
+		MaxLadder++;
+	if (ASDoorOpen[LadderObj.Slot] > 0)
+		MaxLadder++;
+	if (ChalDoorOpen[LadderObj.Slot] > 0)
+		MaxLadder++;
+
+	NewSelectedLadder = Clamp(SelectedLadder + Offset, 0, MaxLadder);
+
+	if (NewSelectedLadder != SelectedLadder)
+	{
+		Unlite(SelectedLadder);
+		SelectedLadder = NewSelectedLadder;
+		Lite(SelectedLadder);
+	}
 }
 
 defaultproperties

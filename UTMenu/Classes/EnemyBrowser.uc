@@ -173,6 +173,51 @@ function TitleClicked()
 	DescArea.AddText(RMI.GetTeamBio(True, GetPlayerOwner()));
 }
 
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
+{
+	super.WindowEvent(Msg, C, X, Y, Key);
+
+	if (Msg == WM_KeyDown)
+	{
+		switch (Key)
+		{
+			case 0x0D: // IK_Enter
+				NextPressed();
+				break;
+
+			case 0x26: // IK_Up
+				B227_ChangeSelected(1);
+				break;
+
+			case 0x28: // IK_Down
+				B227_ChangeSelected(-1);
+				break;
+
+			case 0x21: // IK_PageUp
+				Notify(DescScrollup, DE_Click);
+				break;
+
+			case 0x22: // IK_PageDown
+				Notify(DescScrolldown, DE_Click);
+				break;
+		}
+	}
+}
+
+function B227_ChangeSelected(int Offset)
+{
+	local int NewSelected;
+
+	if (NumNames == 0)
+		return;
+	NewSelected = Clamp(Selected + Offset, 0, NumNames - 1);
+	if (NewSelected != Selected && !Names[NewSelected].bDisabled)
+	{
+		NameSelected(NewSelected);
+		GetPlayerOwner().PlaySound(sound'SpeechWindowClick', SLOT_Interact);
+	}
+}
+
 defaultproperties
 {
      BGName1(0)="UTMenu.CC11"
