@@ -20,6 +20,12 @@ replication
 		B227_FireOffsetX,
 		B227_FireOffsetY,
 		B227_FireOffsetZ;
+
+	reliable if (Role == ROLE_Authority)
+		B227_ClientAdjustCenterHandedness;
+
+	reliable if (Role < ROLE_Authority)
+		B227_SetRightHandedness;
 }
 
 simulated event RenderOverlays( canvas Canvas )
@@ -85,6 +91,9 @@ function SetHand(float Hand)
 		FireOffset.Y = Default.FireOffset.Y * Hand;
 		Mesh = mesh'PulseGunR';
 	}
+
+	if (Hand == 0)
+		B227_ClientAdjustCenterHandedness();
 }
 
 // return delta to combat style
@@ -419,6 +428,24 @@ function TweenDown()
 		TweenAnim('Down', 0.26);
 }
 
+static function bool B227_ShouldAllowCenterView()
+{
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bPulseGunAllowCenterView;
+}
+
+simulated function B227_ClientAdjustCenterHandedness()
+{
+	if (!B227_ShouldAllowCenterView())
+		B227_SetRightHandedness();
+}
+
+function B227_SetRightHandedness()
+{
+	SetHand(-1);
+}
+
 function B227_EmitBeam()
 {
 	PlasmaBeam = PBolt(ProjectileFire(AltProjectileClass, AltProjectileSpeed, bAltWarnTarget));
@@ -453,7 +480,7 @@ simulated function vector B227_PlayerViewOffset()
 
 simulated function int B227_ViewRotationRoll(int Hand)
 {
-	if (Hand == 0)
+	if (Hand == 0 && B227_ShouldAllowCenterView())
 		return 1536 * 2;
 	return super.B227_ViewRotationRoll(Hand);
 }

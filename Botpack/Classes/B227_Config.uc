@@ -8,13 +8,16 @@ var(DMMutator) globalconfig bool bUseFlakShellAmmo;
 var(DMMutator) globalconfig bool bLogNonUTInventory;
 var(HUD) globalconfig bool bUseTahomaFonts;
 var(HUD) globalconfig bool bYellowTeamSayMessages;
-var(NPC) globalconfig float BotDodgeEndTime;
-var(Player) globalconfig bool bFixLoaded;
+var(Misc) globalconfig bool bFixLoaded;
+var(Misc) globalconfig bool bUDamageModifyDeactivation;
+var(Misc) globalconfig float BotDodgeEndTime;
 var(Weapon) globalconfig bool bAdjustNPCFirePosition;
+var(Weapon) globalconfig bool bDroppableSlaveEnforcer;
 var(Weapon) globalconfig bool bMinigunAdjustMuzzleFlashOffset;
 var(Weapon) globalconfig bool bModifyProjectilesLighting;
 var(Weapon) globalconfig bool bModifyShockComboDamage;
 var(Weapon) globalconfig bool bPulseGunAdjustNPCAccuracy; // Reduce accuracy for pawns with low Skill
+var(Weapon) globalconfig bool bPulseGunAllowCenterView;
 var(Weapon) globalconfig bool bPulseGunGuideBeam;
 var(Weapon) globalconfig bool bPulseGunHardcoreDamage; // 150% damage in non-deathmatch games
 var(Weapon) globalconfig bool bPulseGunLimitWallEffect;
@@ -39,13 +42,16 @@ defaultproperties
 	bLogNonUTInventory=True
 	bUseTahomaFonts=False
 	bYellowTeamSayMessages=True
-	BotDodgeEndTime=0.35
 	bFixLoaded=True
+	bUDamageModifyDeactivation=True
+	BotDodgeEndTime=0.35
 	bAdjustNPCFirePosition=True
+	bDroppableSlaveEnforcer=True
 	bMinigunAdjustMuzzleFlashOffset=True
 	bModifyProjectilesLighting=True
 	bModifyShockComboDamage=True
 	bPulseGunAdjustNPCAccuracy=True
+	bPulseGunAllowCenterView=True
 	bPulseGunGuideBeam=True
 	bPulseGunHardcoreDamage=False
 	bPulseGunLimitWallEffect=True

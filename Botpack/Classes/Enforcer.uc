@@ -15,7 +15,6 @@ var() localized string DoubleName;
 var() texture MuzzleFlashVariations[5];
 var int DoubleSwitchPriority;
 
-var globalconfig bool B227_bCanDropSlaveEnforcer;
 var travel bool B227_bDoubleEnforcer;
 
 replication
@@ -821,7 +820,9 @@ event TravelPostAccept()
 
 static function bool B227_CanDropSlaveEnforcer()
 {
-	return class'B227_Config'.default.bEnableExtensions && default.B227_bCanDropSlaveEnforcer;
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bDroppableSlaveEnforcer;
 }
 
 function B227_DropSlaveEnforcer()
@@ -945,5 +946,4 @@ defaultproperties
 	CollisionRadius=24.000000
 	CollisionHeight=12.000000
 	Mass=15.000000
-	B227_bCanDropSlaveEnforcer=True
 }

@@ -103,19 +103,36 @@ function ChangedWeapon()
 //
 state Activated
 {
+	event Timer()
+	{
+		if (FinalCount > 0)
+		{
+			SetTimer(1.0, true);
+			Owner.PlaySound(DeActivateSound,, 8);
+			FinalCount--;
+			return;
+		}
+		UsedUp();
+	}
+
 	event Tick(float DeltaTime)
 	{
+		if (!B227_ShouldModifyDeactivation())
+			return;
+
 		if (Pawn(Owner) == none)
 		{
 			UsedUp();
 			return;
 		}
+
 		B227_UseCharge(DeltaTime);
 		if (Charge == 0)
 		{
 			UsedUp();
 			return;
 		}
+
 		if (Charge * 0.1 <= default.FinalCount)
 		{
 			if (B227_FinalCount > 0)
@@ -129,6 +146,7 @@ state Activated
 		}
 		else
 			B227_FinalCount = 0;
+
 		B227_UpdateUdamageWeapon();
 		B227_WeaponFireEffect();
 	}
@@ -145,11 +163,20 @@ state Activated
 		B227_SetActive();
 		if (B227_Effect != none)
 			B227_Effect.PlaySound(ActivateSound);
+
+		if (!B227_ShouldModifyDeactivation())
+		{
+			FinalCount = Min(FinalCount, 0.1 * Charge - 1);
+			SetTimer(0.1 * Charge - FinalCount, false);
+		}
 	}
 
 	event EndState()
 	{
-		B227_Deactivate();
+		if (B227_ShouldModifyDeactivation())
+			B227_Deactivate();
+		else
+			UsedUp();
 	}
 }
 
@@ -263,6 +290,13 @@ event float BotDesireability(Pawn Bot)
 }
 
 // Auxiliary
+static function bool B227_ShouldModifyDeactivation()
+{
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bUDamageModifyDeactivation;
+}
+
 function B227_UpdateUdamageWeapon()
 {
 	if (Pawn(Owner) == none)
