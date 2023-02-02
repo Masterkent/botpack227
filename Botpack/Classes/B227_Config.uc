@@ -9,6 +9,7 @@ var(DMMutator) globalconfig bool bLogNonUTInventory;
 var(HUD) globalconfig bool bUseTahomaFonts;
 var(HUD) globalconfig bool bYellowTeamSayMessages;
 var(Misc) globalconfig bool bFixLoaded;
+var(Misc) globalconfig bool bModifyPlayerStartLookup;
 var(Misc) globalconfig bool bUDamageModifyDeactivation;
 var(Misc) globalconfig float BotDodgeEndTime;
 var(Weapon) globalconfig bool bAdjustNPCFirePosition;
@@ -43,6 +44,7 @@ defaultproperties
 	bUseTahomaFonts=False
 	bYellowTeamSayMessages=True
 	bFixLoaded=True
+	bModifyPlayerStartLookup=True
 	bUDamageModifyDeactivation=True
 	BotDodgeEndTime=0.35
 	bAdjustNPCFirePosition=True

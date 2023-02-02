@@ -1340,12 +1340,13 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 	local array<Pawn> Players;
 	local int PlayerCount;
 	local PlayerStart Dest, Best;
-	local float BestScore, NextDist, CollisionDist, DistScore;
+	local float BestScore, NextDist;
 	local Pawn OtherPlayer;
 	local int i, j, num;
 	local Teleporter Tel;
 	local NavigationPoint LastPlayerStartSpot;
 	local bool bHasEnabledStartSpot;
+	local float DistScore, NarrowScore, TelefragScore;
 
 	if (bStartMatch && TournamentPlayer(Player) != none &&
 		Level.NetMode == NM_Standalone &&
@@ -1383,8 +1384,14 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 		LastPlayerStartSpot = TournamentPlayer(Player).StartSpot;
 
 	for ( OtherPlayer=Level.PawnList; OtherPlayer!=None; OtherPlayer=OtherPlayer.NextPawn)
-		if ( OtherPlayer.PlayerReplicationInfo != none && (OtherPlayer.Health > 0) && !OtherPlayer.IsA('Spectator') )
+		if (OtherPlayer.PlayerReplicationInfo != none &&
+			OtherPlayer.Health > 0 &&
+			!OtherPlayer.IsInState('Dying') &&
+			!OtherPlayer.IsA('Spectator') &&
+			!OtherPlayer.PlayerReplicationInfo.bIsSpectator)
+		{
 			Players[PlayerCount++] = OtherPlayer;
+		}
 
 	for (i = 0; i < num; ++i)
 	{
@@ -1394,33 +1401,42 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 			Score[i] = 3000 * FRand(); // randomize
 
 		DistScore = 0;
+		NarrowScore = 0;
+		TelefragScore = 0;
 
 		for (j = 0; j < PlayerCount; ++j)
 		{
-			// B227 NOTE: Zone-dependent score may lead to odd selection of start spots.
-			// F.e., on DM-ArcaneTemple, ZoneInfo0 would be preferred in most cases.
-			// This is why Region.Zone is not checked here anymore.
-
 			OtherPlayer = Players[j];
-			NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
 
-			if (Player != none)
-				CollisionDist = Player.CollisionRadius + Player.CollisionHeight +
-					OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight;
-			else
-				CollisionDist = 2 * (OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight);
-
-			if (NextDist < CollisionDist)
-				Score[i] -= 1000000.0;
+			if (B227_ShouldModifyPlayerStartLookup())
+				B227_EvaluatePlayerStartScore(
+					Player,
+					OtherPlayer,
+					Candidate[i].Location,
+					Score[i],
+					DistScore,
+					NarrowScore,
+					TelefragScore);
 			else
 			{
-				if (FastTrace(Candidate[i].Location, OtherPlayer.Location))
-					Score[i] -= 10000;
-				if (NextDist < 2000)
-					DistScore = FMin(DistScore, 2 * (NextDist - 2000));
+				if ( OtherPlayer.Region.Zone == Candidate[i].Region.Zone )
+				{
+					Score[i] -= 1500;
+					NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
+					if ( NextDist < OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight )
+						Score[i] -= 1000000.0;
+					else if ( (NextDist < 2000) && FastTrace(Candidate[i].Location, OtherPlayer.Location) )
+						Score[i] -= (10000.0 - NextDist);
+				}
+				else if ( NumPlayers + NumBots == 2 )
+				{
+					Score[i] += 2 * VSize(OtherPlayer.Location - Candidate[i].Location);
+					if ( FastTrace(Candidate[i].Location, OtherPlayer.Location) )
+						Score[i] -= 10000;
+				}
 			}
 		}
-		Score[i] += DistScore;
+		Score[i] += DistScore + NarrowScore + TelefragScore;
 
 		if (i == 0 || Score[i] > BestScore)
 		{
@@ -1613,6 +1629,65 @@ function B227_AddMapFixMutator()
 	Mutator = Spawn(MutatorClass);
 	if (Mutator != none)
 		BaseMutator.AddMutator(Mutator);
+}
+
+static function bool B227_ShouldModifyPlayerStartLookup()
+{
+	return
+		class'B227_Config'.default.bEnableExtensions &&
+		class'B227_Config'.default.bModifyPlayerStartLookup;
+}
+
+function B227_EvaluatePlayerStartScore(
+	Pawn Player,
+	Pawn OtherPlayer,
+	vector PlayerStartLocation,
+	out float Score,
+	out float DistScore,
+	out float NarrowScore,
+	out float TelefragScore)
+{
+	local float CollisionDistXY, CollisionDistZ, NextDist, NextDistXY, NextDistZ;
+	local vector NextOffset, NextOffsetXY;
+
+	// B227 NOTE: Zone-dependent score may lead to odd selection of start spots.
+	// F.e., on DM-ArcaneTemple, ZoneInfo0 would be preferred in most cases.
+	// This is why Region.Zone is not checked here anymore.
+
+	NextOffset = OtherPlayer.Location - PlayerStartLocation;
+	NextDist = VSize(NextOffset);
+	NextOffsetXY = NextOffset;
+	NextOffsetXY.Z = 0;
+
+	if (Player != none)
+	{
+		CollisionDistXY = Player.CollisionRadius + OtherPlayer.CollisionRadius;
+		CollisionDistZ = Player.CollisionHeight + OtherPlayer.CollisionHeight;
+	}
+	else
+	{
+		CollisionDistXY = 2 * OtherPlayer.CollisionRadius;
+		CollisionDistZ = 2 * OtherPlayer.CollisionHeight;
+	}
+
+	NextDistXY = VSize(NextOffsetXY) - CollisionDistXY;
+	NextDistZ = Abs(NextOffset.Z) - CollisionDistZ;
+
+	if (NextDist < CollisionDistXY + CollisionDistZ) // This spot is too close to some player
+	{
+		Score = 0;
+		NarrowScore = -1000000.0;
+		DistScore = FMin(DistScore, FMax(NextDistXY, NextDistZ) - 10000);
+		if (NextDistXY < 0.1 && NextDistZ < 0.1) // Potential telefrag from this point
+			TelefragScore -= 1000000.0; // The more players are under the risk of telefragging, the less the score is
+	}
+	else if (NarrowScore == 0)
+	{
+		if (FastTrace(PlayerStartLocation, OtherPlayer.Location))
+			Score -= 10000;
+		if (NextDist < 2000)
+			DistScore = FMin(DistScore, 2 * (NextDist - 2000));
+	}
 }
 
 function B227_UpdateGRILimits()

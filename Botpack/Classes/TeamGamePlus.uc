@@ -318,12 +318,13 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 	local array<Pawn> Players;
 	local int PlayerCount;
 	local PlayerStart Dest, Best;
-	local float BestScore, NextDist, CollisionDist, DistScore;
+	local float BestScore, NextDist;
 	local pawn OtherPlayer;
 	local int i, j, num;
 	local Teleporter Tel;
 	local byte Team;
 	local bool bHasEnabledStartSpot;
+	local float DistScore, NarrowScore, TelefragScore;
 
 	if (bStartMatch && TournamentPlayer(Player) != none &&
 		Level.NetMode == NM_Standalone &&
@@ -369,8 +370,14 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 		return none;
 
 	for ( OtherPlayer=Level.PawnList; OtherPlayer!=None; OtherPlayer=OtherPlayer.NextPawn)
-		if ( OtherPlayer.PlayerReplicationInfo != none && (OtherPlayer.Health > 0) && !OtherPlayer.IsA('Spectator') )
+		if (OtherPlayer.PlayerReplicationInfo != none &&
+			OtherPlayer.Health > 0 &&
+			!OtherPlayer.IsInState('Dying') &&
+			!OtherPlayer.IsA('Spectator') &&
+			!OtherPlayer.PlayerReplicationInfo.bIsSpectator)
+		{
 			Players[PlayerCount++] = OtherPlayer;
+		}
 
 	// assess candidates
 	for (i = 0; i < num; ++i)
@@ -381,30 +388,39 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 			Score[i] = 4000 * FRand(); // randomize
 
 		DistScore = 0;
+		NarrowScore = 0;
+		TelefragScore = 0;
 
 		for (j = 0; j < PlayerCount; ++j)
 		{
 			OtherPlayer = Players[j];
-			NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
 
-			if (Player != none)
-				CollisionDist = Player.CollisionRadius + Player.CollisionHeight +
-					OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight;
-			else
-				CollisionDist = 2 * (OtherPlayer.CollisionRadius + OtherPlayer.CollisionHeight);
-
-			if (NextDist < CollisionDist)
-				Score[i] -= 1000000.0;
-			else if (OtherPlayer.PlayerReplicationInfo.Team != Team)
+			if (B227_ShouldModifyPlayerStartLookup())
 			{
-				if (FastTrace(Candidate[i].Location, OtherPlayer.Location))
-					Score[i] -= 10000;
-				if (NextDist < 2000)
-					DistScore = FMin(DistScore, 2 * (NextDist - 2000));
+				B227_EvaluatePlayerStartScore(
+					Player,
+					OtherPlayer,
+					Candidate[i].Location,
+					Score[i],
+					DistScore,
+					NarrowScore,
+					TelefragScore);
+				if (NarrowScore == 0 && OtherPlayer.Region.Zone == Candidate[i].Region.Zone)
+					Score[i] -= 1500;
+			}
+			else if ( OtherPlayer.Region.Zone == Candidate[i].Region.Zone )
+			{
+				Score[i] -= 1500;
+				NextDist = VSize(OtherPlayer.Location - Candidate[i].Location);
+				if (NextDist < 2 * (CollisionRadius + CollisionHeight))
+					Score[i] -= 1000000.0;
+				else if ( (NextDist < 2000) && OtherPlayer.PlayerReplicationInfo != None && (OtherPlayer.PlayerReplicationInfo.Team != Team)
+						&& FastTrace(Candidate[i].Location, OtherPlayer.Location) )
+					Score[i] -= (10000.0 - NextDist);
 			}
 		}
 
-		Score[i] += DistScore;
+		Score[i] += DistScore + NarrowScore + TelefragScore;
 
 		if (i == 0 || Score[i] > BestScore)
 		{
