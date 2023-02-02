@@ -12,17 +12,17 @@ var() sound DownSound;
 // Auxiliary
 var private int B227_Handedness;
 var private float B227_FireOffsetX, B227_FireOffsetY, B227_FireOffsetZ;
+var private bool B227_bAllowCenterView;
 
 replication
 {
 	reliable if (Role == ROLE_Authority && bNetOwner)
-		B227_Handedness,
 		B227_FireOffsetX,
 		B227_FireOffsetY,
 		B227_FireOffsetZ;
 
 	reliable if (Role == ROLE_Authority)
-		B227_ClientAdjustCenterHandedness;
+		B227_ClientSetHandedness;
 
 	reliable if (Role < ROLE_Authority)
 		B227_SetRightHandedness;
@@ -33,6 +33,8 @@ simulated event RenderOverlays( canvas Canvas )
 	Texture'Ammoled'.NotifyActor = Self;
 	Super.RenderOverlays(Canvas);
 	Texture'Ammoled'.NotifyActor = None;
+
+	B227_AdjustHand();
 }
 
 simulated function Destroyed()
@@ -58,7 +60,6 @@ function AnimEnd()
 function SetHand(float Hand)
 {
 	Hand = Clamp(Hand, -1, 2);
-	B227_Handedness = Hand;
 
 	if ( Hand == 2 )
 	{
@@ -92,8 +93,7 @@ function SetHand(float Hand)
 		Mesh = mesh'PulseGunR';
 	}
 
-	if (Hand == 0)
-		B227_ClientAdjustCenterHandedness();
+	B227_UpdateClientHandedness(Hand);
 }
 
 // return delta to combat style
@@ -435,15 +435,34 @@ static function bool B227_ShouldAllowCenterView()
 		class'B227_Config'.default.bPulseGunAllowCenterView;
 }
 
-simulated function B227_ClientAdjustCenterHandedness()
+function B227_UpdateClientHandedness(int Hand)
 {
-	if (!B227_ShouldAllowCenterView())
+	if (Hand != B227_Handedness)
+	{
+		B227_Handedness = Hand;
+		B227_ClientSetHandedness(Hand);
+	}
+}
+
+simulated function B227_ClientSetHandedness(int Hand)
+{
+	B227_Handedness = Hand;
+	if (Hand == 0 && !B227_ShouldAllowCenterView())
 		B227_SetRightHandedness();
 }
 
 function B227_SetRightHandedness()
 {
 	SetHand(-1);
+}
+
+simulated function B227_AdjustHand()
+{
+	if (B227_Handedness == 0 && B227_bAllowCenterView != B227_ShouldAllowCenterView())
+	{
+		B227_bAllowCenterView = B227_ShouldAllowCenterView();
+		B227_ClientSetHandedness(B227_Handedness);
+	}
 }
 
 function B227_EmitBeam()
@@ -480,7 +499,7 @@ simulated function vector B227_PlayerViewOffset()
 
 simulated function int B227_ViewRotationRoll(int Hand)
 {
-	if (Hand == 0 && B227_ShouldAllowCenterView())
+	if (Hand == 0 && B227_bAllowCenterView)
 		return 1536 * 2;
 	return super.B227_ViewRotationRoll(Hand);
 }
@@ -628,4 +647,6 @@ defaultproperties
 	SoundRadius=64
 	SoundVolume=255
 	CollisionRadius=32.000000
+	B227_Handedness=-1
+	B227_bAllowCenterView=True
 }
