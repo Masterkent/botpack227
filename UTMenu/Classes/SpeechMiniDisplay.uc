@@ -12,7 +12,7 @@ function Created()
 {
 	Super.Created();
 
-	bAlwaysOnTop = True;
+	//-bAlwaysOnTop = True;
 	bLeaveOnScreen = True;
 
 	DisplayArea = UTFadeTextArea(CreateWindow(class'UTFadeTextArea', 100, 100, 100, 100));

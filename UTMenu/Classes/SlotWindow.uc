@@ -255,7 +255,7 @@ function SetSaveText(int i, Canvas C)
 	CFont = C.Font;
 	C.Font = class'UTLadderStub'.Static.GetStubClass().Static.GetHugeFont(Root);
 	C.StrLen(SlotButton[i].Text, XL, YL);
-	if (XL > SlotButton[i].WinWidth)
+	if (XL > SlotButton[i].WinWidth * Root.GUIScale)
 		SlotButton[i].Text = Name;
 	C.Font = CFont;
 }
