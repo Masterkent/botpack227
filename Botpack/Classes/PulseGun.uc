@@ -138,7 +138,7 @@ function PlayFiring()
 {
 	FlashCount++;
 	AmbientSound = FireSound;
-	SoundVolume = Pawn(Owner).SoundDampening*255;
+	SoundVolume = B227_SoundDampening() * 255;
 	LoopAnim( 'shootLOOP', 1 + 0.5 * FireAdjust, 0.0);
 	bWarnTarget = (FRand() < 0.2);
 }
@@ -146,6 +146,7 @@ function PlayFiring()
 function PlayAltFiring()
 {
 	AmbientSound = AltFireSound;
+	SoundVolume = B227_SoundDampening() * 255;
 	if ( (AnimSequence == 'BoltLoop') || (AnimSequence == 'BoltStart') )
 		PlayAnim( 'boltloop');
 	else
@@ -369,6 +370,7 @@ state AltFiring
 					B227_EmitBeam();
 				if (B227_ShouldUseEnergyAmplifier() && PlasmaBeam != none)
 					PlasmaBeam.B227_DamageMult = B227_AmplifyDamage(Max(1, PlasmaBeam.Damage * 0.24));
+				SoundVolume = P.SoundDampening * 255;
 			}
 			else
 				Finish();

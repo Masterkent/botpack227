@@ -52,7 +52,7 @@ function PlayFiring()
 {
 	LoopAnim( 'Jab2', 0.7, 0.0 );
 	AmbientSound = HitSound;
-	SoundVolume = 255;
+	SoundVolume = 255 * B227_SoundDampening();
 }
 
 function AltFire( float Value )
@@ -68,12 +68,13 @@ function PlayAltFiring()
 {
 	PlayAnim( 'Swipe', 0.6 );
 	AmbientSound = HitSound;
-	SoundVolume = 255;
+	SoundVolume = 255 * B227_SoundDampening();
 }
 
 function EndAltFiring()
 {
 	AmbientSound = Sound'Botpack.ChainIdle';
+	SoundVolume = default.SoundVolume * B227_SoundDampening();
 	TweenAnim('Idle', 1.0);
 }
 
@@ -86,20 +87,21 @@ state NormalFire
 	{
 		Super.BeginState();
 		AmbientSound = HitSound;
-		SoundVolume = 255;
+		SoundVolume = 255 * B227_SoundDampening();
 	}
 
 	function EndState()
 	{
-	    AmbientSound = Sound'Botpack.ChainIdle';
+		AmbientSound = Sound'Botpack.ChainIdle';
 		Super.EndState();
-		SoundVolume = Default.SoundVolume;
+		SoundVolume = Default.SoundVolume * B227_SoundDampening();
 	}
 
 Begin:
 	Sleep(0.15);
 	if ( PlayerPawn(Owner) != None )
 		PlayerPawn(Owner).ShakeView(ShakeTime, ShakeMag, ShakeVert);
+	SoundVolume = 255 * B227_SoundDampening();
 	TraceFire(0.0);
 	Sleep(0.15);
 	if ( PlayerPawn(Owner) != None )
@@ -177,19 +179,20 @@ state AltFiring
 	{
 		Super.BeginState();
 		AmbientSound = HitSound;
-		SoundVolume = 255;
+		SoundVolume = 255 * B227_SoundDampening();
 	}
 
 	function EndState()
 	{
 		Super.EndState();
 		AmbientSound = Sound'Botpack.ChainIdle';
-		SoundVolume = Default.SoundVolume;
+		SoundVolume = Default.SoundVolume * B227_SoundDampening();
 	}
 
 Begin:
 	AmbientSound = HitSound;
 	Sleep(0.1);
+	SoundVolume = 255 * B227_SoundDampening();
 	FinishAnim();
 	EndAltFiring();
 	FinishAnim();
@@ -208,6 +211,7 @@ state Idle
 
 Begin:
 	bPointing=False;
+	SoundVolume = default.SoundVolume * B227_SoundDampening();
 	if ( (AmmoType != None) && (AmmoType.AmmoAmount<=0) )
 		Pawn(Owner).SwitchToBestWeapon();  //Goto Weapon that has Ammo
 	if ( Pawn(Owner).bFire!=0 )
@@ -306,6 +310,7 @@ function TraceFire(float accuracy)
 function PlayPostSelect()
 {
 	AmbientSound = Sound'Botpack.ChainIdle';
+	SoundVolume = default.SoundVolume * B227_SoundDampening();
 	/*-
 	if ( Level.NetMode == NM_Client )
 	{

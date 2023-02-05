@@ -20,7 +20,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 function PlayFiring()
 {
 	LoopAnim( 'Fire', 0.7 + 0.6 * FireAdjust, 0.05 );
-	PlaySound(class'Razor2'.Default.SpawnSound, SLOT_None,4.2);
+	PlaySound(class'Razor2'.Default.SpawnSound, SLOT_None, 4.2 * B227_SoundDampening());
 }
 
 
@@ -71,7 +71,7 @@ function AltFire( float Value )
 function PlayAltFiring()
 {
 	LoopAnim('Fire', 0.4 + 0.3 * FireAdjust,0.05);
-	PlaySound(class'Razor2Alt'.Default.SpawnSound, SLOT_None,4.2);
+	PlaySound(class'Razor2Alt'.Default.SpawnSound, SLOT_None, 4.2 * B227_SoundDampening());
 }
 
 function PlayIdleAnim()

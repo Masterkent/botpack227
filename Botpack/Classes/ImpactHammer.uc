@@ -182,8 +182,10 @@ state Firing
 		if ( Count > 0.2 )
 		{
 			Count = 0;
-			Owner.MakeNoise(1.0);
+			Owner.MakeNoise(P.SoundDampening);
 		}
+		SoundVolume = 255 * P.SoundDampening;
+
 		if (ChargeSize > 1)
 		{
 			if ( !P.IsA('PlayerPawn') && (P.Enemy != None) )

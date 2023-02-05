@@ -259,6 +259,13 @@ simulated function int B227_ViewRotationRoll(int Hand)
 	return default.Rotation.Roll * Hand;
 }
 
+function float B227_SoundDampening()
+{
+	if (Pawn(Owner) != none)
+		return Pawn(Owner).SoundDampening;
+	return 1.0;
+}
+
 static function bool B227_AdjustTraceResult(
 	LevelInfo Level,
 	out vector StartTrace,
