@@ -35,9 +35,6 @@ function Fire( float Value )
 
 function AltFire( float Value )
 {
-	local actor HitActor;
-	local vector HitLocation, HitNormal, Start;
-
 	if ( Owner == None )
 		return;
 
@@ -52,7 +49,6 @@ function AltFire( float Value )
 function float RateSelf( out int bUseAltMode )
 {
 	local Pawn P;
-	local bool bNovice;
 
 	if ( AmmoType.AmmoAmount <=0 )
 		return -2;
@@ -65,13 +61,13 @@ function float RateSelf( out int bUseAltMode )
 
 function PlayFiring()
 {
-	PlaySound(ShockFireSound,,,,, Level.TimeDilation-0.2*FRand());
+	PlaySound(ShockFireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	LoopAnim('Fire1', 0.20 + 0.20 * FireAdjust,0.05);
 }
 
 function PlayAltFiring()
 {
-	PlaySound(ShockFireSound,,,,, Level.TimeDilation-0.2*FRand());
+	PlaySound(ShockFireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	LoopAnim('Fire1', 0.20 + 0.20 * FireAdjust,0.05);
 }
 
@@ -94,7 +90,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 
 function SpawnEffect(vector HitLocation, vector SmokeLocation)
 {
-	local PKSuperShockBeam Smoke,shock;
+	local PKSuperShockBeam Smoke;
 	local Vector DVector;
 	local int NumPoints;
 	local rotator SmokeRotation;

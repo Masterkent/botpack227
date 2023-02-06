@@ -83,8 +83,8 @@ function setHand(float Hand)
 function PlayFiring()
 {
 	AmbientGlow = 250;
-	PlaySound(FireSound,SLOT_None,,,, level.timedilation+0.2+0.2*FRand());
-	PlaySound(FireSound,SLOT_None,,,8192, level.timedilation-0.2+0.2*FRand());
+	PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, level.timedilation+0.2+0.2*FRand());
+	PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,8192, level.timedilation-0.2+0.2*FRand());
 	PlayAnim(FireAnims[Rand(5)],0.5 + 0.5 * FireAdjust, 0.05);
 
 	if ( (PlayerPawn(Owner) != None)
@@ -307,7 +307,7 @@ function PlaySelect()
 	bCanClientFire = false;
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',1.0,0.0);
-	Owner.PlaySound(SelectSound, SLOT_Misc,,,, Level.TimeDilation-0.1+0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, B227_SoundDampening(),,, Level.TimeDilation-0.1+0.1*FRand());
 }
 
 defaultproperties

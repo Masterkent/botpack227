@@ -62,8 +62,8 @@ function Fire( float Value )
 	if (AmmoType.UseAmmo(1))
 	{
 		CheckVisibility();
-		Owner.PlaySound(FireSound, SLOT_None,,,, Level.TimeDilation-0.2*FRand());
-		Owner.PlaySound(FireSound, SLOT_None,,,, Level.TimeDilation-0.6+0.2*FRand());
+		Owner.PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
+		Owner.PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.6+0.2*FRand());
 		PlayAnim( 'Fire', 0.9, 0.05);
 		bPointing=True;
 		Owner.MakeNoise(Pawn(Owner).SoundDampening);
@@ -94,9 +94,9 @@ function AltFire( float Value )
 	if (AmmoType.UseAmmo(1))
 	{
 		CheckVisibility();
-		Owner.PlaySound(FireSound, SLOT_None,,,, Level.TimeDilation-0.2*FRand());
-		Owner.PlaySound(FireSound, SLOT_None,,,, Level.TimeDilation-0.5+0.2*FRand());
-		Owner.PlaySound(FireSound, SLOT_None,,,, Level.TimeDilation-0.8+0.2*FRand());
+		Owner.PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
+		Owner.PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.5+0.2*FRand());
+		Owner.PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.8+0.2*FRand());
 		PlayAnim('Fire', 0.3, 0.05);
 		bPointing=True;
 		Owner.MakeNoise(Pawn(Owner).SoundDampening);

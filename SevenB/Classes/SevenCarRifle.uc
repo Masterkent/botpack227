@@ -590,7 +590,7 @@ function PlayFiring(){
     }
     else{
       PlayAnim( 'AltFire', 1.5, 0.05);
-      Owner.PlaySound( sound'CARifleShell', SLOT_Misc, 4 );
+      Owner.PlaySound(sound'CARifleShell', SLOT_Misc, 4 * Pawn(Owner).SoundDampening);
       SoundVolume = 255 * Pawn( Owner ).SoundDampening;
       if( PlayerPawn( Owner ) != None && Viewport(PlayerPawn(Owner).player)!=none)
       {
@@ -771,6 +771,8 @@ state NormalFire
     {
       AmbientSound = None;
     }
+    else
+      SoundVolume = 255 * B227_SoundDampening();
     if ( Affector != None )
     {
       B227_FireEffectTimer += DeltaTime;

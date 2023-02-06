@@ -194,10 +194,10 @@ state AltFiring
 
   function AnimEnd()
   {
+    SoundVolume = 255 * B227_SoundDampening();
     if ( (AnimSequence != 'Shoot2') || !bAnimLoop )
     {
       AmbientSound = AltFireSound;
-      SoundVolume = 255*Pawn(Owner).SoundDampening;
       LoopAnim('Shoot2',0.8);
     }
   }

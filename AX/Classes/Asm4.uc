@@ -103,7 +103,7 @@ function AltFire( float Value )
         Aclip = 0;
         shotc = 0;
         PlayAnim('Reload',1.5);
-        PlaySound(Misc1sound, SLOT_None);
+        PlaySound(Misc1sound, SLOT_None, B227_SoundDampening());
     }
 
     if (Bot(owner) != None)
@@ -138,7 +138,7 @@ function TraceFire( float Accuracy )
            Aclip = 0;
            shotc = 0;
            PlayAnim('Reload',1.5);
-           PlaySound(AltFireSound, SLOT_None);
+           PlaySound(AltFireSound, SLOT_None, B227_SoundDampening());
      }
        if (shotc >= 5 )
        {

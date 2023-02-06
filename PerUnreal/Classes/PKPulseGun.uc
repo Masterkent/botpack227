@@ -47,7 +47,7 @@ simulated function PlaySelect()
 	bCanClientFire = false;
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',1.0,0.0);
-	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8,,, Level.TimeDilation-0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8 * Pawn(Owner).SoundDampening,,, Level.TimeDilation-0.1*FRand());
 }
 
 defaultproperties

@@ -131,7 +131,6 @@ function TraceFire2(float accuracy)
 
 function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vector X, Vector Y, Vector Z)
 {
-	local vector realLoc;
 	local int rndDam;
 
 	if (Other == Level)
@@ -193,6 +192,7 @@ function PlayFiring()
 {
 	LoopAnim('Shoot',0.6, 0.05);
 	AmbientSound = FireSound;
+	SoundVolume = default.SoundVolume * B227_SoundDampening();
 	SoundPitch=byte(default.soundpitch*level.timedilation-5);
 	AmbientGlow = 250;
 	bSteadyFlash3rd = true;
@@ -202,6 +202,7 @@ function PlayAltFiring()
 {
 	LoopAnim('Spinn',0.6, 0.05);
 	AmbientSound = AltFireSound;
+	SoundVolume = default.SoundVolume * B227_SoundDampening();
 	SoundPitch=byte(default.soundpitch*level.timedilation-5);
 }
 
@@ -289,6 +290,8 @@ state NormalFire
 		{
 			GotoState('Pickup');
 		}
+		else
+			SoundVolume = default.SoundVolume * B227_SoundDampening();
 
 		if (FRand() < 0.5)
 		{
@@ -318,6 +321,7 @@ state NormalFire
 		bSteadyFlash3rd = true;
 		AmbientGlow = 250;
 		AmbientSound = FireSound;
+		SoundVolume = default.SoundVolume * B227_SoundDampening();
 		Super.BeginState();
 	}
 
@@ -344,6 +348,8 @@ state AltFiring
 			AmbientSound = None;
 			GotoState('Pickup');
 		}
+		else
+			SoundVolume = default.SoundVolume * B227_SoundDampening();
 	}
 
 	function AnimEnd()
@@ -361,6 +367,7 @@ state AltFiring
 	{
 		Super.BeginState();
 		AmbientSound = AltFireSound;
+		SoundVolume = default.SoundVolume * B227_SoundDampening();
 	}
 
 	function EndState()
@@ -397,7 +404,7 @@ function PlaySelect()
 	bCanClientFire = false;
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',0.3,0.0);
-	Owner.PlaySound(SelectSound, SLOT_Misc,,,, Level.TimeDilation-0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, Pawn(Owner).SoundDampening,,, Level.TimeDilation-0.1*FRand());
 }
 
 function TweenDown()

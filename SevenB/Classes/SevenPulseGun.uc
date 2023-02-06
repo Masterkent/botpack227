@@ -101,6 +101,7 @@ state AltFiring
       {
           if (PlasmaBeam != none)
               PlasmaBeam.B227_DamageMult = B227_AmplifyDamage(Max(1, PlasmaBeam.Damage * 0.24));
+          SoundVolume = P.SoundDampening * 255;
       }
       else
         Finish();

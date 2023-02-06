@@ -104,7 +104,6 @@ static function SetMultiSkin( Actor SkinActor, string SkinName, string FaceName,
 {
 	local Texture NewSkin;
 	local string MeshName;
-	local int i;
 	local string TeamColor[4];
 
 	TeamColor[0]="Red";

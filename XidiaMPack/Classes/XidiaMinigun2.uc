@@ -126,11 +126,13 @@ state AltFiring
   }
   function Tick( float DeltaTime )
   {
-    if (Owner==None)
+    if (Pawn(Owner) == None)
     {
       AmbientSound = None;
       GotoState('Pickup');
     }
+    else
+      SoundVolume = 255 * Pawn(Owner).SoundDampening;
 
     if  ( bFiredShot && ((pawn(Owner).bAltFire==0) || bOutOfAmmo || owner.region.zone.bwaterzone) )
       GoToState('FinishFire');

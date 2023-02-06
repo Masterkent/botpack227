@@ -174,7 +174,7 @@ function Finish()
 ///////////////////////////////////////////////////////
 function PlayFiring()
 {
-	PlaySound(FireSound,,,,, Level.TimeDilation-0.2*FRand());
+	PlaySound(FireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	LoopAnim('Fire1', 0.30 + 0.30 * FireAdjust,0.05);
 }
 
@@ -201,7 +201,6 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 
 function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vector X, Vector Y, Vector Z)
 {
-	local int i;
 	local PlayerPawn PlayerOwner;
 
 	if (Other==None)
@@ -230,7 +229,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 
 function SpawnEffect(vector HitLocation, vector SmokeLocation)
 {
-	local ShockBeam Smoke,shock;
+	local ShockBeam Smoke;
 	local Vector DVector;
 	local int NumPoints;
 	local rotator SmokeRotation;
@@ -249,7 +248,7 @@ function SpawnEffect(vector HitLocation, vector SmokeLocation)
 
 function PlayAltFiring()
 {
-	PlaySound(AltFireSound,,,,, Level.TimeDilation-0.2*FRand());
+	PlaySound(AltFireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	LoopAnim('Fire2',0.4 + 0.4 * FireAdjust,0.05);
 }
 
@@ -314,7 +313,7 @@ function PlaySelect()
 	bCanClientFire = false;
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',1.0,0.0);
-	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8,,, Level.TimeDilation-0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8 * B227_SoundDampening(),,, Level.TimeDilation-0.1*FRand());
 }
 
 defaultproperties

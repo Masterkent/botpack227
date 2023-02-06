@@ -149,13 +149,13 @@ function Fire( float Value )
 function PlayFiring()
 {
 	PlayAnim( 'Fire', 0.7, 0.05);
-	PlaySound(FireSound,,,,, Level.TimeDilation-0.1*FRand());
+	PlaySound(FireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.1*FRand());
 	bMuzzleFlash++;
 }
 
 function PlayAltFiring()
 {
-	PlaySound(AltFireSound,,,,, Level.TimeDilation-0.2*FRand());
+	PlaySound(AltFireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	PlayAnim('AltFire', 1.0, 0.05);
 	bMuzzleFlash++;
 }
@@ -212,13 +212,13 @@ Begin:
 function PlayReloading()
 {
 	PlayAnim('Loading',0.6, 0.05);
-	Owner.PlaySound(CockingSound,, 0.9,,, Level.TimeDilation-0.2*FRand());
+	Owner.PlaySound(CockingSound,, 0.9 * B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 }
 
 function PlayFastReloading()
 {
 	PlayAnim('Loading',0.8, 0.05);
-	Owner.PlaySound(CockingSound,, 0.8,,, Level.TimeDilation+0.2*FRand());
+	Owner.PlaySound(CockingSound,, 0.8 * B227_SoundDampening(),,, Level.TimeDilation+0.2*FRand());
 }
 
 state NormalFire
@@ -259,7 +259,7 @@ function PlayIdleAnim()
 function PlayPostSelect()
 {
 	PlayAnim('Loading', 1.3, 0.05);
-	Owner.PlaySound(Misc2Sound,, 0.8,,, Level.TimeDilation+0.1*FRand());
+	Owner.PlaySound(Misc2Sound,, 0.8 * B227_SoundDampening(),,, Level.TimeDilation+0.1*FRand());
 }
 
 function PlaySelect()
@@ -269,7 +269,7 @@ function PlaySelect()
 	bCanClientFire = false;
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',1.0,0.0);
-	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8,,, Level.TimeDilation-0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8 * B227_SoundDampening(),,, Level.TimeDilation-0.1*FRand());
 }
 
 defaultproperties

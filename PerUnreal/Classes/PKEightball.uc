@@ -82,13 +82,13 @@ function PlayLoading(float rate, int num)
 {
 	if ( Owner == None )
 		return;
-	Owner.PlaySound(sound'PKloading',, 1,,, Level.TimeDilation);
+	Owner.PlaySound(sound'PKloading',, B227_SoundDampening(),,, Level.TimeDilation);
 	PlayAnim(LoadAnim[num],, 0.05);
 }
 
 function PlayRotating(int num)
 {
-	Owner.PlaySound(sound'PKbarrelmove',, 1,,, Level.TimeDilation);
+	Owner.PlaySound(sound'PKbarrelmove',, B227_SoundDampening(),,, Level.TimeDilation);
 	PlayAnim(RotateAnim[num],, 0.05);
 }
 
@@ -106,7 +106,7 @@ function PlayRFiring(int num)
 		PlaySound(class'PKRocketMk2'.Default.SpawnSound, SLOT_None, 4.0*Pawn(Owner).SoundDampening,,, Level.TimeDilation-0.2*FRand());
                 }
 	else
-	                PlaySound(sound'PKgrenade',SLOT_None,,,, Level.TimeDilation-0.2*FRand());
+	                PlaySound(sound'PKgrenade',SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	if ( bFireLoad && bInstantRocket )
 		PlayAnim(FireAnim[num], 0.54, 0.05);
 	else
@@ -712,7 +712,7 @@ function PlaySelect()
 	bCanClientFire = false;
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',1.0,0.0);
-	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8,,, Level.TimeDilation-0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, 0.8 * B227_SoundDampening(),,, Level.TimeDilation-0.1*FRand());
 }
 
 defaultproperties

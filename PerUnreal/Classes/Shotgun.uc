@@ -202,14 +202,14 @@ function AltFire( float Value )
 
 function PlayFiring()
 {
-	PlaySound(FireSound,SLOT_None,,,, Level.TimeDilation-0.2*FRand());
+	PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	PlayAnim( 'Fire', 0.5, 0.05);
 	bMuzzleFlash++;
 }
 
 function PlayAltFiring()
 {
-	PlaySound(FireSound,SLOT_None,,,, Level.TimeDilation-0.2*FRand());
+	PlaySound(FireSound, SLOT_None, B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 	PlayAnim('Fire', 0.5, 0.05);
 	bMuzzleFlash++;
 }
@@ -227,7 +227,7 @@ function Reload()
 	if ( s != None )
 		s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.2+0.2)*Y + (FRand()*0.3+1.0) * Z)*120);
 
-	PlaySound(CockingSound,, 0.7 + 0.3*FRand(),,, Level.TimeDilation-0.2*FRand());
+	PlaySound(CockingSound,, (0.7 + 0.3*FRand()) * B227_SoundDampening(),,, Level.TimeDilation-0.2*FRand());
 }
 
 function PlayReloading()
@@ -316,7 +316,7 @@ function PlaySelect()
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',0.4,0.0);
 
-	Owner.PlaySound(SelectSound, SLOT_Misc,,,, Level.TimeDilation+0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, B227_SoundDampening(),,, Level.TimeDilation+0.1*FRand());
 }
 
 simulated event RenderOverlays(canvas Canvas)

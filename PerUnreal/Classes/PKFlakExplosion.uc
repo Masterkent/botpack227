@@ -5,8 +5,6 @@ class PKFlakExplosion expands AnimSpriteEffect;
 
 simulated function PostBeginPlay()
 {
-	local actor a;
-
 	Super.PostBeginPlay();
 	if ( Level.NetMode != NM_DedicatedServer )
 	{

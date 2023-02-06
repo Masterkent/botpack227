@@ -138,7 +138,7 @@ function AltFire( float Value )
 function PlayFiring()
 {
 	PlayAnim( 'FireOne', 1.0 );
-	PlaySound(FireSound,,,,, Level.TimeDilation-0.1*FRand());
+	PlaySound(FireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.1*FRand());
 	bMuzzleFlash++;
 
 	Default.MuzzleScale = 0.75 + 1.0 * FRand();
@@ -152,7 +152,7 @@ function PlayFiring()
 function PlayAltFiring()
 {
 	PlayAnim( 'FireOne', 0.9 );
-	PlaySound(FireSound,,,,, Level.TimeDilation-0.1*FRand());
+	PlaySound(FireSound,, B227_SoundDampening(),,, Level.TimeDilation-0.1*FRand());
 	bMuzzleFlash++;
 
 	Default.MuzzleScale = 0.75 + 1.0 * FRand();
@@ -209,7 +209,7 @@ function PlaySelect()
 	bCanClientFire = false;
 	if ( !IsAnimating() || (AnimSequence != 'Select') )
 		PlayAnim('Select',0.4,0.0);
-	Owner.PlaySound(SelectSound, SLOT_Misc,,,, Level.TimeDilation-0.1*FRand());
+	Owner.PlaySound(SelectSound, SLOT_Misc, B227_SoundDampening(),,, Level.TimeDilation-0.1*FRand());
 }
 
 defaultproperties

@@ -178,7 +178,7 @@ function AltFire( float Value )
 
 function PlayFiring()
 {
-  Owner.PlaySound(FireSound);
+  Owner.PlaySound(FireSound,, Pawn(Owner).SoundDampening);
   justfired=true;
   PlayAnim('Fire', 0.5, 0.05);
   bMuzzleFlash++;
@@ -186,7 +186,7 @@ function PlayFiring()
 
 function PlayAltFiring()
 {
-Owner.PlaySound(FireSound);
+Owner.PlaySound(FireSound,, Pawn(Owner).SoundDampening);
 PlayAnim('Fire', 0.2, 0.05);
 bMuzzleFlash++;
 justfired=true;

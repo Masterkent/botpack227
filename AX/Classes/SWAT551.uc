@@ -202,7 +202,7 @@ function Finish()
 ///////////////////////////////////////////////////////
 function PlayFiring()
 {
-	PlaySound(FireSound, SLOT_None);
+	PlaySound(FireSound, SLOT_None, B227_SoundDampening());
 	PlayAnim('Fire1');
       bMuzzleFlash++;
 }
@@ -278,7 +278,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 
 function PlayAltFiring()
 {
-	PlaySound(AltFireSound, SLOT_None);
+	PlaySound(AltFireSound, SLOT_None, B227_SoundDampening());
 	LoopAnim('Fire1',0.4 + 0.4 * FireAdjust,0.05);
 }
 

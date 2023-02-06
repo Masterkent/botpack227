@@ -81,8 +81,6 @@ function PostBeginPlay()
 function float RateSelf( out int bUseAltMode )
 {
 	local float EnemyDist;
-	local bool bRetreating;
-	local vector EnemyDir;
 
 	bUseAltMode = 0;
 
