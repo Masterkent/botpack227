@@ -460,7 +460,7 @@ function B227_SetRightHandedness()
 
 simulated function B227_AdjustHand()
 {
-	if (B227_Handedness == 0 && B227_bAllowCenterView != B227_ShouldAllowCenterView())
+	if (B227_bAllowCenterView != B227_ShouldAllowCenterView())
 	{
 		B227_bAllowCenterView = B227_ShouldAllowCenterView();
 		B227_ClientSetHandedness(B227_Handedness);
@@ -501,7 +501,7 @@ simulated function vector B227_PlayerViewOffset()
 
 simulated function int B227_ViewRotationRoll(int Hand)
 {
-	if (Hand == 0 && B227_bAllowCenterView)
+	if (B227_Handedness == 0 && B227_bAllowCenterView)
 		return 1536 * 2;
 	return super.B227_ViewRotationRoll(Hand);
 }

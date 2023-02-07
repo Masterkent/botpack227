@@ -9,6 +9,7 @@ var(DMMutator) globalconfig bool bLogNonUTInventory;
 var(HUD) globalconfig bool bUseTahomaFonts;
 var(HUD) globalconfig bool bYellowTeamSayMessages;
 var(Misc) globalconfig bool bFixLoaded;
+var(Misc) globalconfig bool bModifyArmorBalance;
 var(Misc) globalconfig bool bModifyPlayerStartLookup;
 var(Misc) globalconfig bool bUDamageModifyDeactivation;
 var(Misc) globalconfig float BotDodgeEndTime;
@@ -29,6 +30,11 @@ var(Weapon) globalconfig bool bUseEnergyAmplifier;
 var(Weapon) globalconfig bool bUseSpriteSmokeTrails;
 var(Weapon) globalconfig float MinigunMuzzleFlashScale;
 
+static function bool ShouldModifyArmorBalance()
+{
+	return default.bEnableExtensions && default.bModifyArmorBalance;
+}
+
 static function bool ShouldModifyProjectilesLighting()
 {
 	return default.bEnableExtensions && default.bModifyProjectilesLighting;
@@ -44,6 +50,7 @@ defaultproperties
 	bUseTahomaFonts=False
 	bYellowTeamSayMessages=True
 	bFixLoaded=True
+	bModifyArmorBalance=True
 	bModifyPlayerStartLookup=True
 	bUDamageModifyDeactivation=True
 	BotDodgeEndTime=0.35

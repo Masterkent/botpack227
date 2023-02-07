@@ -27,7 +27,12 @@ event float BotDesireability( pawn Bot )
 function bool HandlePickupQuery(Inventory Item)
 {
 	if (Item.Class == Class)
-		B227_HandleUTArmors(Pawn(Owner), Item.Charge, 0, 0);
+	{
+		if (class'B227_Config'.static.ShouldModifyArmorBalance())
+			B227_HandleUTArmors(Pawn(Owner), Item.Charge, 0, 0);
+		else
+			B227_RemoveOtherArmors();
+	}
 
 	return super.HandlePickupQuery(Item);
 }
@@ -80,7 +85,10 @@ function PickupFunction(Pawn Other)
 	if (Owner.bHidden || Owner.Style == STY_Translucent)
 		MyEffect.bHidden = true;
 
-	B227_HandleUTArmors(Pawn(Owner), Charge, 0, 0, self);
+	if (class'B227_Config'.static.ShouldModifyArmorBalance())
+		B227_HandleUTArmors(Pawn(Owner), Charge, 0, 0, self);
+	else
+		B227_RemoveOtherArmors();
 }
 
 function SetEffectTexture()
@@ -96,6 +104,15 @@ function SetEffectTexture()
 	if ( TeamTextures[TeamNum] == None )
 		TeamTextures[TeamNum] = Texture(DynamicLoadObject(TeamTextureStrings[TeamNum], class'Texture'));
 	MyEffect.LowDetailTexture = TeamTextures[TeamNum];
+}
+
+function B227_RemoveOtherArmors()
+{
+	local Inventory I;
+
+	for (I = Owner.Inventory; I != none; I = I.Inventory)
+		if (I.bIsAnArmor && I != self)
+			I.Destroy();
 }
 
 defaultproperties

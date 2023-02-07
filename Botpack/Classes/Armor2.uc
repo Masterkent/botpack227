@@ -8,9 +8,23 @@ class Armor2 extends TournamentPickup;
 
 function bool HandlePickupQuery(Inventory Item)
 {
+	local Inventory S;
+
 	if (Item.Class == Class)
 	{
-		Charge = Max(Charge, B227_HandleUTArmors(Pawn(Owner), 0, Item.Charge, 0));
+		if (class'B227_Config'.static.ShouldModifyArmorBalance())
+			Charge = Max(Charge, B227_HandleUTArmors(Pawn(Owner), 0, Item.Charge, 0));
+		else
+		{
+			S = Pawn(Owner).FindInventoryType(class'UT_Shieldbelt');
+			if (S == none)
+			{
+				if (Charge < Item.Charge)
+					Charge = Item.Charge;
+			}
+			else
+				Charge = Clamp(S.default.Charge - S.Charge, Charge, Item.Charge);
+		}
 		if (Level.Game.LocalLog != None)
 			Level.Game.LocalLog.LogPickup(Item, Pawn(Owner));
 		if (Level.Game.WorldLog != None)
@@ -31,12 +45,29 @@ function bool HandlePickupQuery(Inventory Item)
 
 function Inventory SpawnCopy(Pawn Other)
 {
-	local inventory Copy;
+	local Inventory Copy, S;
 
 	Copy = super.SpawnCopy(Other);
-	Copy.Charge = B227_HandleUTArmors(Other, 0, Copy.Charge, 0, Copy);
-	if (Copy.Charge <= 0)
-		Copy.Destroy();
+
+	if (class'B227_Config'.static.ShouldModifyArmorBalance())
+	{
+		Copy.Charge = B227_HandleUTArmors(Other, 0, Copy.Charge, 0, Copy);
+		if (Copy.Charge <= 0)
+			Copy.Destroy();
+	}
+	else
+	{
+		S = Other.FindInventoryType(class'UT_Shieldbelt');
+		if (S != none)
+		{
+			Copy.Charge = Min(Copy.Charge, S.default.Charge - S.Charge);
+			if (Copy.Charge <= 0)
+			{ 
+				S.Charge -= 1;
+				Copy.Charge = 1;
+			}
+		}
+	}
 
 	return Copy;
 }
