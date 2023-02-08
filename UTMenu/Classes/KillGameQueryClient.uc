@@ -79,6 +79,7 @@ function YesPressed()
 	if (SlotWindow != None)
 	{
 		SlotWindow.Saves[SlotIndex] = "";
+		SlotWindow.default.Saves[SlotIndex] = "";
 		SlotWindow.SaveConfig();
 		SlotWindow.SlotButton[SlotIndex].Text = class'SlotWindow'.Default.EmptyText;
 		class'ManagerWindow'.Default.DOMDoorOpen[SlotIndex] = 0;
