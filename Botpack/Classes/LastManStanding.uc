@@ -313,6 +313,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 		GiveWeapon(PlayerPawn, "Botpack.PulseGun");
 		GiveWeapon(PlayerPawn, "Botpack.Minigun2");
 		GiveWeapon(PlayerPawn, "Botpack.UT_Eightball");
+		B227_AdjustGivenWeapons(PlayerPawn);
 		PlayerPawn.SwitchToBestWeapon();
 	}
 	else

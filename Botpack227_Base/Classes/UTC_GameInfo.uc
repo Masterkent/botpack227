@@ -168,6 +168,46 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 	return Result;
 }
 
+function bool RestartPlayer(Pawn aPlayer)
+{
+	local NavigationPoint startSpot;
+	local GameRules GR;
+
+	if ( bRestartLevel && Level.NetMode!=NM_DedicatedServer && Level.NetMode!=NM_ListenServer )
+		return true;
+
+	startSpot = FindPlayerStart(aPlayer.PlayerReplicationInfo.Team);
+
+	for (GR = GameRules; GR != none; GR = GR.NextRules)
+		if (GR.bNotifySpawnPoint)
+			GR.ModifyPlayerStart(aPlayer, startSpot, aPlayer.PlayerReplicationInfo.Team);
+
+	if (startSpot == none)
+		return false;
+
+	if (!aPlayer.SetLocation(startSpot.Location))
+		return false;
+
+	startSpot.PlayTeleportEffect(aPlayer, true);
+	aPlayer.SetRotation(startSpot.Rotation);
+	aPlayer.ViewRotation = aPlayer.Rotation;
+	aPlayer.Acceleration = vect(0,0,0);
+	aPlayer.Velocity = vect(0,0,0);
+	aPlayer.ClientSetLocation(startSpot.Location, startSpot.Rotation); // Don't let touch anything before enabling collision
+	aPlayer.Health = aPlayer.default.Health;
+	aPlayer.SetCollision(true, true, true);
+	aPlayer.bCollideWorld = true;
+	aPlayer.bHidden = false;
+	aPlayer.DamageScaling = aPlayer.default.DamageScaling;
+	aPlayer.SoundDampening = aPlayer.default.SoundDampening;
+	if (aPlayer.FootRegion.Zone.bPainZone)
+		aPlayer.PainTime = 1;
+	else if (aPlayer.HeadRegion.Zone.bWaterZone)
+		aPlayer.PainTime = aPlayer.UnderwaterTime;
+	AddDefaultInventory(aPlayer);
+	return true;
+}
+
 function bool ForceAddBot();
 
 static function bool UTSF_ForceAddBot(GameInfo this)
