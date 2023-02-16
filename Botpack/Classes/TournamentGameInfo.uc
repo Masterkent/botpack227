@@ -72,6 +72,7 @@ event playerpawn Login
 	local string InVoice;
 	local string InSkin, InFace;
 	local byte InTeam;
+	local class<VoicePack> VoicePackMetaClass;
 
 	if ( !bRatedGame )
 	{
@@ -80,7 +81,7 @@ event playerpawn Login
 			OverrideClass = ParseOption ( Options, "OverrideClass" );
 			if ( OverrideClass != "" )
 			{
-				SpecClass = class<PlayerPawn>(DynamicLoadObject(OverrideClass,class'Class'));
+				SpecClass = class<PlayerPawn>(B227_DynamicLoadSharedObject(Level, OverrideClass, class'Class'));
 				if ( (SpecClass != None) && ClassIsChildOf( SpecClass, class'CHSpectator') )
 					SpawnClass = SpecClass;
 			}
@@ -104,11 +105,21 @@ event playerpawn Login
 		{
 			InVoice = ParseOption ( Options, "Voice" );
 			if (InVoice != "")
-				NewPlayer.PlayerReplicationInfo.VoiceType = class<VoicePack>(DynamicLoadObject(InVoice, class'Class'));
+			{
+				NewPlayer.PlayerReplicationInfo.VoiceType = class<VoicePack>(B227_DynamicLoadSharedObject(Level, InVoice, class'Class', true));
+				if (NewPlayer.PlayerReplicationInfo.VoiceType != none &&
+					TournamentPlayer(NewPlayer) != none &&
+					TournamentPlayer(NewPlayer).VoicePackMetaClass != "")
+				{
+					VoicePackMetaClass = class<VoicePack>(DynamicLoadObject(TournamentPlayer(NewPlayer).VoicePackMetaClass, class'Class', true));
+					if (VoicePackMetaClass != none && !ClassIsChildOf(NewPlayer.PlayerReplicationInfo.VoiceType, VoicePackMetaClass))
+						NewPlayer.PlayerReplicationInfo.VoiceType = none;
+				}
+			}
 			if (NewPlayer.PlayerReplicationInfo.VoiceType == none)
 				NewPlayer.PlayerReplicationInfo.VoiceType = class'UTC_PlayerPawn'.static.B227_GetVoiceType(NewPlayer);
 			if (NewPlayer.PlayerReplicationInfo.VoiceType == none)
-				NewPlayer.PlayerReplicationInfo.VoiceType = class<VoicePack>(DynamicLoadObject("Botpack.VoiceMaleOne", class'Class'));
+				NewPlayer.PlayerReplicationInfo.VoiceType = class'VoiceMaleOne';
 
 			InSkin = ParseOption(Options, "Skin");
 			if (InSkin == "")

@@ -1087,12 +1087,34 @@ function AddDefaultInventory( pawn PlayerPawn )
 		B.bHasImpactHammer = (B.FindInventoryType(class'ImpactHammer') != None);
 }
 
-function GiveWeapon(Pawn PlayerPawn, string aClassName)
+function GiveWeapon(Pawn PlayerPawn, string aClassName )
 {
 	local class<Weapon> WeaponClass;
+	local Weapon newWeapon;
 
 	WeaponClass = class<Weapon>(DynamicLoadObject(aClassName, class'Class'));
-	B227_GiveWeapon(PlayerPawn, WeaponClass);
+
+	if (WeaponClass == none || PlayerPawn.FindInventoryType(WeaponClass) != none)
+		return;
+	newWeapon = Spawn(WeaponClass);
+	if( newWeapon != None )
+	{
+		newWeapon.LifeSpan = newWeapon.default.LifeSpan; // prevents destruction when spawning in destructive zones
+		newWeapon.RespawnTime = 0.0;
+		newWeapon.GiveTo(PlayerPawn);
+		newWeapon.bHeldItem = true;
+		newWeapon.GiveAmmo(PlayerPawn);
+		newWeapon.SetSwitchPriority(PlayerPawn);
+		newWeapon.WeaponSet(PlayerPawn);
+		newWeapon.AmbientGlow = 0;
+		if ( PlayerPawn.IsA('PlayerPawn') )
+			newWeapon.SetHand(PlayerPawn(PlayerPawn).Handedness);
+		else
+			newWeapon.GotoState('Idle');
+		PlayerPawn.Weapon.GotoState('DownWeapon');
+		PlayerPawn.PendingWeapon = None;
+		PlayerPawn.Weapon = newWeapon;
+	}
 }
 
 function byte AssessBotAttitude(Bot aBot, Pawn Other)
@@ -1727,32 +1749,40 @@ function B227_GiveWeapon(Pawn Player, class<Weapon> WeaponClass)
 		NewWeapon.bHeldItem = true;
 		NewWeapon.GiveAmmo(Player);
 		NewWeapon.SetSwitchPriority(Player);
-		NewWeapon.WeaponSet(Player);
 		NewWeapon.AmbientGlow = 0;
-		if (PlayerPawn(Player) != none)
-			NewWeapon.SetHand(PlayerPawn(Player).Handedness);
-		else
-			NewWeapon.GotoState('Idle');
-		if (Player.Weapon != none && !Player.Weapon.bDeleteMe && Player.Weapon.GetStateName() != 'DownWeapon')
+		if (Player.Weapon != none && !Player.Weapon.bDeleteMe && !Player.Weapon.IsInState('DownWeapon'))
+		{
+			if (NewWeapon != Player.Weapon)
+				NewWeapon.GotoState('Idle2');
 			Player.Weapon.GotoState('DownWeapon');
-		Player.PendingWeapon = None;
-		Player.Weapon = NewWeapon;
+		}
+		else
+			NewWeapon.GotoState('DownWeapon');
+		Player.PendingWeapon = NewWeapon;
+		Player.Weapon = none;
 	}
 }
 
-function B227_AdjustGivenWeapons(Pawn Player)
+static function B227_SwitchToBestWeapon(Pawn Player)
 {
+	local float rating;
+	local int usealt;
 	local Inventory Inv;
-	local bool bChangedWeapon;
 
+	if (Player.Inventory == none)
+		return;
+
+	Player.PendingWeapon = Player.Inventory.RecommendWeapon(rating, usealt);
+	if (Player.PendingWeapon == none || Player.PendingWeapon.bDeleteMe)
+		return;
+
+	Player.Weapon = none;
 	for (Inv = Player.Inventory; Inv != none; Inv = Inv.Inventory)
-		if (Weapon(Inv) != none && Inv.GetStateName() == 'DownWeapon')
-		{
-			bChangedWeapon = true;
-			Inv.GotoState('');
-		}
-	if (bChangedWeapon)
-		Player.ChangedWeapon();
+		if (Weapon(Inv) != none && Inv != Player.PendingWeapon && Inv.IsInState('DownWeapon'))
+			Inv.GotoState('Idle2');
+
+	if (!Player.PendingWeapon.IsInState('DownWeapon'))
+		Player.PendingWeapon.GotoState('DownWeapon');
 }
 
 defaultproperties

@@ -164,6 +164,33 @@ simulated function SetMesh()
 	Mesh = default.Mesh;
 }
 
+exec function bool SwitchToBestWeapon()
+{
+	return UTSF_SwitchToBestWeapon(self);
+}
+
+static function bool UTSF_SwitchToBestWeapon(Pawn this)
+{
+	local float rating;
+	local int usealt;
+
+	if (this.Inventory == none)
+		return false;
+
+	this.PendingWeapon = this.Inventory.RecommendWeapon(rating, usealt);
+	if (this.PendingWeapon == this.Weapon)
+		this.PendingWeapon = none;
+	if (this.PendingWeapon == none || this.PendingWeapon.bDeleteMe)
+		return false;
+
+	if (this.Weapon == none)
+		this.ChangedWeapon();
+	else if (this.Weapon != this.PendingWeapon)
+		this.Weapon.PutDown();
+
+	return usealt > 0;
+}
+
 // Auxiliary
 
 /* 227j version

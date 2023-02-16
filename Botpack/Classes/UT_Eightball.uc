@@ -341,7 +341,7 @@ function Actor CheckTarget()
 	}
 	else if ( PawnOwner.Enemy == None )
 		return None;
-	else if ( Owner.IsA('Bot') && Bot(Owner).bNovice )
+	else if ( Bot(Owner) != none && Bot(Owner).bNovice )
 		return None;
 	else if ( VSize(PawnOwner.Enemy.Location - PawnOwner.Location) < 2000 )
 	{
@@ -536,6 +536,13 @@ Begin:
 ///////////////////////////////////////////////////////
 state Idle
 {
+	event BeginState()
+	{
+		SetTimer(0, false);
+		LockedTarget = none;
+		bLockedOn = false;
+	}
+
 	function Timer()
 	{
 		NewTarget = CheckTarget();
@@ -898,6 +905,7 @@ state FireRockets
 			return;
 		}
 		LockedTarget = None;
+		bLockedOn = false;
 		Finish();
 	}
 Begin:

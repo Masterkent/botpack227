@@ -111,6 +111,55 @@ function AdminLogout(UTC_PlayerPawn P)
 	}
 }
 
+function AddDefaultInventory(Pawn Player)
+{
+	if (Spectator(Player) != none)
+		return;
+	Player.JumpZ = Player.default.JumpZ * PlayerJumpZScaling();
+	B227_AddPlayerDefaultWeapon(Player);
+	B227_ModifyPlayerWithGameRules(Player);
+}
+
+function B227_AddPlayerDefaultWeapon(Pawn Player)
+{
+	local Weapon NewWeapon, PendingWeapon;
+	local class<Weapon> WeapClass;
+
+	if (DefaultWeapon == none)
+		return;
+
+	WeapClass = BaseMutator.MutatedDefaultWeapon();
+	if (WeapClass == none || Player.FindInventoryType(WeapClass) != none)
+		return;
+	NewWeapon = Spawn(WeapClass,,, Player.Location);
+	if (NewWeapon == none)
+		return;
+	NewWeapon.LifeSpan = NewWeapon.default.LifeSpan; // prevents destruction when spawning in destructive zones
+	NewWeapon.GiveTo(Player);
+	NewWeapon.bHeldItem = true;
+	NewWeapon.GiveAmmo(Player);
+	NewWeapon.SetSwitchPriority(Player);
+	if (Player.Weapon == none && Player.PendingWeapon != none)
+	{
+		PendingWeapon = Player.PendingWeapon;
+		Player.Weapon = PendingWeapon;
+		NewWeapon.WeaponSet(Player);
+		PendingWeapon.bChangeWeapon = false;
+		Player.Weapon = none;
+	}
+	else
+		NewWeapon.WeaponSet(Player);
+}
+
+function B227_ModifyPlayerWithGameRules(Pawn Player)
+{
+	local GameRules GR;
+
+	for (GR = GameRules; GR != none; GR = GR.NextRules)
+		if (GR.bNotifySpawnPoint)
+			GR.ModifyPlayer(Player);
+}
+
 function string KillMessage(name damageType, pawn Other)
 {
 	return UTF_KillMessage(damageType, Other);
@@ -456,6 +505,32 @@ function UTC_GameReplicationInfo B227_GRI()
 function UTC_PlayerReplicationInfo B227_PRI(Pawn P)
 {
 	return UTC_PlayerReplicationInfo(P.PlayerReplicationInfo);
+}
+
+// Tries to load the object only if its package is in the package map or the game is standalone;
+// otherwise returns none
+static function Object B227_DynamicLoadSharedObject(
+	LevelInfo Level,
+	string ObjectName,
+	class ObjectClass,
+	optional bool MayFail)
+{
+	local int i;
+
+	i = InStr(ObjectName, ".");
+	if (i <= 0)
+	{
+		if (!MayFail)
+			Log("B227_DynamicLoadSharedObject: Invalid ObjectName:" $ ObjectName);
+		return none;
+	}
+	if (Level.NetMode != NM_Standalone && !Level.IsInPackageMap(Left(ObjectName, i)))
+	{
+		if (!MayFail)
+			Log("B227_DynamicLoadSharedObject: Failed to load" @ ObjectName $ ": " @ Left(ObjectName, i) @ "is not in the package map");
+		return none;
+	}
+	return DynamicLoadObject(ObjectName, ObjectClass, MayFail);
 }
 
 function string B227_ZoneDeathMessage(Pawn Victim)

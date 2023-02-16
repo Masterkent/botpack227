@@ -338,6 +338,11 @@ exec function Mutate(string MutateString)
 	class'UTC_Mutator'.static.UTSF_Mutate(Level.Game.BaseMutator, MutateString, self);
 }
 
+exec function bool SwitchToBestWeapon()
+{
+	return class'UTC_Pawn'.static.UTSF_SwitchToBestWeapon(self);
+}
+
 state PlayerWalking
 {
 	ignores SeePlayer, HearNoise, Bump;

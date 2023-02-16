@@ -295,7 +295,7 @@ function TimeMessage(int Num)
 
 function SetVoice(class<ChallengeVoicePack> V)
 {
-	PlayerReplicationInfo.VoiceType = V;
+	//-PlayerReplicationInfo.VoiceType = V;
 	UpdateURL("Voice", string(V), True);
 	ServerSetVoice(V);
 }
@@ -714,7 +714,8 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 	if(Pawn(SkinActor) != None)
 	{
 		if(FaceName != "")
-			Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = Texture(DynamicLoadObject(FacePackage$SkinItem$"5"$FaceItem, class'Texture'));
+			Pawn(SkinActor).PlayerReplicationInfo.TalkTexture =
+				Texture(class'UTC_GameInfo'.static.B227_DynamicLoadSharedObject(SkinActor.Level, FacePackage$SkinItem$"5"$FaceItem, class'Texture'));
 		else
 			Pawn(SkinActor).PlayerReplicationInfo.TalkTexture = None;
 	}
@@ -1431,6 +1432,16 @@ state GameEnded
 exec function ShowSpeech()
 {
 	class'B227_SpeechMenu'.static.ShowMenu(self, B227_SpeechMenu);
+}
+
+exec function B227_SetVoice(string VoiceType)
+{
+	local class<ChallengeVoicePack> VoicePackClass;
+
+	if (Len(VoiceType) > 0)
+		VoicePackClass = class<ChallengeVoicePack>(DynamicLoadObject(VoiceType, class'Class', true));
+	if (VoicePackClass != none)
+		SetVoice(VoicePackClass);
 }
 
 function B227_GiveUTArmor(class<TournamentPickup> ArmorClass, bool bIndependent)
