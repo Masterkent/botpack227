@@ -40,7 +40,7 @@ function PlaySpinDown()
 	}
 }
 
-simulated function PlaySelect()
+function PlaySelect()
 {
 	bForceFire = false;
 	bForceAltFire = false;

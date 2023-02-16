@@ -90,13 +90,27 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 {
 	local float dist;
 	local vector Momentum;
+	local float DefaultMass;
+	local vector DeltaEnergy;
+	local vector NewSquareVelocity;
+	local vector NewVelocity;
 
 	GetAxes(Pawn(Owner).viewrotation,X,Y,Z);
 
 	dist = VSize(Location - Other.Location);
 
-	Momentum = -0.5 * Other.Velocity + 1600 * X + 1000 * Z;
-	Momentum.Z = 7000000.0/((0.4 * dist + 350) * Other.Mass);
+	DefaultMass = 100.0;
+	DeltaEnergy = Square(1600) * X;
+	if (Other.Physics == PHYS_Walking || Other.Physics == PHYS_None)
+		DeltaEnergy += Square(1000) * Z;
+	DeltaEnergy *= (DefaultMass / (2 * 9)) * 0.5;
+	NewSquareVelocity = Other.Velocity * VSize(Other.Velocity) + DeltaEnergy * 2 / FMax(1.0, Other.Mass);
+	NewVelocity = Normal(NewSquareVelocity) * Sqrt(VSize(NewSquareVelocity));
+	Momentum = (NewVelocity - Other.Velocity) * Other.Mass;
+	Momentum.Z = FMax(0, Momentum.Z);
+
+	//-Momentum = -0.5 * Other.Velocity + 1600 * X + 1000 * Z;
+	//-Momentum.Z = 7000000.0/((0.4 * dist + 350) * Other.Mass);
 
 	if (Other == Level)
 	{
@@ -106,7 +120,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 	{
 		if ( FRand() < 0.2 )
 			X *= 5;
-		Other.TakeDamage(HitDamage, Pawn(Owner), HitLocation, 3000.0*X, MyDamageType);
+		Other.TakeDamage(HitDamage, Pawn(Owner), HitLocation, Momentum, MyDamageType);
 		if ( !Other.bIsPawn && !Other.IsA('Carcass') )
 		{
 			if ( FRand() < 0.2 )
@@ -115,8 +129,8 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 		}
 		else
 			{
-			Other.Velocity = (Momentum);
-			Other.SetPhysics(PHYS_Falling);
+			//-Other.Velocity = (Momentum);
+			//-Other.SetPhysics(PHYS_Falling);
 			Other.PlaySound(Sound 'ChunkHit',, 4.0,,100);
 			}
 	}
