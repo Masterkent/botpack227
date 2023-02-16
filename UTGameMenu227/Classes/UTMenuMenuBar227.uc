@@ -2,14 +2,23 @@ class UTMenuMenuBar227 expands UMenuMenuBar;
 
 function Created()
 {
+	local GameInfo Game;
 	local string OldGameUMenuType;
+	local string OldGameOptionsMenuType;
 
-	if (GetLevel().Game != none)
+	GameUMenuDefault = "UTGameMenu227.UTGameMenu227";
+	OptionsUMenuDefault = "UTGameMenu227.UTMenuOptionsMenu227";
+
+	Game = GetLevel().Game;
+	if (Game != none)
 	{
-		OldGameUMenuType = GetLevel().Game.default.GameUMenuType;
-		GetLevel().Game.default.GameUMenuType = GameUMenuDefault;
+		OldGameUMenuType = Game.default.GameUMenuType;
+		OldGameOptionsMenuType = Game.default.GameOptionsMenuType;
+		Game.default.GameUMenuType = GameUMenuDefault;
+		Game.default.GameOptionsMenuType = OptionsUMenuDefault;
 		super.Created();
-		GetLevel().Game.default.GameUMenuType = OldGameUMenuType;
+		Game.default.GameUMenuType = OldGameUMenuType;
+		Game.default.GameOptionsMenuType = OldGameOptionsMenuType;
 	}
 	else
 		super.Created();
@@ -18,4 +27,5 @@ function Created()
 defaultproperties
 {
 	GameUMenuDefault="UTGameMenu227.UTGameMenu227"
+	OptionsUMenuDefault="UTGameMenu227.UTMenuOptionsMenu227"
 }

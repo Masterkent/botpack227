@@ -106,14 +106,27 @@ function Created()
 
 	bInitialized = True;
 
-	j = LoadExistingKeys();
+	DesiredHeight = ButtonTop + 45;
+	LoadSettings();
+}
 
+function LoadSettings()
+{
+	local int i, j;
+
+	bSetReady = false;
+
+	j = LoadExistingKeys();
 	for (i=j; i<MaxBindings; i++)
 		TypeChanged(i);
 
-	bSetReady = True;
+	bSetReady = true;
+}
 
-	DesiredHeight = ButtonTop + 45;
+function WindowShown()
+{
+	super.WindowShown();
+	LoadSettings();
 }
 
 function BeforePaint(Canvas C, float X, float Y)
@@ -207,7 +220,7 @@ function int LoadExistingKeys()
 			Alias = GetPlayerOwner().ConsoleCommand( "KEYBINDING "$KeyName );
 			if ( Alias != "" )
 			{
-				pos = InStr(Alias, "speech ");
+				pos = InStr(Locs(Alias), "speech ");
 				if (pos != -1)
 				{
 					BinderButton[j].Text = class'UMenuCustomizeClientWindow'.default.LocalizedKeyName[i];

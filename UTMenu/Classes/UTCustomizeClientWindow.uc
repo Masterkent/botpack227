@@ -1,9 +1,8 @@
-class UTCustomizeClientWindow expands UMenuCustomizeClientWindow;
+class UTCustomizeClientWindow expands UTC_UMenuCustomizeClientWindow;
 
 var int VoiceKeyNumber;
 var int ConsoleKeyNumber;
 
-/*
 function Created()
 {
 	local int i, j;
@@ -61,7 +60,7 @@ function LoadExistingKeys()
 {
 	Super.LoadExistingKeys();
 
-	if(Root.Console.IsA('UTConsole'))
+	if (UTConsole(Root.Console) != none)
 		BoundKey1[VoiceKeyNumber] = UTConsole(Root.Console).SpeechKey;
 
 	BoundKey1[ConsoleKeyNumber] = Root.Console.ConsoleKey;
@@ -69,9 +68,9 @@ function LoadExistingKeys()
 
 function SetKey(int KeyNo, string KeyName)
 {
-	if(Selection == VoiceKeyNumber)
+	if (Selection == VoiceKeyNumber && UTConsole(Root.Console) != none)
 	{
-		if(KeyNo != 1 && KeyNo != 27 && Root.Console.IsA('UTConsole'))
+		if(KeyNo != 1 && KeyNo != 27)
 		{
 			UTConsole(Root.Console).SpeechKey = KeyNo;
 			Root.Console.SaveConfig();
@@ -80,10 +79,9 @@ function SetKey(int KeyNo, string KeyName)
 			BoundKey2[Selection] = 0;
 		}
 	}
-	else
-	if(Selection == ConsoleKeyNumber)
+	else if (Selection == ConsoleKeyNumber)
 	{
-		if(KeyNo != 1 && KeyNo != 27) // LeftMouse, Escape
+		if (KeyNo != 1 && KeyNo != 27) // LeftMouse, Escape
 		{
 			Root.Console.ConsoleKey = KeyNo;
 			Root.Console.SaveConfig();
@@ -94,13 +92,13 @@ function SetKey(int KeyNo, string KeyName)
 	}
 	else
 	{
-		if(KeyNo == Root.Console.ConsoleKey)
+		if (KeyNo == Root.Console.ConsoleKey)
 		{
 			Root.Console.ConsoleKey = 0;
 			Root.Console.SaveConfig();
 			BoundKey1[ConsoleKeyNumber] = 0;
 		}
-		if(Root.Console.IsA('UTConsole') && KeyNo == UTConsole(Root.Console).SpeechKey)
+		if (UTConsole(Root.Console) != none && KeyNo == UTConsole(Root.Console).SpeechKey)
 		{
 			UTConsole(Root.Console).SpeechKey = 0;
 			Root.Console.SaveConfig();
@@ -109,11 +107,11 @@ function SetKey(int KeyNo, string KeyName)
 		Super.SetKey(KeyNo, KeyName);
 	}
 }
-*/
 
-/*-
-	B227: excluded defaultproperties:
-
+defaultproperties
+{
+	VoiceKeyNumber=19
+	ConsoleKeyNumber=53
 	LabelList(0)="Controls,Fire"
 	LabelList(4)="Strafe Left"
 	LabelList(5)="Strafe Right"
@@ -175,7 +173,7 @@ function SetKey(int KeyNo, string KeyName)
 	AliasNames(16)="FeignDeath"
 	AliasNames(17)="Talk"
 	AliasNames(18)="TeamTalk"
-	AliasNames(19)="None"
+	AliasNames(19)="ShowSpeech"
 	AliasNames(20)="taunt thrust"
 	AliasNames(21)="taunt wave"
 	AliasNames(22)="taunt taunt1"
@@ -211,10 +209,4 @@ function SetKey(int KeyNo, string KeyName)
 	AliasNames(52)="ShrinkHUD"
 	AliasNames(53)="None"
 	AliasNames(54)="Type"
-*/
-
-defaultproperties
-{
-	VoiceKeyNumber=19
-	ConsoleKeyNumber=53
 }

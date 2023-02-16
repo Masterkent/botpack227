@@ -145,25 +145,25 @@ function BeforePaint(Canvas C, float X, float Y)
 	CenterWidth = (WinWidth/4)*3;
 	CenterPos = (WinWidth - CenterWidth)/2;
 
-	AutoTauntCheck.SetSize(CenterWidth-90+16, 1);
-	AutoTauntCheck.WinLeft = CenterPos;
+	AutoTauntCheck.SetSize(MessageBeepCheck.WinWidth, 1);
+	AutoTauntCheck.WinLeft = MessageBeepCheck.WinLeft;
 
-	AnnouncerVolumeSlider.SetSize(CenterWidth, 1);
-	AnnouncerVolumeSlider.SliderWidth = 90;
-	AnnouncerVolumeSlider.WinLeft = CenterPos;
+	AnnouncerVolumeSlider.SetSize(SoundVolumeSlider.WinWidth, 1);
+	AnnouncerVolumeSlider.SliderWidth = SoundVolumeSlider.SliderWidth;
+	AnnouncerVolumeSlider.WinLeft = SoundVolumeSlider.WinLeft;
 
-	MessageSettingsCombo.SetSize(CenterWidth, 1);
-	MessageSettingsCombo.WinLeft = CenterPos;
-	MessageSettingsCombo.EditBoxWidth = 90;
+	MessageSettingsCombo.SetSize(SoundVolumeSlider.WinWidth, 1);
+	MessageSettingsCombo.WinLeft = SoundVolumeSlider.WinLeft;
+	MessageSettingsCombo.EditBoxWidth = SoundVolumeSlider.SliderWidth;
 
-	Use3DHardwareCheck.SetSize(CenterWidth-90+16, 1);
-	Use3DHardwareCheck.WinLeft = CenterPos;
+	Use3DHardwareCheck.SetSize(AutoTauntCheck.WinWidth, 1);
+	Use3DHardwareCheck.WinLeft = AutoTauntCheck.WinLeft;
 
-	UseSurroundSoundCheck.SetSize(CenterWidth-90+16, 1);
-	UseSurroundSoundCheck.WinLeft = CenterPos;
+	UseSurroundSoundCheck.SetSize(AutoTauntCheck.WinWidth, 1);
+	UseSurroundSoundCheck.WinLeft = AutoTauntCheck.WinLeft;
 
-	NoMatureLanguageCheck.SetSize(CenterWidth-90+16, 1);
-	NoMatureLanguageCheck.WinLeft = CenterPos;
+	NoMatureLanguageCheck.SetSize(AutoTauntCheck.WinWidth, 1);
+	NoMatureLanguageCheck.WinLeft = AutoTauntCheck.WinLeft;
 }
 
 function Notify(UWindowDialogControl C, byte E)

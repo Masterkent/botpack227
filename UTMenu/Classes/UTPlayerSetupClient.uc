@@ -75,11 +75,10 @@ function LoadCurrent()
 	TeamCombo.SetSelectedIndex(Max(TeamCombo.FindItemIndex2(string(GetPlayerOwner().PlayerReplicationInfo.Team)), 0));
 	if(GetLevel().Game != None && GetLevel().Game.IsA('UTIntro') || GetPlayerOwner().IsA('Commander') || GetPlayerOwner().IsA('Spectator'))
 	{
-		SN = Class'UnrealPlayerMenu'.Default.PreferredSkin; //-GetPlayerOwner().GetDefaultURL("Skin");
-		FN = Class'UnrealPlayerMenu'.Default.PreferredFace; //-GetPlayerOwner().GetDefaultURL("Face");
-		//-ClassCombo.SetSelectedIndex(Max(ClassCombo.FindItemIndex2(GetPlayerOwner().GetDefaultURL("Class"), True), 0));
-		ClassCombo.SetSelectedIndex(Max(ClassCombo.FindItemIndex2(Class'UnrealPlayerMenu'.Default.ClassString, True), 0));
-		//-Voice = GetPlayerOwner().GetDefaultURL("Voice");
+		SN = B227_GetDefaultURL("Skin");
+		FN = B227_GetDefaultURL("Face");
+		ClassCombo.SetSelectedIndex(Max(ClassCombo.FindItemIndex2(B227_GetDefaultURL("Class"), True), 0));
+		Voice = B227_GetDefaultURL("Voice");
 	}
 	else
 	{
@@ -95,7 +94,7 @@ function LoadCurrent()
 	IterateVoices();
 	VoicePackCombo.SetSelectedIndex(Max(VoicePackCombo.FindItemIndex2(Voice, True), 0));
 
-	//-OverrideClassName = GetPlayerOwner().GetDefaultURL("OverrideClass");
+	OverrideClassName = B227_GetDefaultURL("OverrideClass");
 	if(OverrideClassName != "")
 		OverrideClass = class<PlayerPawn>(DynamicLoadObject(OverrideClassName, class'Class'));
 
@@ -279,6 +278,40 @@ function LoadClasses()
 	}
 
 	ClassCombo.Sort();
+}
+
+function string B227_GetDefaultURL(string Key)
+{
+	local bool bGetDefaultURLIsSupported;
+
+	if (int(GetLevel().EngineVersion) == 227 && int(GetLevel().EngineSubVersion) <= 9)
+		bGetDefaultURLIsSupported = false;
+	else
+		bGetDefaultURLIsSupported = DynamicLoadObject("Engine.PlayerPawn.GetDefaultURL", class'Function', true) != none;
+
+	if (bGetDefaultURLIsSupported)
+		return GetPlayerOwner().GetDefaultURL(Key);
+	return B227_GetLocalURLParam(Key);
+}
+
+function string B227_GetLocalURLParam(string Key)
+{
+	local string URL;
+	local int i;
+
+	URL = GetLevel().GetLocalURL();
+	Key = "?" $ Key $ "=";
+
+	i = InStr(Locs(URL), Locs(Key));
+	if (i >= 0)
+	{
+		URL = Mid(URL, i + Len(Key));
+		i = InStr(URL, "?");
+		if (i >= 0)
+			return Left(URL, i);
+		return URL;
+	}
+	return "";
 }
 
 defaultproperties
