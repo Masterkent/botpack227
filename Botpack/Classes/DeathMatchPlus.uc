@@ -82,6 +82,7 @@ var globalconfig bool B227_bMapFixMutator;
 
 var int B227_ElapsedTime; // Actual match time without waiting at startup phase
 var bool B227_bGenderedMessagesSupported;
+var bool B227_bGivePendingWeapons;
 
 function PostBeginPlay()
 {
@@ -1062,7 +1063,9 @@ function AddDefaultInventory( pawn PlayerPawn )
 	// Spawn Automag
 	B227_GiveWeapon(PlayerPawn, class'Enforcer');
 
-	Super.AddDefaultInventory(PlayerPawn);
+	B227_PendingWeaponSwitcher = PlayerPawn.Spawn(class'B227_PendingWeaponSwitcher');
+	super.AddDefaultInventory(PlayerPawn);
+	B227_PendingWeaponSwitcher = none;
 
 	if ( bUseTranslocator && (!bRatedGame || bRatedTranslocator) )
 	{
@@ -1087,12 +1090,18 @@ function AddDefaultInventory( pawn PlayerPawn )
 		B.bHasImpactHammer = (B.FindInventoryType(class'ImpactHammer') != None);
 }
 
-function GiveWeapon(Pawn PlayerPawn, string aClassName )
+function GiveWeapon(Pawn PlayerPawn, string aClassName)
 {
 	local class<Weapon> WeaponClass;
 	local Weapon newWeapon;
 
 	WeaponClass = class<Weapon>(DynamicLoadObject(aClassName, class'Class'));
+
+	if (B227_bGivePendingWeapons)
+	{
+		B227_GiveWeapon(PlayerPawn, WeaponClass);
+		return;
+	}
 
 	if (WeaponClass == none || PlayerPawn.FindInventoryType(WeaponClass) != none)
 		return;
@@ -1750,16 +1759,8 @@ function B227_GiveWeapon(Pawn Player, class<Weapon> WeaponClass)
 		NewWeapon.GiveAmmo(Player);
 		NewWeapon.SetSwitchPriority(Player);
 		NewWeapon.AmbientGlow = 0;
-		if (Player.Weapon != none && !Player.Weapon.bDeleteMe && !Player.Weapon.IsInState('DownWeapon'))
-		{
-			if (NewWeapon != Player.Weapon)
-				NewWeapon.GotoState('Idle2');
-			Player.Weapon.GotoState('DownWeapon');
-		}
-		else
-			NewWeapon.GotoState('DownWeapon');
+		NewWeapon.GotoState('');
 		Player.PendingWeapon = NewWeapon;
-		Player.Weapon = none;
 	}
 }
 
@@ -1767,22 +1768,14 @@ static function B227_SwitchToBestWeapon(Pawn Player)
 {
 	local float rating;
 	local int usealt;
-	local Inventory Inv;
+	local Weapon PendingWeapon;
 
 	if (Player.Inventory == none)
 		return;
 
-	Player.PendingWeapon = Player.Inventory.RecommendWeapon(rating, usealt);
-	if (Player.PendingWeapon == none || Player.PendingWeapon.bDeleteMe)
-		return;
-
-	Player.Weapon = none;
-	for (Inv = Player.Inventory; Inv != none; Inv = Inv.Inventory)
-		if (Weapon(Inv) != none && Inv != Player.PendingWeapon && Inv.IsInState('DownWeapon'))
-			Inv.GotoState('Idle2');
-
-	if (!Player.PendingWeapon.IsInState('DownWeapon'))
-		Player.PendingWeapon.GotoState('DownWeapon');
+	PendingWeapon = Player.Inventory.RecommendWeapon(rating, usealt);
+	if (PendingWeapon != none)
+		Player.PendingWeapon = PendingWeapon;
 }
 
 defaultproperties

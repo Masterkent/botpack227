@@ -302,6 +302,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 		return;
 	Super.AddDefaultInventory(PlayerPawn);
 
+	B227_bGivePendingWeapons = true;
 	GiveWeapon(PlayerPawn, "Botpack.ShockRifle");
 	GiveWeapon(PlayerPawn, "Botpack.UT_BioRifle");
 	GiveWeapon(PlayerPawn, "Botpack.Ripper");
@@ -349,6 +350,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 				GiveWeapon(PlayerPawn, "Botpack.SniperRifle");
 			}
 		}
+		PlayerPawn.ChangedWeapon();
 	}
 
 	for ( inv=PlayerPawn.inventory; inv!=None; inv=inv.inventory )

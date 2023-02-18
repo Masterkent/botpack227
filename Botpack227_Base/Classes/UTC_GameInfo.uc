@@ -13,6 +13,7 @@ var class<LocalMessage> B227_KillerMessageClass;
 // Auxiliary
 // public:
 var Pawn B227_Player; // is used as the first argument for UTF_FindPlayerStart
+var B227_PendingWeaponSwitcher B227_PendingWeaponSwitcher;
 
 // private:
 var private bool B227_bFindPlayerStart_Default;
@@ -139,13 +140,23 @@ function B227_AddPlayerDefaultWeapon(Pawn Player)
 	NewWeapon.bHeldItem = true;
 	NewWeapon.GiveAmmo(Player);
 	NewWeapon.SetSwitchPriority(Player);
-	if (Player.Weapon == none && Player.PendingWeapon != none)
+	if (B227_PendingWeaponSwitcher != none &&
+		!B227_PendingWeaponSwitcher.bDeleteMe &&
+		B227_PendingWeaponSwitcher.Instigator == Player)
 	{
-		PendingWeapon = Player.PendingWeapon;
-		Player.Weapon = PendingWeapon;
-		NewWeapon.WeaponSet(Player);
-		PendingWeapon.bChangeWeapon = false;
-		Player.Weapon = none;
+		if (Player.PendingWeapon != none)
+		{
+			PendingWeapon = Player.PendingWeapon;
+			Player.Weapon = PendingWeapon;
+			NewWeapon.WeaponSet(Player);
+			PendingWeapon.bChangeWeapon = false;
+			Player.Weapon = none;
+		}
+		else
+		{
+			NewWeapon.GotoState('');
+			Player.PendingWeapon = NewWeapon;
+		}
 	}
 	else
 		NewWeapon.WeaponSet(Player);
