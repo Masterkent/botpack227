@@ -22,7 +22,7 @@ var bool bIsSpectator;
 var bool bTournament;
 
 var string MeshName;
-var bool Initialized;
+var bool bUseChangeNotifications;
 var UTMenuPlayerMeshClient227 MeshWindow;
 
 // Player Name
@@ -56,7 +56,6 @@ var localized string ErrorTitle;
 var localized string NoBotpackMessage;
 
 var UWindowCheckbox SpectatorCheck;
-var bool ClassChanging;
 
 var bool bGetDefaultURLIsSupported;
 
@@ -112,10 +111,10 @@ function InitPlayerURLSupport()
 
 function InitPlayerSetup()
 {
-	Initialized = false;
+	bUseChangeNotifications = false;
 	LoadCurrent();
-	UseSelected();
-	Initialized = true;
+	UpdateCurrentMesh();
+	bUseChangeNotifications = true;
 }
 
 function CreateMenuControls()
@@ -228,7 +227,7 @@ function LoadClasses()
 	ClassCombo.Sort();
 }
 
-function GetCurrentPlayerParams()
+function FetchCurrentPlayerParams()
 {
 	local GameInfo Game;
 	local string URLClass;
@@ -283,7 +282,7 @@ function StoreURLPlayerParams()
 	}
 }
 
-function GetGamePlayerParams()
+function FetchGamePlayerParams()
 {
 	CurrentTeam = default.PlayerTeam[int(bTournament)];
 	CurrentClass = default.PlayerClass[int(bTournament)];
@@ -297,9 +296,11 @@ function GetGamePlayerParams()
 		MeshName = GetPlayerOwner().GetItemName(string(CurrentPlayerClass.default.Mesh));
 }
 
+// Fill controls with data matching CurrentTeam, CurrentClass, etc
 function UpdateModelControls()
 {
 	local int i;
+	local bool bFacesAvailable;
 
 	i = ClassCombo.FindItemIndex2(CurrentClass, true);
 
@@ -311,15 +312,17 @@ function UpdateModelControls()
 		if (Len(SkinCombo.GetValue2()) > 0)
 		{
 			SkinCombo.ShowWindow();
-			FaceCombo.ShowWindow();
 			IterateFaces(SkinCombo.GetValue2());
 			FaceCombo.SetSelectedIndex(Max(FaceCombo.FindItemIndex2(CurrentFace, true), 0));
+			bFacesAvailable = Len(FaceCombo.GetValue2()) > 0;
+			if (bFacesAvailable)
+				FaceCombo.ShowWindow();
 		}
 		else
-		{
 			SkinCombo.HideWindow();
+
+		if (!bFacesAvailable)
 			FaceCombo.HideWindow();
-		}
 
 		if (bIsTournamentPlayer ||
 			CurrentPlayerClass != none && GetPlayerOwner().IsA('TournamentPlayer') && Spectator(GetPlayerOwner()) == none)
@@ -352,7 +355,7 @@ function LoadCurrent()
 {
 	NameEdit.SetValue(GetPlayerOwner().PlayerReplicationInfo.PlayerName);
 
-	GetCurrentPlayerParams();
+	FetchCurrentPlayerParams();
 	StoreURLPlayerParams();
 	bTournament = bIsTournamentPlayer;
 	LoadClasses();
@@ -376,13 +379,13 @@ function IterateSkins()
 
 	SkinCombo.Clear();
 
-	if( ClassIsChildOf(CurrentPlayerClass, class'Spectator') )
+	if (ClassIsChildOf(CurrentPlayerClass, class'Spectator'))
 	{
 		SkinCombo.HideWindow();
 		return;
 	}
-	else
-		SkinCombo.ShowWindow();
+
+	SkinCombo.ShowWindow();
 
 	bNewFormat = CurrentPlayerClass.default.bIsMultiSkinned;
 
@@ -426,14 +429,13 @@ function IterateFaces(string InSkinName)
 	FaceCombo.Clear();
 
 	// New format only
-	if( !CurrentPlayerClass.default.bIsMultiSkinned )
+	if (!CurrentPlayerClass.default.bIsMultiSkinned)
 	{
 		FaceCombo.HideWindow();
 		return;
 	}
-	else
-		FaceCombo.ShowWindow();
 
+	FaceCombo.ShowWindow();
 
 	SkinName = "None";
 	TestName = "";
@@ -449,7 +451,7 @@ function IterateFaces(string InSkinName)
 
 		// Multiskin format
 		if( SkinDesc != "")
-		{			
+		{
 			Temp = GetPlayerOwner().GetItemName(SkinName);
 			if(Mid(Temp, 5) != "" && Left(Temp, 4) == GetPlayerOwner().GetItemName(InSkinName))
 				FaceCombo.AddItem(SkinDesc, Left(SkinName, Len(SkinName) - Len(Temp)) $ Mid(Temp, 5));
@@ -464,12 +466,8 @@ function IterateVoices()
 	local int NumVoices;
 	local string NextVoice, NextDesc;
 	local string VoicepackMetaClass;
-	local bool OldInitialized;
 
-	OldInitialized = Initialized;
-	Initialized = False;
 	VoicePackCombo.Clear();
-	Initialized = OldInitialized;
 
 	if (bIsTournamentPlayer)
 		VoicePackMetaClass = GetDefaultObject(CurrentPlayerClass).GetPropertyText("VoicePackMetaClass");
@@ -577,32 +575,37 @@ function Notify(UWindowDialogControl C, byte E)
 	switch(E)
 	{
 	case DE_Change:
-		switch(C)
+		if (bUseChangeNotifications)
 		{
-			case NameEdit:
-				NameChanged();
-				break;
-			case TeamCombo:
-				TeamChanged();
-				break;
-			case GameCombo:
-				GameChanged();
-				break;
-			case SkinCombo:
-				SkinChanged();
-				break;
-			case ClassCombo:
-				ClassChanged();
-				break;
-			case FaceCombo:
-				FaceChanged();
-				break;
-			case VoicePackCombo:
-				VoiceChanged();
-				break;
-			case SpectatorCheck:
-				SpectatorChanged();
-				break;
+			bUseChangeNotifications = false;
+			switch(C)
+			{
+				case NameEdit:
+					NameChanged();
+					break;
+				case TeamCombo:
+					TeamChanged();
+					break;
+				case GameCombo:
+					GameChanged();
+					break;
+				case ClassCombo:
+					ClassChanged();
+					break;
+				case SkinCombo:
+					SkinChanged();
+					break;
+				case FaceCombo:
+					FaceChanged();
+					break;
+				case VoicePackCombo:
+					VoiceChanged();
+					break;
+				case SpectatorCheck:
+					SpectatorChanged();
+					break;
+			}
+			bUseChangeNotifications = true;
 		}
 	}
 }
@@ -610,83 +613,51 @@ function Notify(UWindowDialogControl C, byte E)
 function NameChanged()
 {
 	local string N;
-	if (Initialized)
-	{
-		Initialized = False;
-		N = NameEdit.GetValue();
-		ReplaceText(N, " ", "_");
-		NameEdit.SetValue(N);
-		Initialized = True;
 
-		GetPlayerOwner().ChangeName(NameEdit.GetValue());
-		UpdateURL("Name", NameEdit.GetValue(), True);
-	}
+	N = NameEdit.GetValue();
+	ReplaceText(N, " ", "_");
+	NameEdit.SetValue(N);
+
+	GetPlayerOwner().ChangeName(N);
+	UpdateURL("Name", N, true);
 }
 
 function TeamChanged()
 {
-	if (Initialized)
-		UseSelected();
+	ApplySelectedModel();
 }
 
 function GameChanged()
 {
-	if (Initialized)
+	bTournament = int(GameCombo.GetValue2()) > 0;
+
+	if (bTournament && DynamicLoadObject("Botpack.TournamentPlayer", class'Class') == none)
 	{
-		bTournament = int(GameCombo.GetValue2()) > 0;
+		bTournament = false;
+		MessageBox(ErrorTitle, NoBotpackMessage, MB_OK, MR_OK);
+		GameCombo.SetSelectedIndex(0);
+		return;
+	}
 
-		if (bTournament && DynamicLoadObject("Botpack.TournamentPlayer", class'Class') == none)
-		{
-			bTournament = false;
-			MessageBox(ErrorTitle, NoBotpackMessage, MB_OK, MR_OK);
-			Initialized = false;
-			GameCombo.SetSelectedIndex(0);
-			Initialized = true;
-			return;
-		}
-
-		Initialized = false;
-		LoadClasses();
-		GetGamePlayerParams();
-		if (Len(CurrentClass) == 0)
-		{
-			Initialized = true;
-			ClassCombo.SetSelectedIndex(0);
-			Initialized = false;
-		}
+	LoadClasses();
+	FetchGamePlayerParams();
+	if (Len(CurrentClass) > 0)
+	{
 		UpdateModelControls();
-		Initialized = true;
-
-		UseSelected();
-
-		ClassChanging = true;
-		VoiceChanged();
-		ClassChanging = false;
+		ApplySelectedModel();
+		ApplySelectedVoice(true);
 	}
-}
-
-function SkinChanged()
-{
-	if (Initialized && Len(SkinCombo.GetValue2()) > 0)
+	else
 	{
-		Initialized = false;
-		IterateFaces(SkinCombo.GetValue2());
-		FaceCombo.SetSelectedIndex(0);
-		Initialized = true;
-		UseSelected();
+		ClassCombo.SetSelectedIndex(0);
+		ClassChanged();
 	}
-}
-
-function FaceChanged()
-{
-	if (Initialized)
-		UseSelected();
 }
 
 function ClassChanged()
 {
-	if (!Initialized)
-		return;
+	local bool bSkinsAvailable;
+	local bool bFacesAvailable;
 
 	CurrentClass = ClassCombo.GetValue2();
 
@@ -701,30 +672,23 @@ function ClassChanged()
 		MeshName = GetPlayerOwner().GetItemName(string(CurrentPlayerClass.default.Mesh));
 	if (Len(MeshName) > 0)
 	{
-		Initialized = false;
-
 		IterateSkins();
 		SkinCombo.SetSelectedIndex(0);
 		if (Len(SkinCombo.GetValue2()) > 0)
 		{
+			bSkinsAvailable = true;
 			SkinCombo.ShowWindow();
-			FaceCombo.ShowWindow();
 			IterateFaces(SkinCombo.GetValue2());
 			FaceCombo.SetSelectedIndex(0);
+			bFacesAvailable = Len(FaceCombo.GetValue2()) > 0;
+			if (bFacesAvailable)
+				FaceCombo.ShowWindow();
 		}
-		else
-		{
-			SkinCombo.HideWindow();
-			FaceCombo.HideWindow();
-		}
-
-		Initialized = true;
 	}
-	else
-	{
+	if (!bSkinsAvailable)
 		SkinCombo.HideWindow();
+	if (!bFacesAvailable)
 		FaceCombo.HideWindow();
-	}
 
 	if (Len(MeshName) == 0 && Len(CurrentClass) > 0)
 	{
@@ -733,121 +697,115 @@ function ClassChanged()
 		return;
 	}
 
-	UseSelected();
+	ApplySelectedModel();
 
 	if (bIsTournamentPlayer ||
 		CurrentPlayerClass != none && GetPlayerOwner().IsA('TournamentPlayer') && Spectator(GetPlayerOwner()) == none)
 	{
-		ClassChanging = true;
 		VoicePackCombo.ShowWindow();
 		IterateVoices();
 		VoicePackCombo.SetSelectedIndex(Max(VoicePackCombo.FindItemIndex2(GetDefaultObject(CurrentPlayerClass).GetPropertyText("VoiceType"), True), 0));
-		ClassChanging = false;
+		ApplySelectedVoice(true);
 	}
 	else
 		VoicePackCombo.HideWindow();
 }
 
+function SkinChanged()
+{
+	if (Len(SkinCombo.GetValue2()) > 0)
+	{
+		IterateFaces(SkinCombo.GetValue2());
+		FaceCombo.SetSelectedIndex(0);
+		ApplySelectedModel();
+	}
+}
+
+function FaceChanged()
+{
+	if (Len(FaceCombo.GetValue2()) > 0)
+		ApplySelectedModel();
+}
+
 function VoiceChanged()
 {
-	local class<VoicePack> VoicePackClass;
-	local VoicePack V;
-
-	if (Initialized)
-	{
-		CurrentVoice = VoicePackCombo.GetValue2();
-		if (CurrentVoice != "")
-			VoicePackClass = class<VoicePack>(DynamicLoadObject(CurrentVoice, class'Class'));
-		if (!ClassChanging && VoicePackClass != none)
-		{
-			V = GetPlayerOwner().Spawn(VoicePackClass, GetPlayerOwner(),, GetPlayerOwner().Location);
-			V.ClientInitialize(
-				GetPlayerOwner().PlayerReplicationInfo,
-				GetPlayerOwner().PlayerReplicationInfo,
-				'ACK',
-				Rand(int(V.GetPropertyText("NumAcks"))));
-		}
-
-		UpdateURL("Voice", CurrentVoice, True);
-		default.PlayerVoice[int(bIsTournamentPlayer)] = CurrentVoice;
-		StaticSaveConfig();
-
-		if (GetPlayerOwner().IsA('TournamentPlayer') &&
-			(CurrentClass ~= string(GetPlayerOwner().Class) ||
-				CurrentPlayerClass != none && CurrentPlayerClass.default.Mesh != none && CurrentPlayerClass.default.Mesh == GetPlayerOwner().Mesh))
-		{
-			GetPlayerOwner().ConsoleCommand("B227_SetVoice" @ CurrentVoice);
-		}
-	}
+	ApplySelectedVoice(false);
 }
 
 function SpectatorChanged()
 {
-	if (Initialized)
-		UseSelected();
+	ApplySelectedModel();
 }
 
 
-function UseSelected()
+function ApplySelectedModel()
+{
+	UseSelectedModel();
+	ApplyCurrentModel();
+	UpdateCurrentMesh();
+}
+
+function UseSelectedModel()
+{
+	CurrentTeam = TeamCombo.GetValue2();
+	CurrentClass = ClassCombo.GetValue2();
+	if (Len(CurrentClass) > 0 && SkinCombo.bWindowVisible)
+		CurrentSkin = SkinCombo.GetValue2();
+	else
+		CurrentSkin = "";
+	if (Len(CurrentClass) > 0 && FaceCombo.bWindowVisible)
+		CurrentFace = FaceCombo.GetValue2();
+	else
+		CurrentFace = "";
+
+	SetCurrentPlayerClassFromName(CurrentClass);
+	bIsSpectator = SpectatorCheck.bChecked;
+}
+
+function ApplyCurrentModel()
 {
 	local int NewTeam;
 
-	if (Initialized)
+	default.PlayerTeam[int(bIsTournamentPlayer)] = CurrentTeam;
+	default.PlayerClass[int(bIsTournamentPlayer)] = CurrentClass;
+	default.PlayerSkin[int(bIsTournamentPlayer)] = CurrentSkin;
+	default.PlayerFace[int(bIsTournamentPlayer)] = CurrentFace;
+	default.PlayerVoice[int(bIsTournamentPlayer)] = CurrentVoice;
+	StaticSaveConfig();
+
+	if (SpectatorCheck.bChecked)
 	{
-		CurrentTeam = TeamCombo.GetValue2();
-		CurrentClass = ClassCombo.GetValue2();
-		if (Len(CurrentClass) > 0)
-		{
-			CurrentSkin = SkinCombo.GetValue2();
-			CurrentFace = FaceCombo.GetValue2();
-		}
+		if (bTournament)
+			UpdateURL("Class", "Botpack.CHSpectator", true);
 		else
-		{
-			CurrentSkin = "";
-			CurrentFace = "";
-		}
-
-		SetCurrentPlayerClassFromName(CurrentClass);
-		bIsSpectator = SpectatorCheck.bChecked;
-
-		default.PlayerTeam[int(bIsTournamentPlayer)] = CurrentTeam;
-		default.PlayerClass[int(bIsTournamentPlayer)] = CurrentClass;
-		default.PlayerSkin[int(bIsTournamentPlayer)] = CurrentSkin;
-		default.PlayerFace[int(bIsTournamentPlayer)] = CurrentFace;
-		default.PlayerVoice[int(bIsTournamentPlayer)] = CurrentVoice;
-		StaticSaveConfig();
-
-		if (SpectatorCheck.bChecked)
-		{
-			if (bTournament)
-				UpdateURL("Class", "Botpack.CHSpectator", True);
-			else
-				UpdateURL("Class", string(Class'UnrealSpectator'), True);
-			UpdateURL("Skin", "", True);
-			UpdateURL("Face", "", True);
-			UpdateURL("Team", "", True);
-		}
-		else
-		{
-			UpdateURL("Class", CurrentClass, True);
-			UpdateURL("Skin", CurrentSkin, True);
-			UpdateURL("Face", CurrentFace, True);
-			UpdateURL("Team", CurrentTeam, True);
-		}
-
-		NewTeam = Int(CurrentTeam);
-
-		// if the same class as current class, change skin
-		if (CurrentClass ~= string(GetPlayerOwner().Class) ||
-			CurrentPlayerClass != none && CurrentPlayerClass.default.Mesh != none && CurrentPlayerClass.default.Mesh == GetPlayerOwner().Mesh)
-		{
-			GetPlayerOwner().ServerChangeSkin(SkinCombo.GetValue2(), FaceCombo.GetValue2(), NewTeam);
-		}
-
-		if (GetPlayerOwner().PlayerReplicationInfo.Team != NewTeam)
-			GetPlayerOwner().ChangeTeam(NewTeam);
+			UpdateURL("Class", "UnrealShare.UnrealSpectator", true);
+		UpdateURL("Skin", "", true);
+		UpdateURL("Face", "", true);
+		UpdateURL("Team", "", true);
+	}
+	else
+	{
+		UpdateURL("Class", CurrentClass, true);
+		UpdateURL("Skin", CurrentSkin, true);
+		UpdateURL("Face", CurrentFace, true);
+		UpdateURL("Team", CurrentTeam, true);
 	}
 
+	NewTeam = Int(CurrentTeam);
+
+	// if the same class as current class, change skin
+	if (CurrentClass ~= string(GetPlayerOwner().Class) ||
+		CurrentPlayerClass != none && CurrentPlayerClass.default.Mesh != none && CurrentPlayerClass.default.Mesh == GetPlayerOwner().Mesh)
+	{
+		GetPlayerOwner().ServerChangeSkin(CurrentSkin, CurrentFace, NewTeam);
+	}
+
+	if (GetPlayerOwner().PlayerReplicationInfo.Team != NewTeam)
+		GetPlayerOwner().ChangeTeam(NewTeam);
+}
+
+function UpdateCurrentMesh()
+{
 	if (CurrentPlayerClass != none)
 	{
 		if (bIsTournamentPlayer)
@@ -860,6 +818,37 @@ function UseSelected()
 	}
 	else
 		MeshWindow.SetMesh(none, 1);
+}
+
+function ApplySelectedVoice(bool bClassChanging)
+{
+	local class<VoicePack> VoicePackClass;
+	local VoicePack V;
+
+	if (VoicePackCombo.bWindowVisible)
+		CurrentVoice = VoicePackCombo.GetValue2();
+	if (CurrentVoice != "")
+		VoicePackClass = class<VoicePack>(DynamicLoadObject(CurrentVoice, class'Class'));
+	if (!bClassChanging && VoicePackClass != none)
+	{
+		V = GetPlayerOwner().Spawn(VoicePackClass, GetPlayerOwner(),, GetPlayerOwner().Location);
+		V.ClientInitialize(
+			GetPlayerOwner().PlayerReplicationInfo,
+			GetPlayerOwner().PlayerReplicationInfo,
+			'ACK',
+			Rand(int(V.GetPropertyText("NumAcks"))));
+	}
+
+	UpdateURL("Voice", CurrentVoice, True);
+	default.PlayerVoice[int(bIsTournamentPlayer)] = CurrentVoice;
+	StaticSaveConfig();
+
+	if (GetPlayerOwner().IsA('TournamentPlayer') &&
+		(CurrentClass ~= string(GetPlayerOwner().Class) ||
+			CurrentPlayerClass != none && CurrentPlayerClass.default.Mesh != none && CurrentPlayerClass.default.Mesh == GetPlayerOwner().Mesh))
+	{
+		GetPlayerOwner().ConsoleCommand("B227_SetVoice" @ CurrentVoice);
+	}
 }
 
 function SetCurrentPlayerClass(class<PlayerPawn> PlayerClass)

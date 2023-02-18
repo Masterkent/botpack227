@@ -6,7 +6,7 @@ var const string Version;
 var bool bEnabled;
 var bool bShowedManagerWindow;
 
-function Created() 
+function Created()
 {
 	default.bEnabled = true;
 
@@ -46,6 +46,6 @@ function CloseActiveWindow()
 
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v2.0 [2023-02-16]"
-	Version="2.0"
+	VersionInfo="UTGameMenu227 v2.1 [2023-02-18]"
+	Version="2.1"
 }
