@@ -3,7 +3,7 @@ class UTMenuOptionsClientWindow227 expands UWindowDialogClientWindow;
 var UMenuPageControl Pages;
 var UWindowSmallCloseButton CloseButton;
 
-function Created() 
+function Created()
 {
 	Pages = UMenuPageControl(CreateWindow(class'UMenuPageControl', 0, 0, WinWidth, WinHeight - 48));
 	Pages.SetMultiLine(True);
