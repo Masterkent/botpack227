@@ -401,7 +401,7 @@ function SetOrders(name NewOrders, Pawn OrderGiver, optional bool bNoAck)
 		// set bLeading if have supporters
 		if ( Level.Game.bTeamGame )
 			for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-				if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team) )
+				if ( P.PlayerReplicationInfo != none && (P.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team) )
 				{
 					B = Bot(P);
 					if ( (B != None) && (B.OrderObject == self) && (BotReplicationInfo(B.PlayerReplicationInfo).RealOrders == 'Follow') )
@@ -711,7 +711,7 @@ function CallForHelp()
 	SendTeamMessage(None, 'Other', 4, 15);
 
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-		if ( P.IsA('Bot') && (P.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team) )
+		if ( Bot(P) != none && (P.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team) )
 			P.HandleHelpMessageFrom(self);
 }
 
@@ -822,7 +822,7 @@ function SetPeripheralVision()
 
 function PainTimer()
 {
-	if (Health <= 0)
+	if (Health <= 0 || bDeleteMe)
 		return;
 
 	if (FootRegion.Zone.bPainZone)
@@ -1069,7 +1069,7 @@ function Bump(actor Other)
 			OtherDir.Z = 0;
 			dist = VSize(OtherDir);
 			bDestinationObstructed = ( VSize(OtherDir) < P.CollisionRadius );
-			if ( P.IsA('Bot') )
+			if (Bot(P) != none)
 				bAmLeader = ( Bot(P).DeferTo(self) || (PlayerReplicationInfo.HasFlag != None) );
 
 			// check if someone else is on destination or within 3 * collisionradius
@@ -1080,7 +1080,7 @@ function Bump(actor Other)
 					if ( dist < M.CollisionRadius )
 					{
 						bDestinationObstructed = true;
-						if ( M.IsA('Bot') )
+						if ( Bot(M) != none )
 							bAmLeader = Bot(M).DeferTo(self) || bAmLeader;
 					}
 					if ( dist < 3 * M.CollisionRadius )
@@ -1089,7 +1089,7 @@ function Bump(actor Other)
 						if ( num >= 2 )
 						{
 							bDestinationObstructed = true;
-							if ( M.IsA('Bot') )
+							if ( Bot(M) != none )
 								bAmLeader = Bot(M).DeferTo(self) || bAmLeader;
 						}
 					}
@@ -1859,7 +1859,7 @@ function WarnTarget(Pawn shooter, float projSpeed, vector FireDir)
 	local vector X,Y,Z, enemyDir;
 
 	// AI controlled creatures may duck if not falling
-	if ( (health <= 0) || !bCanDuck || (Enemy == None)
+	if ( (health <= 0 || bDeleteMe) || !bCanDuck || (Enemy == None)
 		|| (Physics == PHYS_Falling) || (Physics == PHYS_Swimming) )
 		return;
 
@@ -2004,7 +2004,7 @@ function eAttitude AttitudeTo(Pawn Other)
 		}
 	}
 
-	if ( Level.Game.bTeamGame && (PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team) )
+	if ( Level.Game.bTeamGame && Other.PlayerReplicationInfo != none && PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team )
 		return ATTITUDE_Friendly; //teammate
 
 	return ATTITUDE_Hate;
@@ -2065,8 +2065,14 @@ function bool SetEnemy( Pawn NewEnemy )
 
 	if (Enemy == NewEnemy)
 		return true;
-	if ( (NewEnemy == Self) || (NewEnemy == None) || (NewEnemy.Health <= 0) || NewEnemy.IsA('FlockPawn') )
+	if (NewEnemy == self ||
+		NewEnemy == none ||
+		NewEnemy.Health <= 0 ||
+		NewEnemy.bDeleteMe ||
+		NewEnemy.IsA('FlockPawn'))
+	{
 		return false;
+	}
 
 	result = false;
 	newAttitude = AttitudeTo(NewEnemy);
@@ -2076,8 +2082,15 @@ function bool SetEnemy( Pawn NewEnemy )
 		if ( Level.TimeSeconds - Friend.LastSeenTime > 5 )
 			return false;
 		NewEnemy = NewEnemy.Enemy;
-		if ( (NewEnemy == None) || (NewEnemy == Self) || (NewEnemy.Health <= 0) || NewEnemy.IsA('FlockPawn') || NewEnemy.IsA('StationaryPawn') )
+		if (NewEnemy == none ||
+			NewEnemy == self ||
+			NewEnemy.Health <= 0 ||
+			NewEnemy.bDeleteMe ||
+			NewEnemy.IsA('FlockPawn') ||
+			NewEnemy.IsA('StationaryPawn'))
+		{
 			return false;
+		}
 		if (Enemy == NewEnemy)
 			return true;
 
@@ -2167,7 +2180,7 @@ function Killed(pawn Killer, pawn Other, name damageType)
 	if ( Killer == self )
 		Other.Health = FMin(Other.Health, -11); // don't let other do stagger death
 
-	if ( Health <= 0 )
+	if ( Health <= 0 || bDeleteMe )
 		return;
 
 	if ( OldEnemy == Other )
@@ -2196,7 +2209,7 @@ function Killed(pawn Killer, pawn Other, name damageType)
 		else
 			GotoState('Attacking');
 	}
-	else if ( Level.Game.bTeamGame && Other.bIsPlayer
+	else if ( Level.Game.bTeamGame && Other.PlayerReplicationInfo != none
 			&& (Other.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team) )
 	{
 		if ( Other == Self )
@@ -2411,7 +2424,7 @@ function Trigger( actor Other, pawn EventInstigator )
 {
 	local Pawn currentEnemy;
 
-	if ( (Other == Self) || (Health <= 0) )
+	if (Other == self || Health <= 0 || bDeleteMe)
 		return;
 	currentEnemy = Enemy;
 	SetEnemy(EventInstigator);
@@ -2503,7 +2516,7 @@ function bool FindAmbushSpot()
 				for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 					if ( P.bIsPlayer && (P.PlayerReplicationInfo != None)
 						&& (P.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team)
-						&& P.IsA('Bot') && (P != self)
+						&& Bot(P) != none && (P != self)
 						&& (Bot(P).Ambushspot == AmbushSpot) )
 							Bot(P).AmbushSpot = None;
 
@@ -2636,7 +2649,7 @@ state Holding
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if ( (Enemy != None) && (Enemy == InstigatedBy) )
 		{
@@ -2717,7 +2730,7 @@ state Hold
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if ( (Enemy != None) && (Enemy == InstigatedBy) )
 		{
@@ -2737,7 +2750,7 @@ state Hold
 	function HandleHelpMessageFrom(Pawn Other)
 	{
 		if ( (Health > 70) && (Weapon != none && Weapon.AIRating > 0.5) && (Other.Enemy != None)
-			&& ((Other.bIsPlayer && (Other.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team)))
+			&& ((Other.PlayerReplicationInfo != none && (Other.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team)))
 			//	|| (Other.IsA('StationaryPawn') && StationaryPawn(Other).SameTeamAs(PlayerReplicationInfo.Team)))
 			&& (VSize(Other.Enemy.Location - Location) < 800) )
 			{
@@ -2948,7 +2961,7 @@ state Roaming
 	function HandleHelpMessageFrom(Pawn Other)
 	{
 		if ( (Health > 70) && (Weapon != none && Weapon.AIRating > 0.5) && (Other.Enemy != None)
-			&& ((Other.bIsPlayer && (Other.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team)))
+			&& ((Other.PlayerReplicationInfo != none && (Other.PlayerReplicationInfo.Team == PlayerReplicationInfo.Team)))
 			//	|| (Other.IsA('StationaryPawn') && StationaryPawn(Other).SameTeamAs(PlayerReplicationInfo.Team)))
 			&& (VSize(Other.Enemy.Location - Location) < 800) )
 		{
@@ -2963,7 +2976,7 @@ state Roaming
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if (NextState == 'TakeHit')
 		{
@@ -3346,9 +3359,15 @@ state Roaming
 				return;
 		}
 
-		if ( (Other.Health <= 0) || Other.PlayerReplicationInfo.bIsSpectator || (VSize(Other.Location - Location) > 1250)
-			|| !LineOfSightTo(Other) )
+		if (Other.Health <= 0 ||
+			Other.bDeleteMe ||
+			Other.PlayerReplicationInfo == none ||
+			Other.PlayerReplicationInfo.bIsSpectator ||
+			VSize(Other.Location - Location) > 1250 ||
+			!LineOfSightTo(Other))
+		{
 			return;
+		}
 
 		//decide who needs it more
 		CampTime = 2.0;
@@ -3598,7 +3617,7 @@ state Wandering
 						Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if ( (Enemy != None) && (Enemy == InstigatedBy) )
 		{
@@ -3851,7 +3870,7 @@ ignores falling, landed;
 			LastSeenTime = Level.TimeSeconds;
 		}
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if (NextState == 'TakeHit')
 		{
@@ -4129,7 +4148,7 @@ ignores EnemyNotVisible;
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if (NextState == 'TakeHit')
 		{
@@ -4556,7 +4575,7 @@ ignores EnemyNotVisible;
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if (NextState == 'TakeHit')
 		{
@@ -4939,7 +4958,7 @@ state Charging
 
 		bWasOnGround = (Physics == PHYS_Walking);
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if (NextState == 'TakeHit')
 		{
@@ -5166,7 +5185,7 @@ state TacticalMove
 						Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if ( NextState == 'TakeHit' )
 		{
@@ -5804,7 +5823,7 @@ ignores EnemyNotVisible;
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		bFrustrated = true;
 		if (NextState == 'TakeHit')
@@ -6248,7 +6267,7 @@ ignores EnemyNotVisible;
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		bFrustrated = true;
 		if (Enemy != none && Enemy == instigatedBy)
@@ -6531,7 +6550,7 @@ state ImpactJumping
 		RealState = NextState;
 		RealLabel = NextLabel;
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if ( (Enemy != None) && (Enemy == InstigatedBy) )
 		{
@@ -6684,6 +6703,9 @@ ignores Bump, Hitwall, WarnTarget;
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
+
+		if (Health < 0 || bDeleteMe)
+			return;
 
 		if (Enemy == None)
 		{
@@ -7018,7 +7040,7 @@ state RangedAttack
 						Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if (NextState == 'TakeHit')
 		{
@@ -7223,7 +7245,7 @@ ignores EnemyNotVisible;
 							Vector momentum, name damageType)
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		SetEnemy(instigatedBy);
 		if ( Enemy == None )
@@ -7397,7 +7419,7 @@ state FindAir
 						Vector momentum, name damageType)
 	{
 		Super.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
-		if ( health <= 0 )
+		if ( health <= 0 || bDeleteMe )
 			return;
 		if ( NextState == 'TakeHit' )
 		{
