@@ -185,9 +185,18 @@ simulated function CheckBeam(vector X, float DeltaTime)
 
 simulated function UpdatePBeam(TvPBolt ParentBolt, vector Dir, vector Loc, float DeltaTime)
 {
+  if (ParentBolt.B227_bHitPortal && class'B227_Config'.static.WarpedBeamOffset() > 0)
+  {
+    PrePivot = default.PrePivot - class'B227_Config'.static.WarpedBeamOffset() * Dir;
+    SetLocation(Loc - (PrePivot - default.PrePivot));
+  }
+  else
+  {
+    PrePivot = default.PrePivot;
+    SetLocation(Loc);
+  }
   SpriteFrame = ParentBolt.SpriteFrame;
   Skin = SpriteAnim[SpriteFrame];
-  SetLocation(Loc);
   SetRotation(rotator(Dir));
   BeamLength = ParentBolt.BeamLength;
   NumHits = ParentBolt.NumHits;

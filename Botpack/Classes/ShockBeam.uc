@@ -55,7 +55,7 @@ simulated function Timer()
 
 	if (NumPuffs>0)
 	{
-		r = Spawn(class'Shockbeam',,,Location+MoveAmount);
+		r = Spawn(class'Shockbeam',,,Location + (PrePivot - default.PrePivot) + MoveAmount);
 		r.RemoteRole = ROLE_None;
 		r.NumPuffs = NumPuffs -1;
 		r.MoveAmount = MoveAmount;

@@ -410,15 +410,16 @@ function vector B227_GetFireStartTrace()
 	return Owner.Location + CalcDrawOffset() + FireOffset.Y * Y + FireOffset.Z * Z;
 }
 
-static function B227_SpawnShockBeam(Actor Spawner, vector BeamLocation, rotator BeamRotation, vector MoveAmount, int NumPuffs)
+static function Actor B227_SpawnShockBeam(Actor Spawner, vector BeamLocation, rotator BeamRotation, vector MoveAmount, int NumPuffs)
 {
 	local ShockBeam Beam;
 
 	Beam = Spawner.Spawn(class'ShockBeam',,, BeamLocation, BeamRotation);
 	if (Beam == none)
-		return;
+		return none;
 	Beam.MoveAmount = MoveAmount;
 	Beam.NumPuffs = NumPuffs;
+	return Beam;
 }
 
 // Auxiliary

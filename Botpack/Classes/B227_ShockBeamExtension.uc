@@ -41,8 +41,17 @@ state Active
 {
 	function SpawnShockBeam()
 	{
+		local Actor Beam;
+
 		if (ShockRifleClass != none)
-			ShockRifleClass.static.B227_SpawnShockBeam(self, Location, Rotation, MoveAmount, NumPuffs);
+		{
+			Beam = ShockRifleClass.static.B227_SpawnShockBeam(self, Location, Rotation, MoveAmount, NumPuffs);
+			if (Beam != none && class'B227_Config'.static.WarpedBeamOffset() > 0)
+			{
+				Beam.PrePivot = Beam.default.PrePivot - vector(Beam.Rotation) * class'B227_Config'.static.WarpedBeamOffset();
+				Beam.SetLocation(Beam.Location - (Beam.PrePivot - Beam.default.PrePivot));
+			}
+		}
 	}
 
 Begin:

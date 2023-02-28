@@ -23,6 +23,7 @@ var(Weapon) globalconfig bool bPulseGunAllowCenterView;
 var(Weapon) globalconfig bool bPulseGunGuideBeam;
 var(Weapon) globalconfig bool bPulseGunHardcoreDamage; // 150% damage in non-deathmatch games
 var(Weapon) globalconfig bool bPulseGunLimitWallEffect;
+var(Weapon) globalconfig bool bShiftWarpedBeams; // Hack-fix for 227j bug - failure to render meshes near portals
 var(Weapon) globalconfig bool bTraceFireThroughWarpZones;
 var(Weapon) globalconfig bool bTranslocatorModuleRecovery;
 var(Weapon) globalconfig bool bUseEmitterSmokeTrails;
@@ -38,6 +39,13 @@ static function bool ShouldModifyArmorBalance()
 static function bool ShouldModifyProjectilesLighting()
 {
 	return default.bEnableExtensions && default.bModifyProjectilesLighting;
+}
+
+static function float WarpedBeamOffset()
+{
+	if (default.bShiftWarpedBeams)
+		return 40.0;
+	return 0.0;
 }
 
 defaultproperties
@@ -64,6 +72,7 @@ defaultproperties
 	bPulseGunGuideBeam=True
 	bPulseGunHardcoreDamage=False
 	bPulseGunLimitWallEffect=True
+	bShiftWarpedBeams=True
 	bTraceFireThroughWarpZones=True
 	bTranslocatorModuleRecovery=False
 	bUseEnergyAmplifier=True

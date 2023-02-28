@@ -72,15 +72,16 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
 		Other.TakeDamage(HitDamage, Pawn(Owner), HitLocation, 60000.0*X, MyDamageType);
 }
 
-static function B227_SpawnShockBeam(Actor Spawner, vector BeamLocation, rotator BeamRotation, vector MoveAmount, int NumPuffs)
+static function Actor B227_SpawnShockBeam(Actor Spawner, vector BeamLocation, rotator BeamRotation, vector MoveAmount, int NumPuffs)
 {
 	local SuperShockBeam Beam;
 
 	Beam = Spawner.Spawn(class'SuperShockBeam',,, BeamLocation, BeamRotation);
 	if (Beam == none)
-		return;
+		return none;
 	Beam.MoveAmount = MoveAmount;
 	Beam.NumPuffs = NumPuffs;
+	return Beam;
 }
 
 defaultproperties
