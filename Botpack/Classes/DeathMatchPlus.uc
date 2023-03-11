@@ -908,7 +908,11 @@ function Bot SpawnBot(out NavigationPoint StartSpot)
 		AddDefaultInventory( NewBot );
 		NumBots++;
 		if ( bRequireReady && (CountDown > 0) )
+		{
 			NewBot.GotoState('Dying', 'WaitingForStart');
+			NewBot.SetCollision(false, false, false);
+			NewBot.SetPhysics(PHYS_None);
+		}
 		NewBot.AirControl = AirControl;
 
 		if ( (Level.NetMode != NM_Standalone) && (bNetReady || bRequireReady) )
@@ -973,7 +977,11 @@ function Bot SpawnRatedBot(out NavigationPoint StartSpot)
 		AddDefaultInventory( NewBot );
 		NumBots++;
 		if ( bRequireReady && (CountDown > 0) )
+		{
 			NewBot.GotoState('Dying', 'WaitingForStart');
+			NewBot.SetCollision(false, false, false);
+			NewBot.SetPhysics(PHYS_None);
+		}
 		NewBot.AirControl = 0.35;
 	}
 

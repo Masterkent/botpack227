@@ -376,6 +376,16 @@ event Possess()
 	}
 
 	Super.Possess();
+
+	if (UTIntro(Level.Game) != none)
+	{
+		if (LadderLoadGame(Level.Game) != none ||
+			LadderNewGame(Level.Game) != none ||
+			LadderTransition(Level.Game) != none)
+		{
+			GotoState('B227_MenuState');
+		}
+	}
 }
 
 function ClientVoiceMessage(PlayerReplicationInfo Sender, PlayerReplicationInfo Recipient, name messagetype, byte messageID)
@@ -1429,6 +1439,24 @@ state GameEnded
 
 
 // U227 additions
+
+state B227_MenuState
+{
+	ignores
+		Died,
+		FootZoneChange,
+		HeadZoneChange,
+		KilledBy,
+		PlayerTick,
+		TakeDamage,
+		ZoneChange;
+
+	event BeginState()
+	{
+		SetPhysics(PHYS_None);
+	}
+}
+
 exec function ShowSpeech()
 {
 	class'B227_SpeechMenu'.static.ShowMenu(self, B227_SpeechMenu);

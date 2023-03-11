@@ -7395,6 +7395,8 @@ TryAgain:
 	Goto('TryAgain');
 WaitingForStart:
 	bHidden = true;
+	SetCollision(false, false, false);
+	SetPhysics(PHYS_None);
 }
 
 state FindAir

@@ -323,7 +323,7 @@ function PlayPostSelect()
 
 function TweenDown()
 {
-	PlaySound(DownSound, SLOT_None, 4.0 * Pawn(Owner).SoundDampening);
+	Owner.PlaySound(DownSound, SLOT_None, 4.0 * Pawn(Owner).SoundDampening);
 	Super.TweenDown();
 	AmbientSound = None;
 }
