@@ -231,6 +231,7 @@ function Server_FixCurrentMap_NP08Hourences()
 
 function Server_FixCurrentMap_NP09Silver()
 {
+	Dispatcher(LoadLevelActor("Dispatcher9")).OutEvents[1] = '';
 	EliminateStaticActor("BlockAll10");
 }
 

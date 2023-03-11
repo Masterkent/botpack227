@@ -88,7 +88,7 @@ function LevelStartupAdjustments()
 	AdjustSpecialerEvents();
 	AdjustWaterToggleZones();
 	AdjustThingFactories();
-	AdjustDecorations();
+	AdjustThrowStuffDecorations();
 	AdjustExplodingEffects();
 	AdjustMusicEvents();
 	AdjustTriggers();
@@ -135,6 +135,18 @@ function AdjustThingFactories()
 		}
 }
 
+function AdjustThrowStuffDecorations()
+{
+	local ThrowStuff ThrowStuff;
+	local Decoration Deco;
+
+	foreach AllActors(class'ThrowStuff', ThrowStuff)
+		if (ThrowStuff.Event != '')
+			foreach AllActors(class'Decoration', Deco, ThrowStuff.Event)
+				if (!Deco.bStatic)
+					Deco.bSimulatedPawnRep = true;
+}
+
 function AdjustDecorations()
 {
 	local Decoration Deco;
@@ -145,6 +157,23 @@ function AdjustDecorations()
 			Deco.bCollideWorld = false;
 			Deco.bMovable = false;
 			Deco.SetPhysics(PHYS_None);
+		}
+}
+
+function ReplaceMasterCreatureChunks()
+{
+	local MasterCreatureChunk Chunk;
+	local CreatureChunks NewChunk;
+
+	foreach AllActors(class'MasterCreatureChunk', Chunk)
+		if (Chunk.RemoteRole == ROLE_SimulatedProxy && Chunk.bDecorative)
+		{
+			NewChunk = Chunk.Spawn(class'CreatureChunks',, Chunk.Tag);
+			NewChunk.bDecorative = true;
+			NewChunk.DrawScale = Chunk.DrawScale;
+			NewChunk.Mesh = Chunk.Mesh;
+			NewChunk.Skin = Chunk.Skin;
+			Chunk.Destroy();
 		}
 }
 
@@ -1075,15 +1104,22 @@ function AdjustRealCrouchInfo(Actor A)
 	A.RemoteRole = ROLE_SimulatedProxy;
 }
 
+auto state MutatorState
+{
+Begin:
+	AdjustDecorations();
+	ReplaceMasterCreatureChunks();
+}
+
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.22";
+	return "ONPCoopMutator v5.23";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.22 [2023-01-28]"
-	Version="5.22"
+	VersionInfo="ONPCoopMutator v5.23 [2023-03-11]"
+	Version="5.23"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True

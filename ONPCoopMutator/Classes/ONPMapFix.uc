@@ -423,6 +423,8 @@ function Server_FixCurrentMap_NP08Hourences()
 
 function Server_FixCurrentMap_NP09Silver()
 {
+	Dispatcher(LoadLevelActor("Dispatcher9")).OutEvents[1] = '';
+
 	// allows players to reuse the lift
 	LoadLevelMover("Mover1").bTriggerOnceOnly = false;
 	LoadLevelTrigger("Trigger5").bTriggerOnceOnly = false;
@@ -469,6 +471,12 @@ function Server_FixCurrentMap_NP13DrPest()
 	{
 		P.Health = P.default.Health;
 		Spawn(class'ONPPhantomPawnAdjustment').ControlledPawn = P;
+	}
+
+	if (!MutatorPtr.bUseONPSpeech)
+	{
+		Dispatcher(LoadLevelActor("Dispatcher9")).OutDelays[1] = 0;
+		Dispatcher(LoadLevelActor("Dispatcher10")).OutDelays[1] = 4;
 	}
 }
 
@@ -780,7 +788,6 @@ function Server_FixCurrentMap_ONP_map08DisposalX()
 function Server_FixCurrentMap_ONP_map09SurfaceX()
 {
 	SetNamedTriggerPawnClassProximity("Trigger6");
-	LoadLevelActor("MaleBodyThree20").bSimulatedPawnRep = true;
 	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
 	LoadLevelActor("Trigger23").Tag = '';
 	CreatureFactory(LoadLevelActor("CreatureFactory0")).bCovert = false;

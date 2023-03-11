@@ -30,7 +30,6 @@ function bool RemoveDuplicatedMutator()
 function LevelStartupAdjustments()
 {
 	Level.Game.bAlwaysEnhancedSightCheck = false;
-	AdjustDecorations();
 	AdjustExplodingEffects();
 	AdjustMusicEvents();
 	AdjustTriggers();
@@ -144,14 +143,20 @@ function AddGameRules()
 		Level.Game.GameRules.AddRules(GR);
 }
 
+auto state MutatorState
+{
+Begin:
+	AdjustDecorations();
+}
+
 function string GetHumanName()
 {
-	return "ONPSPFix v1.17";
+	return "ONPSPFix v1.18";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.17 [2023-01-28]"
-	Version="1.17"
+	VersionInfo="ONPSPFix v1.18 [2023-03-11]"
+	Version="1.18"
 	bPreventFallingOutOfWorld=True
 }
