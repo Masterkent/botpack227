@@ -442,20 +442,22 @@ exec function Loaded()
 	if ( DM == None )
 		return;
 
-	DM.GiveWeapon(self, "Botpack.PulseGun");
-	DM.GiveWeapon(self, "Botpack.ShockRifle");
-	DM.GiveWeapon(self, "Botpack.UT_FlakCannon");
-	DM.GiveWeapon(self, "Botpack.UT_BioRifle");
-	DM.GiveWeapon(self, "Botpack.Minigun2");
-	DM.GiveWeapon(self, "Botpack.SniperRifle");
-	DM.GiveWeapon(self, "Botpack.Ripper");
-	DM.GiveWeapon(self, "Botpack.UT_Eightball");
+	DM.B227_GiveWeapon(self, class'Botpack.PulseGun');
+	DM.B227_GiveWeapon(self, class'Botpack.ShockRifle');
+	DM.B227_GiveWeapon(self, class'Botpack.UT_FlakCannon');
+	DM.B227_GiveWeapon(self, class'Botpack.UT_BioRifle');
+	DM.B227_GiveWeapon(self, class'Botpack.Minigun2');
+	DM.B227_GiveWeapon(self, class'Botpack.SniperRifle');
+	DM.B227_GiveWeapon(self, class'Botpack.Ripper');
+	DM.B227_GiveWeapon(self, class'Botpack.UT_Eightball');
+	if (PendingWeapon != none)
+		ChangedWeapon();
 
 	for ( inv=inventory; inv!=None; inv=inv.inventory )
 	{
 		weap = Weapon(inv);
 		if ( (weap != None) && (weap.AmmoType != None) )
-			weap.AmmoType.AmmoAmount = weap.AmmoType.MaxAmmo;
+			weap.AmmoType.AmmoAmount = Max(weap.AmmoType.AmmoAmount, weap.AmmoType.MaxAmmo);
 	}
 
 	B227_GiveUTArmor(class'Armor2', !class'B227_Config'.default.bFixLoaded);

@@ -262,7 +262,7 @@ function PlaySpinDown()
 	if ( (Mesh != PickupViewMesh) && (Owner != None) )
 	{
 		PlayAnim('Spindown', 1.0, 0.0);
-		PlaySound(DownSound, SLOT_None, 1.0 * Pawn(Owner).SoundDampening);
+		Owner.PlaySound(DownSound, SLOT_None, 1.0 * Pawn(Owner).SoundDampening);
 	}
 }
 

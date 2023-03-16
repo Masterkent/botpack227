@@ -212,13 +212,13 @@ Begin:
 function PlayReloading()
 {
 	PlayAnim('Loading',0.7, 0.05);
-	PlaySound(CockingSound, SLOT_None, 0.5 * Pawn(Owner).SoundDampening);
+	Owner.PlaySound(CockingSound, SLOT_None, 0.5 * Pawn(Owner).SoundDampening);
 }
 
 function PlayFastReloading()
 {
 	PlayAnim('Loading',1.4, 0.05);
-	PlaySound(CockingSound, SLOT_None, 0.5 * Pawn(Owner).SoundDampening);
+	Owner.PlaySound(CockingSound, SLOT_None, 0.5 * Pawn(Owner).SoundDampening);
 }
 
 /* Weapon's client states are removed in this conversion
@@ -346,7 +346,7 @@ function PlayIdleAnim()
 function PlayPostSelect()
 {
 	PlayAnim('Loading', 1.3, 0.05);
-	PlaySound(Misc2Sound, SLOT_None, 1.3 * Pawn(Owner).SoundDampening);
+	Owner.PlaySound(Misc2Sound, SLOT_None, 1.3 * Pawn(Owner).SoundDampening);
 }
 
 defaultproperties

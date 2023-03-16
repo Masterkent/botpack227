@@ -1062,7 +1062,6 @@ function float PlayerJumpZScaling()
 
 function AddDefaultInventory( pawn PlayerPawn )
 {
-	local Weapon NewWeapon;
 	local Bot B;
 
 	if ( PlayerPawn.IsA('Spectator') || (bRequireReady && (CountDown > 0)) )
@@ -1076,22 +1075,7 @@ function AddDefaultInventory( pawn PlayerPawn )
 	B227_PendingWeaponSwitcher = none;
 
 	if ( bUseTranslocator && (!bRatedGame || bRatedTranslocator) )
-	{
-		// Spawn Translocator.
-		if( PlayerPawn.FindInventoryType(class'Translocator')==None )
-		{
-			newWeapon = Spawn(class'Translocator');
-			if( newWeapon != None )
-			{
-				newWeapon.Instigator = PlayerPawn;
-				newWeapon.BecomeItem();
-				PlayerPawn.AddInventory(newWeapon);
-				newWeapon.GiveAmmo(PlayerPawn);
-				newWeapon.SetSwitchPriority(PlayerPawn);
-				newWeapon.WeaponSet(PlayerPawn);
-			}
-		}
-	}
+		B227_GiveWeapon(PlayerPawn, class'Translocator', true);
 
 	B = Bot(PlayerPawn);
 	if ( B != None )
@@ -1751,9 +1735,10 @@ function int B227_TimeLimitSeconds()
 	return TimeLimit * 60;
 }
 
-function B227_GiveWeapon(Pawn Player, class<Weapon> WeaponClass)
+function B227_GiveWeapon(Pawn Player, class<Weapon> WeaponClass, optional bool bSwitchIfBetter)
 {
 	local Weapon NewWeapon;
+	local Weapon CurrentWeapon;
 
 	if (WeaponClass == none || Player.FindInventoryType(WeaponClass) != none)
 		return;
@@ -1768,7 +1753,13 @@ function B227_GiveWeapon(Pawn Player, class<Weapon> WeaponClass)
 		NewWeapon.SetSwitchPriority(Player);
 		NewWeapon.AmbientGlow = 0;
 		NewWeapon.GotoState('');
-		Player.PendingWeapon = NewWeapon;
+
+		if (Player.PendingWeapon != none)
+			CurrentWeapon = Player.PendingWeapon;
+		else
+			CurrentWeapon = Player.Weapon;
+		if (!bSwitchIfBetter || CurrentWeapon == none || CurrentWeapon.SwitchPriority() < NewWeapon.SwitchPriority())
+			Player.PendingWeapon = NewWeapon;
 	}
 }
 

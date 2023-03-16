@@ -82,13 +82,13 @@ function PlayLoading(float rate, int num)
 {
 	if ( Owner == None )
 		return;
-	PlaySound(CockingSound, SLOT_None, Pawn(Owner).SoundDampening);
+	Owner.PlaySound(CockingSound, SLOT_None, Pawn(Owner).SoundDampening);
 	PlayAnim(LoadAnim[num],, 0.05);
 }
 
 function PlayRotating(int num)
 {
-	PlaySound(Misc3Sound, SLOT_None, 0.1 * Pawn(Owner).SoundDampening);
+	Owner.PlaySound(Misc3Sound, SLOT_None, 0.1 * Pawn(Owner).SoundDampening);
 	PlayAnim(RotateAnim[num],, 0.05);
 }
 
