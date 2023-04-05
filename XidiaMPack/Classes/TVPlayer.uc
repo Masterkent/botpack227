@@ -53,6 +53,7 @@ var bool bDec;
 const AverageChange = 23;
 const drunkclamp = 13;
 
+var globalconfig bool B227_bNoDrunkenness;
 var CodeConsoleWindow B227_CodeConsoleWindow;
 
 //STATE PLAYERSHIP: This is a state which simulates the player flying a ship.
@@ -385,7 +386,7 @@ function DoJump( optional float F )
 
 event UpdateEyeHeight (float DeltaTime){
   Super.UpdateEyeHeight(DeltaTime);
-  if (4*Health>=default.Health){
+  if (B227_bNoDrunkenness || 4*Health>=default.Health){
     DrunkLevel=0;
   }
   else{
@@ -1548,7 +1549,7 @@ state PlayerWalking
     EyeHeight = EyeHeight * ( 1 - smooth) + (BaseEyeHeight + ShakeVert) * smooth;
   }
   //player "drunkenness" if under 25% health
-  if (4*Health>=default.Health){
+  if (B227_bNoDrunkenness || 4*Health>=default.Health){
     DrunkLevel=0;
   }
   else{

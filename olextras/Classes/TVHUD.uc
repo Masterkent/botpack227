@@ -64,6 +64,7 @@ var bool NoZBufHack;
 var float M3, M4, M5, M9, M11, M64, M113, M128, M245;
 
 var globalconfig bool B227_bVerticalScaling;
+var globalconfig float B227_MaxHorizontalScalingAspectRatio;
 var globalconfig float B227_UpscaleHUD;
 
 var int B227_CanvasScaleSupport;
@@ -239,6 +240,9 @@ simulated function DrawWeaponIcon(Canvas Canvas, texture Icon, int Pos, byte Mod
 
   if (default.B227_bVerticalScaling)
     XOffset = FMax(0, Canvas.SizeX - Canvas.SizeY * 4 / 3) / 2;
+  else if (default.B227_MaxHorizontalScalingAspectRatio >= 1.0)
+    XOffset = FMax(0, Canvas.SizeX - Canvas.SizeY * default.B227_MaxHorizontalScalingAspectRatio) / 2;
+
   Canvas.SetPos(XOffset + Pos*M128,canvas.clipy-M64*(Mode%2+1));
   Xl=Canvas.CurX;
   Yl=Canvas.CurY;
@@ -1646,6 +1650,8 @@ static function float B227_ScaledScreenWidth(Canvas Canvas)
 {
 	if (default.B227_bVerticalScaling)
 		return FMin(Canvas.SizeX, Canvas.SizeY * 4 / 3);
+	if (default.B227_MaxHorizontalScalingAspectRatio >= 1.0)
+		return FMin(Canvas.SizeX, Canvas.SizeY * default.B227_MaxHorizontalScalingAspectRatio);
 	return Canvas.SizeX;
 }
 
@@ -1660,7 +1666,10 @@ function B227_InitUpscale(Canvas Canvas)
 		Canvas.PushCanvasScale(CanvasScale, true);
 	}
 	else if (B227_CanvasScaleSupport == 0)
+	{
 		B227_CanvasScaleSupport = int(DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none) * 2 - 1;
+		B227_InitUpscale(Canvas);
+	}
 }
 
 function B227_ResetUpscale(Canvas Canvas)
@@ -1674,5 +1683,6 @@ defaultproperties
      NormalStyle=STY_Normal
      HUDConfigWindowType="olextras.tvhudconfig"
      Texture=None
+     B227_MaxHorizontalScalingAspectRatio=1.78
      B227_UpscaleHUD=1.0
 }

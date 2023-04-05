@@ -75,6 +75,7 @@ const drunkclamp = 13;
 //for minigun:
 var bool bForceWalk;
 
+var globalconfig bool B227_bNoDrunkenness;
 var CodeConsoleWindow B227_CodeConsoleWindow;
 
 //STATE PLAYERSHIP: This is a state which simulates the player flying a ship.
@@ -421,7 +422,7 @@ function ClientDrunk(float DrunkTime){ //set how long client is drunk
 event UpdateEyeHeight (float DeltaTime){
   Super.UpdateEyeHeight(DeltaTime);
   DrunkTimer-=DeltaTime;
-	if (DrunkTimer<=0){
+  if (B227_bNoDrunkenness || DrunkTimer<=0){
     DrunkTimer=0;
     DrunkLevel=0;
   }
@@ -444,7 +445,8 @@ event UpdateEyeHeight (float DeltaTime){
 //drunk code:
 function UTF_PlayHit(float Damage, vector HitLocation, name damageType, vector Momentum)
 {
-	Super.UTF_PlayHit(Damage,HitLocation,damageType,Momentum);
+  super.UTF_PlayHit(Damage, HitLocation, damageType, Momentum);
+
   if ( (Damage <= 0) && (ReducedDamageType != 'All') )
     return;
   //check for special types
@@ -1610,8 +1612,8 @@ state PlayerWalking
     EyeHeight = EyeHeight * ( 1 - smooth) + (BaseEyeHeight + ShakeVert) * smooth;
   }
   //player drunkedness code
-	DrunkTimer-=DeltaTime;
-	if (DrunkTimer<=0){
+  DrunkTimer-=DeltaTime;
+  if (B227_bNoDrunkenness || DrunkTimer<=0){
     DrunkTimer=0;
     DrunkLevel=0;
   }

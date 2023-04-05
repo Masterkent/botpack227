@@ -1375,7 +1375,10 @@ function B227_InitUpscale(Canvas Canvas)
 		Canvas.PushCanvasScale(CanvasScale, true);
 	}
 	else if (B227_CanvasScaleSupport == 0)
+	{
 		B227_CanvasScaleSupport = int(DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none) * 2 - 1;
+		B227_InitUpscale(Canvas);
+	}
 }
 
 function B227_ResetUpscale(Canvas Canvas)
