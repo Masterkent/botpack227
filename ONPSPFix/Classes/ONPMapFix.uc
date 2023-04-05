@@ -189,8 +189,13 @@ simulated function FixLightEffects()
 
 function Server_FixCurrentMap_NP02DavidM()
 {
+	local ScriptedPawn Pawn;
 	local Trigger Trigger;
 	local ONPPlayerMoveTrigger MoveTrigger;
+
+	Pawn = ScriptedPawn(LoadLevelActor("SkaarjScout0"));
+	Pawn.AttitudeToPlayer = ATTITUDE_Ignore;
+	Pawn.bHateWhenTriggered = true;
 
 	Trigger = LoadLevelTrigger("Trigger3");
 	MoveTrigger = class'ONPPlayerMoveTrigger'.static.StaticReplaceTrigger(Trigger);
