@@ -5,6 +5,12 @@ class RelicRegenInventory expands RelicInventory;
 var vector InstFog;
 var float InstFlash;
 
+replication
+{
+	reliable if (Role == ROLE_Authority)
+		B227_PlayRegenSound;
+}
+
 state Activated
 {
 	function Timer()
@@ -17,7 +23,7 @@ state Activated
 				FlashShell(0.3);
 				if (PlayerPawn(Owner) != none)
 				{
-					class'UTC_PlayerPawn'.static.UTSF_ClientPlaySound(PlayerPawn(Owner), sound'RegenHiss', false);
+					B227_PlayRegenSound();
 					PlayerPawn(Owner).ClientInstantFlash(InstFlash, InstFog);
 				}
 			}
@@ -37,6 +43,15 @@ state Activated
 		SetTimer(0.0, False);
 		Super.EndState();
 	}
+}
+
+simulated function B227_PlayRegenSound()
+{
+	local int i;
+
+	if (PlayerPawn(Owner) != none)
+		for (i = 0; i < 4; ++i)
+			Owner.PlaySound(sound'RegenHiss', SLOT_None, 16.0);
 }
 
 defaultproperties

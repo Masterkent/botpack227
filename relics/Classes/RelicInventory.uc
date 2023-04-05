@@ -229,6 +229,11 @@ exec function TossRelic()
 	DropInventory();
 }
 
+function class<Actor> B227_RelicsVersionClass()
+{
+	return class'B227_relics_Version'; // makes class B227_relics_Version loaded
+}
+
 defaultproperties
 {
      ShellSkin=FireTexture'UnrealShare.Belt_fx.ShieldBelt.RedShield'
