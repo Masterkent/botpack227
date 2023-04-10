@@ -266,6 +266,8 @@ simulated function Client_FixCurrentMap()
 		Client_FixCurrentMap_NP05Heiko();
 	else if (CurrentMap ~= "NP09Silver")
 		Client_FixCurrentMap_NP09Silver();
+	else if (CurrentMap ~= "NP13DrPest")
+		Client_FixCurrentMap_NP13DrPest();
 	else if (CurrentMap ~= "ONP-map22TransferX")
 		Client_FixCurrentMap_ONP_map22TransferX();
 	else if (CurrentMap ~= "ONP-map26EBE")
@@ -478,6 +480,18 @@ function Server_FixCurrentMap_NP13DrPest()
 		Dispatcher(LoadLevelActor("Dispatcher9")).OutDelays[1] = 0;
 		Dispatcher(LoadLevelActor("Dispatcher10")).OutDelays[1] = 4;
 	}
+}
+
+simulated function Client_FixCurrentMap_NP13DrPest()
+{
+	local Texture Texture;
+
+	Texture = Texture(DynamicLoadObject(Outer.Name $ "." $ "geilekabelkurz", class'Texture', true));
+	if (Texture != none)
+		Texture.bTransparent = true;
+	Texture = Texture(DynamicLoadObject(Outer.Name $ "." $ "geilekabellang", class'Texture', true));
+	if (Texture != none)
+		Texture.bTransparent = true;
 }
 
 function Server_FixCurrentMap_NP14MClaneDrPest()

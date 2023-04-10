@@ -168,7 +168,9 @@ simulated function Client_FixCurrentMap()
 
 	CurrentMap = string(Outer.Name);
 
-	if (CurrentMap ~= "ONP-map22TransferX")
+	if (CurrentMap ~= "NP13DrPest")
+		Client_FixCurrentMap_NP13DrPest();
+	else if (CurrentMap ~= "ONP-map22TransferX")
 		Client_FixCurrentMap_ONP_map22TransferX();
 }
 
@@ -260,6 +262,18 @@ function Server_FixCurrentMap_NP13DrPest()
 		P.Health = P.default.Health;
 		Spawn(class'ONPPhantomPawnAdjustment').ControlledPawn = P;
 	}
+}
+
+simulated function Client_FixCurrentMap_NP13DrPest()
+{
+	local Texture Texture;
+
+	Texture = Texture(DynamicLoadObject(Outer.Name $ "." $ "geilekabelkurz", class'Texture', true));
+	if (Texture != none)
+		Texture.bTransparent = true;
+	Texture = Texture(DynamicLoadObject(Outer.Name $ "." $ "geilekabellang", class'Texture', true));
+	if (Texture != none)
+		Texture.bTransparent = true;
 }
 
 function Server_FixCurrentMap_NP14MClaneDrPest()
@@ -698,17 +712,17 @@ function Server_FixCurrentMap_ONP_map40Boss()
 
 simulated function Actor LoadLevelActor(string ActorName, optional bool bMayFail)
 {
-	return Actor(DynamicLoadObject(outer.name $ "." $ ActorName, class'Actor', bMayFail));
+	return Actor(DynamicLoadObject(Outer.Name $ "." $ ActorName, class'Actor', bMayFail));
 }
 
 simulated function Mover LoadLevelMover(string MoverName)
 {
-	return Mover(DynamicLoadObject(outer.name $ "." $ MoverName, class'Mover'));
+	return Mover(DynamicLoadObject(Outer.Name $ "." $ MoverName, class'Mover'));
 }
 
 function Trigger LoadLevelTrigger(string TriggerName)
 {
-	return Trigger(DynamicLoadObject(outer.name $ "." $ TriggerName, class'Trigger'));
+	return Trigger(DynamicLoadObject(Outer.Name $ "." $ TriggerName, class'Trigger'));
 }
 
 function MakeMoverTriggerableOnceOnly(string MoverName, optional bool bProtect)
@@ -756,7 +770,7 @@ function AssignInitialState(Actor A, name StateName)
 function DisablePlayerStart(string PlayerStartName)
 {
 	local PlayerStart ps;
-	ps = PlayerStart(DynamicLoadObject(outer.name $ "." $ PlayerStartName, class'PlayerStart'));
+	ps = PlayerStart(DynamicLoadObject(Outer.Name $ "." $ PlayerStartName, class'PlayerStart'));
 	ps.bSinglePlayerStart = False;
 	ps.bCoopStart = False;
 }
@@ -765,7 +779,7 @@ function DisableTeleporter(string TeleporterName)
 {
 	local Teleporter telep;
 
-	telep = Teleporter(DynamicLoadObject(outer.name $ "." $ TeleporterName, class'Teleporter'));
+	telep = Teleporter(DynamicLoadObject(Outer.Name $ "." $ TeleporterName, class'Teleporter'));
 	telep.SetCollision(false);
 	telep.DrawType = DT_None;
 	telep.URL = "";

@@ -156,7 +156,7 @@ function string GetHumanName()
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.19 [2023-04-05]"
+	VersionInfo="ONPSPFix v1.19 [2023-04-10]"
 	Version="1.19"
 	bPreventFallingOutOfWorld=True
 }

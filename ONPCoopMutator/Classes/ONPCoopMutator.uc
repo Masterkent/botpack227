@@ -1113,13 +1113,13 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.23";
+	return "ONPCoopMutator v5.24";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.23 [2023-03-11]"
-	Version="5.23"
+	VersionInfo="ONPCoopMutator v5.24 [2023-04-10]"
+	Version="5.24"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True
