@@ -28,7 +28,9 @@ var config bool               //yawn....
     bshield,
     bUseDecals, //more specifically blood decals :P
     PermaDecals, //permanent decals.
-    B227_PermaCarcasses;
+    B227_bCheckReplacement,
+    B227_bModifyAmmoPickupSound,
+    B227_bPermaCarcasses;
 //non-config options (for save game hack):
 var bool   oBioRifle,
     oASMD,
@@ -192,6 +194,9 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
   // set bSuperRelevant to false if want the gameinfo's super.IsRelevant() function called
   // to check on relevancy of this actor.
 
+  if (!B227_bCheckReplacement)
+    return true;
+
   //weaps...
 if (other.isa('transporter')){   //OSA 2.2 transport fix.
 hack=spawn(class'transhack',,other.tag,other.location);
@@ -243,7 +248,7 @@ scriptedpawn(other).RangedProjectile=Class'olSlithProjectile';
 else if (scriptedpawn(other).RangedProjectile==Class'Unreali.warlordrocket')
 scriptedpawn(other).RangedProjectile=Class'oldskool.olwarlordrocket';  }
 //if (busedecals||level.netmode!=nm_standalone)
-if (B227_PermaCarcasses &&
+if (B227_bPermaCarcasses &&
 	class<CreatureCarcass>(ScriptedPawn(Other).CarcassType) != none &&
 	ScriptedPawn(Other).CarcassType == ScriptedPawn(Other).default.CarcassType)
 {
@@ -460,7 +465,8 @@ if ( Other.IsA('Weapon') )            //set up decal/network weapons.....
   //ammo
   if ( Other.IsA('Ammo'))                           //ammo sets for correct item place.......
   {
-    if (string(Ammo(Other).PickupSound)~="UnrealShare.Pickups.AmmoSnd")
+    if (string(Ammo(Other).PickupSound)~="UnrealShare.Pickups.AmmoSnd" &&
+        B227_bModifyAmmoPickupSound)
     {          //fix up this stuff.....
       Ammo(Other).PickupSound=Sound'BotPack.Pickups.AmmoPick';
       //- Ammo(Other).bClientAnim=True;
@@ -815,6 +821,11 @@ static function string B227_DifficultyString(byte Difficulty)
 	return string(Difficulty);
 }
 
+function class<Actor> B227_VersionClass()
+{
+	return class'B227_oldskool_Version'; // makes class B227_oldskool_Version loaded
+}
+
 defaultproperties
 {
      bmini=True
@@ -824,5 +835,7 @@ defaultproperties
      UnAir=True
      spymessage(0)="Monster viewing cheat enabled."
      spymessage(1)="Monster viewing cheat disabled."
-     B227_PermaCarcasses=True
+     B227_bCheckReplacement=True
+     B227_bModifyAmmoPickupSound=True
+     B227_bPermaCarcasses=True
 }
