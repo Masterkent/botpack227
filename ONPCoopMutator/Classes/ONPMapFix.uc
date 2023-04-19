@@ -87,6 +87,8 @@ function Server_FixCurrentMap_ONP()
 {
 	if (CurrentMap ~= "NP02DavidM")
 		Server_FixCurrentMap_NP02DavidM();
+	else if (CurrentMap ~= "NP04Hyperion")
+		Server_FixCurrentMap_NP04Hyperion();
 	else if (CurrentMap ~= "NP05Heiko")
 		Server_FixCurrentMap_NP05Heiko();
 	else if (CurrentMap ~= "NP06Heiko")
@@ -326,6 +328,11 @@ function Server_FixCurrentMap_NP02DavidM()
 		Trigger.Event = 'toggle_biglift';
 		Trigger.ReTriggerDelay = 0;
 	}
+}
+
+function Server_FixCurrentMap_NP04Hyperion()
+{
+	InterpolateSpecialEvent("SpecialEvent10");
 }
 
 function Server_FixCurrentMap_NP05Heiko()
@@ -1122,6 +1129,7 @@ function Server_FixCurrentMap_ONP_map14Mine()
 	LoadLevelMover("Mover1").StayOpenTime = 4;
 	SetNamedTriggerPawnClassProximity("Trigger2");
 	SetNamedTriggerPawnClassProximity("Trigger16");
+	InterpolateSpecialEvent("SpecialEvent10");
 	MakeMessageEventFor("SpecialEvent45");
 }
 
@@ -1471,6 +1479,11 @@ function MakeLocalMessageEventFor(string SpecialEventName)
 	SpecialEvent = SpecialEvent(LoadLevelActor(SpecialEventName));
 	if (SpecialEvent != none)
 		SpecialEvent.bBroadcast = false;
+}
+
+function InterpolateSpecialEvent(string SpecialEventName)
+{
+	class'ONPInterpolateSpecialEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
 }
 
 simulated function EliminateStaticActor(string ActorName)

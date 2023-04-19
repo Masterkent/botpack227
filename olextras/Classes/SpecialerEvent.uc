@@ -35,6 +35,8 @@ event BroadcastSayMessage( coerce string Msg, float time, pawn EventInstigator)
 }
 function Trigger( actor Other, pawn EventInstigator )
 {
+  local string InterpolatedMessage;
+
   if (Message=="")
     return;
   if (MyMessageType=='Say'&&Sound!=none){
@@ -49,12 +51,22 @@ function Trigger( actor Other, pawn EventInstigator )
       return;
     }
   }
+
+  if (InStr(Message, "%k") >= 0)
+  {
+    if (EventInstigator == none || Len(EventInstigator.GetHumanName()) == 0)
+      return;
+    InterpolatedMessage = ReplaceStr(Message, "%k", EventInstigator.GetHumanName());
+  }
+  else
+    InterpolatedMessage = Message;
+
   if( bBroadcast )
-    BroadcastMessage(Message, true, MyMessageType); // Broadcast message to all players.
-  else if( EventInstigator!=None && len(Message)!=0 )
+    BroadcastMessage(InterpolatedMessage, true, MyMessageType); // Broadcast message to all players.
+  else if( EventInstigator!=None && len(InterpolatedMessage)!=0 )
   {
     // Send message to instigator only.
-    EventInstigator.ClientMessage( Message,MyMessageType );
+    EventInstigator.ClientMessage( InterpolatedMessage, MyMessageType );
   }
 }
 

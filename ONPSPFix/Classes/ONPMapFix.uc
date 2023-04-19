@@ -31,6 +31,8 @@ function Server_FixCurrentMap_ONP()
 {
 	if (CurrentMap ~= "NP02DavidM")
 		Server_FixCurrentMap_NP02DavidM();
+	else if (CurrentMap ~= "NP04Hyperion")
+		Server_FixCurrentMap_NP04Hyperion();
 	else if (CurrentMap ~= "NP05Heiko")
 		Server_FixCurrentMap_NP05Heiko();
 	else if (CurrentMap ~= "NP06Heiko")
@@ -204,6 +206,11 @@ function Server_FixCurrentMap_NP02DavidM()
 	MoveTrigger.bNoReenter = true;
 
 	LoadLevelMover("Mover48").MoverEncroachType = ME_IgnoreWhenEncroach;
+}
+
+function Server_FixCurrentMap_NP04Hyperion()
+{
+	InterpolateSpecialEvent("SpecialEvent10");
 }
 
 function Server_FixCurrentMap_NP05Heiko()
@@ -582,6 +589,7 @@ function Server_FixCurrentMap_ONP_map14Mine()
 	LoadLevelMover("Mover1").StayOpenTime = 4;
 	SetNamedTriggerPawnClassProximity("Trigger2");
 	SetNamedTriggerPawnClassProximity("Trigger16");
+	InterpolateSpecialEvent("SpecialEvent10");
 }
 
 function Server_FixCurrentMap_ONP_map16Dam()
@@ -783,6 +791,11 @@ function DisableTeleporter(string TeleporterName)
 	telep.SetCollision(false);
 	telep.DrawType = DT_None;
 	telep.URL = "";
+}
+
+function InterpolateSpecialEvent(string SpecialEventName)
+{
+	class'ONPInterpolateSpecialEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
 }
 
 simulated function EliminateStaticActor(string ActorName)
