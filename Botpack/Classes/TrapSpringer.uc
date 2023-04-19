@@ -79,11 +79,14 @@ event float BotDesireability( pawn Bot )
 	for ( j=0; j<trapnum; j++ )
 		if ( Trap[j] != None )
 		{
-			if ( Trap[j].IsA('ZoneInfo') )
+			if ( ZoneInfo(Trap[j]) != none )
 			{
-				for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-					if ( (P.Region.Zone == Trap[j]) && FoundTrapTarget(Bot, P) )
-						return CalcDesire(Bot, P);
+				if (B227_IsActiveTrapZone(ZoneInfo(Trap[j])))
+				{
+					for ( P=Level.PawnList; P!=None; P=P.NextPawn )
+						if ( (P.Region.Zone == Trap[j]) && FoundTrapTarget(Bot, P) )
+							return CalcDesire(Bot, P);
+				}
 			}
 			else if ( Trap[j].bBlockActors || Trap[j].bBlockPlayers )
 			{
@@ -173,6 +176,13 @@ Begin:
 	BecomePickup();
 
 Dropped:
+}
+
+static function bool B227_IsActiveTrapZone(ZoneInfo Zone)
+{
+	if (PressureZone(Zone) != none)
+		return !PressureZone(Zone).bTriggered;
+	return true;
 }
 
 defaultproperties

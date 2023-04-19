@@ -29,80 +29,31 @@ event ActorEntered( actor Other )
 		P = Pawn(Other);
 
 		// Maybe scream?
-		if( P.bIsPlayer )
+		if (P.bIsPlayer &&
+			Spectator(P) == none &&
+			P.PlayerReplicationInfo != none &&
+			!P.PlayerReplicationInfo.bIsSpectator &&
+			P.Health > 0)
 		{
 			// Scream now (from the terrible pain)
 			P.PlaySound( P.Die, SLOT_Talk );
 		}
 
-		Enable('Tick');
+		if (Spectator(P) == none)
+			class'B227_VacuumZoneInfluence'.static.GetInstance(P, self, true);
 	}
 }
 
 function Tick( float DeltaTime )
 {
-	local float  		ratio, curScale;
-	local vector 		curFog;
-	local PlayerPawn	pPawn;
-	local Pawn P;
-	local bool bActive;
-	local int OldFatness;
-
-	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-	{
-		// Ensure player hasn't been dispatched through other means already (suicide?)
-		if( (P.Region.Zone == self) && (P.Health > 0) )
-		{
-			ratio = FMax(0.01,float(Max(P.Fatness,128) - P.Default.Fatness)/FMax(1,(255 - P.Default.Fatness)));
-			ratio += DeltaTime/KillTime;
-			bActive = true;
-			// Fatness
-			OldFatness = P.Fatness;
-			P.Fatness = Max(P.Fatness,128) + Max(1, ratio * (255 - P.Default.Fatness) - (P.Fatness - P.Default.Fatness));
-			if ( P.Fatness < Max(OldFatness,P.Default.Fatness) )
-				P.Fatness = 255;
-
-			// Fog & Field of view
-			pPawn = PlayerPawn(P);
-			if( pPawn != None )
-			{
-				curScale = (EndFlashScale-StartFlashScale)*ratio + StartFlashScale;
-				curFog   = (EndFlashFog  -StartFlashFog  )*ratio + StartFlashFog;
-				pPawn.ClientFlash( curScale, 1000 * curFog );
-
-				pPawn.SetFOVAngle( (DieFOV-pPawn.default.FOVAngle)*ratio + pPawn.default.FOVAngle);
-			}
-			if ( P.Fatness > 250 )
-			{
-				B227_AdjustDamageString();
-				Level.Game.SpecialDamageString = DamageString;
-				P.TakeDamage
-				(
-					10000,
-					none,
-					P.Location,
-					Vect(0,0,0),
-					DamageType
-				);
-				Level.Game.SpecialDamageString = "";
-				MakeNormal(P);
-			}
-		}
-	}
-
-	if( !bActive )
-		Disable('Tick');
+	// B227: pawns are updated in B227_VacuumZoneInfluence
 }
 
 function MakeNormal(Pawn P)
 {
-	local PlayerPawn PPawn;
 	// set the fatness back to normal
 	P.Fatness = P.Default.Fatness;
 	P.DrawScale = P.Default.DrawScale;
-	PPawn = PlayerPawn(P);
-	if( PPawn != None )
-		PPawn.SetFOVAngle( PPawn.Default.FOVAngle );
 }
 
 // When an actor leaves this zone.

@@ -251,7 +251,7 @@ function CheckEndGame()
 function ScoreKill(pawn Killer, pawn Other)
 {
 	Other.DieCount++;
-	if (Other.PlayerReplicationInfo.Score > 0)
+	if (Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.Score > 0)
 		Other.PlayerReplicationInfo.Score -= 1;
 	if( (killer != Other) && (killer != None) )
 		killer.killCount++;

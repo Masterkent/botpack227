@@ -14,7 +14,7 @@ function Actor SpecialHandling(Pawn Other)
 		return self;
 	B = Bot(Other);
 
-	if ( (B.MyTranslocator == None) || (B.MyTranslocator.TTarget != None) )
+	if ( B == none || (B.MyTranslocator == None) || (B.MyTranslocator.TTarget != None) )
 		return None;
 
 	B.TranslocateToTarget(self);

@@ -202,9 +202,9 @@ function Translocate()
 
 	Start = Pawn(Owner).Location;
 	TTarget.SetCollision(false,false,false);
-	if ( Pawn(Owner).SetLocation(Dest) )
+	if (!Owner.bInterpolating && Pawn(Owner).SetLocation(Dest))
 	{
-		if ( !Owner.Region.Zone.bWaterZone )
+		if (!Owner.Region.Zone.bWaterZone && (Owner.Physics == PHYS_Walking || Owner.Physics == PHYS_None))
 			Owner.SetPhysics(PHYS_Falling);
 		if ( TTarget.Disrupted() )
 		{

@@ -465,6 +465,8 @@ function bool SwitchToBestWeapon()
 // ASMD combo move
 function SpecialFire()
 {
+	if (Weapon == none)
+		return;
 	bComboPaused = true;
 	SpecialPause = 0.75 + VSize(Target.Location - Location)/Weapon.AltProjectileSpeed;
 	NextState = 'Attacking';
@@ -1404,16 +1406,23 @@ function bool NearWall(float walldist)
 function FireWeapon()
 {
 	local bool bUseAltMode;
-	local Weapon MyAutomag;
+	//-local Weapon MyAutomag;
 
 	if ( (Enemy == None) && bShootSpecial )
 	{
-		//fake use automag
-		MyAutomag = Weapon(FindInventoryType(class'Enforcer'));
-		if ( MyAutoMag == None )
-			Spawn(class'PlasmaSphere',,, Location,Rotator(Target.Location - Location));
-		else
-			MyAutoMag.TraceFire(0);
+		if (Health > 0 && LineOfSightTo(Target) && B227_IsUsableInstantHitWeapon(Weapon))
+		{
+			if (Weapon.bInstantHit)
+				Weapon.Fire(1.0);
+			else
+				Weapon.AltFire(1.0);
+		}
+		//- //fake use automag
+		//- MyAutomag = Weapon(FindInventoryType(class'Enforcer'));
+		//- if ( MyAutoMag == None )
+		//- 	Spawn(class'PlasmaSphere',,, Location,Rotator(Target.Location - Location));
+		//- else
+		//- 	MyAutoMag.TraceFire(0);
 
 		return;
 	}
@@ -7290,7 +7299,8 @@ Begin:
 
 state GameEnded
 {
-ignores SeePlayer, EnemyNotVisible, HearNoise, TakeDamage, Died, Bump, Trigger, HitWall, HeadZoneChange, FootZoneChange, ZoneChange, Falling, WarnTarget, PainTimer;
+ignores SeePlayer, EnemyNotVisible, HearNoise, TakeDamage, Died, Bump, Trigger, HitWall, HeadZoneChange, FootZoneChange, ZoneChange, Falling, WarnTarget, PainTimer,
+	FireWeapon, SetOrders;
 
 	function SpecialFire()
 	{
@@ -7577,6 +7587,17 @@ function bool B227_PickWallAdjust()
 	}
 
 	return PickWallAdjust();
+}
+
+static function bool B227_IsUsableInstantHitWeapon(Weapon Weapon)
+{
+	if (Weapon != none && !Weapon.bDeleteMe &&
+		(Weapon.bInstantHit || Weapon.bAltInstantHit) &&
+		(Weapon.AmmoType == none || Weapon.AmmoType.AmmoAmount > 0))
+	{
+		return true;
+	}
+	return false;
 }
 
 defaultproperties

@@ -318,7 +318,7 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 			{
 				if (Killer.Weapon != none)
 					KillerWeapon = Killer.Weapon.ItemName;
-				BroadcastMessage( ParseKillMessage(
+				BroadcastMessage( B227_ParseKillMessage(
 						Killer.GetHumanName(),
 						Other.GetHumanName(),
 						KillerWeapon,
@@ -337,11 +337,11 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 			{
 				if (Other.Weapon != none)
 					OtherWeapon = Other.Weapon.ItemName;
-				BroadcastMessage( ParseKillMessage(
+				BroadcastMessage( B227_ParseKillMessage(
 						Other.GetHumanName(),
 						Other.GetHumanName(),
 						OtherWeapon,
-						ReplaceStr(SpecialDamageString, "%o", "%k")
+						SpecialDamageString
 						),
 					false, 'DeathMessage');
 			}
@@ -513,7 +513,7 @@ function UTC_GameReplicationInfo B227_GRI()
 	return UTC_GameReplicationInfo(GameReplicationInfo);
 }
 
-function UTC_PlayerReplicationInfo B227_PRI(Pawn P)
+static function UTC_PlayerReplicationInfo B227_PRI(Pawn P)
 {
 	return UTC_PlayerReplicationInfo(P.PlayerReplicationInfo);
 }
@@ -542,6 +542,17 @@ static function Object B227_DynamicLoadSharedObject(
 		return none;
 	}
 	return DynamicLoadObject(ObjectName, ObjectClass, MayFail);
+}
+
+static function string B227_ParseKillMessage(string KillerName, string VictimName, string WeaponName, string DeathMessage)
+{
+	if (InStr(DeathMessage, "%k") >= 0)
+		DeathMessage = ReplaceStr(DeathMessage, "%k", KillerName);
+	if (InStr(DeathMessage, "%o") >= 0)
+		DeathMessage = ReplaceStr(DeathMessage, "%o", VictimName);
+	if (InStr(DeathMessage, "%w") >= 0)
+		DeathMessage = ReplaceStr(DeathMessage, "%w", WeaponName);
+	return DeathMessage;
 }
 
 function string B227_ZoneDeathMessage(Pawn Victim)

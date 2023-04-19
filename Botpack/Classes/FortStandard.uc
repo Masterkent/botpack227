@@ -33,7 +33,7 @@ function PostBeginPlay()
 {
 	local NavigationPoint N;
 
-	if ( !Level.Game.IsA('Assault') )
+	if (Assault(Level.Game) == none)
 	{
 		Destroy();
 		return;
@@ -64,21 +64,19 @@ function String GetHumanName()
 function Destroyed()
 {
 	Super.Destroyed();
-	if ( Level.Game.IsA('Assault') )
+	if (Assault(Level.Game) != none)
 		Assault(Level.Game).RemoveFort(self, instigator);
 }
 
 function Touch( Actor Other )
 {
-	if ( bTriggerOnly && Other.bIsPawn && Pawn(Other).bIsPlayer
-		&& (Pawn(Other).PlayerReplicationInfo.Team != Assault(Level.Game).Defender.TeamIndex) )
+	if (bTriggerOnly && Other.bIsPawn && B227_IsAttackerPawn(Pawn(Other)))
 		DestroyFort(Pawn(Other));
 }
 
 function Trigger( actor Other, pawn EventInstigator )
 {
-	if ( EventInstigator.bIsPlayer
-		&& (EventInstigator.PlayerReplicationInfo.Team != Assault(Level.Game).Defender.TeamIndex) )
+	if (B227_IsAttackerPawn(EventInstigator))
 		DestroyFort(EventInstigator);
 }
 
@@ -89,7 +87,7 @@ function DestroyFort(pawn InstigatedBy)
 	SetTimer(0.0, false);
 	Health = Default.Health;
 	AmbientSound = None;
-	if ( FallBackFort != '' )
+	if ( FallBackFort != '' && Assault(Level.Game) != none )
 		Assault(Level.Game).FallBackTo(FallBackFort, DefensePriority);
 
 	if ( Event != '' )
@@ -104,8 +102,7 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 {
 	local Actor A;
 
-	if ( bTriggerOnly || (instigatedBy == None)
-		 || (instigatedBy.bIsPlayer && (instigatedBy.PlayerReplicationInfo.Team == Assault(Level.Game).Defender.TeamIndex)) )
+	if (bTriggerOnly || !B227_IsAttackerPawn(instigatedBy))
 		return;
 	Health -= Damage;
 	if ( (Defender != None) && (Defender.Health > 0)
@@ -143,6 +140,15 @@ function Timer()
 		LightType = LT_Steady;
 		PlaySound(sound'ControlSound');
 	}
+}
+
+function bool B227_IsAttackerPawn(Pawn Pawn)
+{
+	if (Pawn == none || Pawn.bDeleteMe || !Pawn.bIsPlayer)
+		return false;
+	if (Assault(Level.Game) == none)
+		return true;
+	return Assault(Level.Game).B227_IsAttackerPawn(Pawn);
 }
 
 defaultproperties

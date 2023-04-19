@@ -385,7 +385,7 @@ function RemoveFort(FortStandard F, Pawn instigator)
 function Killed(pawn killer, pawn Other, name damageType)
 {
 	Super.Killed(killer, Other, damageType);
-	if ( (Other == Leader[Other.PlayerReplicationInfo.Team]) && Other.IsA('Bot') )
+	if (Bot(Other) != none && Other.PlayerReplicationInfo != none && Other == Leader[Other.PlayerReplicationInfo.Team])
 		ElectNewLeaderFor(Bot(Other));
 }
 
@@ -1076,6 +1076,16 @@ function int B227_TimeLimitSeconds()
 	if (SavedTime > 0)
 		return SavedTime;
 	return super.B227_TimeLimitSeconds();
+}
+
+function bool B227_IsAttackerPawn(Pawn Pawn)
+{
+	return Pawn != none && !Pawn.bDeleteMe && Pawn.PlayerReplicationInfo != none && Pawn.PlayerReplicationInfo.Team == Attacker.TeamIndex;
+}
+
+function bool B227_IsDefenderPawn(Pawn Pawn)
+{
+	return Pawn != none && !Pawn.bDeleteMe && Pawn.PlayerReplicationInfo != none && Pawn.PlayerReplicationInfo.Team == Defender.TeamIndex;
 }
 
 defaultproperties

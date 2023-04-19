@@ -1455,6 +1455,8 @@ state B227_MenuState
 
 	event BeginState()
 	{
+		if (ViewTarget != none)
+			SetLocation(ViewTarget.Location);
 		SetPhysics(PHYS_None);
 	}
 }

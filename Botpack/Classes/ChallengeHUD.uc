@@ -799,7 +799,7 @@ simulated function DrawWeapons(Canvas Canvas)
 				Canvas.CurX = WeaponX;
 				Canvas.CurY = BaseY + 52 * WeapScale;
 				Canvas.DrawColor = BaseColor;
-				AmmoScale = FClamp(88.0 * WeapScale * WeaponSlot[i].AmmoType.AmmoAmount/WeaponSlot[i].AmmoType.MaxAmmo, 0, 88);
+				AmmoScale = 88.0 * WeapScale * FClamp(WeaponSlot[i].AmmoType.AmmoAmount / FMax(1, WeaponSlot[i].AmmoType.MaxAmmo), 0, 1);
 				Canvas.DrawTile(Texture'BotPack.HudElements1', AmmoScale, 8 * WeapScale,64,64,128.0,8.0);
 			}
 		}
@@ -937,7 +937,7 @@ simulated function PostRender( canvas Canvas )
 	Canvas.SetClip(768*Scale - 10, Canvas.ClipY);
 	bDrawFaceArea = false;
 	if ( !bHideFaces && !PlayerOwner.bShowScores && !bForceScores && !bHideHUD
-			&& !PawnOwner.PlayerReplicationInfo.bIsSpectator && (Scale >= 0.4) )
+			&& PawnOwner.PlayerReplicationInfo != none && !PawnOwner.PlayerReplicationInfo.bIsSpectator && (Scale >= 0.4) )
 	{
 		DrawSpeechArea(Canvas, XL, YL);
 		bDrawFaceArea = (FaceTexture != None) && (FaceTime > Level.TimeSeconds);
@@ -1095,7 +1095,7 @@ simulated function PostRender( canvas Canvas )
 			DrawCrossHair(Canvas, 0,0 );
 	}
 
-	if ( (PawnOwner != Owner) && PawnOwner.bIsPlayer )
+	if ( (PawnOwner != Owner) && PawnOwner.bIsPlayer && PawnOwner.PlayerReplicationInfo != none )
 	{
 		Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 		Canvas.bCenter = true;
@@ -1122,7 +1122,7 @@ simulated function PostRender( canvas Canvas )
 
 	if( !bHideHUD )
 	{
-		if ( !PawnOwner.PlayerReplicationInfo.bIsSpectator )
+		if ( PawnOwner.PlayerReplicationInfo == none || !PawnOwner.PlayerReplicationInfo.bIsSpectator )
 		{
 			Canvas.Style = Style;
 
@@ -1492,7 +1492,7 @@ simulated function DrawTypingPrompt( canvas Canvas, console Console )
 	Canvas.Font = MyFonts.GetSmallFont(B227_ScaledFontScreenWidth(Canvas));
 	Canvas.StrLen( "TEST", XL, YL );
 	YPos = YL*4 + 8;
-	if (PawnOwner.PlayerReplicationInfo.bIsSpectator || bHideHUD || bHideFaces)
+	if (PawnOwner.PlayerReplicationInfo != none && PawnOwner.PlayerReplicationInfo.bIsSpectator || bHideHUD || bHideFaces)
 		XOffset = 0;
 	else
 		XOffset = FMax(0,FaceAreaOffset + 15*Scale + YPos);

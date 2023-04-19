@@ -861,30 +861,39 @@ state FireRockets
 				if ( LockedTarget != None )
 				{
 					s = Spawn( class 'ut_SeekingRocket',, '', FireLocation,FireRot);
-					s.Seeking = LockedTarget;
-					s.NumExtraRockets = DupRockets;
-					if ( Angle > 0 )
-						s.Velocity *= (0.9 + 0.2 * FRand());
+					if (s != none)
+					{
+						s.Seeking = LockedTarget;
+						s.NumExtraRockets = DupRockets;
+						if ( Angle > 0 )
+							s.Velocity *= (0.9 + 0.2 * FRand());
+					}
 				}
 				else
 				{
 					r = Spawn( class'rocketmk2',, '', FireLocation,FireRot);
-					r.NumExtraRockets = DupRockets;
-					if (RocketsLoaded>4 && bTightWad) r.bRing=True;
-					if ( Angle > 0 )
-						r.Velocity *= (0.9 + 0.2 * FRand());
+					if (r != none)
+					{
+						r.NumExtraRockets = DupRockets;
+						if (RocketsLoaded>4 && bTightWad) r.bRing=True;
+						if ( Angle > 0 )
+							r.Velocity *= (0.9 + 0.2 * FRand());
+					}
 				}
 			}
 			else
 			{
 				g = Spawn( class 'ut_Grenade',, '', FireLocation,AdjustedAim);
-				g.NumExtraGrenades = DupRockets;
-				if ( DupRockets > 0 )
+				if (g != none)
 				{
-					RandRot.Pitch = FRand() * 1500 - 750;
-					RandRot.Yaw = FRand() * 1500 - 750;
-					RandRot.Roll = FRand() * 1500 - 750;
-					g.Velocity = g.Velocity >> RandRot;
+					g.NumExtraGrenades = DupRockets;
+					if ( DupRockets > 0 )
+					{
+						RandRot.Pitch = FRand() * 1500 - 750;
+						RandRot.Yaw = FRand() * 1500 - 750;
+						RandRot.Roll = FRand() * 1500 - 750;
+						g.Velocity = g.Velocity >> RandRot;
+					}
 				}
 			}
 
