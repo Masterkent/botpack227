@@ -3,18 +3,23 @@ class B227_VacuumZoneInfluence expands Info;
 var ZoneInfo Zone;
 var bool bScreamed;
 var bool bActive;
-var float TimePassed;
-var float curScale;
-var vector curFog;
-var float curFOV;
+var float TimePassed, LastTimePassed, ClientTimePassed;
+var float KillTime;
+var float StartFlashScale, EndFlashScale;
+var vector StartFlashFog, EndFlashFog;
+var float DieFOV;
 
 replication
 {
 	reliable if (Role == ROLE_Authority)
 		bActive,
-		curScale,
-		curFog,
-		curFOV;
+		TimePassed,
+		KillTime,
+		StartFlashScale,
+		EndFlashScale,
+		StartFlashFog,
+		EndFlashFog,
+		DieFOV;
 }
 
 static function B227_VacuumZoneInfluence GetInstance(Pawn Pawn, ZoneInfo Zone, bool bCreate)
@@ -42,8 +47,10 @@ simulated event Tick(float DeltaTime)
 	local Pawn PawnOwner;
 	local PlayerPawn PlayerOwner;
 	local VacuumZone VacuumZone;
-	local float ratio;
-	local float MainFOV;
+	local float Ratio;
+	local float curScale;
+	local vector curFog;
+	local float curFOV, DesiredFOV;
 
 	PawnOwner = Pawn(Owner);
 	PlayerOwner = PlayerPawn(Owner);
@@ -66,15 +73,17 @@ simulated event Tick(float DeltaTime)
 		if (VacuumZone != none && VacuumZone.KillTime > 0)
 		{
 			TimePassed += DeltaTime;
-			ratio = FMin(1.0, TimePassed / VacuumZone.KillTime);
-			PawnOwner.Fatness = Min(255, PawnOwner.default.Fatness + (255 - PawnOwner.default.Fatness) * ratio);
+			Ratio = FMin(1.0, TimePassed / VacuumZone.KillTime);
+			PawnOwner.Fatness = Min(255, PawnOwner.default.Fatness + (255 - PawnOwner.default.Fatness) * Ratio);
 
 			if (PlayerOwner != none)
 			{
-				curScale = (VacuumZone.EndFlashScale - VacuumZone.StartFlashScale) * ratio + VacuumZone.StartFlashScale;
-				curFog = (VacuumZone.EndFlashFog - VacuumZone.StartFlashFog ) * ratio + VacuumZone.StartFlashFog;
-				curFog *= 1000;
-				curFOV = (VacuumZone.DieFOV - PlayerOwner.default.FOVAngle) * ratio + PlayerOwner.default.FOVAngle;
+				KillTime = VacuumZone.KillTime;
+				StartFlashScale = VacuumZone.StartFlashScale;
+				EndFlashScale = VacuumZone.EndFlashScale;
+				StartFlashFog = VacuumZone.StartFlashFog * 1000;
+				EndFlashFog = VacuumZone.EndFlashFog * 1000;
+				DieFOV = VacuumZone.DieFOV;
 			}
 
 			if (TimePassed >= VacuumZone.KillTime)
@@ -92,8 +101,6 @@ simulated event Tick(float DeltaTime)
 				Level.Game.SpecialDamageString = "";
 				VacuumZone.MakeNormal(PawnOwner);
 				TimePassed = 0;
-				if (PlayerOwner != none)
-					curFOV = PlayerOwner.default.FOVAngle;
 			}
 		}
 	}
@@ -102,10 +109,20 @@ simulated event Tick(float DeltaTime)
 
 	if (Level.NetMode != NM_DedicatedServer && bActive && PlayerOwner != none)
 	{
+		if (ClientTimePassed < TimePassed || TimePassed < LastTimePassed)
+			ClientTimePassed = TimePassed;
+		else
+			ClientTimePassed += DeltaTime;
+		LastTimePassed = TimePassed;
+
+		Ratio = FMin(1.0, ClientTimePassed / KillTime);
+		curScale = StartFlashScale + Ratio * (EndFlashScale - StartFlashScale);
+		curFog = StartFlashFog + Ratio * (EndFlashFog - StartFlashFog);
 		PlayerOwner.ClientFlash(curScale, curFog);
+		curFOV = PlayerOwner.default.FOVAngle + Ratio * (DieFOV - PlayerOwner.default.FOVAngle);
 		curFOV = FClamp(curFOV, 1, 179);
-		MainFOV = FClamp(PlayerOwner.MainFOV, 1, 170);
-		PlayerOwner.FOVAngle = ATan(Tan(curFOV * Pi / 360) * Tan(MainFOV * Pi / 360)) * 360 / Pi;
+		DesiredFOV = FClamp(PlayerOwner.DesiredFOV, 1, 170);
+		PlayerOwner.FOVAngle = ATan(Tan(curFOV * Pi / 360) * Tan(DesiredFOV * Pi / 360)) * 360 / Pi;
 	}
 }
 

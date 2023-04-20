@@ -100,10 +100,13 @@ function Tick( float DeltaTime )
 			pPawn = PlayerPawn(P);
 			if( pPawn != None && Influence != none )
 			{
-				Influence.curScale = (EndFlashScale - StartFlashScale) * ratio + StartFlashScale;
-				Influence.curFog = (EndFlashFog - StartFlashFog) * ratio + StartFlashFog;
-				Influence.curFog *= 1000;
-				Influence.curFOV = (DieFOV - pPawn.default.FOVAngle) * ratio + pPawn.default.FOVAngle;
+				Influence.TimePassed = TimePassed;
+				Influence.KillTime = KillTime;
+				Influence.StartFlashScale = StartFlashScale;
+				Influence.EndFlashScale = EndFlashScale;
+				Influence.StartFlashFog = StartFlashFog * 1000;
+				Influence.EndFlashFog = EndFlashFog * 1000;
+				Influence.DieFOV = DieFOV;
 			}
 			if (TimePassed >= KillTime)
 			{
