@@ -319,7 +319,7 @@ function RemoveFort(FortStandard F, Pawn instigator)
 	local Bot B;
 
 	bFortDown = true;
-	if ( instigator.bIsPlayer )
+	if ( instigator.bIsPlayer && instigator.PlayerReplicationInfo != none )
 		instigator.PlayerReplicationInfo.Score += 10;
 	if ( F.DestroyedMessage != "" )
 		BroadcastMessage(F.FortName@F.DestroyedMessage, true, 'CriticalEvent');
@@ -357,7 +357,7 @@ function RemoveFort(FortStandard F, Pawn instigator)
 	}
 	if ( F.bFinalFort || (numForts == 0) )
 	{
-		if ( instigator.bIsPlayer )
+		if ( instigator.bIsPlayer && instigator.PlayerReplicationInfo != none )
 			instigator.PlayerReplicationInfo.Score += 100;
 		bAssaultWon = true;
 		EndGame("Assault succeeded!");
@@ -706,8 +706,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 				needed = Min(2, Teams[aBot.PlayerReplicationInfo.Team].Size - 2 );
 				for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 				{
-					if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == aBot.PlayerReplicationInfo.Team)
-						&& (P != aBot) )
+					if ( P.bIsPlayer && B227_AreInSameTeam(P, aBot) && P != aBot )
 					{
 						B = Bot(P);
 						if ( B != None )
@@ -843,8 +842,7 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 			needed = Min(2, Teams[aBot.PlayerReplicationInfo.Team].Size - 2 );
 			for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 			{
-				if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == aBot.PlayerReplicationInfo.Team)
-					&& (P != aBot) )
+				if ( P.bIsPlayer && B227_AreInSameTeam(P, aBot) && P != aBot )
 				{
 					B = Bot(P);
 					if ( (B != None)
@@ -865,7 +863,7 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 			else
 				return 2; //ignore
 		}
-		else if ( Other.bIsPlayer && (aBot.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team) )
+		else if ( Other.bIsPlayer && B227_AreInSameTeam(aBot, Other) )
 			return 3;
 		else
 			return 1;
@@ -898,7 +896,7 @@ function SetBotOrders(Bot NewBot)
 
 	// only follow players, if there are any
 	For ( P=Level.PawnList; P!=None; P= P.NextPawn )
-		if ( P.IsA('PlayerPawn') && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
+		if ( PlayerPawn(P) != none && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
 			&& !P.IsA('Spectator') )
 	{
 		num++;
@@ -1002,9 +1000,11 @@ function ElectNewLeaderFor(bot OldLeader)
 	BestDist = 1000000;
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
 	{
-		if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == OldLeader.PlayerReplicationInfo.Team)
-			&& (P != OldLeader) && (P.Health > 0)
-			&& P.IsA('Bot') )
+		if (P.bIsPlayer &&
+			Bot(P) != none &&
+			B227_AreInSameTeam(P, OldLeader) &&
+			P != OldLeader &&
+			P.Health > 0)
 		{
 			Dist = VSize(P.Location - OldLeader.Location);
 			if ( Dist < BestDist )
@@ -1021,10 +1021,13 @@ function ElectNewLeaderFor(bot OldLeader)
 	Best.GotoState('Attacking');
 	Leader[OldLeader.PlayerReplicationInfo.Team] = Best;
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-		if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == OldLeader.PlayerReplicationInfo.Team)
-			&& P.IsA('Bot')
-			&& (BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow') )
+		if (P.bIsPlayer &&
+			Bot(P) != none &&
+			B227_AreInSameTeam(P, OldLeader) &&
+			BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow'))
+		{
 			Bot(P).SetOrders('Follow',Best);
+		}
 }
 
 function bool HandleTieUp(Bot Bumper, Bot Bumpee)
@@ -1040,10 +1043,13 @@ function bool HandleTieUp(Bot Bumper, Bot Bumpee)
 		Bumpee.SetOrders('Attack', None);
 		Bumpee.GotoState('Attacking');
 		for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-			if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == Bumper.PlayerReplicationInfo.Team)
-				&& P.IsA('Bot')
-				&& (BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow') )
+			if (P.bIsPlayer &&
+				Bot(P) != none &&
+				B227_AreInSameTeam(P, Bumper) &&
+				BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow')
+			{
 				Bot(P).SetOrders('Follow',Bumpee);
+			}
 		return true;
 	}
 	return false;

@@ -20,7 +20,7 @@ event InitGame( string Options, out string Error )
 
 function float GameThreatAdd(Bot aBot, Pawn Other)
 {
-	if ( !Other.bIsPlayer )
+	if ( !Other.bIsPlayer || Other.PlayerReplicationInfo == none )
 		return 0;
 	else
 		return 0.1 * Other.PlayerReplicationInfo.Score;
@@ -125,7 +125,7 @@ function bool RestartPlayer( pawn aPlayer )
 	{
 		BroadcastLocalizedMessage(class'LMSOutMessage', 0, aPlayer.PlayerReplicationInfo);
 		For ( P=Level.PawnList; P!=None; P=P.NextPawn )
-			if ( P.bIsPlayer && (P.PlayerReplicationInfo.Score >= 1) )
+			if ( P.bIsPlayer && P.PlayerReplicationInfo != none && (P.PlayerReplicationInfo.Score >= 1) )
 				P.PlayerReplicationInfo.Score += 0.00001;
 		if ( aPlayer.IsA('Bot') )
 		{
@@ -214,7 +214,7 @@ function CheckEndGame()
 	// Check to see if everyone is a ghost.
 	NumGhosts = 0;
 	for ( PawnLink=Level.PawnList; PawnLink!=None; PawnLink=PawnLink.nextPawn )
-		if ( PawnLink.bIsPlayer )
+		if ( PawnLink.bIsPlayer && PawnLink.PlayerReplicationInfo != none )
 		{
 			if ( PawnLink.PlayerReplicationInfo.Score < 1 )
 				NumGhosts++;
@@ -260,7 +260,7 @@ function ScoreKill(pawn Killer, pawn Other)
 
 function bool PickupQuery( Pawn Other, Inventory item )
 {
-	if ( Other.PlayerReplicationInfo.Score < 1 )
+	if ( Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.Score < 1 )
 		return false;
 
 	return Super.PickupQuery( Other, item );
@@ -281,7 +281,7 @@ function byte AssessBotAttitude(Bot aBot, Pawn Other)
 		Adjust = -0.2;
 	else
 		Adjust = -0.2 - 0.1 * aBot.Skill;
-	if ( Other.bIsPlayer && (Other.PlayerReplicationInfo.Score < 1) )
+	if ( Other.bIsPlayer && Other.PlayerReplicationInfo != none && (Other.PlayerReplicationInfo.Score < 1) )
 		return 2; //bots ignore ghosts
 	else if ( aBot.bKamikaze )
 		return 1;

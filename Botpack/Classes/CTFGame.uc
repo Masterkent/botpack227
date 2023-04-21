@@ -13,7 +13,7 @@ var float LastSeeFlagCarrier;
 
 function Logout(pawn Exiting)
 {
-	if ( Exiting.PlayerReplicationInfo.HasFlag != None )
+	if ( Exiting.PlayerReplicationInfo != none && Exiting.PlayerReplicationInfo.HasFlag != None )
 		CTFFlag(Exiting.PlayerReplicationInfo.HasFlag).SendHome();
 	Super.Logout(Exiting);
 }
@@ -65,8 +65,11 @@ function ScoreKill(pawn Killer, pawn Other)
 {
 
 	if( (killer == Other) || (killer == None) )
-		Other.PlayerReplicationInfo.Score -= 1;
-	else if ( killer != None )
+	{
+		if (Other.PlayerReplicationInfo != none)
+			Other.PlayerReplicationInfo.Score -= 1;
+	}
+	else
 	{
 		killer.killCount++;
 		if (Killer.PlayerReplicationInfo != none &&
@@ -173,7 +176,7 @@ function ScoreFlag(Pawn Scorer, CTFFlag theFlag)
 	{
 		if (PlayerPawn(TeamMate) != none)
 			class'UTC_PlayerPawn'.static.UTSF_ClientPlaySound(PlayerPawn(TeamMate), CaptureSound[Scorer.PlayerReplicationInfo.Team]);
-		else if ( TeamMate.IsA('Bot') )
+		else if (Bot(TeamMate) != none)
 			Bot(TeamMate).SetOrders(BotReplicationInfo(TeamMate.PlayerReplicationInfo).RealOrders, BotReplicationInfo(TeamMate.PlayerReplicationInfo).RealOrderGiver, true);
 	}
 
@@ -205,7 +208,7 @@ function Actor SetDefenseFor(Bot aBot)
 
 function float GameThreatAdd(Bot aBot, Pawn Other)
 {
-	if ( Other.PlayerReplicationInfo.HasFlag != None )
+	if ( Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.HasFlag != None )
 		return 10;
 	else
 		return 0;
@@ -239,7 +242,7 @@ function bool FindPathToBase(Bot aBot, FlagBase aBase)
 
 function byte AssessBotAttitude(Bot aBot, Pawn Other)
 {
-	if ( aBot.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team )
+	if ( B227_AreInSameTeam(aBot, Other) )
 		return 3; //teammate
 	else if ( (Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.HasFlag != None)
 				|| (aBot.PlayerReplicationInfo.HasFlag != None) )
@@ -571,7 +574,7 @@ function SetBotOrders(Bot NewBot)
 		&& (NumSupportingPlayer == 0) )
 	{
 		For ( P=Level.PawnList; P!=None; P=P.NextPawn )
-			if ( P.IsA('PlayerPawn') && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
+			if ( PlayerPawn(P) != none && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
 				&& !P.IsA('Spectator') )
 		{
 			num++;
@@ -590,7 +593,7 @@ function SetBotOrders(Bot NewBot)
 			// no players on this team - possibly support other bot
 			num = 0;
 			For ( P=Level.PawnList; P!=None; P=P.NextPawn )
-				if ( P.IsA('Bot') && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
+				if ( Bot(P) != none && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
 					&& (Bot(P).Orders == 'Attack') )
 			{
 				num++;
@@ -599,7 +602,7 @@ function SetBotOrders(Bot NewBot)
 					// make sure P doesn't already have a follower
 					bAvailable = true;
 					for ( M=Level.PawnList; M!=None; M=M.NextPawn )
-						if ( M.IsA('Bot') && (M.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
+						if ( Bot(M) != none && (M.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
 							&& (Bot(M).Orders == 'Follow') && (Bot(M).OrderObject == P) )
 							bAvailable = false;
 					if ( bAvailable )
@@ -624,7 +627,7 @@ function SetBotOrders(Bot NewBot)
 // AllowTranslocation - return true if Other can teleport to Dest
 function bool AllowTranslocation(Pawn Other, vector Dest )
 {
-	if ( Other.PlayerReplicationInfo.HasFlag != None )
+	if ( Other.PlayerReplicationInfo != none && Other.PlayerReplicationInfo.HasFlag != None )
 		CTFFlag(Other.PlayerReplicationInfo.HasFlag).Drop(0.5 * Other.Velocity);
 
 	return true;
@@ -642,8 +645,8 @@ function bool CanTranslocate(Bot aBot)
 function int ReduceDamage(int Damage, name DamageType, pawn injured, pawn instigatedBy)
 {
 	if ( (instigatedBy != None)
-		&& (injured.PlayerReplicationInfo.Team != instigatedBy.PlayerReplicationInfo.Team)
-		&& injured.IsA('Bot')
+		&& !B227_AreInSameTeam(injured, instigatedBy)
+		&& Bot(injured) != none
 		&& ((injured.health < 35) || (injured.PlayerReplicationInfo.HasFlag != None)) )
 			Bot(injured).SendTeamMessage(None, 'OTHER', 4, 15);
 
@@ -701,7 +704,7 @@ function bool CheckThisTranslocator(Bot aBot, TranslocatorTarget T)
 	F = CTFReplicationInfo(GameReplicationInfo).FlagList[aBot.PlayerReplicationInfo.Team].HomeBase;
 
 	if ( (T.Region.Zone == F.Region.Zone)
-		&& (T.Instigator.PlayerReplicationInfo.Team != aBot.PlayerReplicationInfo.Team)
+		&& !B227_AreInSameTeam(T.Instigator, aBot)
 		&& !T.Disrupted()
 		&& (VSize(T.Location - F.Location) < 1000) )
 	{

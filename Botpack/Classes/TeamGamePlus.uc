@@ -299,7 +299,9 @@ function ReBalance()
 
 	// re-assign orders to follower bots with no leaders
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-		if ( BotReplicationInfo(P.PlayerReplicationInfo) != none && P.IsA('Bot') && (BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow') )
+		if (BotReplicationInfo(P.PlayerReplicationInfo) != none &&
+			Bot(P) != none &&
+			BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow')
 		{
 			A = Pawn(Bot(P).OrderObject);
 			if ( (A == None) || A.bDeleteMe || !A.bIsPlayer || !B227_AreInSameTeam(A, P) )

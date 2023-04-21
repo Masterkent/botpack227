@@ -43,6 +43,9 @@ simulated function Timer()
 {
 	local ut_SpriteSmokePuff b;
 
+	if (bDeleteMe) // fix for 227j bug that allows calling Timer after destruction
+		return;
+
 	if (Role == ROLE_Authority &&
 		PlayerPawn(Owner) != none &&
 		Viewport(PlayerPawn(Owner).Player) == none &&

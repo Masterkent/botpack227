@@ -30,7 +30,7 @@ function ScoreKill(pawn Killer, pawn Other)
 	Super.ScoreKill(Killer, Other);
 
 	if ( Other.bIsPlayer && (Killer != None) && Killer.bIsPlayer
-		&& (Killer != Other) && (Killer.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team)
+		&& (Killer != Other) && B227_AreInSameTeam(Killer, Other)
 		&& (FriendlyFireScale > 0) )
 			Killer.PlayerReplicationInfo.Score -= 1;
 }
@@ -183,11 +183,11 @@ function ClearControl(Pawn Other)
 	local int Num;
 
 	// find a teammate
-	if ( !Other.bIsPlayer || (Other.PlayerReplicationInfo.Team == 255) )
+	if ( !Other.bIsPlayer || Other.PlayerReplicationInfo == none || (Other.PlayerReplicationInfo.Team == 255) )
 		return;
 
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-		if ( P.bIsPlayer && (P != Other) && (P.PlayerReplicationInfo.Team == Other.PlayerReplicationInfo.Team) )
+		if ( P.bIsPlayer && (P != Other) && B227_AreInSameTeam(P, Other) )
 		{
 			Num++;
 			if ( (Pick == None) || (Rand(Num) == 1) )
@@ -447,7 +447,7 @@ function SetBotOrders(Bot NewBot)
 	if ( NumSupportingPlayer == 0 )
 	{
 		For ( P=Level.PawnList; P!=None; P= P.NextPawn )
-			if ( P.IsA('PlayerPawn') && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
+			if ( PlayerPawn(P) != none && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team)
 				&& !P.IsA('Spectator') )
 		{
 			num++;
@@ -464,7 +464,7 @@ function SetBotOrders(Bot NewBot)
 	}
 	num = 0;
 	For ( P=Level.PawnList; P!=None; P= P.NextPawn )
-		if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == NewBot.PlayerReplicationInfo.Team) )
+		if ( P.bIsPlayer && B227_AreInSameTeam(P, NewBot) )
 		{
 			total++;
 			if ( (P != NewBot) && P.IsA('Bot') )

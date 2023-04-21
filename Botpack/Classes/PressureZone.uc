@@ -114,7 +114,9 @@ function Tick( float DeltaTime )
 					Level.Game.SpecialDamageString = DamageString;
 				else
 					Level.Game.SpecialDamageString = class'VacuumZone'.default.DamageString;
-				if (P.ReducedDamageType != 'All' && P.GetStateName() != 'CheatFlying')
+				if (P.ReducedDamageType != 'All' &&
+					P.GetStateName() != 'CheatFlying' &&
+					!P.IsInState('GameEnded'))
 				{
 					Health = P.Health;
 					P.Health = -1000; // make sure gibs

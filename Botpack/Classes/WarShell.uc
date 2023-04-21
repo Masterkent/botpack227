@@ -12,6 +12,9 @@ simulated event Timer()
 {
 	local ut_SpriteSmokePuff b;
 
+	if (bDeleteMe) // fix for 227j bug that allows calling Timer after destruction
+		return;
+
 	if (Level.NetMode != NM_DedicatedServer && (Trail == none || Trail.bDeleteMe))
 	{
 		Trail = Spawn(class'RedeemerTrail', self);

@@ -44,7 +44,7 @@ simulated function PostRender( canvas Canvas )
 
 	Canvas.Reset();
 
-	if (GuidedShell != none)
+	if (GuidedShell != none && !GuidedShell.bDeleteMe)
 		GuidedShell.PostRender(Canvas);
 
 	OldClipX = Canvas.ClipX;
@@ -142,11 +142,16 @@ function AltFire( float Value )
 		Pawn(Owner).PlayRecoil(FiringSpeed);
 		PlayFiring();
 		GuidedShell = GuidedWarShell(ProjectileFire(AltProjectileClass, ProjectileSpeed, bWarnTarget));
-		GuidedShell.SetOwner(Owner);
-		PlayerPawn(Owner).ViewTarget = GuidedShell;
-		GuidedShell.Guider = PlayerPawn(Owner);
-		ClientAltFire(0);
-		GotoState('Guiding');
+		if (GuidedShell != none)
+		{
+			GuidedShell.SetOwner(Owner);
+			PlayerPawn(Owner).ViewTarget = GuidedShell;
+			GuidedShell.Guider = PlayerPawn(Owner);
+			ClientAltFire(0);
+			GotoState('Guiding');
+		}
+		else
+			ClientAltFire(0);
 	}
 }
 
@@ -156,7 +161,10 @@ function bool ClientAltFire( float Value )
 	{
 		if ( Affector != None )
 			Affector.FireEffect();
-		PlaySound(FireSound, SLOT_None,4.0*Pawn(Owner).SoundDampening);
+		// B227: FireSound is already played in PlayFiring;
+		// unlike UT, B227 ensures that PlayFiring is called on network clients,
+		// hence an extra call to PlaySound is not needed.
+		//-PlaySound(FireSound, SLOT_None,4.0*Pawn(Owner).SoundDampening);
 		return true;
 	}
 	return false;
@@ -168,7 +176,7 @@ State Guiding
 	{
 		if ( !bCanFire )
 			return;
-		if ( GuidedShell != None )
+		if ( GuidedShell != None && !GuidedShell.bDeleteMe )
 			GuidedShell.Explode(GuidedShell.Location,Vect(0,0,1));
 		bCanClientFire = true;
 
