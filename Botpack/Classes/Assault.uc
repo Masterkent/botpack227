@@ -1024,7 +1024,7 @@ function ElectNewLeaderFor(bot OldLeader)
 		if (P.bIsPlayer &&
 			Bot(P) != none &&
 			B227_AreInSameTeam(P, OldLeader) &&
-			BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow'))
+			BotReplicationInfo(P.PlayerReplicationInfo).RealOrders == 'Follow')
 		{
 			Bot(P).SetOrders('Follow',Best);
 		}
