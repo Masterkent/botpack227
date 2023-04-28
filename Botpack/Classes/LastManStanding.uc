@@ -127,7 +127,7 @@ function bool RestartPlayer( pawn aPlayer )
 		For ( P=Level.PawnList; P!=None; P=P.NextPawn )
 			if ( P.bIsPlayer && P.PlayerReplicationInfo != none && (P.PlayerReplicationInfo.Score >= 1) )
 				P.PlayerReplicationInfo.Score += 0.00001;
-		if ( aPlayer.IsA('Bot') )
+		if ( Bot(aPlayer) != none )
 		{
 			aPlayer.PlayerReplicationInfo.bIsSpectator = true;
 			if (UTC_PlayerReplicationInfo(aPlayer.PlayerReplicationInfo) != none)

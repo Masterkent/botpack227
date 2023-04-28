@@ -33,7 +33,7 @@ function Actor SpecialHandling(Pawn Other)
 {
 	local Bot B;
 
-	if ( !Other.IsA('Bot') )
+	if ( Bot(Other) == none )
 		return None;
 
 	if ( (VSize(Location - Other.Location) < 200)

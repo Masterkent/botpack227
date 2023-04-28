@@ -467,7 +467,7 @@ function SetBotOrders(Bot NewBot)
 		if ( P.bIsPlayer && B227_AreInSameTeam(P, NewBot) )
 		{
 			total++;
-			if ( (P != NewBot) && P.IsA('Bot') )
+			if ( (P != NewBot) && Bot(P) != none )
 			{
 				B = Bot(P);
 				if ( B.Orders == 'FreeLance' )

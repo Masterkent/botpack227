@@ -300,6 +300,7 @@ function DiscardInventory( Pawn Other )
 		Other.TossWeapon();
 	}
 	Other.Weapon = None;
+	Other.PendingWeapon = none;
 	Other.SelectedItem = None;
 
 	// Destroy the inventory list.

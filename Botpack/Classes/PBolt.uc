@@ -24,7 +24,6 @@ var class<PBolt> B227_PBoltClass;
 var PBolt B227_BeamStarter;
 var PlasmaCap B227_BeamEnd;
 var bool B227_bCanHitInstigator;
-var bool B227_bHitPortal;
 var float B227_DamageMult;
 
 replication
@@ -205,16 +204,7 @@ simulated function UpdateBeam(PBolt ParentBolt, vector Dir, float DeltaTime)
 
 simulated function B227_UpdateBeam(PBolt ParentBolt, vector Pos, vector Dir, bool bCanHitInstigator, float DeltaTime)
 {
-	if (ParentBolt.B227_bHitPortal && class'B227_Config'.static.WarpedBeamOffset() > 0)
-	{
-		PrePivot = default.PrePivot - class'B227_Config'.static.WarpedBeamOffset() * Dir;
-		SetLocation(Pos - (PrePivot - default.PrePivot));
-	}
-	else
-	{
-		PrePivot = default.PrePivot;
-		SetLocation(Pos);
-	}
+	SetLocation(Pos);
 	SpriteFrame = ParentBolt.SpriteFrame;
 	Skin = SpriteAnim[SpriteFrame];
 	SetRotation(rotator(Dir));
@@ -232,7 +222,7 @@ simulated function Actor B227_TraceBeam(out vector Dir, out vector HitLocation, 
 		Tracer = self;
 	else
 		Tracer = Instigator;
-	StartTrace = Location + (PrePivot - default.PrePivot);
+	StartTrace = Location;
 	EndTrace = StartTrace + BeamSize * Dir;
 	HitActor = class'UTC_Weapon'.static.B227_TraceShot(Tracer, StartTrace, EndTrace, HitLocation, HitNormal);
 	MaxWarps = 1;
@@ -244,12 +234,10 @@ simulated function Actor B227_TraceBeam(out vector Dir, out vector HitLocation, 
 		// Dir is set above
 		HitLocation = StartTrace;
 		bCanHitInstigator = 1;
-		B227_bHitPortal = true;
 		return none;
 	}
 	// Dir and HitLocation are set above
 	bCanHitInstigator = int(B227_bCanHitInstigator);
-	B227_bHitPortal = false;
 	return HitActor;
 }
 

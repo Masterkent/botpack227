@@ -22,7 +22,7 @@ function float RateSelf( out int bUseAltMode )
 		return 0;
 
 	EnemyDist = VSize(P.Enemy.Location - Owner.Location);
-	if ( (EnemyDist < 750) && P.IsA('Bot') && Bot(P).bNovice && (P.Skill <= 2) && !P.Enemy.IsA('Bot') && (ImpactHammer(P.Enemy.Weapon) != None) )
+	if ( (EnemyDist < 750) && Bot(P) != none && Bot(P).bNovice && (P.Skill <= 2) && Bot(P.Enemy) == none && (ImpactHammer(P.Enemy.Weapon) != None) )
 		return FClamp(300/(EnemyDist + 1), 0.6, 0.75);
 
 	if ( EnemyDist > 400 )

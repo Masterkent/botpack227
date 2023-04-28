@@ -40,8 +40,9 @@ function Timer()
 		if ( P.IsA('CHSpectator') && (PlayerPawn(P).ViewTarget == None) )
 		{
 			PlayerPawn(P).ViewClass(class'Pawn');
-			Pawn(PlayerPawn(P).ViewTarget).skill = 2;
-			if ( PlayerPawn(P).ViewTarget.IsA('Bot') )
+			if (Pawn(PlayerPawn(P).ViewTarget) != none)
+				Pawn(PlayerPawn(P).ViewTarget).skill = 2;
+			if (Bot(PlayerPawn(P).ViewTarget) != none)
 				Bot(PlayerPawn(P).ViewTarget).ReSetSkill();
 		}
 }

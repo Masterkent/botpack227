@@ -56,7 +56,7 @@ function Touch(Actor Other)
 		return;
 
 	Controller = Pawn(Other);
-	if ( Controller.IsA('Bot') && (Controller.MoveTarget == self) )
+	if ( Bot(Controller) != none && (Controller.MoveTarget == self) )
 		Controller.MoveTimer = -1.0; // stop moving toward this
 	UpdateStatus();
 }

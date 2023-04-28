@@ -230,7 +230,7 @@ function Fire( float Value )
 			GotoState('');
 			GotoState('FireRockets', 'Begin');
 		}
-		else if ( Instigator.IsA('Bot') )
+		else if ( Bot(Instigator) != none || Bots(Instigator) != none )
 		{
 			if ( LockedTarget != None )
 			{
@@ -251,7 +251,7 @@ function Fire( float Value )
 				GotoState('Idle','PendingLock');
 				return;
 			}
-			else if ( !Bot(Owner).bNovice
+			else if ( (Bot(Owner) == none || !Bot(Owner).bNovice)
 					&& (FRand() < 0.7)
 					&& IsInState('Idle') && (Instigator.Enemy != None)
 					&& ((Instigator.Enemy == Instigator.Target) || (Instigator.Target == None))

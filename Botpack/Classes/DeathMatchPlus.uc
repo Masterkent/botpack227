@@ -475,9 +475,9 @@ function Killed(pawn killer, pawn Other, name damageType)
 
 	if ( BotConfig.bAdjustSkill && (killer.IsA('PlayerPawn') || Other.IsA('PlayerPawn')) )
 	{
-		if ( killer.IsA('Bot') )
+		if ( Bot(killer) != none )
 			BotConfig.AdjustSkill(Bot(killer),true);
-		if ( Other.IsA('Bot') )
+		if ( Bot(Other) != none )
 			BotConfig.AdjustSkill(Bot(Other),false);
 	}
 
@@ -591,7 +591,7 @@ function int ReduceDamage(int Damage, name DamageType, pawn injured, pawn instig
 			Damage *= 0.5;
 
 		//skill level modification
-		if ( instigatedBy.IsA('Bot') && injured.IsA('PlayerPawn') )
+		if ( Bot(instigatedBy) != none && PlayerPawn(injured) != none )
 		{
 			if ( ((instigatedBy.Weapon != None) && instigatedBy.Weapon.bMeleeWeapon)
 				|| ((injured.Weapon != None) && injured.Weapon.bMeleeWeapon && (VSize(injured.location - instigatedBy.Location) < 600)) )
@@ -1454,7 +1454,7 @@ function NavigationPoint UTF_FindPlayerStart(Pawn Player, optional byte InTeam, 
 function Logout(pawn Exiting)
 {
 	Super.Logout(Exiting);
-	if ( Exiting.IsA('Bot') )
+	if ( Bot(Exiting) != none )
 		NumBots--;
 	if ( Exiting.IsA('Commander') )
 		NumCommanders--;
@@ -1754,7 +1754,7 @@ function B227_GiveWeapon(Pawn Player, class<Weapon> WeaponClass, optional bool b
 		NewWeapon.AmbientGlow = 0;
 		NewWeapon.GotoState('');
 
-		if (Player.PendingWeapon != none)
+		if (Player.PendingWeapon != none && !Player.PendingWeapon.bDeleteMe)
 			CurrentWeapon = Player.PendingWeapon;
 		else
 			CurrentWeapon = Player.Weapon;

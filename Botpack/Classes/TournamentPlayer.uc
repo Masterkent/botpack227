@@ -310,7 +310,7 @@ exec function ListBots()
 	local Pawn P;
 
 	for (P=Level.PawnList; P!=None; P=P.NextPawn)
-		if ( P.bIsPlayer && P.IsA('Bot') )
+		if ( P.bIsPlayer && Bot(P) != none )
 			log(P.PlayerReplicationInfo.PlayerName$" skill "$P.Skill$" novice "$Bot(P).bNovice);
 }
 

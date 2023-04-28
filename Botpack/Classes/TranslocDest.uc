@@ -46,7 +46,7 @@ function PostBeginPlay()
 
 event int SpecialCost(Pawn Seeker)
 {
-	if ( !Seeker.IsA('Bot') || !Bot(Seeker).bCanTranslocate )
+	if ( Bot(Seeker) == none || !Bot(Seeker).bCanTranslocate )
 		return 10000000;
 	return 300;
 }
@@ -58,7 +58,7 @@ function Actor SpecialHandling(Pawn Other)
 {
 	local Bot B;
 
-	if ( !Other.IsA('Bot') )
+	if ( Bot(Other) == none )
 		return None;
 
 	if ( (VSize(Location - Other.Location) < 200)

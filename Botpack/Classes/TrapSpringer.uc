@@ -106,7 +106,7 @@ event float BotDesireability( pawn Bot )
 
 function bool FoundTrapTarget(Pawn Bot, Pawn P)
 {
-	return ( P.bIsPlayer && (P != Bot) && (P.Health > 0)
+	return ( P.bIsPlayer && (P != Bot) && (P.Health > 0) && P.PlayerReplicationInfo != none
 			&& (!Level.Game.bTeamGame || (P.PlayerReplicationInfo.Team != Bot.PlayerReplicationInfo.Team)) );
 }
 

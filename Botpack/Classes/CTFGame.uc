@@ -327,7 +327,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 					}
 				}
 			}
-			else if ( (!bOrdered || ABot.OrderObject.IsA('Bot'))
+			else if ( (!bOrdered || Bot(ABot.OrderObject) != none)
 				&& (FriendlyFlag.bKnownLocation || (FRand() < 0.1)) )
 			{
 				FriendlyFlag.bKnownLocation = true;
@@ -393,7 +393,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 			return true;
 		}
 		else if ( (aBot.Orders == 'Attack')
-				 || ((aBot.Orders == 'Follow') && aBot.OrderObject.IsA('Bot')
+				 || ((aBot.Orders == 'Follow') && Bot(aBot.OrderObject) != none
 					&& ((Pawn(aBot.OrderObject).Health <= 0)
 						 || ((EnemyFlag.Region.Zone == aBot.Region.Zone) && (VSize(EnemyFlag.Location - aBot.Location) < 2000)))) )
 		{
@@ -405,7 +405,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 			}
 
 			if ( (aBot.Enemy != None)
-				&& (aBot.Enemy.IsA('PlayerPawn') || (aBot.Enemy.IsA('Bot') && (Bot(aBot.Enemy).Orders == 'Attack')))
+				&& (aBot.Enemy.IsA('PlayerPawn') || (Bot(aBot.Enemy) != none && (Bot(aBot.Enemy).Orders == 'Attack')))
 				&& (((aBot.Enemy.Region.Zone == FriendlyFlag.HomeBase.Region.Zone) && (EnemyFlag.HomeBase.Region.Zone != FriendlyFlag.HomeBase.Region.Zone))
 					|| (VSize(aBot.Enemy.Location - FriendlyFlag.HomeBase.Location) < 0.6 * VSize(aBot.Location - EnemyFlag.HomeBase.Location))) )
 				{
@@ -433,7 +433,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		return false;
 	}
 
-	if ( (bOrdered && !aBot.OrderObject.IsA('Bot')) || (aBot.Weapon == None) || (aBot.Weapon.AIRating < 0.4) )
+	if ( (bOrdered && Bot(aBot.OrderObject) == none) || (aBot.Weapon == None) || (aBot.Weapon.AIRating < 0.4) )
 		return false;
 
 	if ( (aBot.Enemy == None) && (aBot.Orders != 'Defend') )
@@ -509,7 +509,7 @@ function bool RestartPlayer(Pawn aPlayer)
 						bPowerPlay = false;
 						break;
 					}
-					else if ( (P != B) && P.IsA('Bot') && (Bot(P).Orders == 'Defend') )
+					else if ( (P != B) && Bot(P) != none && (Bot(P).Orders == 'Defend') )
 						bPowerPlay = true;
 				}
 			}

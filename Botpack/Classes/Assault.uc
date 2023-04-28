@@ -338,7 +338,7 @@ function RemoveFort(FortStandard F, Pawn instigator)
 			{
 				if ( N.taken )
 					for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-						if ( P.IsA('Bot') && Bot(P).AmbushSpot == N )
+						if ( Bot(P) != none && Bot(P).AmbushSpot == N )
 							Bot(P).AmbushSpot = None;
 				N.taken = true;
 			}
@@ -678,7 +678,7 @@ function bool FindSpecialAttractionFor(Bot aBot)
 		{
 			if ( !aBot.CloseToPointMan(Pawn(aBot.OrderObject)) )
 			{
-				if ( aBot.OrderObject.IsA('Bot') && ((aBot.Weapon == None) || (aBot.Weapon.AIRating < 0.5)) )
+				if ( Bot(aBot.OrderObject) != none && ((aBot.Weapon == None) || (aBot.Weapon.AIRating < 0.5)) )
 					return false;
 				if ( aBot.ActorReachable(aBot.OrderObject) )
 					aBot.MoveTarget = aBot.OrderObject;

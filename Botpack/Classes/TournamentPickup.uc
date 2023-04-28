@@ -12,7 +12,7 @@ function BecomeItem()
 
 	Super.BecomeItem();
 
-	if ( Instigator.IsA('Bot') || Level.Game.bTeamGame || !Level.Game.IsA('DeathMatchPlus')
+	if ( Bot(Instigator) != none || Level.Game.bTeamGame || DeathMatchPlus(Level.Game) == none
 		|| DeathMatchPlus(Level.Game).bNoviceMode
 		|| (DeathMatchPlus(Level.Game).NumBots > 4) )
 		return;

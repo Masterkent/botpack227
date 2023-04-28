@@ -20,7 +20,7 @@ function AltFire( float Value )
 	if ( Owner == None )
 		return;
 
-	if ( Owner.IsA('Bot') ) //make sure won't blow self up
+	if ( Bot(Owner) != none || Bots(Owner) != none ) //make sure won't blow self up
 	{
 		Start = Owner.Location + CalcDrawOffset() + FireOffset.Z * vect(0,0,1);
 		if ( Pawn(Owner).Enemy != None )
@@ -37,10 +37,10 @@ function AltFire( float Value )
 	{
 		GotoState('AltFiring');
 		bCanClientFire = true;
-		if ( Owner.IsA('Bot') )
+		if ( Bot(Owner) != none || Bots(Owner) != none )
 		{
 			if ( Owner.IsInState('TacticalMove') && (Owner.Target == Pawn(Owner).Enemy)
-			 && (Owner.Physics == PHYS_Walking) && !Bot(Owner).bNovice
+			 && (Owner.Physics == PHYS_Walking) && (Bot(Owner) == none || !Bot(Owner).bNovice)
 			 && (FRand() * 6 < Pawn(Owner).Skill) )
 				Pawn(Owner).SpecialFire();
 		}
@@ -68,7 +68,9 @@ function TraceFire( float Accuracy )
 		B227_FireEndTrace += 10000 * Normal(Tracked.Location - B227_FireStartTrace);
 	else
 	{
+		bSplashDamage = false;
 		AdjustedAim = pawn(owner).AdjustAim(1000000, B227_FireStartTrace, 2.75 * AimError, false, false);
+		bSplashDamage = default.bSplashDamage;
 		B227_FireEndTrace += (10000 * vector(AdjustedAim));
 	}
 
@@ -88,7 +90,7 @@ function float RateSelf( out int bUseAltMode )
 		return -2;
 
 	P = Pawn(Owner);
-	bNovice = ( (Bot(Owner) == None) || Bot(Owner).bNovice );
+	bNovice = ( (Bot(Owner) == None) || Bot(Owner).bNovice ) && Bots(Owner) == none;
 	if ( P.Enemy == None )
 		bUseAltMode = 0;
 	else if ( P.Enemy.IsA('StationaryPawn') )
@@ -156,7 +158,7 @@ function Finish()
 	if ( (Pawn(Owner).bFire!=0) && (FRand() < 0.6) )
 		Timer();
 	if ( !bChangeWeapon && (Tracked != None) && !Tracked.bDeleteMe && (Owner != None)
-		&& (Owner.IsA('Bot')) && (Pawn(Owner).Enemy != None) && (FRand() < 0.3 + 0.35 * Pawn(Owner).skill)
+		&& (Bot(Owner) != none || Bots(Owner) != none) && (Pawn(Owner).Enemy != None) && (FRand() < 0.3 + 0.35 * Pawn(Owner).skill)
 		&& (AmmoType.AmmoAmount > 0) )
 	{
 		if ( (Owner.Acceleration == vect(0,0,0)) ||
@@ -189,7 +191,9 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
 	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
+	bSplashDamage = false;
 	AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
+	bSplashDamage = default.bSplashDamage;
 
 	PlayerOwner = PlayerPawn(Owner);
 	if ( PlayerOwner != None )

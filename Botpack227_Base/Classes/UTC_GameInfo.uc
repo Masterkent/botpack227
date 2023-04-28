@@ -144,7 +144,7 @@ function B227_AddPlayerDefaultWeapon(Pawn Player)
 		!B227_PendingWeaponSwitcher.bDeleteMe &&
 		B227_PendingWeaponSwitcher.Instigator == Player)
 	{
-		if (Player.PendingWeapon != none)
+		if (Player.PendingWeapon != none && !Player.PendingWeapon.bDeleteMe)
 		{
 			PendingWeapon = Player.PendingWeapon;
 			Player.Weapon = PendingWeapon;

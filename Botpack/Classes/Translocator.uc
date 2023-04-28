@@ -133,9 +133,9 @@ function Fire( float Value )
 			!B227_HasEnabledModuleRecovery() &&
 			!TTarget.B227_bIsRecoverable)
 		{
-			if (Level.Game.LocalLog != None)
+			if (Level.Game.LocalLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.LocalLog.LogSpecialEvent("translocate_gib", Pawn(Owner).PlayerReplicationInfo.PlayerID);
-			if (Level.Game.WorldLog != None)
+			if (Level.Game.WorldLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.WorldLog.LogSpecialEvent("translocate_gib", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 
 			Pawn(Owner).PlaySound(sound'TDisrupt', SLOT_None, 4.0);
@@ -208,9 +208,9 @@ function Translocate()
 			Owner.SetPhysics(PHYS_Falling);
 		if ( TTarget.Disrupted() )
 		{
-			if (Level.Game.LocalLog != None)
+			if (Level.Game.LocalLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.LocalLog.LogSpecialEvent("translocate_gib", Pawn(Owner).PlayerReplicationInfo.PlayerID);
-			if (Level.Game.WorldLog != None)
+			if (Level.Game.WorldLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.WorldLog.LogSpecialEvent("translocate_gib", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 
 			SpawnEffect(Start, Dest);
@@ -225,9 +225,9 @@ function Translocate()
 
 		if ( !FastTrace(Pawn(Owner).Location, TTarget.Location) )
 		{
-			if (Level.Game.LocalLog != None)
+			if (Level.Game.LocalLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.LocalLog.LogSpecialEvent("translocate_fail", Pawn(Owner).PlayerReplicationInfo.PlayerID);
-			if (Level.Game.WorldLog != None)
+			if (Level.Game.WorldLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.WorldLog.LogSpecialEvent("translocate_fail", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 
 			Pawn(Owner).SetLocation(Start);
@@ -235,9 +235,9 @@ function Translocate()
 		}
 		else
 		{
-			if (Level.Game.LocalLog != None)
+			if (Level.Game.LocalLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.LocalLog.LogSpecialEvent("translocate", Pawn(Owner).PlayerReplicationInfo.PlayerID);
-			if (Level.Game.WorldLog != None)
+			if (Level.Game.WorldLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 				Level.Game.WorldLog.LogSpecialEvent("translocate", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 
 			Owner.Velocity.X = 0;
@@ -255,7 +255,7 @@ function Translocate()
 			{
 				// bots must re-acquire this player
 				for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-					if ( (P.Enemy == Owner) && P.IsA('Bot') )
+					if ( (P.Enemy == Owner) && Bot(P) != none )
 						Bot(P).LastAcquireTime = Level.TimeSeconds;
 			}
 
@@ -266,9 +266,9 @@ function Translocate()
 	else
 	{
 		Owner.PlaySound(AltFireSound, SLOT_None, 4 * Pawn(Owner).SoundDampening);
-		if (Level.Game.LocalLog != None)
+		if (Level.Game.LocalLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 			Level.Game.LocalLog.LogSpecialEvent("translocate_fail", Pawn(Owner).PlayerReplicationInfo.PlayerID);
-		if (Level.Game.WorldLog != None)
+		if (Level.Game.WorldLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 			Level.Game.WorldLog.LogSpecialEvent("translocate_fail", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 	}
 
@@ -314,12 +314,12 @@ function ThrowTarget()
 {
 	local Vector Start, X,Y,Z;
 
-	if (Level.Game.LocalLog != None)
+	if (Level.Game.LocalLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 		Level.Game.LocalLog.LogSpecialEvent("throw_translocator", Pawn(Owner).PlayerReplicationInfo.PlayerID);
-	if (Level.Game.WorldLog != None)
+	if (Level.Game.WorldLog != None && Pawn(Owner).PlayerReplicationInfo != none)
 		Level.Game.WorldLog.LogSpecialEvent("throw_translocator", Pawn(Owner).PlayerReplicationInfo.PlayerID);
 
-	if ( Owner.IsA('Bot') )
+	if ( Bot(Owner) != none )
 		bBotMoveFire = true;
 	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 	Pawn(Owner).ViewRotation = Pawn(Owner).AdjustToss(TossForce, Start, 0, true, true);
@@ -329,7 +329,7 @@ function ThrowTarget()
 	{
 		bTTargetOut = true;
 		TTarget.Master = self;
-		if ( Owner.IsA('Bot') )
+		if ( Bot(Owner) != none )
 			TTarget.SetCollisionSize(0,0);
 		TTarget.Throw(Pawn(Owner), MaxTossForce, Start);
 	}
@@ -347,7 +347,7 @@ state NormalFire
 	}
 
 Begin:
-	if ( Owner.IsA('Bot') )
+	if ( Bot(Owner) != none )
 		Bot(Owner).SwitchToBestWeapon();
 	Sleep(0.1);
 	if ( (Pawn(Owner).bFire != 0) && (Pawn(Owner).bAltFire != 0) )

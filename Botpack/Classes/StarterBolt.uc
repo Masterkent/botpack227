@@ -28,7 +28,7 @@ simulated function PostBeginPlay()
 
 	if ( instigator == None )
 		return;
-	if ( Instigator.IsA('Bot') && Bot(Instigator).bNovice )
+	if ( Bot(Instigator) != none && Bot(Instigator).bNovice )
 		aimerror = 2200 + (3 - instigator.skill) * 300;
 	else
 		aimerror = 1000 + (3 - instigator.skill) * 400;

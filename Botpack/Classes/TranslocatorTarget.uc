@@ -86,7 +86,7 @@ function Throw(Pawn Thrower, float force, vector StartPosition)
 	local vector dir;
 
 	dir = vector(Thrower.ViewRotation);
-	if ( Thrower.IsA('Bot') )
+	if ( Bot(Thrower) != none )
 		Velocity = force * dir + vect(0,0,200);
 	else
 	{

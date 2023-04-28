@@ -320,7 +320,7 @@ function TraceFire( float Accuracy )
 	FireOffset *= 0.35;
 	if ( (SlaveEnforcer != None) || bIsSlave )
 		Accuracy = FClamp(3*Accuracy,0.75,3);
-	else if ( Owner.IsA('Bot') && !Bot(Owner).bNovice )
+	else if ( Bot(Owner) != none && !Bot(Owner).bNovice )
 		Accuracy = FMax(Accuracy, 0.45);
 
 	Super.TraceFire(Accuracy);

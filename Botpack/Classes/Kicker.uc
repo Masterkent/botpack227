@@ -84,7 +84,7 @@ simulated function B227_PostTouch( actor Other )
 	}
 	else
 		Push += KickVelocity;
-	if ( Other.IsA('Bot') )
+	if ( Bot(Other) != none )
 	{
 		if ( bWasFalling )
 			Bot(Other).bJumpOffPawn = true;

@@ -110,7 +110,7 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 		&& (VSize(Location - Defender.Location) < 1000)
 		&& Defender.LineOfSightTo(self) )
 	{
-		if ( Defender.IsA('Bot') )
+		if ( Bot(Defender) != none )
 			Bot(Defender).SendTeamMessage(None, 'OTHER', 13, 15);
 		LastHelpMessage = Level.TimeSeconds;
 	}
