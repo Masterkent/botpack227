@@ -22,7 +22,7 @@ function ResetOwner()
 	if (P == none)
 		return;
 	P.JumpZ = P.Default.JumpZ * Level.Game.PlayerJumpZScaling();
-	if ( Level.Game.IsA('DeathMatchPlus') )
+	if (DeathMatchPlus(Level.Game) != none)
 		P.AirControl = DeathMatchPlus(Level.Game).AirControl;
 	else
 		P.AirControl = P.Default.AirControl;
@@ -31,25 +31,17 @@ function ResetOwner()
 
 function OwnerJumped()
 {
-	if (Pawn(Owner) != none && !Pawn(Owner).bIsWalking && IsInState('Activated'))
+	if (Pawn(Owner) == none)
+		return;
+	if (bActive &&
+		(TournamentPlayer(Owner) == none || !Pawn(Owner).bIsWalking) &&
+		B227_UseCharge())
 	{
-		TimeCharge=0;
-		if ( Charge <= 0 )
-		{
-			if ( Owner != None )
-			{
-				Owner.PlaySound(DeActivateSound, SLOT_None);
-				ResetOwner();
-			}
-			UsedUp();
-		}
-		else
-			Owner.PlaySound(sound'BootJmp', SLOT_None);
-		Charge -= 1;
+		if (Inventory != none && Pawn(Owner).JumpZ > Pawn(Owner).default.JumpZ * 3)
+			Inventory.OwnerJumped();
 	}
-	if( Inventory != None )
+	else if (Inventory != none)
 		Inventory.OwnerJumped();
-
 }
 
 function Timer()
@@ -75,7 +67,7 @@ function Timer()
 		TimeCharge++;
 		if (TimeCharge>20)
 		{
-			OwnerJumped();
+			B227_UseCharge();
 			TimeCharge = 0;
 		}
 	}
@@ -114,6 +106,24 @@ Begin:
 state DeActivated
 {
 Begin:
+}
+
+function bool B227_UseCharge()
+{
+	TimeCharge = 0;
+	if (Charge <= 0)
+	{
+		if (bActive)
+		{
+			Owner.PlaySound(DeActivateSound, SLOT_None);
+			ResetOwner();
+		}
+		UsedUp();
+		return false;
+	}
+	Owner.PlaySound(sound'BootJmp', SLOT_None);
+	Charge -= 1;
+	return true;
 }
 
 defaultproperties
