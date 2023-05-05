@@ -169,9 +169,9 @@ function UnderLift(Mover M)
 	local NavigationPoint N;
 
 	// find nearest lift exit and go for that
-	if ( (MoveTarget != None) && MoveTarget.IsA('LiftCenter') )
+	if ( LiftCenter(MoveTarget) != none )
 		for ( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
-			if ( N.IsA('LiftExit') && (LiftExit(N).LiftTag == M.Tag)
+			if ( LiftExit(N) != none && (LiftExit(N).LiftTag == M.Tag)
 				&& ActorReachable(N) )
 			{
 				MoveTarget = N;
@@ -202,7 +202,7 @@ function ShootTarget(Actor NewTarget);
 
 function InitRating()
 {
-	if ( !Level.Game.IsA('DeathMatchPlus') )
+	if ( DeathMatchPlus(Level.Game) == none )
 		return;
 
 	Rating = 1000 + 400 * skill;
@@ -382,7 +382,7 @@ function SetOrders(name NewOrders, Pawn OrderGiver, optional bool bNoAck)
 	}
 	else if ( Orders == 'Defend' )
 	{
-		if ( Level.Game.IsA('TeamGamePlus') )
+		if ( TeamGamePlus(Level.Game) != none )
 			OrderObject = TeamGamePlus(Level.Game).SetDefenseFor(self);
 		else
 			OrderObject = None;
@@ -458,6 +458,8 @@ function bool SwitchToBestWeapon()
 		ChangedWeapon();
 	else if ( Weapon != PendingWeapon )
 		Weapon.PutDown();
+	else
+		PendingWeapon = none;
 
 	return (usealt > 0);
 }
@@ -833,7 +835,7 @@ function PainTimer()
 	{
 		if (bDrowning)
 			self.TakeDamage(5, None, Location + CollisionHeight * vect(0,0,0.5), vect(0,0,0), 'Drowned');
-		else if ( !Level.Game.IsA('Assault') )
+		else if ( Assault(Level.Game) == none )
 		{
 			bDrowning = true;
 			GotoState('FindAir');
@@ -970,7 +972,7 @@ function WhatToDoNext(name LikelyState, name LikelyLabel)
 		log("old enemy "$OldEnemy);
 	}
 	if ( (Level.NetMode != NM_Standalone)
-		&& Level.Game.IsA('DeathMatchPlus')
+		&& DeathMatchPlus(Level.Game) != none
 		&& DeathMatchPlus(Level.Game).TooManyBots() )
 	{
 		Destroy();
@@ -1029,7 +1031,7 @@ function bool DeferTo(Bot Other)
 	if ( (Other.PlayerReplicationInfo.HasFlag != None)
 		|| ((Orders == 'Follow') && (Other == OrderObject)) )
 	{
-		if ( Level.Game.IsA('TeamGamePlus') && TeamGamePlus(Level.Game).HandleTieUp(self, Other) )
+		if ( TeamGamePlus(Level.Game) != none && TeamGamePlus(Level.Game).HandleTieUp(self, Other) )
 			return false;
 		if ( (Enemy != None) && LineOfSightTo(Enemy) )
 			GotoState('TacticalMove', 'NoCharge');
@@ -1215,7 +1217,7 @@ event UpdateEyeHeight(float DeltaTime)
 	//check if still viewtarget
 	bViewTarget = false;
 	for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-		if ( P.IsA('PlayerPawn') && (PlayerPawn(P).ViewTarget == self) )
+		if ( PlayerPawn(P) != none && (PlayerPawn(P).ViewTarget == self) )
 		{
 			bViewTarget = true;
 			if ( bVerbose )
@@ -2001,7 +2003,7 @@ function eAttitude AttitudeTo(Pawn Other)
 {
 	local byte result;
 
-	if ( Level.Game.IsA('DeathMatchPlus') )
+	if ( DeathMatchPlus(Level.Game) != none )
 	{
 		result = DeathMatchPlus(Level.Game).AssessBotAttitude(self, Other);
 		Switch (result)
@@ -2060,7 +2062,7 @@ function float AssessThreat( Pawn NewThreat )
 			ThreatValue += 0.15;
 	}
 
-	if ( Level.Game.IsA('DeathMatchPlus') )
+	if ( DeathMatchPlus(Level.Game) != none )
 		ThreatValue += DeathMatchPlus(Level.Game).GameThreatAdd(self, NewThreat);
 	return ThreatValue;
 }
@@ -2160,7 +2162,7 @@ function InitializeSkill(float InSkill)
 function ReSetSkill()
 {
 	//log(self$" at skill "$Skill$" novice "$bNovice);
-	bThreePlus = ( (Skill >= 3) && Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).bThreePlus );
+	bThreePlus = ( (Skill >= 3) && DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).bThreePlus );
 	bLeadTarget = ( !bNovice || bThreePlus );
 	if ( bNovice )
 		ReFireRate = Default.ReFireRate;
@@ -2173,7 +2175,7 @@ function ReSetSkill()
 function MaybeTaunt(Pawn Other)
 {
 	if ( (FRand() < 0.25) && (Orders != 'Attack')
-		&& (!Level.Game.IsA('TeamGamePlus') || (TeamGamePlus(Level.Game).PriorityObjective(self) < 1)) )
+		&& (TeamGamePlus(Level.Game) == none || (TeamGamePlus(Level.Game).PriorityObjective(self) < 1)) )
 	{
 		Target = Other;
 		GotoState('VictoryDance');
@@ -2477,7 +2479,7 @@ function BigJump(Actor JumpDest)
 {
 	SetPhysics(PHYS_Falling);
 	Velocity = GroundSpeed * Normal(JumpDest.Location - Location);
-	if ( JumpDest.IsA('JumpSpot') && JumpSpot(JumpDest).bAlwaysAccel )
+	if ( JumpSpot(JumpDest) != none && JumpSpot(JumpDest).bAlwaysAccel )
 	{
 		bBigJump = true;
 		Acceleration = AccelRate * Normal(Destination - Location);
@@ -2488,6 +2490,7 @@ function BigJump(Actor JumpDest)
 		Inventory.OwnerJumped();
 	Velocity.Z = JumpZ;
 	Velocity = EAdjustJump();
+	PlaySound(JumpSound, SLOT_Talk, 1.0, true, 1200, 1.0);
 	bJumpOffPawn = true;
 	DesiredRotation = Rotator(JumpDest.Location - Location);
 	if ( Region.Zone.ZoneGravity == Region.Zone.Default.ZoneGravity )
@@ -2500,7 +2503,7 @@ function bool FindAmbushSpot()
 	local Pawn P;
 
 	bSpecialAmbush = false;
-	if ( (AmbushSpot == None) && Level.Game.IsA('DeathMatchPlus') )
+	if ( (AmbushSpot == None) && DeathMatchPlus(Level.Game) != none )
 		DeathMatchPlus(Level.Game).PickAmbushSpotFor(self);
 	if ( bSpecialAmbush )
 		return true;
@@ -2591,7 +2594,7 @@ function bool PickLocalInventory(float MaxDist, float MinDistraction)
 		{
 			NewWeight = inv.BotDesireability(self);
 			if ( (NewWeight > MinDistraction)
-				 || (Inv.bHeldItem && Inv.IsA('Weapon') && (VSize(Inv.Location - Location) < 0.6 * MaxDist)) )
+				 || (Inv.bHeldItem && Weapon(Inv) != none && (VSize(Inv.Location - Location) < 0.6 * MaxDist)) )
 			{
 				NewWeight = NewWeight/VSize(Inv.Location - Location);
 				if ( NewWeight > BestWeight )
@@ -2799,7 +2802,7 @@ state Hold
 	{
 		if (Physics == PHYS_Falling)
 			return;
-		if ( Wall.IsA('Mover') && Mover(Wall).HandleDoor(self) )
+		if ( Mover(Wall) != none && Mover(Wall).HandleDoor(self) )
 		{
 			if ( SpecialPause > 0 )
 				Acceleration = vect(0,0,0);
@@ -2964,7 +2967,7 @@ state Roaming
 	function MayFall()
 	{
 		bCanJump = ( (MoveTarget != None)
-					&& ((MoveTarget.Physics != PHYS_Falling) || !MoveTarget.IsA('Inventory')) );
+					&& ((MoveTarget.Physics != PHYS_Falling) || Inventory(MoveTarget) == none) );
 	}
 
 	function HandleHelpMessageFrom(Pawn Other)
@@ -3027,7 +3030,7 @@ state Roaming
 	{
 		if (Physics == PHYS_Falling)
 			return;
-		if ( Wall.IsA('Mover') && Mover(Wall).HandleDoor(self) )
+		if ( Mover(Wall) != none && Mover(Wall).HandleDoor(self) )
 		{
 			if ( SpecialPause > 0 )
 				Acceleration = vect(0,0,0);
@@ -3060,8 +3063,8 @@ state Roaming
 		local byte TeamPriority;
 		local Pawn P;
 
-		bCanTranslocate = ( Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).CanTranslocate(self) );
-		if ( Level.Game.IsA('TeamGamePlus') )
+		bCanTranslocate = ( DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).CanTranslocate(self) );
+		if ( TeamGamePlus(Level.Game) != none )
 		{
 			if ( (Orders == 'FreeLance') && !bStayFreelance
 				 &&	(Orders != BotReplicationInfo(PlayerReplicationInfo).RealOrders) )
@@ -3111,7 +3114,7 @@ state Roaming
 						if ( PickLocalInventory(600, 0) )
 							return;
 
-						if ( !OrderObject.IsA('PlayerPawn') )
+						if ( PlayerPawn(OrderObject) == none )
 						{
 							BestWeight = 0;
 							BestPath = FindBestInventoryPath(BestWeight, !bNovice && (skill >= 2));
@@ -3178,7 +3181,7 @@ state Roaming
 			return;
 		}
 
-		if ( ((Orders == 'Follow') && (bNearPoint || (Level.Game.IsA('TeamGamePlus') && TeamGamePlus(Level.Game).WaitForPoint(self))))
+		if ( ((Orders == 'Follow') && (bNearPoint || (TeamGamePlus(Level.Game) != none && TeamGamePlus(Level.Game).WaitForPoint(self))))
 			|| ((Orders == 'Defend') && bLockedAndLoaded && LineOfSightTo(OrderObject)) )
 		{
 			if ( FRand() < 0.35 )
@@ -3230,7 +3233,7 @@ state Roaming
 
 		// nothing around - maybe just wait a little
 		if ( (FRand() < 0.35) && bNovice
-			&& (!Level.Game.IsA('DeathMatchPlus') || !DeathMatchPlus(Level.Game).OneOnOne())  )
+			&& (DeathMatchPlus(Level.Game) == none || !DeathMatchPlus(Level.Game).OneOnOne())  )
 		{
 			GoalString = " Nothing cool, so camp ";
 			CampTime = 3.5 + FRand() - skill;
@@ -3248,7 +3251,7 @@ state Roaming
 		}
 
 		// hunt player
-		if ( (!bNovice || (Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).OneOnOne()))
+		if ( (!bNovice || (DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).OneOnOne()))
 			&& (Weapon != none && Weapon.AIRating > 0.5) && (Health > 60) )
 		{
 			if ( (PlayerPawn(RoamTarget) != None) && !LineOfSightTo(RoamTarget) )
@@ -3264,7 +3267,7 @@ state Roaming
 			{
 				// high skill bots go hunt player
 				for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-					if ( P.bIsPlayer && P.IsA('PlayerPawn')
+					if ( P.bIsPlayer && PlayerPawn(P) != none
 						&& ((VSize(P.Location - Location) > 1500) || !LineOfSightTo(P)) )
 					{
 						BestPath = FindPathToward(P);
@@ -3354,7 +3357,7 @@ state Roaming
 	{
 		local bool bHaveItem, bIsHealth, bOtherHas, bIsWeapon;
 
-		if ( MoveTarget.IsA('Weapon') )
+		if ( Weapon(MoveTarget) != none )
 		{
 			if ( (Weapon == None) || (Weapon.AIRating < 0.5) || Weapon(MoveTarget).bWeaponStay )
 				return;
@@ -3512,9 +3515,9 @@ Moving:
 		Sleep(0.0);
 		Goto('RunAway');
 	}
-	if ( MoveTarget.IsA('InventorySpot') )
+	if ( InventorySpot(MoveTarget) != none )
 	{
-		if ( (!Level.Game.IsA('TeamGamePlus') || (TeamGamePlus(Level.Game).PriorityObjective(self) == 0))
+		if ( (TeamGamePlus(Level.Game) == none || (TeamGamePlus(Level.Game).PriorityObjective(self) == 0))
 			&& (InventorySpot(MoveTarget).markedItem != None)
 			&& (InventorySpot(MoveTarget).markedItem.BotDesireability(self) > 0) )
 		{
@@ -3542,7 +3545,7 @@ Moving:
 			Goto('ReCamp');
 		}
 	}
-	else if ( MoveTarget.IsA('Inventory') && Level.Game.bTeamGame )
+	else if ( Inventory(MoveTarget) != none && Level.Game.bTeamGame )
 	{
 		if ( Orders == 'Follow' )
 			ShareWith(Pawn(OrderObject));
@@ -3606,7 +3609,7 @@ state Wandering
 
 	singular event BaseChange()
 	{
-		if ( (Base != None) && Base.IsA('Mover') )
+		if ( Mover(Base) != None )
 			Destination = Location - 300 * Normal(Velocity);
 		else
 			Super.BaseChange();
@@ -3666,7 +3669,7 @@ state Wandering
 	{
 		if (Physics == PHYS_Falling)
 			return;
-		if ( Wall.IsA('Mover') && Mover(Wall).HandleDoor(self) )
+		if ( Mover(Wall) != none && Mover(Wall).HandleDoor(self) )
 		{
 			if ( SpecialPause > 0 )
 				Acceleration = vect(0,0,0);
@@ -4053,7 +4056,7 @@ ignores SeePlayer, HearNoise, Bump, HitWall;
 				else if ( bWillHunt || (!bSniping && (VSize(Enemy.Location - Location)
 							> 600 + (FRand() * RelativeStrength(Enemy) - CombatStyle) * 600)) )
 				{
-					bDevious = ( !bNovice && !Level.Game.bTeamGame && Level.Game.IsA('DeathMatchPlus')
+					bDevious = ( !bNovice && !Level.Game.bTeamGame && DeathMatchPlus(Level.Game) != none
 								&& (FRand() < 0.52 - 0.12 * DeathMatchPlus(Level.Game).NumBots) );
 					GotoState('Hunting');
 				}
@@ -4116,7 +4119,7 @@ ignores EnemyNotVisible;
 		bAdvancedTactics = false;
 		if ( bCanFire ) // MoveTarget is player, not destination
 			bCanJump = ( (MoveTarget != None)
-						&& ((MoveTarget.Physics != PHYS_Falling) || !MoveTarget.IsA('Inventory')) );
+						&& ((MoveTarget.Physics != PHYS_Falling) || Inventory(MoveTarget) == none) );
 	}
 
 	function WarnTarget(Pawn shooter, float projSpeed, vector FireDir)
@@ -4187,7 +4190,7 @@ ignores EnemyNotVisible;
 	{
 		if (Physics == PHYS_Falling)
 			return;
-		if ( Wall.IsA('Mover') && Mover(Wall).HandleDoor(self) )
+		if ( Mover(Wall) != none && Mover(Wall).HandleDoor(self) )
 		{
 			if ( SpecialPause > 0 )
 				Acceleration = vect(0,0,0);
@@ -4264,7 +4267,7 @@ ignores EnemyNotVisible;
 						return;
 					}
 				}
-				else if ( Level.Game.IsA('TeamGamePlus') && TeamGamePlus(Level.Game).SendBotToGoal(self) )
+				else if ( TeamGamePlus(Level.Game) != none && TeamGamePlus(Level.Game).SendBotToGoal(self) )
 					return;
 			}
 			if ( BestPath != None )
@@ -4493,7 +4496,7 @@ Moving:
 		Sleep(0.0);
 		Goto('RunAway');
 	}
-	if ( MoveTarget.IsA('InventorySpot') && (InventorySpot(MoveTarget).markedItem != None)
+	if ( InventorySpot(MoveTarget) != none && (InventorySpot(MoveTarget).markedItem != None)
 		&& (InventorySpot(MoveTarget).markedItem.GetStateName() == 'Pickup')
 		&& (InventorySpot(MoveTarget).markedItem.BotDesireability(self) > 0) )
 			MoveTarget = InventorySpot(MoveTarget).markedItem;
@@ -4535,7 +4538,7 @@ ignores EnemyNotVisible;
 	{
 		bAdvancedTactics = false;
 		bCanJump = ( (MoveTarget != None)
-					&& ((MoveTarget.Physics != PHYS_Falling) || !MoveTarget.IsA('Inventory')) );
+					&& ((MoveTarget.Physics != PHYS_Falling) || Inventory(MoveTarget) == none) );
 	}
 
 	function EnemyNotVisible()
@@ -4614,7 +4617,7 @@ ignores EnemyNotVisible;
 	{
 		if (Physics == PHYS_Falling)
 			return;
-		if ( Wall.IsA('Mover') && Mover(Wall).HandleDoor(self) )
+		if ( Mover(Wall) != none && Mover(Wall).HandleDoor(self) )
 		{
 			if ( SpecialPause > 0 )
 				Acceleration = vect(0,0,0);
@@ -4645,10 +4648,10 @@ ignores EnemyNotVisible;
 			WhatToDoNext('','');
 			return;
 		}
-		bCanTranslocate = ( Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).CanTranslocate(self) );
+		bCanTranslocate = ( DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).CanTranslocate(self) );
 		LastAttractCheck = Level.TimeSeconds - 0.1;
 
-		if ( Level.Game.IsA('TeamGamePlus')
+		if ( TeamGamePlus(Level.Game) != none
 			&& TeamGamePlus(Level.Game).FindSpecialAttractionFor(self) )
 		{
 			if ( IsInState('Fallback') )
@@ -4858,7 +4861,7 @@ state Charging
 	{
 		if (Physics == PHYS_Falling)
 			return;
-		if ( Wall.IsA('Mover') && Mover(Wall).HandleDoor(self) )
+		if ( Mover(Wall) != none && Mover(Wall).HandleDoor(self) )
 		{
 			if ( SpecialPause > 0 )
 				Acceleration = vect(0,0,0);
@@ -5457,12 +5460,12 @@ situation. Make sure destination is reachable
 		enemyDist = VSize(Location - Enemy.Location);
 		if ( (bNovice && (FRand() > 0.3 + 0.15 * skill)) || (FRand() > 0.7 + 0.15 * skill)
 			&& ((EnemyDist > 900) || (Enemy.Weapon == None) || !Enemy.Weapon.bMeleeWeapon)
-			&& (!Level.Game.IsA('TeamGamePlus') || (TeamGamePlus(Level.Game).PriorityObjective(self) == 0)) )
+			&& (TeamGamePlus(Level.Game) == none || (TeamGamePlus(Level.Game).PriorityObjective(self) == 0)) )
 			GiveUpTactical(true);
 
 		success = false;
 		if ( (bSniping || (Orders == 'Hold'))
-			&& (!Level.Game.IsA('TeamGamePlus') || (TeamGamePlus(Level.Game).PriorityObjective(self) == 0)) )
+			&& (TeamGamePlus(Level.Game) == none || (TeamGamePlus(Level.Game).PriorityObjective(self) == 0)) )
 			bNoCharge = true;
 		if ( bSniping && Weapon != none && Weapon.IsA('SniperRifle') )
 		{
@@ -5803,7 +5806,7 @@ ignores EnemyNotVisible;
 	function MayFall()
 	{
 		bCanJump = ( ((MoveTarget != None)
-					&& ((MoveTarget.Physics != PHYS_Falling) || !MoveTarget.IsA('Inventory')))
+					&& ((MoveTarget.Physics != PHYS_Falling) || Inventory(MoveTarget) == none))
 					|| PointReachable(Destination) );
 	}
 
@@ -5909,7 +5912,7 @@ ignores EnemyNotVisible;
 	{
 		if (Physics == PHYS_Falling)
 			return;
-		if ( Wall.IsA('Mover') && Mover(Wall).HandleDoor(self) )
+		if ( Mover(Wall) != none && Mover(Wall).HandleDoor(self) )
 		{
 			if ( SpecialPause > 0 )
 				Acceleration = vect(0,0,0);
@@ -6043,7 +6046,7 @@ ignores EnemyNotVisible;
 		else
 			bHunting = true;
 
-		bCanTranslocate = ( Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).CanTranslocate(self) );
+		bCanTranslocate = ( DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).CanTranslocate(self) );
 
 		if ( bDevious )
 		{
@@ -6098,7 +6101,7 @@ ignores EnemyNotVisible;
 			return;
 		}
 
-		if ( (NumHuntPaths > 60) && (bNovice || !Level.Game.IsA('DeathMatchPlus') || !DeathMatchPlus(Level.Game).OneOnOne()) )
+		if ( (NumHuntPaths > 60) && (bNovice || DeathMatchPlus(Level.Game) == none || !DeathMatchPlus(Level.Game).OneOnOne()) )
 		{
 			WhatToDoNext('', '');
 			return;
@@ -6224,7 +6227,7 @@ AfterFall:
 	bFromWall = false;
 
 Follow:
-	if ( Level.Game.IsA('TeamGamePlus') )
+	if ( TeamGamePlus(Level.Game) != none )
 		TeamGamePlus(Level.Game).FindSpecialAttractionFor(self);
 	if ( bSniping )
 		GotoState('StakeOut');
@@ -6443,7 +6446,7 @@ Begin:
 	if ( AmbushSpot == None )
 		bSniping = false;
 	if ( (bSniping && (VSize(Location - AmbushSpot.Location) > 3 * CollisionRadius))
-		|| (Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).NeverStakeOut(self)) )
+		|| (DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).NeverStakeOut(self)) )
 	{
 		Enemy = None;
 		OldEnemy = None;
@@ -6468,7 +6471,7 @@ Begin:
 	else
 		PlayChallenge();
 	Sleep(1 + FRand());
-	if ( Level.Game.IsA('TeamGamePlus') )
+	if ( TeamGamePlus(Level.Game) != none )
 		TeamGamePlus(Level.Game).FindSpecialAttractionFor(self);
 	if ( ContinueStakeOut() )
 	{
@@ -6483,7 +6486,7 @@ Begin:
 		if ( bSniping )
 			WhatToDoNext('','');
 		BlockedPath = None;
-		bDevious = ( !bNovice && !Level.Game.bTeamGame && Level.Game.IsA('DeathMatchPlus')
+		bDevious = ( !bNovice && !Level.Game.bTeamGame && DeathMatchPlus(Level.Game) != none
 					&& (FRand() < 0.75 - 0.15 * DeathMatchPlus(Level.Game).NumBots) );
 		GotoState('Hunting', 'AfterFall');
 	}
@@ -6653,7 +6656,7 @@ ignores Bump, Hitwall, WarnTarget;
 
 	singular event BaseChange()
 	{
-		if ( (Base != None) && Base.IsA('Mover')
+		if ( Mover(Base) != None
 			&& ((MoveTarget == Base)
 				|| ((MoveTarget != None) && (MoveTarget == Mover(Base).myMarker))) )
 		{
@@ -7367,7 +7370,7 @@ ignores SeePlayer, EnemyNotVisible, HearNoise, Died, Bump, Trigger, HitWall, Hea
 	function BeginState()
 	{
 		if ( (Level.NetMode != NM_Standalone)
-			&& Level.Game.IsA('DeathMatchPlus')
+			&& DeathMatchPlus(Level.Game) != none
 			&& DeathMatchPlus(Level.Game).TooManyBots() )
 		{
 			Destroy();
@@ -7572,16 +7575,22 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 function bool B227_PickWallAdjust()
 {
 	local bool Result;
+	local float OldJumpZ;
 
 	if (Physics == PHYS_Walking)
 	{
-		Result = PickWallAdjust();
-		if (Physics == PHYS_Falling && JumpZ > 0 && Velocity.Z >= JumpZ * 0.9)
+		if (JumpZ != default.JumpZ * Level.Game.PlayerJumpZScaling())
 		{
-			PlaySound(JumpSound, SLOT_Talk, 1.0, true, 1200, 1.0);
-			if (bCountJumps && Inventory != none)
-				Inventory.OwnerJumped();
+			OldJumpZ = JumpZ;
+			JumpZ = default.JumpZ;
+			Result = PickWallAdjust();
+			JumpZ = OldJumpZ;
 		}
+		else
+			Result = PickWallAdjust();
+
+		if (Physics == PHYS_Falling && default.JumpZ > 0)
+			PlaySound(JumpSound, SLOT_Talk, 1.0, true, 1200, 1.0);
 
 		return Result;
 	}

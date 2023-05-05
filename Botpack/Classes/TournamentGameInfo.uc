@@ -191,7 +191,7 @@ static function string UTF_CreatureKillMessage(name damageType, pawn Other)
 	else
 		message = Default.DeathVerb$Default.DeathTerm;
 
-	return ( message$Default.DeathPrep );
+	return B227_RemoveTrailingPeriod(message) $ Default.DeathPrep;
 }
 
 static function string UTF_PlayerKillMessage(name damageType, PlayerReplicationInfo Other)
@@ -491,6 +491,13 @@ static function bool B227_ReplaceUnrealIPlayerClass(out class<PlayerPawn> Player
 static function class<PlayerPawn> B227_LoadPlayerClass(string PlayerClassName)
 {
 	return class<PlayerPawn>(DynamicLoadObject(PlayerClassName, class'Class', true));
+}
+
+static function string B227_RemoveTrailingPeriod(string S)
+{
+	if (Right(S, 1) == ".")
+		return Left(S, Len(S) - 1);
+	return S;
 }
 
 defaultproperties
