@@ -5,7 +5,8 @@ var transient byte WetSteps;
 function PlayDodge(eDodgeDir DodgeMove)
 {
 	Velocity.Z = 210;
-	PlayDuck();
+	if (!bUpdating)
+		PlayDuck();
 }
 
 function PlayDyingSound()

@@ -56,6 +56,9 @@ simulated function RunStep()
 function PlayDodge(eDodgeDir DodgeMove)
 {
 	Velocity.Z = 210;
+	if (bUpdating)
+		return;
+
 	if ( DodgeMove == DODGE_Left )
 		PlayAnim('LeftDodge', 1.35, 0.06);
 	else if ( DodgeMove == DODGE_Right )
@@ -239,15 +242,12 @@ function PlayLanded(float impactVel)
 	impactVel = 0.1 * impactVel * impactVel;
 	BaseEyeHeight = Default.BaseEyeHeight;
 
-	if ( Role == ROLE_Authority )
-	{
-		if ( impactVel > 0.17 )
-			PlaySound(LandGrunt, SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
-		if( Level.FootprintManager!=None )
-			Level.FootprintManager.Static.PlayLandingNoise(Self,1,impactVel);
-		else if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) )
-			PlaySound(Land, SLOT_Interact, FClamp(4.5 * impactVel,0.5,6), false, 1000, 1.0);
-	}
+	if ( impactVel > 0.17 )
+		B227_PlayOwnedSound(LandGrunt, SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+	if ( Level.FootprintManager!=None )
+		B227_PlayLandingNoise(Self, 1, impactVel);
+	else if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) )
+		B227_PlayOwnedSound(Land, SLOT_Interact, FClamp(4.5 * impactVel,0.5,6), false, 1000, 1.0);
 
 	if ( (GetAnimGroup(AnimSequence) == 'Dodge') && IsAnimating() )
 		return;

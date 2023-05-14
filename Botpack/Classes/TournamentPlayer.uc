@@ -65,6 +65,7 @@ var globalconfig bool B227_bUnrealBeepSound;
 
 var transient B227_SpeechMenu B227_SpeechMenu;
 var transient B227_PermissiveAccessManager B227_PermissiveAccessManager;
+var transient byte B227_WetSteps;
 
 replication
 {
@@ -112,10 +113,11 @@ function DoJump( optional float F )
 	if ( !bIsCrouching && (Physics == PHYS_Walking) )
 	{
 		if ( !bUpdating )
-			B227_PlaySound(JumpSound, SLOT_Talk, 1.5, true, 1200, 1.0 );
+			B227_PlayOwnedSound(JumpSound, SLOT_Talk, 1.5, true, 1200, 1.0 );
 		if ( (Level.Game != None) && (Level.Game.Difficulty > 0) )
 			MakeNoise(0.1 * Level.Game.Difficulty);
-		PlayInAir();
+		if (!bUpdating && !bIsCrouching)
+			PlayInAir();
 		if ( bCountJumps && (Role == ROLE_Authority) && (Inventory != None) )
 			Inventory.OwnerJumped();
 		if ( bIsWalking )
@@ -467,6 +469,9 @@ exec function Loaded()
 function PlayDodge(eDodgeDir DodgeMove)
 {
 	Velocity.Z = 210;
+	if (bUpdating)
+		return;
+
 	if ( DodgeMove == DODGE_Left )
 		TweenAnim('DodgeL', 0.25);
 	else if ( DodgeMove == DODGE_Right )
@@ -801,13 +806,17 @@ simulated function FootStepping()
 		return;
 	}
 
-	decision = FRand();
-	if ( decision < 0.34 )
-		step = Footstep1;
-	else if (decision < 0.67 )
-		step = Footstep2;
-	else
-		step = Footstep3;
+	if (Level.FootprintManager == none ||
+		!Level.FootprintManager.static.OverrideFootstep(self, step, B227_WetSteps))
+	{
+		decision = FRand();
+		if ( decision < 0.34 )
+			step = Footstep1;
+		else if (decision < 0.67 )
+			step = Footstep2;
+		else
+			step = Footstep3;
+	}
 
 	PlaySound(step, SLOT_Interact, 2.2, false, 1000.0, 1.0);
 }
@@ -1174,9 +1183,11 @@ function PlayLanded(float impactVel)
 	BaseEyeHeight = Default.BaseEyeHeight;
 
 	if ( impactVel > 0.17 )
-		B227_PlaySound(LandGrunt, SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
-	if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) )
-		B227_PlaySound(Land, SLOT_Interact, FClamp(4 * impactVel,0.5,5), false,1000, 1.0);
+		B227_PlayOwnedSound(LandGrunt, SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+	if ( Level.FootprintManager != none )
+		B227_PlayLandingNoise(self, 0, impactVel);
+	else if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) )
+		B227_PlayOwnedSound(Land, SLOT_Interact, FClamp(4 * impactVel,0.5,5), false,1000, 1.0);
 	if ( (impactVel > 0.06) || (GetAnimGroup(AnimSequence) == 'Jumping') || (GetAnimGroup(AnimSequence) == 'Ducking') )
 	{
 		if ( (Weapon == None) || (Weapon.Mass < 20) )
@@ -1536,6 +1547,17 @@ function B227_PopAdminAccess()
 	class'B227_PermissiveAccessManager'.static.PopAdminAccess(Level, B227_PermissiveAccessManager);
 }
 
+function B227_PlayLandingNoise(Pawn Other, float VolAmp, float ImpactVel)
+{
+	if (NetConnection(Player) != none && bIsPlayer)
+	{
+		bIsPlayer = false; // The landing sound will be played only for other players
+		Level.FootprintManager.static.PlayLandingNoise(self, VolAmp, ImpactVel);
+		bIsPlayer = true;
+	}
+	else
+		Level.FootprintManager.static.PlayLandingNoise(self, VolAmp, ImpactVel);
+}
 
 defaultproperties
 {

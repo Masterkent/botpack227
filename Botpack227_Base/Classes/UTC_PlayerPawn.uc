@@ -224,6 +224,27 @@ static function UTSF_ClientWeaponEvent(PlayerPawn this, name EventType)
 		UTC_Weapon(this.Weapon).ClientWeaponEvent(EventType);
 }
 
+function DoJump( optional float F )
+{
+	if ( CarriedDecoration != None )
+		return;
+	if ( !bIsCrouching && (Physics == PHYS_Walking) )
+	{
+		if ( !bUpdating )
+			B227_PlayOwnedSound(JumpSound, SLOT_Talk, 1.5, true, 1200, 1.0 );
+		if ( (Level.Game != None) && (Level.Game.Difficulty > 0) )
+			MakeNoise(0.1 * Level.Game.Difficulty);
+		if (!bUpdating && !bIsCrouching)
+			PlayInAir();
+		if ( bCountJumps && (Role == ROLE_Authority) && Inventory != none )
+			Inventory.OwnerJumped();
+		Velocity.Z = JumpZ;
+		if ( Base!=Level && Base!=None )
+			Velocity.Z += Base.Velocity.Z;
+		SetPhysics(PHYS_Falling);
+	}
+}
+
 function Landed(vector HitNormal)
 {
 	//Note - physics changes type to PHYS_Walking by default for landed pawns
@@ -264,6 +285,12 @@ function int CompressAccel(int C)
 	else
 		C = Min(abs(C), 127) + 128;
 	return C;
+}
+
+function PlayDodge(EDodgeDir DodgeMove)
+{
+	if (!bUpdating)
+		PlayDuck();
 }
 
 exec function GetWeapon(class<Weapon> NewWeaponClass)
@@ -366,6 +393,31 @@ state PlayerWalking
 			else
 				PlayWaiting();
 		}
+	}
+
+	function Dodge(eDodgeDir DodgeMove)
+	{
+		local vector X,Y,Z;
+
+		if ( bIsCrouching || (Physics != PHYS_Walking) )
+			return;
+
+		GetAxes(Rotation,X,Y,Z);
+		if (DodgeMove == DODGE_Forward)
+			Velocity = 1.5*GroundSpeed*X + (Velocity Dot Y)*Y;
+		else if (DodgeMove == DODGE_Back)
+			Velocity = -1.5*GroundSpeed*X + (Velocity Dot Y)*Y;
+		else if (DodgeMove == DODGE_Left)
+			Velocity = 1.5*GroundSpeed*Y + (Velocity Dot X)*X;
+		else if (DodgeMove == DODGE_Right)
+			Velocity = -1.5*GroundSpeed*Y + (Velocity Dot X)*X;
+
+		Velocity.Z = 160;
+		if (!bUpdating)
+			B227_PlayOwnedSound(JumpSound, SLOT_Talk, 1.0, true, 800, 1.0 );
+		PlayDodge(DodgeMove); // Changes Velocity.Z, therefore it must be called independently of bUpdating
+		DodgeDir = DODGE_Active;
+		SetPhysics(PHYS_Falling);
 	}
 }
 
@@ -538,6 +590,18 @@ state PlayerSpectating
 	}
 }
 
+simulated function SetMesh()
+{
+	Mesh = default.Mesh;
+}
+
+// Auxiliary
+
+simulated function UTC_PlayerReplicationInfo B227_PRI()
+{
+	return UTC_PlayerReplicationInfo(PlayerReplicationInfo);
+}
+
 function B227_PlaySound(
 	sound Sound,
 	optional ESoundSlot Slot,
@@ -549,16 +613,31 @@ function B227_PlaySound(
 	class'UTC_Actor'.static.B227_PlaySound(self, Sound, Slot, Volume, bNoOverride, Radius, Pitch);
 }
 
-simulated function SetMesh()
+function B227_PlayOwnedSound(
+	sound Sound,
+	optional ESoundSlot Slot,
+	optional float Volume,
+	optional bool bNoOverride,
+	optional float Radius,
+	optional float Pitch)
 {
-	Mesh = default.Mesh;
-}
+	if (Volume == 0)
+		Volume = TransientSoundVolume;
 
-// Auxiliary
+	if (Radius == 0)
+		Radius = TransientSoundRadius;
 
-simulated function UTC_PlayerReplicationInfo B227_PRI()
-{
-	return UTC_PlayerReplicationInfo(PlayerReplicationInfo);
+	if (Pitch == 0)
+		Pitch = 1.f;
+
+	if (NetConnection(Player) != none && bIsPlayer)
+	{
+		bIsPlayer = false;
+		PlaySound(Sound, Slot, Volume, bNoOverride, Radius, Pitch);
+		bIsPlayer = true;
+	}
+	else
+		PlaySound(Sound, Slot, Volume, bNoOverride, Radius, Pitch);
 }
 
 static function float B227_LastPlaySound(PlayerPawn this)

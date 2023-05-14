@@ -366,10 +366,11 @@ function DoJump( optional float F )
   if ( !bIsCrouching && (Physics == PHYS_Walking) )
   {
     if ( !bUpdating&&lastplaysound<level.timeseconds)  //rand sounz
-      PlaySound(JumpSounds[rand(3)], SLOT_Talk, 1.5, true, 1200, 1.0 );
+      B227_PlayOwnedSound(JumpSounds[rand(3)], SLOT_Talk, 1.5, true, 1200, 1.0 );
     if ( (Level.Game != None) && (Level.Game.Difficulty > 0) )
       MakeNoise(0.1 * Level.Game.Difficulty);
-    PlayInAir();
+    if (!bUpdating)
+      PlayInAir();
     //-if ( bCountJumps){
     //-  boots=XidiaJumpBoots(FindInventoryType(class'XidiaJumpBoots'));
     //-  if (Boots!=none)
@@ -1378,13 +1379,16 @@ state PlayerWalking
       Velocity = -1.5*GroundSpeed*Y + (Velocity Dot X)*X;
 
     Velocity.Z = 160;
-    if (lastplaysound<level.timeseconds){
-      if (linfo.bisMissionPack)
-        PlaySound(Sound'B227_XiDodge', SLOT_Talk, 1.0, true, 800, 1.0 );
-      else
-        PlaySound(JumpSound, SLOT_Talk, 1.0, true, 800, 1.0 );
+    if (!bUpdating)
+    {
+      if (lastplaysound<level.timeseconds){
+        if (linfo.bisMissionPack)
+          B227_PlayOwnedSound(Sound'B227_XiDodge', SLOT_Talk, 1.0, true, 800, 1.0 );
+        else
+          B227_PlayOwnedSound(JumpSound, SLOT_Talk, 1.0, true, 800, 1.0 );
+      }
+      setTimer(0.0,false);
     }
-    setTimer(0.0,false);
     PlayDodge(DodgeMove);
     DodgeDir = DODGE_Active;
     SetPhysics(PHYS_Falling);
@@ -1931,18 +1935,23 @@ function PlayLanded(float impactVel)
   if ( impactVel > 0.17 && lastplaysound<level.timeseconds) {//rand soundzzzzzzzzzzzzzzzzzzzzzzz
     rand=frand();
     if (rand<0.5)
-      PlaySound(Sound'B227_XiLand2', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+      B227_PlayOwnedSound(Sound'B227_XiLand2', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
     else /*if ( rand<0.5)*/
-      PlaySound(Sound'B227_XiLand1', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+      B227_PlayOwnedSound(Sound'B227_XiLand1', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
 /*      else if ( rand<0.75)
-    PlaySound(Sound'OLfall3', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+    PlayOwnedSound(Sound'OLfall3', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
       else
-    PlaySound(Sound'OLfall4', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+    PlayOwnedSound(Sound'OLfall4', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
   */
   }
 
-  if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) &&lastplaysound<level.timeseconds)
-     PlaySound(Land, SLOT_Interact, FClamp(4 * impactVel,0.5,5), false,1000, 1.0);
+  if (LastPlaySound < Level.TimeSeconds)
+  {
+    if ( Level.FootprintManager != none )
+      B227_PlayLandingNoise(self, 0, impactVel);
+    else if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) )
+       B227_PlayOwnedSound(Land, SLOT_Interact, FClamp(4 * impactVel,0.5,5), false,1000, 1.0);
+  }
   if ( (impactVel > 0.06) || (GetAnimGroup(AnimSequence) == 'Jumping') || (GetAnimGroup(AnimSequence) == 'Ducking') )
   {
     if ( (Weapon == None) || (Weapon.Mass < 20) )

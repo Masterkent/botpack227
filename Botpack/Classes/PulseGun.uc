@@ -12,17 +12,14 @@ var() sound DownSound;
 // Auxiliary
 var private int B227_Handedness;
 var private float B227_FireOffsetX, B227_FireOffsetY, B227_FireOffsetZ;
-var private bool B227_bAllowCenterView;
 
 replication
 {
 	reliable if (Role == ROLE_Authority && bNetOwner)
+		B227_Handedness,
 		B227_FireOffsetX,
 		B227_FireOffsetY,
 		B227_FireOffsetZ;
-
-	reliable if (Role == ROLE_Authority)
-		B227_ClientSetHandedness;
 
 	reliable if (Role < ROLE_Authority)
 		B227_SetRightHandedness;
@@ -93,7 +90,7 @@ function SetHand(float Hand)
 		Mesh = mesh'PulseGunR';
 	}
 
-	B227_UpdateClientHandedness(Hand);
+	B227_Handedness = Hand;
 }
 
 // return delta to combat style
@@ -437,22 +434,6 @@ static function bool B227_ShouldAllowCenterView()
 		class'B227_Config'.default.bPulseGunAllowCenterView;
 }
 
-function B227_UpdateClientHandedness(int Hand)
-{
-	if (Hand != B227_Handedness)
-	{
-		B227_Handedness = Hand;
-		B227_ClientSetHandedness(Hand);
-	}
-}
-
-simulated function B227_ClientSetHandedness(int Hand)
-{
-	B227_Handedness = Hand;
-	if (Hand == 0 && !B227_ShouldAllowCenterView())
-		B227_SetRightHandedness();
-}
-
 function B227_SetRightHandedness()
 {
 	SetHand(-1);
@@ -460,10 +441,10 @@ function B227_SetRightHandedness()
 
 simulated function B227_AdjustHand()
 {
-	if (B227_bAllowCenterView != B227_ShouldAllowCenterView())
+	if (B227_Handedness == 0 && !B227_ShouldAllowCenterView())
 	{
-		B227_bAllowCenterView = B227_ShouldAllowCenterView();
-		B227_ClientSetHandedness(B227_Handedness);
+		B227_Handedness = -1;
+		B227_SetRightHandedness();
 	}
 }
 
@@ -501,7 +482,7 @@ simulated function vector B227_PlayerViewOffset()
 
 simulated function int B227_ViewRotationRoll(int Hand)
 {
-	if (B227_Handedness == 0 && B227_bAllowCenterView)
+	if (B227_Handedness == 0 && B227_ShouldAllowCenterView())
 		return 1536 * 2;
 	return super.B227_ViewRotationRoll(Hand);
 }
@@ -650,5 +631,4 @@ defaultproperties
 	SoundVolume=255
 	CollisionRadius=32.000000
 	B227_Handedness=-1
-	B227_bAllowCenterView=True
 }

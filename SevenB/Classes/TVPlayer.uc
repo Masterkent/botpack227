@@ -397,15 +397,16 @@ function DoJump( optional float F )
   {
     if ( !bUpdating&&lastplaysound<level.timeseconds)  //rand sounz
 //      PlaySound(JumpSounds[rand(3)], SLOT_Talk, 1.5, true, 1200, 1.0 );
-			      PlaySound(JumpSounds[0], SLOT_Talk, 1.5, true, 1200, 1.0 );
+			      B227_PlayOwnedSound(JumpSounds[0], SLOT_Talk, 1.5, true, 1200, 1.0 );
     if ( (Level.Game != None) && (Level.Game.Difficulty > 0) )
       MakeNoise(0.1 * Level.Game.Difficulty);
-    PlayInAir();
-    if ( bCountJumps){
+    if (!bUpdating)
+      PlayInAir();
+    if ( bCountJumps && Role == ROLE_Authority ){
       boots=XidiaJumpBoots(FindInventoryType(class'XidiaJumpBoots'));
       if (Boots!=none)
         Boots.SetJumpZ();
-      else
+      else if (Inventory != none)
 				Inventory.OwnerJumped();
     }
     Velocity.Z = JumpZ;
@@ -1439,13 +1440,12 @@ state PlayerWalking
       Velocity = -1.5*GroundSpeed*Y + (Velocity Dot X)*X;
 
     Velocity.Z = 160;
-    if (lastplaysound<level.timeseconds){
-//      if (linfo.bisMissionPack)
-  //      PlaySound(Sound'XiDodge', SLOT_Talk, 1.0, true, 800, 1.0 );
-   //   else
-        PlaySound(JumpSound, SLOT_Talk, 1.0, true, 800, 1.0 );
+    if (!bUpdating)
+    {
+      if (lastplaysound<level.timeseconds)
+        B227_PlayOwnedSound(JumpSound, SLOT_Talk, 1.0, true, 800, 1.0 );
+      setTimer(0.0,false);
     }
-    setTimer(0.0,false);
     PlayDodge(DodgeMove);
     DodgeDir = DODGE_Active;
     SetPhysics(PHYS_Falling);
@@ -1964,10 +1964,15 @@ function PlayLanded(float impactVel)
   impactVel = 0.1 * impactVel * impactVel;
   BaseEyeHeight = Default.BaseEyeHeight;
   if ( impactVel > 0.17 )
-    PlaySound(LandGrunt, SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+    B227_PlayOwnedSound(LandGrunt, SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
 
-  if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) &&lastplaysound<level.timeseconds)
-     PlaySound(Land, SLOT_Interact, FClamp(4 * impactVel,0.5,5), false,1000, 1.0);
+  if (LastPlaySound < Level.TimeSeconds)
+  {
+    if ( Level.FootprintManager != none )
+      B227_PlayLandingNoise(self, 0, impactVel);
+    else if ( !FootRegion.Zone.bWaterZone && (impactVel > 0.01) )
+       B227_PlayOwnedSound(Land, SLOT_Interact, FClamp(4 * impactVel,0.5,5), false,1000, 1.0);
+  }
   if ( (impactVel > 0.06) || (GetAnimGroup(AnimSequence) == 'Jumping') || (GetAnimGroup(AnimSequence) == 'Ducking') )
   {
     if ( (Weapon == None) || (Weapon.Mass < 20) )
