@@ -20,4 +20,6 @@ defaultproperties
 	UWHit2=MUWHit2
 	Die=death1dfem
 	bIsFemale=true
+	StatusDoll=Texture'Botpack.Icons.Woman'
+	StatusBelt=Texture'Botpack.Icons.WomanBelt'
 }
