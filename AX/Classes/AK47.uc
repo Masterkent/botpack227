@@ -19,13 +19,10 @@ var bool bBotSpecialMove;
 var float TapTime;
 var vector OwnerLocation;
 
-var int B227_Handedness;
-
 replication
 {
 	reliable if (Role == ROLE_Authority && bNetOwner)
-		Aclip,
-		B227_Handedness;
+		Aclip;
 }
 
 
@@ -319,14 +316,13 @@ function SetHand(float Hand)
 	if (Hand == 1)
 		Hand = 0;
 	super.SetHand(Hand);
-	B227_Handedness = Hand;
 }
 
 simulated function vector B227_PlayerViewOffset()
 {
 	local vector ViewOffset;
 
-	switch (B227_Handedness)
+	switch (B227_GetHandedness())
 	{
 		case -1:
 			ViewOffset.X = 0;

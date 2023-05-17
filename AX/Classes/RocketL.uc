@@ -232,7 +232,9 @@ function SetHand(float Hand)
 
 simulated function vector B227_PlayerViewOffset()
 {
-	if (B227_ViewOffsetMode() == 2 && PlayerPawn(Owner) != none && PlayerPawn(Owner).Handedness == 0)
+	local float Hand;
+
+	if (B227_ViewOffsetMode() == 2 && B227_GetKnownHandedness(Hand) && Hand == 0)
 		return PlayerViewOffset * PlayerPawn(Owner).FOVAngle / 90;
 	return PlayerViewOffset;
 }

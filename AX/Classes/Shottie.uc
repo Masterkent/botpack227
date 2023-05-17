@@ -6,13 +6,6 @@ class Shottie expands AXweapons;
 #exec OBJ LOAD FILE="AXResources.u" PACKAGE=AX
 
 var vector ViewOffset;
-var int B227_Handedness;
-
-replication
-{
-	reliable if (Role == ROLE_Authority && bNetOwner)
-		B227_Handedness;
-}
 
 //// fire shot/////
 function Fire( float Value )
@@ -175,14 +168,13 @@ function SetHand(float Hand)
 	if (Hand == 1)
 		Hand = 0;
 	super.SetHand(Hand);
-	B227_Handedness = Hand;
 }
 
 simulated function vector B227_PlayerViewOffset()
 {
 	local vector ViewOffset;
 
-	switch (B227_Handedness)
+	switch (B227_GetHandedness())
 	{
 		case -1:
 			ViewOffset.X = 0;

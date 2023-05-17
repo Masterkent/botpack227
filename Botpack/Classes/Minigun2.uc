@@ -13,6 +13,8 @@ var() texture MuzzleFlashVariations[10];
 // set which hand is holding weapon
 function setHand(float Hand)
 {
+	B227_SetHandedness(Hand);
+
 	if ( Hand == 2 )
 	{
 		FireOffset.Y = 0;
@@ -84,6 +86,7 @@ function float RateSelf( out int bUseAltMode )
 simulated event RenderOverlays( canvas Canvas )
 {
 	local Actor NotifyActor;
+	local float Hand;
 
 	if ( bSteadyFlash3rd )
 	{
@@ -97,7 +100,7 @@ simulated event RenderOverlays( canvas Canvas )
 	else
 		bMuzzleFlash = 0;
 	FlashY = Default.FlashY * (1.08 - 0.16 * FRand());
-	if ( !Owner.IsA('PlayerPawn') || (PlayerPawn(Owner).Handedness == 0) )
+	if (B227_GetKnownHandedness(Hand) && Hand == 0)
 		FlashO = B227_GetMuzzleFlashOffset(true) * (4 + 0.15 * FRand());
 	else
 		FlashO = B227_GetMuzzleFlashOffset(false) * (1 + 0.15 * FRand());

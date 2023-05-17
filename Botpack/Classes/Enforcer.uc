@@ -308,7 +308,7 @@ function BringUp()
 		SetTwoHands();
 		SlaveEnforcer.BringUp();
 	}
-	bBringingUp = true;
+	//-bBringingUp = true;
 	Super.BringUp();
 }
 
@@ -641,7 +641,8 @@ Repeater:
 simulated event RenderOverlays(canvas Canvas)
 {
 	local PlayerPawn PlayerOwner;
-	local int realhand;
+	local float realhand;
+	local float Hand;
 
 	B227_AdjustSlaveDisplayProperties();
 
@@ -666,7 +667,7 @@ simulated event RenderOverlays(canvas Canvas)
 				PlayerOwner.Handedness = -1;
 		}
 	}
-	if ( (PlayerOwner == None) || (PlayerOwner.Handedness == 0) )
+	if ( !B227_GetKnownHandedness(Hand) || Hand == 0 )
 	{
 		if ( AnimSequence == 'Shot2' )
 		{
@@ -689,19 +690,19 @@ simulated event RenderOverlays(canvas Canvas)
 		FlashO = Default.FlashO;
 		FlashY = Default.FlashY;
 	}
-	if ( !bHideWeapon && ( (SlaveEnforcer != None) || bIsSlave ) )
+	if ( !bHideWeapon && SlaveEnforcer != None )
 	{
-		if ( PlayerOwner == None )
-			bMuzzleFlash = 0;
+		//-if ( PlayerOwner == None )
+		//-	bMuzzleFlash = 0;
 
 		Super.RenderOverlays(Canvas);
 		if ( SlaveEnforcer != None )
 		{
-			if ( SlaveEnforcer.bBringingUp )
-			{
-				SlaveEnforcer.bBringingUp = false;
-				SlaveEnforcer.PlaySelect();
-			}
+			//-if ( SlaveEnforcer.bBringingUp )
+			//-{
+			//-	SlaveEnforcer.bBringingUp = false;
+			//-	SlaveEnforcer.PlaySelect();
+			//-}
 			SlaveEnforcer.RenderOverlays(Canvas);
 		}
 	}

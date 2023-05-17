@@ -10,19 +10,14 @@ var PBolt PlasmaBeam;
 var() sound DownSound;
 
 // Auxiliary
-var private int B227_Handedness;
 var private float B227_FireOffsetX, B227_FireOffsetY, B227_FireOffsetZ;
 
 replication
 {
 	reliable if (Role == ROLE_Authority && bNetOwner)
-		B227_Handedness,
 		B227_FireOffsetX,
 		B227_FireOffsetY,
 		B227_FireOffsetZ;
-
-	reliable if (Role < ROLE_Authority)
-		B227_SetRightHandedness;
 }
 
 simulated event RenderOverlays( canvas Canvas )
@@ -90,7 +85,7 @@ function SetHand(float Hand)
 		Mesh = mesh'PulseGunR';
 	}
 
-	B227_Handedness = Hand;
+	B227_SetHandedness(Hand);
 }
 
 // return delta to combat style
@@ -434,17 +429,17 @@ static function bool B227_ShouldAllowCenterView()
 		class'B227_Config'.default.bPulseGunAllowCenterView;
 }
 
-function B227_SetRightHandedness()
-{
-	SetHand(-1);
-}
-
 simulated function B227_AdjustHand()
 {
-	if (B227_Handedness == 0 && !B227_ShouldAllowCenterView())
+	local float Hand;
+
+	if (B227_GetKnownHandedness(Hand) &&
+		Hand == 0 &&
+		!B227_ShouldAllowCenterView() &&
+		Owner == Level.GetLocalPlayerPawn())
 	{
-		B227_Handedness = -1;
-		B227_SetRightHandedness();
+		B227_SetHandedness(-1);
+		B227_ServerSetHand(-1);
 	}
 }
 
@@ -469,7 +464,7 @@ simulated function vector B227_PlayerViewOffset()
 {
 	local vector ViewOffset;
 
-	if (B227_Handedness != 0)
+	if (B227_GetHandedness() != 0)
 		return PlayerViewOffset;
 
 	ViewOffset = default.PlayerViewOffset;
@@ -480,9 +475,9 @@ simulated function vector B227_PlayerViewOffset()
 	return ViewOffset * 100;
 }
 
-simulated function int B227_ViewRotationRoll(int Hand)
+simulated function int B227_ViewRotationRoll(float Hand)
 {
-	if (B227_Handedness == 0 && B227_ShouldAllowCenterView())
+	if (B227_GetHandedness() == 0)
 		return 1536 * 2;
 	return super.B227_ViewRotationRoll(Hand);
 }
@@ -630,5 +625,4 @@ defaultproperties
 	SoundRadius=64
 	SoundVolume=255
 	CollisionRadius=32.000000
-	B227_Handedness=-1
 }

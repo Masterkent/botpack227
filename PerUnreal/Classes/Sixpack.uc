@@ -123,10 +123,10 @@ function TraceFire2(float accuracy)
 		spawn(class'PKSawHit',,,HitLocation+HitNormal, Rotator(HitNormal));
 		PlaySound(sound'PKsawiron',SLOT_None,,,1000,level.timedilation-0.1*Frand());
 	}
-	else if (Pawn(Other).Health > 0)
+	else if (!Other.bIsPawn || Pawn(Other).Health > 0)
 		PlaySound(sound'PKsawhit',SLOT_None,,,1000,level.timedilation-0.3+0.4*Frand());
-	else if ( Other.IsA('PlayerPawn') && (Pawn(Other).Health > 0) )
-		PlaySound(sound'PKsawhit',SLOT_None,,,1000,level.timedilation-0.3+0.4*Frand());
+	//-else if ( Other.IsA('PlayerPawn') && (Pawn(Other).Health > 0) )
+	//-	PlaySound(sound'PKsawhit',SLOT_None,,,1000,level.timedilation-0.3+0.4*Frand());
 }
 
 function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vector X, Vector Y, Vector Z)

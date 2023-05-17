@@ -94,7 +94,8 @@ simulated event RenderOverlays(canvas Canvas)         //muzzle stuff.....
 simulated event RenderOverlays(canvas Canvas)
 {
 	local PlayerPawn PlayerOwner;
-	local int realhand;
+	local float realhand;
+	local float Hand;
 
 	if ( (bMuzzleFlash > 0) && !Level.bDropDetail )
 		MFTexture = MuzzleFlashVariations[Rand(5)];
@@ -117,7 +118,7 @@ simulated event RenderOverlays(canvas Canvas)
 				PlayerOwner.Handedness = -1;
 		}
 	}
-	if ( (PlayerOwner == None) || (PlayerOwner.Handedness == 0) )
+	if ( !B227_GetKnownHandedness(Hand) || Hand == 0 )
 	{
 		if ( AnimSequence == 'Shot2' )
 		{
@@ -144,8 +145,8 @@ simulated event RenderOverlays(canvas Canvas)
 	{
 		slavemag.isslave = true;  // keep updating this stuff: no need to replicate
 		slavemag.mastermag = self;
-		if ( PlayerOwner == None )
-			bMuzzleFlash = 0;
+		//-if ( PlayerOwner == None )
+		//-	bMuzzleFlash = 0;
 
 		multiskins[1] = texture'MAGtwo';  // swap skin so it is displayed only in 1st person
 		super(TournamentWeapon).RenderOverlays(Canvas);
@@ -153,11 +154,11 @@ simulated event RenderOverlays(canvas Canvas)
 
 		if ( slavemag != None )
 		{
-			if ( slavemag.bBringingUp )
-			{
-				slavemag.bBringingUp = false;
-				slavemag.PlaySelect();
-			}
+			//-if ( slavemag.bBringingUp )
+			//-{
+			//-	slavemag.bBringingUp = false;
+			//-	slavemag.PlaySelect();
+			//-}
 			slavemag.RenderOverlays(Canvas);
 		}
 	}

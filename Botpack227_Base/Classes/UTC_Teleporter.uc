@@ -132,22 +132,24 @@ event Touch(Actor Other)
 			foreach AllActors(class'Teleporter', Dest)
 				if (string(Dest.Tag) ~= URL && Dest != self)
 					i++;
+			if (i == 0)
+			{
+				Pawn(Other).ClientMessage("Teleport destination for " $ self $ " not found!");
+				return;
+			}
 			i = rand(i);
 			foreach AllActors(class'Teleporter', Dest)
 				if (string(Dest.Tag) ~= URL && Dest != self && i-- == 0)
-					break;
-			if (Dest != none)
-			{
-				// Teleport the actor into the other teleporter.
-				if (Other.bIsPawn)
-					PlayTeleportEffect(Pawn(Other), false);
-				UTSF_Accept(Dest, Other, self);
-				if (Event != '' && Other.bIsPawn)
-					foreach AllActors(class'Actor', A, Event)
-						A.Trigger(Other, Other.Instigator);
-			}
-			else
-				Pawn(Other).ClientMessage("Teleport destination for " $ self $ " not found!");
+				{
+					// Teleport the actor into the other teleporter.
+					if (Other.bIsPawn)
+						PlayTeleportEffect(Pawn(Other), false);
+					UTSF_Accept(Dest, Other, self);
+					if (Event != '' && Other.bIsPawn)
+						foreach AllActors(class'Actor', A, Event)
+							A.Trigger(Other, Other.Instigator);
+					return;
+				}
 		}
 	}
 }

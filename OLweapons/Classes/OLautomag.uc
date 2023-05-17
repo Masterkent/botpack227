@@ -33,7 +33,7 @@ function BringUp()
     SetTwoHands();
     Slavemag.BringUp();
   }
-  bbringingup=true;
+  //-bbringingup=true;
   Super.BringUp();
 }
 
@@ -841,7 +841,7 @@ event float BotDesireability(Pawn Bot)     //bots like it better with akimbo :D
 simulated event RenderOverlays(canvas Canvas)
 {
   local PlayerPawn PlayerOwner;
-  local int realhand;
+  local float realhand;
 
   PlayerOwner = PlayerPawn(Owner);
   if ( PlayerOwner != None )
@@ -867,11 +867,11 @@ simulated event RenderOverlays(canvas Canvas)
   {
     Slavemag.isslave=true;  //keep updating this stuff: no need to replicate
     slavemag.mastermag=self;
-    if ( Slavemag.bBringingUp )
-    {
-      Slavemag.bBringingUp = false;
-      Slavemag.PlayAnim('Select',1.0,0.0);
-    }
+    //-if ( Slavemag.bBringingUp )
+    //-{
+    //-  Slavemag.bBringingUp = false;
+    //-  Slavemag.PlayAnim('Select',1.0,0.0);
+    //-}
     Slavemag.RenderOverlays(Canvas);
   }
   if ( PlayerOwner != None )
@@ -908,12 +908,13 @@ function PlaySelect()
 
 function AnimEnd()
 {
-  if ( (Level.NetMode == NM_Client) && bBringingUp  && (Mesh != PickupViewMesh) )
-  {
-    bBringingUp = false;
-    PlaySelect();
-  }
-  else if (isslave&&(mastermag.isinstate('')||mastermag.IsInState('idle')||animsequence=='select'))
+  //-if ( (Level.NetMode == NM_Client) && bBringingUp  && (Mesh != PickupViewMesh) )
+  //-{
+  //-  bBringingUp = false;
+  //-  PlaySelect();
+  //-}
+  //-else
+  if (isslave&&(mastermag.isinstate('')||mastermag.IsInState('idle')||animsequence=='select'))
      PlayIdleAnim();
   else if (!isslave)
     Super.AnimEnd();

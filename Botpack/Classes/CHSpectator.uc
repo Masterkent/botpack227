@@ -15,9 +15,9 @@ event PostBeginPlay()
 exec function Jump( optional float F )
 {
 	ViewClass(class'SpectatorCam', true);
-	While ( (ViewTarget != None) && ViewTarget.IsA('SpectatorCam') && SpectatorCam(ViewTarget).bSkipView )
+	While ( SpectatorCam(ViewTarget) != none && SpectatorCam(ViewTarget).bSkipView )
 		ViewClass(class'SpectatorCam', true);
-	if ( ViewTarget.IsA('SpectatorCam') )
+	if ( SpectatorCam(ViewTarget) != none )
 		bBehindView = false;
 }
 
@@ -29,7 +29,7 @@ exec function Verbose()
 
 function FixFOV()
 {
-	if ( (ViewTarget != None) && !ViewTarget.IsA('SpectatorCam') )
+	if ( (ViewTarget != None) && SpectatorCam(ViewTarget) == none )
 	{
 		FOVAngle = 90;
 		DesiredFOV = 90;
@@ -68,25 +68,25 @@ exec function ViewPlayerNum(optional int num)
 	bChaseCam = true;
 	bBehindView = true;
 	Super.ViewPlayerNum(num);
-	FixFOV();
+	//-FixFOV();
 }
 
 exec function ViewClass( class<actor> aClass, optional bool bQuiet )
 {
 	Super.ViewClass(aClass, bQuiet);
-	FixFOV();
+	//-FixFOV();
 }
 
 exec function ViewSelf()
 {
 	Super.ViewSelf();
-	FixFOV();
+	//-FixFOV();
 }
 
 exec function CheatView( class<actor> aClass )
 {
 	Super.CheatView(aClass);
-	FixFOV();
+	//-FixFOV();
 }
 
 exec function Fire( optional float F )

@@ -69,6 +69,9 @@ function PlayDodge(eDodgeDir DodgeMove)
 		return;
 	}
 	Velocity.Z = 210;
+	if (bUpdating)
+		return;
+
 	if ( DodgeMove == DODGE_Left )
 		PlayAnim('RollLeft', 1.35 * FMax(0.35, Region.Zone.ZoneGravity.Z/Region.Zone.Default.ZoneGravity.Z), 0.06);
 	else if ( DodgeMove == DODGE_Right )

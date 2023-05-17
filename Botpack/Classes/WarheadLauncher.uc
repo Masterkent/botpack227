@@ -112,6 +112,8 @@ function PlayFiring()
 
 function setHand(float Hand)
 {
+	B227_SetHandedness(Hand);
+
 	if ( Hand == 2 )
 	{
 		bHideWeapon = true;

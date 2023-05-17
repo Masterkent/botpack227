@@ -152,7 +152,7 @@ simulated function Tick(float DeltaTime)
 		}
 		else
 		{
-			SetPhysics(default.Physics);
+			SetPhysics(PHYS_Projectile);
 			if ( RealLocation != vect(0,0,0) )
 			{
 				SetLocation(RealLocation);
@@ -160,8 +160,8 @@ simulated function Tick(float DeltaTime)
 			}
 			if ( RealVelocity != vect(0,0,0) )
 			{
-				B227_Velocity = RealVelocity;
-				SetRotation(rotator(B227_Velocity));
+				Velocity = RealVelocity;
+				SetRotation(rotator(Velocity));
 				RealVelocity = vect(0,0,0);
 			}
 			return;
@@ -239,11 +239,11 @@ simulated function Tick(float DeltaTime)
 
 		NewMove.TimeStamp = B227_CurrentTimestamp;
 		NewMove.Delta = DeltaTime;
-		NewMove.Velocity = B227_Velocity;
-		NewMove.SetRotation(GuidedRotation);
+		NewMove.SetRotation(Rotation);
+		NewMove.DesiredRotation = GuidedRotation;
 
 		MoveRocket(DeltaTime, B227_Velocity, GuidedRotation);
-		ServerMove(B227_CurrentTimestamp, Location, NewMove.Rotation.Pitch, NewMove.Rotation.Yaw);
+		ServerMove(B227_CurrentTimestamp, Location, GuidedRotation.Pitch, GuidedRotation.Yaw);
 		return;
 	}
 	MoveRocket(DeltaTime, B227_Velocity, GuidedRotation);
@@ -299,7 +299,8 @@ simulated function ClientUpdatePosition()
 		}
 		else
 		{
-			MoveRocket(CurrentMove.Delta, CurrentMove.Velocity, CurrentMove.Rotation);
+			SetRotation(CurrentMove.Rotation);
+			MoveRocket(CurrentMove.Delta, B227_Velocity, CurrentMove.DesiredRotation);
 			CurrentMove = CurrentMove.NextMove;
 		}
 	}

@@ -8,6 +8,17 @@ var() class<LocalMessage> PickupMessageClass;
 
 var vector B227_FireStartTrace, B227_FireEndTrace;
 
+var private float B227_Handedness;
+
+replication
+{
+	reliable if (Role == ROLE_Authority)
+		B227_Handedness;
+
+	reliable if (Role < ROLE_Authority)
+		B227_ServerSetHand;
+}
+
 auto state Pickup
 {
 	function Touch( actor Other )
@@ -37,7 +48,7 @@ simulated event RenderOverlays(Canvas Canvas)
 {
 	local rotator NewRot;
 	local bool bPlayerOwner;
-	local int Hand;
+	local float Hand;
 	local PlayerPawn PlayerOwner;
 	local float ScreenHeight;
 	local float FovScale;
@@ -54,6 +65,7 @@ simulated event RenderOverlays(Canvas Canvas)
 		bPlayerOwner = true;
 		Hand = PlayerOwner.Handedness;
 	}
+	B227_GetKnownHandedness(Hand);
 
 	if (  (Level.NetMode == NM_Client) && bPlayerOwner && (Hand == 2) )
 	{
@@ -65,6 +77,7 @@ simulated event RenderOverlays(Canvas Canvas)
 		Pawn(Owner).WalkBob = vect(0,0,0);
 
 	if ( (bMuzzleFlash > 0) && bDrawMuzzleFlash && Level.bHighDetailMode && (MFTexture != None) &&
+		B227_HasKnownHandedness() &&
 		class'B227_BaseConfig'.default.bDrawMuzzleFlash &&
 		B227_MuzzleFlashScale() > 0 )
 	{
@@ -73,7 +86,7 @@ simulated event RenderOverlays(Canvas Canvas)
 		else
 			ScreenHeight = Canvas.SizeX * 3 / 4;
 
-		FovScale = 1 / Tan(FClamp(PlayerOwner.FOVAngle, 1, 179) / 360 * Pi);
+		FovScale = 1 / Tan(FClamp(Level.GetLocalPlayerPawn().FOVAngle, 1, 179) / 360 * Pi);
 		CustomScale = FClamp(B227_MuzzleFlashScale(), 0, 2);
 		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FovScale * CustomScale;
 		if ( !bSetFlashTime )
@@ -143,6 +156,12 @@ function bool HandlePickupQuery(Inventory Item)
 		return false;
 
 	return Inventory.HandlePickupQuery(Item);
+}
+
+function SetHand(float Hand)
+{
+	B227_Handedness = Hand;
+	super.SetHand(Hand);
 }
 
 function bool ClientFire(float Value)
@@ -252,11 +271,49 @@ simulated function vector B227_CalcDrawOffset(Canvas Canvas)
 	return DrawOffset;
 }
 
-simulated function int B227_ViewRotationRoll(int Hand)
+simulated function int B227_ViewRotationRoll(float Hand)
 {
 	if (Hand == 0)
 		return -2 * default.Rotation.Roll;
 	return default.Rotation.Roll * Hand;
+}
+
+function B227_ServerSetHand(float Hand)
+{
+	SetHand(Hand);
+}
+
+// May be called client-side
+simulated function B227_SetHandedness(float Handedness)
+{
+	B227_Handedness = Handedness;
+}
+
+simulated function bool B227_HasKnownHandedness()
+{
+	return
+		B227_Handedness != default.B227_Handedness ||
+		PlayerPawn(Owner) != none && Owner == Level.GetLocalPlayerPawn();
+}
+
+simulated function bool B227_GetKnownHandedness(out float Handedness)
+{
+	if (B227_Handedness != default.B227_Handedness)
+		Handedness = B227_Handedness;
+	else if (PlayerPawn(Owner) != none && Owner == Level.GetLocalPlayerPawn())
+		Handedness = PlayerPawn(Owner).Handedness;
+	else
+		return false;
+	return true;
+}
+
+simulated function float B227_GetHandedness()
+{
+	if (B227_Handedness != default.B227_Handedness)
+		return B227_Handedness;
+	if (PlayerPawn(Owner) != none && Owner == Level.GetLocalPlayerPawn())
+		return PlayerPawn(Owner).Handedness;
+	return 0;
 }
 
 function float B227_SoundDampening()
@@ -377,4 +434,9 @@ static function vector B227_WarpZoneHitLocation(WarpZoneInfo WarpZone, vector Hi
 			MaxDist = NextDist;
 	}
 	return HitLocation - Dir * Dist;
+}
+
+defaultproperties
+{
+	B227_Handedness=-1024
 }
