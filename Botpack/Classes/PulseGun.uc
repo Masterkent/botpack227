@@ -470,8 +470,8 @@ simulated function vector B227_PlayerViewOffset()
 	ViewOffset = default.PlayerViewOffset;
 	ViewOffset.Y = -1.81;
 
-	if (B227_ViewOffsetMode() == 2 && Pawn(Owner) != none)
-		ViewOffset.Y *= Pawn(Owner).FOVAngle / 90.0;
+	if (B227_ViewOffsetMode() == 2)
+		ViewOffset.Y *= Level.GetLocalPlayerPawn().FOVAngle / 90.0;
 	return ViewOffset * 100;
 }
 

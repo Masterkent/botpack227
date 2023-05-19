@@ -428,6 +428,8 @@ simulated function PostRender( canvas Canvas )
 	local int XPos, YPos;
 	local Vector X,Y,Z, Dir;
 	local float Scale, FovScale;
+	local float CrosshairHSize, CrosshairVSize;
+	local float XL, YL;
 
 	if (PlayerPawn(Owner) == none || PlayerPawn(Owner).bBehindView)
 		return;
@@ -436,10 +438,8 @@ simulated function PostRender( canvas Canvas )
 	if (Canvas.ClipY < 768)
 		Canvas.Font = Font'TinyRedFont';
 	else
-	{
 		Canvas.Font = Font'WhiteFont';
-		Canvas.DrawColor = MakeColor(255, 0, 0);
-	}
+	Canvas.DrawColor = MakeColor(255, 0, 0);
 
 	if ( Level.bHighDetailMode )
 		Canvas.Style = ERenderStyle.STY_Translucent;
@@ -450,19 +450,22 @@ simulated function PostRender( canvas Canvas )
 
 	foreach VisibleCollidingActors(class'Pawn', P, 2000,, true)
 	{
-		Dir = P.Location - Location;
+		Dir = P.Location + P.CollisionHeight * vect(0, 0, 1) - Location;
 		Dist = VSize(Dir);
 		if ( ((Dir / Dist) Dot X) > 0.7 * FovScale)
 		{
+			Canvas.StrLen(int(Dist), XL, YL);
+			Scale = FMax(1.0, class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 640.0));
+			CrosshairHSize = Texture'Crosshair6'.USize * Scale;
+			CrosshairVSize = Texture'Crosshair6'.VSize * Scale;
+
 			Dir = Dir / (Dir Dot X);
 			XPos = 0.5 * (Canvas.SizeX + Canvas.SizeX * (Dir Dot Y) * FovScale);
-			YPos = 0.5 * (Canvas.SizeY - Canvas.SizeX * (Dir Dot Z) * FovScale);
+			YPos = 0.5 * (Canvas.SizeY - Canvas.SizeX * (Dir Dot Z) * FovScale) - CrosshairVSize - 2 * YL;
 
-			Scale = FMax(1.0, class'UTC_HUD'.static.B227_CrosshairSize(Canvas, 640.0));
-
-			Canvas.SetPos(XPos - 0.5 * Texture'Crosshair6'.USize * Scale, YPos - 0.5 * Texture'Crosshair6'.VSize * Scale);
+			Canvas.SetPos(XPos - 0.5 * CrosshairHSize, YPos - 0.5 * CrosshairVSize);
 			Canvas.DrawIcon(texture'CrossHair6', Scale);
-			Canvas.SetPos(Xpos - 12, YPos + Texture'Crosshair6'.VSize * Scale);
+			Canvas.SetPos(XPos - 12, YPos + CrosshairVSize);
 			Canvas.DrawText(int(Dist), true);
 		}
 	}

@@ -253,10 +253,10 @@ simulated function vector B227_CalcDrawOffset(Canvas Canvas)
 	{
 		case 1:
 			ViewOffset = 0.01 * B227_PlayerViewOffset();
-			ViewOffset.X *= FMin(1.0, 0.75 / (Tan(FClamp(PawnOwner.FOVAngle, 1, 179) / 360 * Pi) * Canvas.SizeY / Canvas.SizeX));
+			ViewOffset.X *= FMin(1.0, 0.75 / (Tan(FClamp(Level.GetLocalPlayerPawn().FOVAngle, 1, 179) / 360 * Pi) * Canvas.SizeY / Canvas.SizeX));
 			break;
 		case 2:
-			ViewOffset = 0.9 / PawnOwner.FOVAngle * B227_PlayerViewOffset();
+			ViewOffset = 0.9 / Level.GetLocalPlayerPawn().FOVAngle * B227_PlayerViewOffset();
 			break;
 		default:
 			ViewOffset = 0.01 * B227_PlayerViewOffset();
