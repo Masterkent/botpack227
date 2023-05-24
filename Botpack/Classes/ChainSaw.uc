@@ -328,6 +328,37 @@ function TweenDown()
 	AmbientSound = None;
 }
 
+function setHand(float Hand)
+{
+	if (Hand > 0 && !class'B227_Config'.default.bChainSawAllowLeftHandedness)
+		Hand = 0;
+	super.setHand(Hand);
+}
+
+simulated function vector B227_PlayerViewOffset(Canvas Canvas)
+{
+	local vector ViewOffset;
+	local float ScaleY;
+
+	ViewOffset = PlayerViewOffset;
+	if (B227_ViewOffsetMode() == 1 && class'B227_Config'.default.bChainSawFixWidescreenView)
+	{
+		ScaleY = Tan(Canvas.Viewport.Actor.FOVAngle * Pi / 360.0);
+		ViewOffset.Y *= FMax(1.0, Square(ScaleY));
+		if (ViewOffset.Y > 0)
+		{
+			ViewOffset.Y = FMin(ViewOffset.Y, Abs(default.PlayerViewOffset.Y * 100));
+			ViewOffset.Y = FMax(ViewOffset.Y, PlayerViewOffset.Y * ScaleY);
+		}
+		else if (ViewOffset.Y < 0)
+		{
+			ViewOffset.Y = FMax(ViewOffset.Y, -Abs(default.PlayerViewOffset.Y * 100));
+			ViewOffset.Y = FMin(ViewOffset.Y, PlayerViewOffset.Y * ScaleY);
+		}
+	}
+	return ViewOffset;
+}
+
 defaultproperties
 {
 	Range=90.000000

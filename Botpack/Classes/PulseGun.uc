@@ -460,7 +460,7 @@ function B227_EmitBeam()
 	PlasmaBeam.B227_bLimitWallEffect = B227_ShouldLimitWallEffect();
 }
 
-simulated function vector B227_PlayerViewOffset()
+simulated function vector B227_PlayerViewOffset(Canvas Canvas)
 {
 	local vector ViewOffset;
 
@@ -468,10 +468,10 @@ simulated function vector B227_PlayerViewOffset()
 		return PlayerViewOffset;
 
 	ViewOffset = default.PlayerViewOffset;
-	ViewOffset.Y = -1.81;
+	ViewOffset.Y = -1.87;
 
 	if (B227_ViewOffsetMode() == 2)
-		ViewOffset.Y *= Level.GetLocalPlayerPawn().FOVAngle / 90.0;
+		ViewOffset.Y *= Canvas.Viewport.Actor.FOVAngle / 90.0;
 	return ViewOffset * 100;
 }
 

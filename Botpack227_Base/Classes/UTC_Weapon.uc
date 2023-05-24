@@ -82,13 +82,13 @@ simulated event RenderOverlays(Canvas Canvas)
 		B227_MuzzleFlashScale() > 0 )
 	{
 		if (B227_ViewOffsetMode() == 2)
-			ScreenHeight = Canvas.SizeY; // It's hard to calculate the correct offset for this mode anyway, so the original method is preserved for it.
+			ScreenHeight = Canvas.ClipY; // It's hard to calculate the correct offset for this mode anyway, so the original method is preserved for it.
 		else
-			ScreenHeight = Canvas.SizeX * 3 / 4;
+			ScreenHeight = Canvas.ClipX * 3 / 4;
 
-		FovScale = 1 / Tan(FClamp(Level.GetLocalPlayerPawn().FOVAngle, 1, 179) / 360 * Pi);
+		FovScale = 1.0 / Tan(FClamp(Canvas.Viewport.Actor.FOVAngle, 1, 179) / 360 * Pi);
 		CustomScale = FClamp(B227_MuzzleFlashScale(), 0, 2);
-		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FovScale * CustomScale;
+		MuzzleScale = Default.MuzzleScale * Canvas.ClipX/640.0 * FMin(1.0, FovScale) * CustomScale;
 		if ( !bSetFlashTime )
 		{
 			bSetFlashTime = true;
@@ -231,12 +231,17 @@ static function int B227_ViewOffsetMode()
 	return class'B227_BaseConfig'.default.WeaponViewOffsetMode;
 }
 
+static function float B227_ViewOffsetScaling()
+{
+	return FClamp(class'B227_BaseConfig'.default.WeaponViewOffsetScaling, 0.0, 1.0);
+}
+
 static function float B227_MuzzleFlashScale()
 {
 	return 1.0;
 }
 
-simulated function vector B227_PlayerViewOffset()
+simulated function vector B227_PlayerViewOffset(Canvas Canvas)
 {
 	return PlayerViewOffset;
 }
@@ -245,6 +250,7 @@ simulated function vector B227_CalcDrawOffset(Canvas Canvas)
 {
 	local vector DrawOffset, WeaponBob;
 	local Pawn PawnOwner;
+	local float FOVAngle, FOVScale;
 	local vector ViewOffset;
 
 	PawnOwner = Pawn(Owner);
@@ -252,14 +258,16 @@ simulated function vector B227_CalcDrawOffset(Canvas Canvas)
 	switch (B227_ViewOffsetMode())
 	{
 		case 1:
-			ViewOffset = 0.01 * B227_PlayerViewOffset();
-			ViewOffset.X *= FMin(1.0, 0.75 / (Tan(FClamp(Level.GetLocalPlayerPawn().FOVAngle, 1, 179) / 360 * Pi) * Canvas.SizeY / Canvas.SizeX));
+			ViewOffset = 0.01 * B227_PlayerViewOffset(Canvas);
+			FOVAngle = FClamp(Canvas.Viewport.Actor.FOVAngle, 1, 179);
+			FOVScale = FMin(1.0, 0.75 * Canvas.SizeX / (FMax(Canvas.SizeY, 1.0) * Tan(FOVAngle / 360.0 * Pi)));
+			ViewOffset.X *= 1.0 - (1.0 - FOVScale) * B227_ViewOffsetScaling();
 			break;
 		case 2:
-			ViewOffset = 0.9 / Level.GetLocalPlayerPawn().FOVAngle * B227_PlayerViewOffset();
+			ViewOffset = 0.9 / Canvas.Viewport.Actor.FOVAngle * B227_PlayerViewOffset(Canvas);
 			break;
 		default:
-			ViewOffset = 0.01 * B227_PlayerViewOffset();
+			ViewOffset = 0.01 * B227_PlayerViewOffset(Canvas);
 	}
 
 	DrawOffset = ViewOffset >> PawnOwner.ViewRotation;

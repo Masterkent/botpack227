@@ -14,6 +14,8 @@ var(Misc) globalconfig bool bModifyPlayerStartLookup;
 var(Misc) globalconfig bool bUDamageModifyDeactivation;
 var(Misc) globalconfig float BotDodgeEndTime;
 var(Weapon) globalconfig bool bAdjustNPCFirePosition;
+var(Weapon) globalconfig bool bChainSawAllowLeftHandedness;
+var(Weapon) globalconfig bool bChainSawFixWidescreenView;
 var(Weapon) globalconfig bool bDroppableSlaveEnforcer;
 var(Weapon) globalconfig bool bMinigunAdjustMuzzleFlashOffset;
 var(Weapon) globalconfig bool bModifyProjectilesLighting;
@@ -55,6 +57,8 @@ defaultproperties
 	bUDamageModifyDeactivation=True
 	BotDodgeEndTime=0.35
 	bAdjustNPCFirePosition=True
+	bChainSawAllowLeftHandedness=False
+	bChainSawFixWidescreenView=True
 	bDroppableSlaveEnforcer=True
 	bMinigunAdjustMuzzleFlashOffset=True
 	bModifyProjectilesLighting=True

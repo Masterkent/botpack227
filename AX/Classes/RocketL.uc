@@ -230,7 +230,7 @@ function SetHand(float Hand)
 	super.SetHand(Hand);
 }
 
-simulated function vector B227_PlayerViewOffset()
+simulated function vector B227_PlayerViewOffset(Canvas Canvas)
 {
 	local float Hand;
 
