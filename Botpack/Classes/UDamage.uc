@@ -24,10 +24,11 @@ singular function UsedUp()
 	Destroy();
 }
 
-simulated function FireEffect()
+function FireEffect()
 {
 	if (Pawn(Owner) == none || Pawn(Owner).Weapon == none)
 		return;
+	Owner.MakeNoise(1.0);
 	if (!bActive || Charge * 0.1 - default.FinalCount < 5)
 		class'UTC_Actor'.static.B227_PlaySound(Pawn(Owner).Weapon, EndFireSound, SLOT_Interact, 8);
 	else
@@ -36,7 +37,7 @@ simulated function FireEffect()
 
 function SetOwnerLighting()
 {
-	// Owner.AmbientGlow = 254; // [U227] Excluded
+	// Owner.AmbientGlow = 254; // B227: Excluded
 	if (B227_Effect == none || B227_Effect.bDeleteMe)
 	{
 		B227_Effect = Level.Spawn(class'B227_UDamageEffect', Owner,, Owner.Location);
@@ -108,6 +109,7 @@ state Activated
 		if (FinalCount > 0)
 		{
 			SetTimer(1.0, true);
+			Owner.MakeNoise(1.0);
 			Owner.PlaySound(DeActivateSound,, 8);
 			FinalCount--;
 			return;
@@ -139,6 +141,7 @@ state Activated
 				B227_FinalCount -= DeltaTime;
 			if (B227_FinalCount <= 0)
 			{
+				Owner.MakeNoise(1.0);
 				if (B227_Effect != none)
 					B227_Effect.PlaySound(DeActivateSound,, 8);
 				B227_FinalCount += 1;
@@ -161,6 +164,7 @@ state Activated
 		B227_InitWeaponFireEffect();
 		B227_Discharge = 0;
 		B227_SetActive();
+		Owner.MakeNoise(1.0);
 		if (B227_Effect != none)
 			B227_Effect.PlaySound(ActivateSound);
 
@@ -210,6 +214,11 @@ state DeActivated
 			B227_SetActive();
 	}
 
+	event EndState()
+	{
+		B227_Deactivate();
+	}
+
 	event Tick(float DeltaTime)
 	{
 		if (!B227_bActive)
@@ -241,6 +250,7 @@ state DeActivated
 		{
 			if (FinalCount > 0)
 			{
+				Owner.MakeNoise(1.0);
 				if (B227_Effect != none)
 					B227_Effect.PlaySound(DeActivateSound,, 8);
 				B227_FinalCount += 1;
@@ -264,6 +274,7 @@ function bool HandlePickupQuery(Inventory Item)
 		bAutoActivate &&
 		B227_Effect != none)
 	{
+		Owner.MakeNoise(1.0);
 		B227_Effect.PlaySound(ActivateSound);
 	}
 	return super.HandlePickupQuery(Item);
@@ -413,6 +424,8 @@ function B227_UseCharge(float DeltaTime)
 
 function B227_SetActive()
 {
+	if (B227_bActive)
+		return;
 	B227_bActive = true;
 	SetOwnerLighting();
 	Pawn(Owner).DamageScaling *= 3.0;

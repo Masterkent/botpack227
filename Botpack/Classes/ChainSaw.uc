@@ -343,8 +343,8 @@ simulated function vector B227_PlayerViewOffset(Canvas Canvas)
 	ViewOffset = PlayerViewOffset;
 	if (B227_ViewOffsetMode() == 1 && class'B227_Config'.default.bChainSawFixWidescreenView)
 	{
-		ScaleY = Tan(Canvas.Viewport.Actor.FOVAngle * Pi / 360.0);
-		ViewOffset.Y *= FMax(1.0, Square(ScaleY));
+		ScaleY = Tan(FClamp(Canvas.Viewport.Actor.FOVAngle, 90.0, 179.0) * Pi / 360.0);
+		ViewOffset.Y *= Square(ScaleY);
 		if (ViewOffset.Y > 0)
 		{
 			ViewOffset.Y = FMin(ViewOffset.Y, Abs(default.PlayerViewOffset.Y * 100));
