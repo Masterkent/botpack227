@@ -217,10 +217,12 @@ if (other.isa('musicevent')&&musicevent(other).Song==none&&level.song==none){ //
 }
 //-if (other.style==STY_NORMAL&&other.isa('pawn')&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('bird1')||other.isa('Slith')||other.isa('manta')))
 //-  other.style=STY_MASKED; //fix up masking bug on pawns
-if (other.IsA('inventory')) //so pickup messages work......
+if (Other.bIsPawn && Pawn(Other).DropWhenKilled != none)
+  B227_AdjustInventoryClass(Pawn(Other).DropWhenKilled);
+if (Inventory(other) != none) //so pickup messages work......
   class'UTC_Inventory'.static.B227_SetPickupMessageClass(Inventory(other), none);
 //here we swap baddie projectiles around.... (neither a spawn notify nor mutator would affect the projectiles so I had to do it the hard way :(
-else if (other.isa('scriptedpawn')){
+else if (ScriptedPawn(other) != none){
 if (class'olweapons.uiweapons'.default.busedecals){
 //if (other.isa('skaarjtrooper'))
 //scriptedpawn(other).Shadow = Spawn(class'PlayerShadow',other,,other.location);
@@ -819,6 +821,22 @@ static function string B227_DifficultyString(byte Difficulty)
 	if (Difficulty < default.B227_DifficultiesNum)
 		return class'UMenuNewGameClientWindow'.default.Skills[Difficulty];
 	return string(Difficulty);
+}
+
+function B227_AdjustInventoryClass(out class<Inventory> InventoryClass)
+{
+	InventoryClass = B227_ReplaceInventoryClass(InventoryClass);
+}
+
+function class<Inventory> B227_ReplaceInventoryClass(class<Inventory> InventoryClass)
+{
+	local class<Actor> ActorClass;
+
+	ActorClass = InventoryClass;
+	FixContents(ActorClass);
+	if (ClassIsChildOf(ActorClass, class'Inventory'))
+		return class<Inventory>(ActorClass);
+	return InventoryClass;
 }
 
 function class<Actor> B227_VersionClass()

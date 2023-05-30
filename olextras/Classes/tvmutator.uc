@@ -206,6 +206,8 @@ if (Level.NetMode!=nm_standalone&&(Other.Isa('PlayerMotionFreeze')||Other.IsA('V
 //return true;
 //-if (other.Isa('MoviePawn')) //UMS movie hack
 //-  pawn(other).Shadow = Spawn(class'TVpawnShadow',other,,other.location);
+if (Other.bIsPawn && Pawn(Other).DropWhenKilled != none)
+  B227_AdjustInventoryClass(Pawn(Other).DropWhenKilled);
 if (other.isa('scriptedpawn')){
   //-if (other.style==STY_NORMAL&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('Slith')||other.isa('manta')))
   //-  other.style=STY_MASKED; //fix up masking bug on pawns
@@ -342,6 +344,38 @@ function SetUpCurrent(){
   omag=bmag;
   oshield=bshield;
   NewVersion=true; //OSA 2.25+ save
+}
+
+
+function class<Inventory> B227_ReplaceInventoryClass(class<Inventory> InventoryClass)
+{
+	if (InventoryClass == class'AutoMag' || InventoryClass == class'Enforcer')
+		return class'SPEnf';
+	if (InventoryClass == class'DispersionPistol' || InventoryClass == class'oldpistol')
+		return class'NoammoDpistol';
+	if (InventoryClass == class'Stinger' || InventoryClass == class'PulseGun' || InventoryClass == class'ospulsegun')
+		return class'TVPulsegun';
+	if (InventoryClass == class'Eightball' || InventoryClass == class'UT_Eightball')
+		return class'TVEightball';
+	if (InventoryClass == class'Translator')
+		return class'TVtranslator';
+	if (InventoryClass == class'Flashlight')
+		return class'TvFlashlight';
+	if (InventoryClass == class'SearchLight')
+		return class'TVSearchLight';
+	if (ClassIsChildOf(InventoryClass, class'WarHeadLauncher') || ClassIsChildOf(InventoryClass, class'UDamage'))
+		return class'SuperAmmoShockRifle';
+	if (ClassIsChildOf(InventoryClass, class'ImpactHammer') ||
+		ClassIsChildOf(InventoryClass, class'ChainSaw') ||
+		ClassIsChildOf(InventoryClass, class'UT_Invisibility') ||
+		ClassIsChildOf(InventoryClass, class'UT_JumpBoots'))
+	{
+		return class'olWeapons.osDispersionpowerup';
+	}
+	if (InventoryClass == class'UT_ShieldBelt')
+		return class'olWeapons.ospowershield';
+
+	return super.B227_ReplaceInventoryClass(InventoryClass);
 }
 
 function B227_AddONPSPFix()
