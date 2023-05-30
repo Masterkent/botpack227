@@ -207,7 +207,7 @@ state Firing
 			HitActor = Trace(HitLocation, HitNormal, EndTrace, StartTrace, true);
 			if ( (HitActor != None) && (HitActor.DrawType == DT_Mesh) )
 			{
-				ProcessTraceHit(HitActor, HitLocation, HitNormal, Normal(EndTrace - StartTrace), Y, Z);
+				ProcessTraceHit(HitActor, HitLocation, HitNormal, X, Y, Z);
 				PlayFiring();
 				GoToState('FireBlast');
 			}

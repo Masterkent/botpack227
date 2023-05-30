@@ -452,8 +452,16 @@ exec function Loaded()
 	DM.B227_GiveWeapon(self, class'Botpack.SniperRifle');
 	DM.B227_GiveWeapon(self, class'Botpack.Ripper');
 	DM.B227_GiveWeapon(self, class'Botpack.UT_Eightball');
-	if (PendingWeapon != none)
-		ChangedWeapon();
+
+	if (PendingWeapon != none && !PendingWeapon.bDeleteMe)
+	{
+		if (Weapon == PendingWeapon)
+			PendingWeapon = none;
+		else if (Weapon != none && !Weapon.bDeleteMe)
+			Weapon.PutDown();
+		else
+			ChangedWeapon();
+	}
 
 	for ( inv=inventory; inv!=None; inv=inv.inventory )
 	{

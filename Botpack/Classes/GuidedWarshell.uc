@@ -450,7 +450,9 @@ simulated function PostRender( canvas Canvas )
 
 	foreach VisibleCollidingActors(class'Pawn', P, 2000,, true)
 	{
-		Dir = P.Location + P.CollisionHeight * vect(0, 0, 1) - Location;
+		Dir = P.Location - Location;
+		if (!class'B227_Config'.default.bRedeemerUseDirectPointers)
+			Dir += P.CollisionHeight * vect(0, 0, 1);
 		Dist = VSize(Dir);
 		if ( ((Dir / Dist) Dot X) > 0.7 * FovScale)
 		{
@@ -461,7 +463,9 @@ simulated function PostRender( canvas Canvas )
 
 			Dir = Dir / (Dir Dot X);
 			XPos = 0.5 * (Canvas.SizeX + Canvas.SizeX * (Dir Dot Y) * FovScale);
-			YPos = 0.5 * (Canvas.SizeY - Canvas.SizeX * (Dir Dot Z) * FovScale) - CrosshairVSize - 2 * YL;
+			YPos = 0.5 * (Canvas.SizeY - Canvas.SizeX * (Dir Dot Z) * FovScale);
+			if (!class'B227_Config'.default.bRedeemerUseDirectPointers)
+				YPos -= CrosshairVSize + 2 * YL;
 
 			Canvas.SetPos(XPos - 0.5 * CrosshairHSize, YPos - 0.5 * CrosshairVSize);
 			Canvas.DrawIcon(texture'CrossHair6', Scale);
