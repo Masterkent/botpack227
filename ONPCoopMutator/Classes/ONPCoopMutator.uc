@@ -32,6 +32,7 @@ var() config array<Remapping> MapReplacements;
 var() config bool bDebugMode;
 
 var ONPGameRules GameRulesPtr;
+var ONPLevelInfo LInfo;
 
 event PostBeginPlay()
 {
@@ -48,6 +49,7 @@ event PostBeginPlay()
 	AddGameRules();
 	RegisterONPLevelInfo();
 	RegisterClientPackage();
+	ReplaceDefaultWeaponClass();
 
 	SaveConfig();
 }
@@ -475,33 +477,51 @@ function ReplaceTvTransEvent(TvTranslatorEvent Other)
 
 function RegisterONPLevelInfo()
 {
-	local ONPLevelInfo LInfo;
-
 	foreach AllActors(class'ONPLevelInfo', LInfo)
 	{
 		if (bDebugMode)
 			Log("ONPCoopMutator: RegisterONPLevelInfo" @ LInfo);
 
-		AdjustONPLevelInfo(LInfo);
+		AdjustONPLevelInfo();
 
 		GameRulesPtr.LInfo = LInfo;
 		return;
 	}
 }
 
-function AdjustONPLevelInfo(ONPLevelInfo A)
+function AdjustONPLevelInfo()
 {
 	local int i;
 
-	for (i = 0; i < ArrayCount(A.DefaultInventory); ++i)
-		AdjustONPLevelInfoInventory(A.DefaultInventory[i]);
-	for (i = 0; i < ArrayCount(A.TriggeredInv); ++i)
-		AdjustONPLevelInfoInventory(A.TriggeredInv[i]);
+	for (i = 0; i < ArrayCount(LInfo.DefaultInventory); ++i)
+		AdjustONPLevelInfoInventory(LInfo.DefaultInventory[i]);
+	for (i = 0; i < ArrayCount(LInfo.TriggeredInv); ++i)
+		AdjustONPLevelInfoInventory(LInfo.TriggeredInv[i]);
 }
 
 function AdjustONPLevelInfoInventory(out class<Inventory> InventoryClass)
 {
 	InventoryClass = InventoryClassReplacement(InventoryClass, true);
+}
+
+function ReplaceDefaultWeaponClass()
+{
+	if (LInfo == none)
+		return;
+
+	if (Level.Game.DefaultWeapon == class'DispersionPistol' ||
+		Level.Game.DefaultWeapon == class'oldpistol')
+	{
+		if (WeaponReplacementMode ~= "ONP" ||
+			WeaponReplacementMode ~= "ONP-Basic" ||
+			WeaponReplacementMode ~= "Powerful")
+		{
+			if (LInfo.DefaultWeapon <= 2)
+				Level.Game.DefaultWeapon = class'olextras.NoammoDpistol';
+			else
+				Level.Game.DefaultWeapon = none;
+		}
+	}
 }
 
 function bool ReplaceWithC(actor Other, class<Actor> aClass)
@@ -1113,13 +1133,13 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v5.25";
+	return "ONPCoopMutator v5.26";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v5.25 [2023-04-19]"
-	Version="5.25"
+	VersionInfo="ONPCoopMutator v5.26 [2023-06-01]"
+	Version="5.26"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False
 	bUseONPWeaponsSupply=True

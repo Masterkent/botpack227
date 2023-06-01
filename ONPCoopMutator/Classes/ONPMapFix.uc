@@ -819,13 +819,18 @@ function Server_FixCurrentMap_ONP_map09SurfaceX()
 
 function Server_FixCurrentMap_ONP_map10AmbushX()
 {
+	local Mover Mover;
 	local ONPPlayerRelocation PlayerRelocation;
 
 	DisablePlayerStart("PlayerStart0");
 
-	LoadLevelActor("ThingFactory0").Tag = '';
-	LoadLevelActor("ThingFactory1").Tag = '';
-	LoadLevelActor("ThingFactory2").Tag = '';
+	ThingFactory(LoadLevelActor("ThingFactory0")).prototype = class'ONPLandedWarShellExplosion';
+	ThingFactory(LoadLevelActor("ThingFactory1")).prototype = class'ONPLandedWarShellExplosion';
+	ThingFactory(LoadLevelActor("ThingFactory2")).prototype = class'ONPLandedWarShellExplosion';
+
+	Mover = LoadLevelMover("Mover41");
+	Mover.DelayTime = 0;
+	Mover.MoveTime = 1;
 
 	PlayerRelocation = Spawn(class'ONPPlayerRelocation',, 'rise', vect(-4464.000000,-12192.000000,-512.000000));
 	PlayerRelocation.MaxRelocationZ = -740.0;
