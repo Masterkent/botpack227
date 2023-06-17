@@ -5537,7 +5537,10 @@ situation. Make sure destination is reachable
 		if (enemyDist > FMax(VSize(OldLocation - Enemy.OldLocation), 240))
 			Aggression += 0.4 * FRand();
 
-		enemydir = (Enemy.Location - Location)/enemyDist;
+		if (enemyDist > 0)
+			enemydir = (Enemy.Location - Location)/enemyDist;
+		else
+			enemydir = vector(Rotation);
 		if ( bJumpy )
 			minDist = 160;
 		else
