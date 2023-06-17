@@ -607,7 +607,7 @@ function Notify(UWindowWindow B, byte E)
 {
 	local int i;
 
-	if (!bInitialized)
+	if (!bInitialized || LadderObj == none)
 		return;
 
 	switch (E)
@@ -629,25 +629,25 @@ function Notify(UWindowWindow B, byte E)
 						if (BaseMatch > MaxBaseMatch)
 							BaseMatch = MaxBaseMatch;
 					}
-					break;
+					return;
 				case Scrolldown:
 					BaseMatch--;
 					if (BaseMatch < 0)
 						BaseMatch = 0;
-					break;
+					return;
 				case InfoScrollup:
 					MapInfoArea.ScrollingOffset--;
 					if (MapInfoArea.ScrollingOffset < 0)
 						MapInfoArea.ScrollingOffset = 0;
-					break;
+					return;
 				case InfoScrolldown:
 					MapInfoArea.ScrollingOffset++;
 					if (MapInfoArea.ScrollingOffset > 10)
 						MapInfoArea.ScrollingOffset = 10;
-					break;
+					return;
 				case BackButton:
 					BackPressed();
-					break;
+					return;
 			}
 			for (i=0; i<LadderObj.CurrentLadder.Default.Matches; i++)
 			{

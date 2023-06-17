@@ -107,10 +107,10 @@ function Created()
 	bInitialized = True;
 
 	DesiredHeight = ButtonTop + 45;
-	LoadSettings();
+	B227_LoadSettings();
 }
 
-function LoadSettings()
+function B227_LoadSettings()
 {
 	local int i, j;
 
@@ -126,7 +126,7 @@ function LoadSettings()
 function WindowShown()
 {
 	super.WindowShown();
-	LoadSettings();
+	B227_LoadSettings();
 }
 
 function BeforePaint(Canvas C, float X, float Y)
