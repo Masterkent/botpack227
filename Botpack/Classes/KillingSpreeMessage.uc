@@ -73,7 +73,27 @@ static simulated function ClientReceive(
 
 static function string B227_GetString(optional int Switch)
 {
-	return default.B227_RelatedPawnInfo_1 $ default.EndSpreeNote @ default.B227_RelatedPawnInfo_2 @ default.EndSpreeNoteTrailer;
+	if (Len(default.B227_RelatedPawnInfo_2) == 0)
+	{
+		if (Len(default.B227_RelatedPawnInfo_1) > 0)
+			return default.B227_RelatedPawnInfo_1 @ default.SpreeNote[Switch];
+	}
+	else
+	{
+		if (Len(default.B227_RelatedPawnInfo_1) == 0)
+		{
+			if (Len(default.B227_RelatedPawnInfo_2) > 0 && class<Pawn>(default.B227_RelatedClass) != none)
+			{
+				if (class<Pawn>(default.B227_RelatedClass).default.bIsFemale)
+					return default.B227_RelatedPawnInfo_2 @ default.EndFemaleSpree;
+				else
+					return default.B227_RelatedPawnInfo_2 @ default.EndSelfSpree;
+			}
+		}
+		else
+			return default.B227_RelatedPawnInfo_1 $ default.EndSpreeNote @ default.B227_RelatedPawnInfo_2 @ default.EndSpreeNoteTrailer;
+	}
+	return "";
 }
 
 defaultproperties

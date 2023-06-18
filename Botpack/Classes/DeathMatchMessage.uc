@@ -31,6 +31,9 @@ static function string GetString(
 	optional Object OptionalObject
 	)
 {
+	if (default.B227_bHasRelatedContext)
+		return B227_GetString(Switch);
+
 	switch (Switch)
 	{
 		case 0:
@@ -62,6 +65,33 @@ static function string GetString(
 
 			return RelatedPRI_1.PlayerName$class'GameInfo'.Default.LeftMessage;
 			break;
+	}
+	return "";
+}
+
+static function string B227_GetString(optional int Switch)
+{
+	switch (Switch)
+	{
+		case 0:
+			return default.OverTimeMessage;
+		case 1:
+			if (Len(default.B227_RelatedPawnInfo_1) == 0)
+				return "";
+
+			return default.B227_RelatedPawnInfo_1 $ class'GameInfo'.default.EnteredMessage;
+		case 2:
+			if (Len(default.B227_RelatedPawnInfo_1) == 0 || Len(default.B227_RelatedPawnInfo_2) == 0)
+				return "";
+			return default.B227_RelatedPawnInfo_1 @ default.GlobalNameChange @ default.B227_RelatedPawnInfo_2;
+		case 3:
+			if (Len(default.B227_RelatedPawnInfo_1) == 0 || Len(default.B227_RelatedInfo) == 0)
+				return "";
+			return default.B227_RelatedPawnInfo_1 @ default.NewTeamMessage @ default.B227_RelatedInfo $ default.NewTeamMessageTrailer;
+		case 4:
+			if (Len(default.B227_RelatedPawnInfo_1) == 0)
+				return "";
+			return default.B227_RelatedPawnInfo_1 $ class'GameInfo'.default.LeftMessage;
 	}
 	return "";
 }

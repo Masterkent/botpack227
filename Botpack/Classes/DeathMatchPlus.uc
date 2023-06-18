@@ -1321,8 +1321,8 @@ function ChangeName(Pawn Other, string S, bool bNameChange)
 		PRI.OldName = PRI.PlayerName;
 		PRI.PlayerName = S;
 	}
-	if ( bNameChange && !Other.IsA('Spectator') )
-		BroadcastLocalizedMessage( DMMessageClass, 2, Other.PlayerReplicationInfo );
+	if (bNameChange && !Other.IsA('Spectator'))
+		class'UTC_Actor'.static.B227_StaticBroadcastLocalizedMessage(self, DMMessageClass, 2, PRI.OldName, PRI.PlayerName);
 
 /// [U227] Excluded
 ///	if (LocalLog != None)

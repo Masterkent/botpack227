@@ -63,6 +63,52 @@ static function UTSF_BroadcastLocalizedMessage(
 		}
 }
 
+static function B227_StaticBroadcastLocalizedMessage(
+	Actor this,
+	class<LocalMessage> Message,
+	optional int Switch,
+	optional string RelatedPawnInfo_1,
+	optional string RelatedPawnInfo_2,
+	optional class<Object> RelatedClass,
+	optional string RelatedInfo)
+{
+	local LevelInfo Level;
+	local GameRules GR;
+	local Pawn P;
+	local string Msg;
+
+	if (this == none)
+		return;
+	Level = this.Level;
+
+	Message.default.B227_bHasRelatedContext = true;
+	Message.default.B227_RelatedPawnInfo_1 = RelatedPawnInfo_1;
+	Message.default.B227_RelatedPawnInfo_2 = RelatedPawnInfo_2;
+	Message.default.B227_RelatedClass = RelatedClass;
+	Message.default.B227_RelatedInfo = RelatedInfo;
+
+	Msg = Message.static.B227_GetString(Switch);
+
+	Message.default.B227_bHasRelatedContext = false;
+	Message.default.B227_RelatedPawnInfo_1 = "";
+	Message.default.B227_RelatedPawnInfo_2 = "";
+	Message.default.B227_RelatedClass = none;
+	Message.default.B227_RelatedInfo = "";
+
+	if (Level.Game != none)
+	{
+		if (Level.Game.GameRules != none)
+			for (GR = Level.Game.GameRules; GR != none; GR = GR.NextRules)
+				if (GR.bNotifyMessages && B227_MessageMutatorGR(GR) == none && !GR.AllowBroadcast(this, Msg))
+					return;
+		if (!Level.Game.AllowsBroadcast(this, Len(Msg)))
+			return;
+	}
+	for (P = Level.PawnList; P != None; P = P.nextPawn)
+		if (P.bIsPlayer || P.IsA('MessagingSpectator'))
+			class'UTC_Pawn'.static.B227_StaticReceiveLocalizedMessage(P, Message, Switch, RelatedPawnInfo_1, RelatedPawnInfo_2, RelatedClass, RelatedInfo);
+}
+
 // Play sound only with Role == ROLE_Authority
 static function B227_PlaySound(
 	Actor this,

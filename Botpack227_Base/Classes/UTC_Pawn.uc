@@ -73,7 +73,7 @@ static function B227_StaticReceiveLocalizedMessage(
 		Message.default.B227_RelatedInfo = RelatedInfo;
 
 		this.ClientMessage(
-			Message.static.GetString(Switch),
+			Message.static.B227_GetString(Switch),
 			Message.default.B227_MessageName,
 			Message.default.bBeep);
 

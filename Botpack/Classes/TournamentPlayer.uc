@@ -1541,7 +1541,7 @@ function B227_EndSpree(Pawn Killer, Pawn Other)
 {
 	if (Killer == Other || Killer == none)
 		ReceiveLocalizedMessage(class'KillingSpreeMessage', 1, none, Other.PlayerReplicationInfo);
-	else
+	else if (Len(Killer.GetHumanName()) > 0 && Len(Other.GetHumanName()) > 0)
 		B227_ReceiveLocalizedMessage(class'KillingSpreeMessage', 0, Other.GetHumanName(), Killer.GetHumanName());
 }
 

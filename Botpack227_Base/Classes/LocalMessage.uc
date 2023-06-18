@@ -103,6 +103,11 @@ static function float GetOffset(int Switch, float YL, float ClipY )
 
 static function int GetFontSize( int Switch );
 
+static function string B227_GetString(optional int Switch)
+{
+	return "";
+}
+
 defaultproperties
 {
      Lifetime=3
