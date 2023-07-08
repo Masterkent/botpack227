@@ -49,7 +49,7 @@ function bool ReplaceWith(Actor Other, string ClassName)
 		// Note: Other.Region doesn't refer to the relevant zone for dynamically spawned actors
 		if (!bool(Other.Location) ||
 			Level.GetLocZone(Other.Location).ZoneNumber == 0 ||
-			Pawn(Other.Owner) != none))
+			Pawn(Other.Owner) != none)
 		{
 			return false;
 		}
