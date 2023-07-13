@@ -351,7 +351,10 @@ static function bool B227_AdjustTraceResult(
 	Dir = Normal(EndTrace - StartTrace);
 
 	if (HitActor != none)
-		HitWarpZone = WarpZoneInfo(Level.GetLocZone(HitLocation + HitNormal).Zone);
+	{
+		if (LevelInfo(HitActor) != none || HitActor.bWorldGeometry)
+			HitWarpZone = WarpZoneInfo(Level.GetLocZone(HitLocation + HitNormal).Zone);
+	}
 	else
 	{
 		HitWarpZone = WarpZoneInfo(Level.GetLocZone(EndTrace).Zone);
