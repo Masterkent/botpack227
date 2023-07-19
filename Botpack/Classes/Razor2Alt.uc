@@ -18,7 +18,9 @@ auto state Flying
 	{
 		if (Other != Instigator)
 		{
+			class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_DamageWeaponClass);
 			Other.TakeDamage(Damage, Instigator, HitLocation, MomentumTransfer * Normal(Velocity), MyDamageType);
+			class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
 			B227_SetupProjectileExplosion(, HitLocation);
 			MakeNoise(1.0);
  			Destroy();
@@ -48,6 +50,8 @@ auto state Flying
 			return;
 
 		bHurtEntry = true;
+		class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_DamageWeaponClass);
+
 		foreach VisibleCollidingActors( class 'Actor', Victims, 180, HitLocation )
 		{
 			if( Victims != self )
@@ -67,6 +71,8 @@ auto state Flying
 				);
 			}
 		}
+
+		class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
 		bHurtEntry = false;
 		MakeNoise(1.0);
 	}

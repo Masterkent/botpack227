@@ -226,6 +226,16 @@ function TraceFire(float Accuracy)
 	ProcessTraceHit(Other, HitLocation, HitNormal, X, Y, Z);
 }
 
+function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed, bool bWarn)
+{
+	local Projectile Proj;
+
+	class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
+	Proj = super.ProjectileFire(ProjClass, ProjSpeed, bWarn);
+	class'B227_Projectile'.default.B227_DamageWeaponClass = none;
+	return Proj;
+}
+
 static function int B227_ViewOffsetMode()
 {
 	return class'B227_BaseConfig'.default.WeaponViewOffsetMode;

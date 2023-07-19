@@ -126,6 +126,7 @@ function Fire( float Value )
 		GetAxes(AdjustedAim,X,Y,Z);
 		Spawn(class'WeaponLight',,'',Start+X*20,rot(0,0,0));
 		Start = Start + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
+		class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
 		Spawn( class 'UTChunk1',, '', Start, AdjustedAim);
 		Spawn( class 'UTChunk2',, '', Start - Z, AdjustedAim);
 		Spawn( class 'UTChunk3',, '', Start + 2 * Y + Z, AdjustedAim);
@@ -142,6 +143,7 @@ function Fire( float Value )
 		else if ( B.Skill > 1 )
 			Spawn( class 'UTChunk3',, '', Start + Y - Z, AdjustedAim);
 
+		class'B227_Projectile'.default.B227_DamageWeaponClass = none;
 		ClientFire(Value);
 		GoToState('NormalFire');
 	}
@@ -181,7 +183,9 @@ function AltFire( float Value )
 		Spawn(class'WeaponLight',,'',Start+X*20,rot(0,0,0));
 		Start = Start + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 		AdjustedAim = pawn(owner).AdjustToss(AltProjectileSpeed, Start, AimError, True, bAltWarnTarget);
+		class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
 		Spawn(class'FlakSlug',,, Start,AdjustedAim);
+		class'B227_Projectile'.default.B227_DamageWeaponClass = none;
 		ClientAltFire(Value);
 		GoToState('AltFiring');
 	}

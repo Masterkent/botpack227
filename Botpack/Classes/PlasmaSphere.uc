@@ -12,6 +12,8 @@ var() texture SpriteAnim[20];
 var() int NumFrames;
 var Float AnimTime;
 
+var private class<Weapon> B227_DamageWeaponClass;
+
 simulated function PostBeginPlay()
 {
 	Super.PostBeginPlay();
@@ -19,7 +21,10 @@ simulated function PostBeginPlay()
 	if ( Level.NetMode == NM_Client )
 		LifeSpan = 2.0;
 	else
+	{
 		Velocity = Speed * vector(Rotation);
+		B227_SetDamageWeaponClass(class'B227_Projectile'.default.B227_DamageWeaponClass);
+	}
 	if ( Level.bDropDetail )
 		LightType = LT_None;
 }
@@ -63,7 +68,7 @@ simulated function Explode(vector HitLocation, vector HitNormal)
 		else
 			DrawScale *= 0.65 / default.DrawScale;
 
-	    LightType = LT_Steady;
+		LightType = LT_Steady;
 		LightRadius = Clamp(LightRadius * 5 / default.LightRadius, 5, 255);
 		SetCollision(false,false,false);
 		LifeSpan = 0.5;
@@ -90,12 +95,16 @@ simulated function ProcessTouch (Actor Other, vector HitLocation)
 			bExploded = !Level.bHighDetailMode || Level.bDropDetail;
 		}
 		if ( Role == ROLE_Authority )
+		{
+			class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_GetDamageWeaponClass());
 			Other.TakeDamage(
 				B227_GetDamage(),
 				Instigator,
 				HitLocation,
 				MomentumTransfer * vector(Rotation),
 				MyDamageType);
+			class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
+		}
 
 		Explode(HitLocation, vect(0,0,1));
 	}
@@ -110,6 +119,16 @@ Begin:
 function int B227_GetDamage()
 {
 	return class'PulseGun'.static.B227_ModifyDamage(self, Damage);
+}
+
+function class<Weapon> B227_GetDamageWeaponClass()
+{
+	return B227_DamageWeaponClass;
+}
+
+function B227_SetDamageWeaponClass(class<Weapon> WeaponClass)
+{
+	B227_DamageWeaponClass = WeaponClass;
 }
 
 defaultproperties

@@ -107,12 +107,16 @@ function bool ClientAltFire(float Value)
 function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed, bool bWarn)
 {
 	local Vector Start, X,Y,Z;
+	local Projectile Proj;
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
 	Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 	AdjustedAim = pawn(owner).AdjustToss(ProjSpeed, Start, 0, True, (bWarn || (FRand() < 0.4)));
-	return Spawn(ProjClass,,, Start,AdjustedAim);
+	class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
+	Proj = Spawn(ProjClass,,, Start,AdjustedAim);
+	class'B227_Projectile'.default.B227_DamageWeaponClass = none;
+	return Proj;
 }
 
 function PlayAltFiring()
@@ -213,6 +217,8 @@ state ShootLoad
 		local rotator R;
 		local vector start, X,Y,Z;
 
+		class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
+
 		GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
 		R = Owner.Rotation;
 		R.Yaw = R.Yaw + Rand(8000) - 4000;
@@ -225,6 +231,8 @@ state ShootLoad
 		R.Pitch = R.Pitch + Rand(1000) - 500;
 		Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
 		Spawn(AltProjectileClass,,, Start,R);
+
+		class'B227_Projectile'.default.B227_DamageWeaponClass = none;
 	}
 
 	function AnimEnd()

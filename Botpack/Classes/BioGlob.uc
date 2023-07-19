@@ -43,7 +43,9 @@ function SpawnSplash()
 
 	NumSplash--;
 	Start = SpawnPoint + 4 * VRand();
+	class'B227_Projectile'.default.B227_DamageWeaponClass = B227_GetDamageWeaponClass();
 	Spawn(class'BioSplash',,,Start,Rotator(Start - Location));
+	class'B227_Projectile'.default.B227_DamageWeaponClass = none;
 }
 
 state OnSurface

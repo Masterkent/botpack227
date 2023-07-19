@@ -63,14 +63,23 @@ function Explode(vector HitLocation, vector HitNormal)
 	MakeNoise(1.0);
 	B227_SetupProjectileExplosion(Location,, HitNormal, rotator(Velocity));
 
+	class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_DamageWeaponClass);
 	HurtRadiusProj(damage, 150, 'FlakDeath', MomentumTransfer, HitLocation);
+	class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
+
 	start = Location + 10 * HitNormal;
- 	Spawn( class'ut_FlameExplosion',,,Start);
+	Spawn( class'ut_FlameExplosion',,,Start);
+
+	class'B227_Projectile'.default.B227_DamageWeaponClass = B227_DamageWeaponClass;
+
 	Spawn( class 'UTChunk2',, '', Start);
 	Spawn( class 'UTChunk3',, '', Start);
 	Spawn( class 'UTChunk4',, '', Start);
 	Spawn( class 'UTChunk1',, '', Start);
 	Spawn( class 'UTChunk2',, '', Start);
+
+	class'B227_Projectile'.default.B227_DamageWeaponClass = none;
+
 	Destroy();
 }
 

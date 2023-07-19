@@ -9,6 +9,7 @@ class Ripper extends TournamentWeapon;
 function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed, bool bWarn)
 {
 	local Vector Start, X,Y,Z;
+	local Projectile Proj;
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
@@ -17,7 +18,10 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 		bSplashDamage = bRecommendSplashDamage;
 	AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
 	bSplashDamage = default.bSplashDamage;
-	return Spawn(ProjClass,,, Start,AdjustedAim);
+	class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
+	Proj = Spawn(ProjClass,,, Start,AdjustedAim);
+	class'B227_Projectile'.default.B227_DamageWeaponClass = none;
+	return Proj;
 }
 
 function PlayFiring()

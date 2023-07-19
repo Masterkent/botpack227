@@ -44,7 +44,10 @@ function Explode(vector HitLocation,vector HitNormal)
 	local UT_RingExplosion3 RingExplosion3;
 
 	PlaySound(ImpactSound, SLOT_Misc, 0.5,,, 0.5+FRand());
+	class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_DamageWeaponClass);
 	HurtRadiusProj(Damage, 70, MyDamageType, MomentumTransfer, Location );
+	class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
+
 	if (Damage > 60)
 	{
 		RingExplosion3 = Spawn(class'UT_RingExplosion3',,, HitLocation+HitNormal*8,rotator(HitNormal));

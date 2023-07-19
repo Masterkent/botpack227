@@ -13,11 +13,14 @@ var float wallTime;
 var float BaseOffset;
 var BioFear MyFear;
 
+var private class<Weapon> B227_DamageWeaponClass;
+
 
 function PostBeginPlay()
 {
 	SetTimer(3.0, false);
 	Super.PostbeginPlay();
+	B227_SetDamageWeaponClass(class'B227_Projectile'.default.B227_DamageWeaponClass);
 }
 
 function Destroyed()
@@ -39,7 +42,10 @@ function Timer()
 	if ( (Mover(Base) != None) && Mover(Base).bDamageTriggered )
 		Base.TakeDamage( Damage, instigator, Location, MomentumTransfer * Normal(Velocity), MyDamageType);
 
+	class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_GetDamageWeaponClass());
 	HurtRadiusProj(damage * Drawscale, FMin(250, DrawScale * 75), MyDamageType, MomentumTransfer * Drawscale, Location);
+	class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
+
 	Destroy();
 }
 
@@ -185,6 +191,16 @@ state OnSurface
 
 		bCheckedSurface = true;
 	}
+}
+
+function class<Weapon> B227_GetDamageWeaponClass()
+{
+	return B227_DamageWeaponClass;
+}
+
+function B227_SetDamageWeaponClass(class<Weapon> WeaponClass)
+{
+	B227_DamageWeaponClass = WeaponClass;
 }
 
 defaultproperties

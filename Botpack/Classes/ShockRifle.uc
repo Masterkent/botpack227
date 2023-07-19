@@ -198,7 +198,9 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 	PlayerOwner = PlayerPawn(Owner);
 	if ( PlayerOwner != None )
 		PlayerOwner.ClientInstantFlash( -0.4, vect(450, 190, 650));
+	class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
 	Proj = Spawn(ProjClass,,, Start,AdjustedAim);
+	class'B227_Projectile'.default.B227_DamageWeaponClass = none;
 	if (B227_ShouldUseEnergyAmplifier() && Proj != none)
 		Proj.Damage *= B227_AmplifyDamage(80);
 	Tracked = Proj;

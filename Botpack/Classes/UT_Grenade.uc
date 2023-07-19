@@ -129,7 +129,9 @@ simulated function HitWall( vector HitNormal, actor Wall )
 ///////////////////////////////////////////////////////
 function BlowUp(vector HitLocation)
 {
+	class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_DamageWeaponClass);
 	HurtRadiusProj(damage, 200, MyDamageType, MomentumTransfer, HitLocation);
+	class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
 	MakeNoise(1.0);
 }
 

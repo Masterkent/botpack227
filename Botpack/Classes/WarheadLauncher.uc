@@ -149,6 +149,8 @@ function AltFire( float Value )
 			GuidedShell.SetOwner(Owner);
 			PlayerPawn(Owner).ViewTarget = GuidedShell;
 			GuidedShell.Guider = PlayerPawn(Owner);
+			if (Pawn(Owner).Weapon == self)
+				GuidedShell.B227_GuiderWeaponClass = Class;
 			ClientAltFire(0);
 			GotoState('Guiding');
 		}
@@ -224,9 +226,14 @@ State Finishing
 {
 	ignores Fire, AltFire;
 
-	function BeginState()
+	event BeginState()
 	{
 		bShowStatic = true;
+	}
+
+	event EndState()
+	{
+		bShowStatic = false; // important if the weapon was tossed out
 	}
 
 Begin:

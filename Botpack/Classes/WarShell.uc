@@ -81,7 +81,9 @@ singular function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation
 	{
 		PlaySound(Sound'Expl03',,6.0);
 		spawn(class'WarExplosion',,,Location);
+		class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_DamageWeaponClass);
 		HurtRadiusProj(Damage, 350.0, MyDamageType, MomentumTransfer, HitLocation );
+		class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
 		RemoteRole = ROLE_SimulatedProxy;
 		Destroy();
 	}

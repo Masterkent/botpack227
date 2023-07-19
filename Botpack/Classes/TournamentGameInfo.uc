@@ -234,10 +234,12 @@ function PlayTeleportEffect( actor Incoming, bool bOut, bool bSound)
 
 function BroadcastRegularDeathMessage(pawn Killer, pawn Other, name damageType)
 {
-	if (damageType == 'RedeemerDeath')
+	if (B227_WeaponDeathMessagesMode == 0)
+		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, None);
+	else if (damageType == 'RedeemerDeath')
 	{
 		if ( RedeemerClass == None )
-			RedeemerClass = class<Weapon>(DynamicLoadObject("Botpack.Warheadlauncher", class'Class'));
+			RedeemerClass = class'WarheadLauncher';
 		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, RedeemerClass);
 	}
 	else if (damageType == 'Eradicated')
@@ -246,9 +248,16 @@ function BroadcastRegularDeathMessage(pawn Killer, pawn Other, name damageType)
 		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, class'UT_Eightball');
 	else if (damageType == 'Gibbed')
 		BroadcastLocalizedMessage(DeathMessageClass, 8, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, None);
-	else {
-		if (Killer.Weapon != None)
+	else
+	{
+		if (B227_WeaponDeathMessagesMode == 2 && B227_DamageWeaponClass != none && B227_DamageWeaponClass != class'Weapon')
+			BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, B227_DamageWeaponClass);
+		else if (
+			(B227_WeaponDeathMessagesMode == 1 || B227_WeaponDeathMessagesMode == 2 && B227_DamageWeaponClass == class'Weapon') &&
+			Killer.Weapon != none)
+		{
 			BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, Killer.Weapon.Class);
+		}
 		else
 			BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, None);
 	}

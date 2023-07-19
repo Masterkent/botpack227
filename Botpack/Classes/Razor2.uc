@@ -28,6 +28,8 @@ auto state Flying
 	{
 		if (bCanHitInstigator || Other != Instigator)
 		{
+			class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_DamageWeaponClass);
+
 			if (Other.bIsPawn &&
 				HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight &&
 				(Bot(Instigator) == none || !Bot(Instigator).bNovice))
@@ -36,6 +38,8 @@ auto state Flying
 			}
 			else
 				Other.TakeDamage(Damage, Instigator, HitLocation, MomentumTransfer * Normal(Velocity), 'shredded');
+
+			class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
 
 			if ( Other.bIsPawn )
 				PlaySound(MiscSound, SLOT_Misc, 2.0);

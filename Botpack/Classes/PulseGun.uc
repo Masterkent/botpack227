@@ -211,7 +211,9 @@ state NormalFire
 		AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
 		Start = Start - Sin(Angle)*Y*4 + (Cos(Angle)*4 - 10.78)*Z;
 		Angle += 1.8;
+		class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
 		Proj = Spawn(ProjClass,,, Start,AdjustedAim);
+		class'B227_Projectile'.default.B227_DamageWeaponClass = none;
 		if (B227_ShouldUseEnergyAmplifier() && Proj != none)
 		{
 			DamageMult = B227_AmplifyDamage(Proj.Damage);

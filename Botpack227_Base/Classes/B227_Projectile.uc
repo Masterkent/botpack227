@@ -1,6 +1,13 @@
 class B227_Projectile expands Projectile;
 
 var bool B227_bReplicateExplosion;
+var class<Weapon> B227_DamageWeaponClass;
+
+event PreBeginPlay()
+{
+	super.PreBeginPlay();
+	B227_DamageWeaponClass = class'B227_Projectile'.default.B227_DamageWeaponClass;
+}
 
 function B227_SetupProjectileExplosion(
 	optional vector ProjLocation,

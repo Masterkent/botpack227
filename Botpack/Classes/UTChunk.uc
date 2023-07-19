@@ -7,6 +7,8 @@ var	chunktrail trail;
 var Texture AnimFrame[12];
 var int Count;
 
+var private class<Weapon> B227_DamageWeaponClass;
+
 #exec OBJ LOAD FILE="BotpackResources.u" PACKAGE=Botpack
 
 	simulated function PostBeginPlay()
@@ -29,6 +31,7 @@ var int Count;
 			Velocity = Vector(RandRot) * (Speed + (FRand() * 200 - 100));
 			if (Region.zone.bWaterZone)
 				Velocity *= 0.65;
+			B227_SetDamageWeaponClass(class'B227_Projectile'.default.B227_DamageWeaponClass);
 		}
 		Super.PostBeginPlay();
 	}
@@ -41,8 +44,12 @@ var int Count;
 			If ( speed > 200 )
 			{
 				if ( Role == ROLE_Authority )
+				{
+					class'UTC_GameInfo'.static.B227_SetDamageWeaponClass(Level, B227_GetDamageWeaponClass());
 					Other.TakeDamage(damage, instigator,HitLocation,
 						(MomentumTransfer * Velocity/speed), MyDamageType );
+					class'UTC_GameInfo'.static.B227_ResetDamageWeaponClass(Level);
+				}
 				if ( FRand() < 0.5 )
 					PlaySound(Sound 'ChunkHit',, 4.0,,200);
 			}
@@ -113,6 +120,16 @@ var int Count;
 			Velocity *= 0.65;
 		}
 	}
+
+function class<Weapon> B227_GetDamageWeaponClass()
+{
+	return B227_DamageWeaponClass;
+}
+
+function B227_SetDamageWeaponClass(class<Weapon> WeaponClass)
+{
+	B227_DamageWeaponClass = WeaponClass;
+}
 
 defaultproperties
 {

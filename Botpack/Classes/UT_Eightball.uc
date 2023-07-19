@@ -839,8 +839,11 @@ state FireRockets
 		bPointing = true;
 		FireRot = AdjustedAim;
 		RocketRad = 4;
-		if (bTightWad || !bFireLoad) RocketRad=7;
+		if (bTightWad || !bFireLoad)
+			RocketRad=7;
 		bMultiRockets = ( RocketsLoaded > 1 );
+		class'B227_Projectile'.default.B227_DamageWeaponClass = Class;
+
 		While ( RocketsLoaded > 0 )
 		{
 			if ( bMultiRockets )
@@ -900,6 +903,8 @@ state FireRockets
 			Angle += 1.0484; //2*3.1415/6;
 			RocketsLoaded--;
 		}
+
+		class'B227_Projectile'.default.B227_DamageWeaponClass = none;
 		bTightWad=False;
 		bRotated = false;
 	}

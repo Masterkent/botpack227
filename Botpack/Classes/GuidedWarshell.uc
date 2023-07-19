@@ -14,6 +14,8 @@ var SavedMove FreeMoves;
 
 var vector RealLocation, RealVelocity;
 
+var class<Weapon> B227_GuiderWeaponClass;
+
 var float B227_CurrentTimestamp; // Doesn't change when the game is paused (in contrast to Level.TimeSeconds)
 var float B227_CurrentServerTimestamp;
 var vector B227_Velocity; // Actual velocity; the value is preserved when setting PHYS_None (in contrast to Velocity)
@@ -529,7 +531,8 @@ function bool B227_LostGuider()
 		Guider.bDeleteMe ||
 		Guider.Health <= 0 ||
 		(PlayerPawn(Guider) != none && PlayerPawn(Guider).ViewTarget != self) ||
-		Guider.IsInState('FeigningDeath');
+		Guider.IsInState('FeigningDeath') ||
+		B227_GuiderWeaponClass != none && (Guider.Weapon == none || Guider.Weapon.Class != B227_GuiderWeaponClass);
 }
 
 simulated function B227_AdjustCurrentClientTimestamp(out float DeltaTime)

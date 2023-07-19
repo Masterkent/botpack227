@@ -8,11 +8,14 @@ var class<LocalMessage> DMMessageClass;
 
 var localized bool bAlternateMode;
 
-var class<LocalMessage> B227_KillerMessageClass;
+var() globalconfig int B227_WeaponDeathMessagesMode;
+
+var() class<LocalMessage> B227_KillerMessageClass;
 
 // Auxiliary
 // public:
 var Pawn B227_Player; // is used as the first argument for UTF_FindPlayerStart
+var class<Weapon> B227_DamageWeaponClass;
 var B227_PendingWeaponSwitcher B227_PendingWeaponSwitcher;
 
 // private:
@@ -444,8 +447,14 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 
 function BroadcastRegularDeathMessage(pawn Killer, pawn Other, name damageType)
 {
-	if (Killer.Weapon != none)
+	if (B227_WeaponDeathMessagesMode == 2 && B227_DamageWeaponClass != none && B227_DamageWeaponClass != class'Weapon')
+		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, B227_DamageWeaponClass);
+	else if (
+		(B227_WeaponDeathMessagesMode == 1 || B227_WeaponDeathMessagesMode == 2 && B227_DamageWeaponClass == class'Weapon') &&
+		Killer.Weapon != none)
+	{
 		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, Killer.Weapon.Class);
+	}
 	else
 		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, none);
 }
@@ -699,8 +708,22 @@ static function B227_BroadcastLocalizedDeathMessage(
 	class'UTC_Actor'.static.UTSF_BroadcastLocalizedMessage(this, DeathMessageClass, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 }
 
+static function B227_SetDamageWeaponClass(LevelInfo Level, class<Weapon> WeaponClass)
+{
+	if (UTC_GameInfo(Level.Game) != none)
+		UTC_GameInfo(Level.Game).B227_DamageWeaponClass = WeaponClass;
+}
+
+static function B227_ResetDamageWeaponClass(LevelInfo Level)
+{
+	if (UTC_GameInfo(Level.Game) != none)
+		UTC_GameInfo(Level.Game).B227_DamageWeaponClass = class'Weapon';
+}
+
 defaultproperties
 {
 	DeathMessageClass=Class'Engine.LocalMessage'
 	GameReplicationInfoClass=Class'UTC_GameReplicationInfo'
+	B227_DamageWeaponClass=Class'Weapon'
+	B227_WeaponDeathMessagesMode=2
 }
