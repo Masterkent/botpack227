@@ -75,8 +75,10 @@ function SetUpCurrent(){
   NewVersion=true; //OSA 2.25+ save
 }
 function postbeginplay(){
-SetupCurrent();
+  SetupCurrent();
   class'UTC_GameInfo'.static.UTSF_RegisterDamageMutator(self);     //OSA 3: damage mutator for skaarj voice thing
+  if (Level.Game.DefaultWeapon != none)
+    Level.Game.DefaultWeapon = class<Weapon>(B227_ReplaceInventoryClass(Level.Game.DefaultWeapon));
 //decals spawnnotify:
 //log ("OldSkool Amp'd: SPOldSkool Postbeginplay called");
 }
@@ -204,14 +206,14 @@ hack.Offset=transporter(other).Offset;
 other.disable('trigger'); //my version is better :P
 return true; //keep its navigation properties.  With trigger disabled it can't do anything and the hack manages it.
 }
-if (other.isa('decoration')){    //fix content (falling stuff)
+if (Decoration(Other) != none){    //fix content (falling stuff)
   //-if (other.isa('tree')||left(getitemname(string(other.class)),5)~="plant")
   //-  other.style=STY_MASKED; //fix up mask bug in D3D?
   fixcontents(decoration(other).Contents);
   fixcontents(decoration(other).Content2);
   fixcontents(decoration(other).Content3);
 }
-if (other.isa('musicevent')&&musicevent(other).Song==none&&level.song==none){ //need to set to null
+if (MusicEvent(Other) != none && MusicEvent(Other).Song==none&&level.song==none){ //need to set to null
   musicevent(other).song=music'olroot.null';
   return true;
 }
@@ -219,6 +221,8 @@ if (other.isa('musicevent')&&musicevent(other).Song==none&&level.song==none){ //
 //-  other.style=STY_MASKED; //fix up masking bug on pawns
 if (Other.bIsPawn && Pawn(Other).DropWhenKilled != none)
   B227_AdjustInventoryClass(Pawn(Other).DropWhenKilled);
+if (Weapon(Other) != none && Weapon(Other).AmmoName != none)
+  Weapon(Other).AmmoName = class<Ammo>(B227_ReplaceInventoryClass(Weapon(Other).AmmoName));
 if (Inventory(other) != none) //so pickup messages work......
   class'UTC_Inventory'.static.B227_SetPickupMessageClass(Inventory(other), none);
 //here we swap baddie projectiles around.... (neither a spawn notify nor mutator would affect the projectiles so I had to do it the hard way :(
@@ -258,7 +262,7 @@ if (B227_bPermaCarcasses &&
 }
 //get those skaarjy right.....                   i.e sets weapons so won't screw up player.  Warning: this makes the skaarj even deadlier ;)
 
-if ( Other.IsA('skaarjtrooper')){
+if (SkaarjTrooper(Other) != none){
     if (skaarjtrooper(Other).weapontype==Class'unreali.Stinger')
     {
     if (bstingy)
@@ -333,10 +337,10 @@ if ( Other.IsA('skaarjtrooper')){
    }
 else //anything else forget about it.....
 return true;
-if ( Other.IsA('Weapon') )            //set up decal/network weapons.....
+if (Weapon(Other) != none)            //set up decal/network weapons.....
   {
-    if (Other.Isa('tournamentweapon')){
-    if ( Other.IsA('uiweapons') ){
+    if (TournamentWeapon(Other) != none){
+    if (uiweapons(Other) != none){
     return true;}                              //possible options for "new" maps....
  /*   If (Other.Isa('Olstinger')&&bstingy){
     ReplaceWith(Other, "olweapons.osPulseGun");
@@ -465,7 +469,7 @@ if ( Other.IsA('Weapon') )            //set up decal/network weapons.....
   return true;  //some other wierd weapon that got in here :D
   }
   //ammo
-  if ( Other.IsA('Ammo'))                           //ammo sets for correct item place.......
+  if (Ammo(Other) != none)                           //ammo sets for correct item place.......
   {
     if (string(Ammo(Other).PickupSound)~="UnrealShare.Pickups.AmmoSnd" &&
         B227_bModifyAmmoPickupSound)
@@ -473,53 +477,53 @@ if ( Other.IsA('Weapon') )            //set up decal/network weapons.....
       Ammo(Other).PickupSound=Sound'BotPack.Pickups.AmmoPick';
       //- Ammo(Other).bClientAnim=True;
     }
-    if ( Other.IsA('TournamentAmmo') )           //for UT: SP.......
+    if (TournamentAmmo(Other) != none)           //for UT: SP.......
     {
       //-if ( Other.IsA('shockcore')){    //check not default ammo...
       //-  shockcore(other).icon=Texture'UnrealShare.Icons.I_ASMD';
       //-  return true;
       //-}
-      if ( Other.isa('RocketPack'))  {
+      if (RocketPack(Other) != none)  {
         RocketPack(Other).UsedInWeaponSlot[5]=0;
         RocketPack(Other).UsedInWeaponSlot[9]=1;
         //-RocketPack(Other).Icon=Texture'UnrealShare.Icons.I_RocketAmmo';
         return true;
       }
-      if ( Other.IsA('Pammo'))
+      if (PAmmo(Other) != none)
       {
         Pammo(Other).UsedInWeaponSlot[3]=0;
         Pammo(Other).UsedInWeaponSlot[5]=1;
         Pammo(Other).Icon=Texture'pulseicon';       //ph34r |\/|y 1c0|\| |\/|4k1|\|9 5k1llz!!!!!!!
         return true;
       }
-      if ( Other.IsA('bladehopper'))
+      if (BladeHopper(Other) != none)
       {
         bladehopper(other).UsedInWeaponSlot[7]=0;
         bladehopper(other).UsedInWeaponSlot[6]=1;
         //-bladehopper(other).Icon=Texture'UnrealI.Icons.I_RazorAmmo';
         return true;
       }
-      if ( Other.IsA('bulletbox'))
+      if (BulletBox(Other) != none)
       {
         bulletbox(other).UsedInWeaponSlot[9]=0;
         bulletbox(other).UsedInWeaponSlot[0]=1;
         return true;
       }
-      if ( Other.IsA('Flakammo'))
+      if (FlakAmmo(Other) != none)
       {
         flakammo(other).UsedInWeaponSlot[6]=0;
         flakammo(other).UsedInWeaponSlot[8]=1;
         //-flakammo(other).Icon=Texture'UnrealI.Icons.I_FlakAmmo';
         return true;
       }
-      if ( Other.IsA('miniammo'))
+      if (MiniAmmo(Other) != none)
       {
-        miniammo(other).UsedInWeaponSlot[0]=0;
+        miniammo(other).UsedInWeaponSlot[0]=int(bmag && !bmini);
         miniammo(other).UsedInWeaponSlot[7]=1;
         //-miniammo(other).Icon=Texture'UnrealShare.Icons.I_ShellAmmo';
         return true;
       }
-      if ( Other.IsA('bioammo'))
+      if (BioAmmo(Other) != none)
       {
         bioammo(other).UsedInWeaponSlot[8]=0;
         bioammo(other).UsedInWeaponSlot[3]=1;
@@ -527,6 +531,12 @@ if ( Other.IsA('Weapon') )            //set up decal/network weapons.....
         return true;
       }
       return true;
+    }
+
+    if (Other.Class == class'ShellBox' && !bmag && bmini)
+    {
+      ShellBox(Other).UsedInWeaponSlot[0] = 0;
+      ShellBox(Other).UsedInWeaponSlot[7] = 1;
     }
 
     if ( Other.IsA('ASMDAmmo')&& !Other.IsA('Defaultammo')&&basmd ){    //check not default ammo...
@@ -585,7 +595,7 @@ if ( Other.IsA('Clip') &&bmag&&Other.Location != vect(0,0,0)&&Other.owner==None 
     return true; //other stuff...
     }
 //items
-if ( Other.IsA('pickup') )
+if (Pickup(Other) != none)
 {
 //-if (Other.Isa('armor2')){              //icon.....
 //-armor2(other).Icon=Texture'UnrealShare.Icons.I_Armor';
@@ -594,7 +604,7 @@ if ( Other.IsA('pickup') )
 //-if (Other.Isa('thighpads')){  //stronger pads......    (kev suit standarts)
 //-thighpads(other).Icon=Texture'UnrealShare.Icons.I_kevlar'; //to stop confusion :D
 //-return true;}
-if ( Other.IsA('Tournamentpickup') )        //sure ok :D
+if (TournamentPickup(Other) != none)        //sure ok :D
       return true;
   if ( Other.IsA('JumpBoots') &&bjump)
   {
@@ -667,12 +677,12 @@ function bool ReplaceWith(actor Other, string aClassName)
     return False;
   if( FRand() > Other.OddsOfAppearing )
     return False;
-  if ( Other.IsA('Inventory') && (Other.Location == vect(0,0,0)) )
+  if ( Inventory(Other) != none && (Other.Location == vect(0,0,0)) )
     return false;
   aClass = class<Actor>(DynamicLoadObject(aClassName, class'Class'));
   if ( aClass != None )
     A = Spawn(aClass,,Other.tag,Other.Location, Other.Rotation);
-  if ( Other.IsA('Inventory') )
+  if ( Inventory(Other) != none )
   {
     if ( Inventory(Other).MyMarker != None )
     {
@@ -685,7 +695,7 @@ function bool ReplaceWith(actor Other, string aClassName)
       }
       Inventory(Other).MyMarker = None;
     }
-    else if ( A.IsA('Inventory') &&Inventory(Other).bhelditem)
+    else if (Inventory(A) != none && Inventory(Other).bhelditem)
     {
       Inventory(A).bHeldItem = true;
       Inventory(A).Respawntime = 0.0;
@@ -693,19 +703,21 @@ function bool ReplaceWith(actor Other, string aClassName)
   }
   if ( A != None )
   {
-        if (A.Isa('thighpads')){   //kev suit pads.....
+        if (ThighPads(A) != none){   //kev suit pads.....
     Thighpads(A).charge=100;
     Thighpads(A).armorabsorption=80;
 Thighpads(A).AbsorptionPriority=6;}
-    if (A.Isa('armor2'))
+    if (Armor2(A) != none)
     armor2(A).ArmorAbsorption=90;
-    if (A.Isa('udamage')) {               //9 sec Udamage......
+    if (UDamage(A) != none) {               //9 sec Udamage......
     udamage(A).charge=90;
 udamage(A).finalcount=2;  }
-    if (a.IsA('minigun2')&&!bmag)     //if we have automags we gotta do this.....
-    minigun2(a).AmmoName=Class'UnrealShare.ShellBox';
-    if (a.IsA('enforcer')&&!bmini)     //if we have minigunz we gotta do this.....
-    enforcer(a).AmmoName=Class'UnrealShare.ShellBox';
+    if (Minigun2(A) != none && !bmag)     //if we have automags we gotta do this.....
+      Minigun2(A).AmmoName = Class'UnrealShare.ShellBox';
+    //-if (a.IsA('enforcer')&&!bmini)     //if we have minigunz we gotta do this..... // B227 note: actually, this is a mistake - see below
+    //-enforcer(a).AmmoName=Class'UnrealShare.ShellBox';
+    // B227 note: if bmag is true, an Enforcer can't successfully spawn a ShellBox, because it will be immediately replaced with MiniAmmo;
+    //            if bmag is false, automags won't be replaced with Enforcers.
     if (a.Isa('olautomag')&&Other.Isa('automag')&&automag(other).hitdamage==70){//h4x for Ballad of Ash
     olautomag(A).hitdamage=automag(other).hitdamage;
     olautomag(A).altfiresound=automag(other).AltFireSound;
