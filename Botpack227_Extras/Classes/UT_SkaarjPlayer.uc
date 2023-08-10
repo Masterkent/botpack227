@@ -88,15 +88,49 @@ function TweenToWalking(float tweentime)
 
 function TweenToRunning(float tweentime)
 {
+	local vector X, Y, Z, Dir;
+	local float StrafeAnimRate;
+
 	BaseEyeHeight = Default.BaseEyeHeight;
+
+	// determine facing direction
+	GetAxes(Rotation, X, Y, Z);
+	Dir = Normal(Acceleration);
+
+	StrafeAnimRate = 2.5 * 0.6;
+
 	if (bIsWalking)
 		TweenToWalking(0.1);
-	else if (Weapon == None)
-		PlayAnim('Jog', 1, tweentime);
-	else if ( Weapon.bPointing )
-		PlayAnim('JogFire', 1, tweentime);
+	else if (Weapon == none || !Weapon.bPointing)
+	{
+		if (Dir Dot X < 0.75 && Dir != vect(0,0,0))
+		{
+			// strafing or backing up
+			if (Dir Dot X < -0.75)
+				PlayAnim('Jog', 1, tweentime);
+			else if (Dir Dot Y > 0)
+				PlayAnim('StrafeLeft', StrafeAnimRate, tweentime);
+			else
+				PlayAnim('StrafeRight', StrafeAnimRate, tweentime);
+		}
+		else
+			PlayAnim('Jog', 1, tweentime);
+	}
 	else
-		PlayAnim('Jog', 1, tweentime);
+	{
+		if (Dir Dot X < 0.75 && Dir != vect(0,0,0))
+		{
+			// strafing or backing up
+			if (Dir Dot X < -0.75)
+				PlayAnim('JogFire', 1, tweentime);
+			else if (Dir Dot Y > 0)
+				PlayAnim('StrafeLeftFr', StrafeAnimRate, tweentime);
+			else
+				PlayAnim('StrafeRightFr', StrafeAnimRate, tweentime);
+		}
+		else
+			PlayAnim('JogFire', 1, tweentime);
+	}
 }
 
 function PlayWalking()
@@ -112,13 +146,67 @@ function PlayWalking()
 
 function PlayRunning()
 {
+	local vector X, Y, Z, Dir;
+	local float StrafeAnimRate;
+
 	BaseEyeHeight = Default.BaseEyeHeight;
-	if (Weapon == None)
-		LoopAnim('Jog',1.1);
-	else if ( Weapon.bPointing )
-		LoopAnim('JogFire',1.1);
+
+	// determine facing direction
+	GetAxes(Rotation, X, Y, Z);
+	Dir = Normal(Acceleration);
+
+	StrafeAnimRate = 2.5 * 0.6 * 1.1;
+
+	if (Weapon == none || !Weapon.bPointing)
+	{
+		if (Dir Dot X < 0.75 && Dir != vect(0,0,0))
+		{
+			// strafing or backing up
+			if (Dir Dot X < -0.75)
+				LoopAnim('Jog', 1.1);
+			else if (Dir Dot Y > 0)
+			{
+				if (AnimSequence == 'StrafeLeft' || AnimSequence == 'StrafeLeftFr')
+					LoopAnim('StrafeLeft', StrafeAnimRate,, 1.0);
+				else
+					LoopAnim('StrafeLeft', StrafeAnimRate, 0.1, 1.0);
+			}
+			else
+			{
+				if (AnimSequence == 'StrafeRight' || AnimSequence == 'StrafeRightFr')
+					LoopAnim('StrafeRight', StrafeAnimRate,, 1.0);
+				else
+					LoopAnim('StrafeRight', StrafeAnimRate, 0.1, 1.0);
+			}
+		}
+		else
+			LoopAnim('Jog', 1.1);
+	}
 	else
-		LoopAnim('Jog',1.1);
+	{
+		if (Dir Dot X < 0.75 && Dir != vect(0,0,0))
+		{
+			// strafing or backing up
+			if (Dir Dot X < -0.75)
+				LoopAnim('JogFire', 1.1);
+			else if (Dir Dot Y > 0)
+			{
+				if (AnimSequence == 'StrafeLeft' || AnimSequence == 'StrafeLeftFr')
+					LoopAnim('StrafeLeftFr', StrafeAnimRate,, 1.0);
+				else
+					LoopAnim('StrafeLeftFr', StrafeAnimRate, 0.1, 1.0);
+			}
+			else
+			{
+				if (AnimSequence == 'StrafeRight' || AnimSequence == 'StrafeRightFr')
+					LoopAnim('StrafeRightFr', StrafeAnimRate,, 1.0);
+				else
+					LoopAnim('StrafeRightFr', StrafeAnimRate, 0.1, 1.0);
+			}
+		}
+		else
+			LoopAnim('JogFire', 1.1);
+	}
 }
 
 function PlayRising()
@@ -375,6 +463,9 @@ function SwimAnimUpdate(bool bNotForward)
 
 exec function Taunt(name Sequence)
 {
+	if (bool(Acceleration) || bIsCrouching)
+		return;
+
 	if (HasAnim(Sequence) && GetAnimGroup(Sequence) == 'Gesture')
 		super.Taunt(Sequence);
 	else if (Sequence == 'Victory1' || Sequence == 'Wave')
@@ -391,6 +482,9 @@ exec function Taunt(name Sequence)
 
 function ServerTaunt(name Sequence)
 {
+	if (bool(Acceleration) || bIsCrouching)
+		return;
+
 	if (HasAnim(Sequence) && GetAnimGroup(Sequence) == 'Gesture')
 		super.ServerTaunt(Sequence);
 	else if (Sequence == 'Victory1' || Sequence == 'Wave')
@@ -403,6 +497,24 @@ function PlayChatting()
 {
 	if (Mesh != none)
 		LoopAnim('gunfix', 0.7, 0.25);
+}
+
+state PlayerWalking
+{
+	function ProcessMove(float DeltaTime, vector NewAccel, eDodgeDir DodgeMove, rotator DeltaRot)
+	{
+		super.ProcessMove(DeltaTime, NewAccel, DodgeMove, DeltaRot);
+
+		if (Physics == PHYS_Walking &&
+			!bIsCrouching &&
+			(!bAnimTransition || AnimFrame > 0) &&
+			bool(Acceleration) &&
+			(AnimSequence == 'Shield' || AnimSequence == 'Fighter' || AnimSequence == 'gunfix'))
+		{
+			bAnimTransition = true;
+			TweenToRunning(0.1);
+		}
+	}
 }
 
 function MultimeshPackageRef()
