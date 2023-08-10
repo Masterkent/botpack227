@@ -360,13 +360,13 @@ function PlaySelect()
   bForceFire = false;
   bForceAltFire = false;
   bCanClientFire = false;
-  if ( !IsAnimating() || bool(string(AnimSequence) != "Select"$string(powerlevel+1)) ){
+  //-if ( !IsAnimating() || bool(string(AnimSequence) != "Select"$string(powerlevel+1)) ){
     if (PowerLevel==0) PlayAnim('Select1',0.5,0.0);
     else if (PowerLevel==1) PlayAnim('Select2',0.5,0.0);
     else if (PowerLevel==2) PlayAnim('Select3',0.5,0.0);
     else if (PowerLevel==3) PlayAnim('Select4',0.5,0.0);
     else if (PowerLevel==4) PlayAnim('Select5',0.5,0.0);
-  }
+  //-}
 
 }
 function TweenToStill()      //handle powerlevelz

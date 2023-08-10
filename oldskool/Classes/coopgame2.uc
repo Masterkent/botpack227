@@ -206,12 +206,12 @@ if( injured.Region.Zone.bNeutralZone )
     return Damage;
 
   if ( instigatedBy.bIsPlayer && injured.bIsPlayer && (instigatedBy != injured) )
-    return Damage*friendlyfirescale;
+    return Damage * friendlyfirescale * instigatedBy.DamageScaling;
 
   if ( (DamageType == 'Fell') && bSpecialFallDamage )
     return Min(Damage, 5);
 
-  return Damage;
+  return Damage * instigatedBy.DamageScaling;
 }
 
 function bool ShouldRespawn(Actor Other)
