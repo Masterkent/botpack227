@@ -497,6 +497,8 @@ function Server_FixCurrentMap_ONP_map18FriendX()
 
 function Server_FixCurrentMap_ONP_map19IceX()
 {
+	LoadLevelTrigger("Trigger49").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger87").bTriggerOnceOnly = true;
 	SetNamedTriggerPawnClassProximity("Trigger73");
 }
 
@@ -514,6 +516,7 @@ function Server_FixCurrentMap_ONP_map21NestX()
 function Server_FixCurrentMap_ONP_map22TransferX()
 {
 	LoadLevelTrigger("Trigger29").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = true;
 	LoadLevelMover("Mover56").MoverEncroachType = ME_IgnoreWhenEncroach;
 
 	SetNamedTriggerPawnClassProximity("Trigger46");
@@ -533,6 +536,7 @@ function Server_FixCurrentMap_ONP_map23PowerPlayX()
 
 function Server_FixCurrentMap_ONP_map24CoreX()
 {
+	LoadLevelTrigger("Trigger110").bTriggerOnceOnly = true;
 	SetEventTriggersPawnClassProximity('Death');
 	SetEventTriggersPawnClassProximity('electric');
 	SetNamedTriggerPawnClassProximity("Trigger56");

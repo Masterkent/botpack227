@@ -954,6 +954,8 @@ function Server_FixCurrentMap_ONP_map18FriendX()
 
 function Server_FixCurrentMap_ONP_map19IceX()
 {
+	LoadLevelTrigger("Trigger49").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger87").bTriggerOnceOnly = true;
 	LoadLevelMover("Mover120").StayOpenTime = 4;
 	MakeMessageEventFor("SpecialEvent25");
 	SetNamedTriggerPawnClassProximity("Trigger73");
@@ -986,6 +988,7 @@ function Server_FixCurrentMap_ONP_map22TransferX()
 	DisablePlayerStart("PlayerStart3");
 
 	LoadLevelTrigger("Trigger29").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = true;
 	LoadLevelMover("Mover56").MoverEncroachType = ME_IgnoreWhenEncroach;
 
 	SetNamedTriggerPawnClassProximity("Trigger46");
@@ -1029,6 +1032,8 @@ function Server_FixCurrentMap_ONP_map24CoreX()
 	local Decoration SteelBox;
 
 	DisablePlayerStart("PlayerStart0");
+	LoadLevelTrigger("Trigger110").bTriggerOnceOnly = true;
+
 	MakeLocalMessageEventFor("SpecialEvent127"); // Health Regeneration
 	MakeMessageEventFor("SpecialEvent128");
 	MakeMessageEventFor("SpecialEvent133");
