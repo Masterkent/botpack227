@@ -639,7 +639,6 @@ function ExecuteChaseCam(MovieCamera TargetCamera, string Command)
     local actor TargetActor;
     local vector Offset;
     local rotator RotOffset;
-    local float Distance;
 
     TargetActor = FindActor(Command);
     Offset = ScriptVectors[CurrentCommand];
@@ -875,7 +874,6 @@ function ExecuteStopAnim(MoviePawn TargetPawn, string Command)
 
 function ExecuteSetWeapon(MoviePawn TargetPawn, string Command)
 {
-    local weapon NewWeapon;
     local class<weapon> WeaponType;
     local rotator WeaponRotation;
 
@@ -897,7 +895,6 @@ function ExecuteSetHeadSize(MoviePawn TargetPawn)
 
 function ExecuteSetHead(MoviePawn TargetPawn, string Command)
 {
-  local weapon NewHead;
     local class<weapon> HeadType;
     local rotator HeadRotation;
 
@@ -1193,7 +1190,6 @@ function ExecuteChangeHUD(string Command)
 function ExecuteChangeLevel(string Command)
 {
     local string URL;
-    local GameInfo NewGame;
     local class<GameInfo> GameClass;
     //-local pawn p;
     

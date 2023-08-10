@@ -79,16 +79,14 @@ function Tick(float DeltaTime)
 function ConvertPlayers() {
 
 	local PlayerPawn P;
-	local Player Pl;
-	local MoviePlayer NewMoviePlayer;
-	
+
 	local TriggeredMovieSpot MS;
 
 	PlayerNum = 0;
 	foreach AllActors(class'TriggeredMovieSpot', MS, TargetMovieSpotTag) {
 		Log ("Found MovieSpot spot!");
 		if (bRolling == false)	{
-			MP = spawn(class'MoviePlayer',,,MS.Location,MS.Rotation);		
+			MP = spawn(class'MoviePlayer',,,MS.Location,MS.Rotation);
 			Log ("No camera found.. spawning new one");
 		}
 	}
@@ -96,7 +94,7 @@ function ConvertPlayers() {
 	foreach AllActors(class'PlayerPawn', P) {
 		if (!P.IsA('MoviePlayer')) {
 			Log ("Converting... "$P);
-	
+
 			if (bDontChangeHUD == false) {
 				P.MyHud.Destroy();
 				P.MyHud = none;
@@ -105,7 +103,7 @@ function ConvertPlayers() {
 			}
 			P.ViewTarget = MP;
 			P.bBehindView = false;
-    		
+
 		}
 	}
 

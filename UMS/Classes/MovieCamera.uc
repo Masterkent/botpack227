@@ -171,7 +171,7 @@ function ResetCamera()
 
 event Tick(float DeltaTime)
 {
-	local vector TempVec, X, Y, Z;
+	local vector TempVec;
 	local rotator TempRot, TempRot2;
 	local float TempFloat, TempFloat2;
 	

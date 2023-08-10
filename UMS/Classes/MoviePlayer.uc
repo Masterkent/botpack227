@@ -93,6 +93,8 @@ exec function RestartLevel()
 // This pawn was possessed by a player.
 function Possess()
 {
+	DefaultFOV = FClamp(MainFOV, 90, 170);
+	DesiredFOV = DefaultFOV;
 }
 
 function PostBeginPlay()
@@ -145,16 +147,16 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 event PlayerTick(float DeltaTime)
 {
     local MovieCamera M;
-	
+
     M = MovieCamera(ViewTarget);
-	
+
 	//If ViewTarget is a MovieCamera, update FOV
     if(M != NONE)
     {
         //Adjust FOV to FOV of camera
-        DesiredFOV = M.CurrentFOV;
+        DesiredFOV = B227_ScaleFOV(M.CurrentFOV);
 	}
-	
+
 	//Do fade
 	if(bFade)
 	{
@@ -170,7 +172,7 @@ event PlayerTick(float DeltaTime)
             ConstantGlowFog = FadeColor * (1 - (CurrentFadeTime / DesiredFadeTime));
         }
 	}
-	
+
 	ViewFlash(DeltaTime);
 	ViewShake(DeltaTime);
 }
@@ -201,6 +203,11 @@ auto state WatchingTheMovie
 	Begin:
 		Sleep(100);
 		Goto'Begin';
+}
+
+function float B227_ScaleFOV(float FOV)
+{
+	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * Tan(FClamp(DefaultFOV, 90, 179) * Pi / 360)) * 360 / Pi;
 }
 
 defaultproperties

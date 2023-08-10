@@ -33,8 +33,8 @@ var rotator TrackingDirections;
 
 event Tick(float DeltaTime)
 {
-	local vector TempVec, X, Y, Z;
-	local rotator TempRot, TempRot2;
+	local vector TempVec;
+	local rotator TempRot;
 	
 	
     //Check for rotating

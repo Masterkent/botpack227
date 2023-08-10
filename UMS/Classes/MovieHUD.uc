@@ -2,7 +2,7 @@
 // MovieHUD.
 // Created by Stephen 'Nemesis' Deaver, Yoda and Hugh Macdonald.
 //=============================================================================
-class MovieHUD expands HUD;
+class MovieHUD expands UnrealHUD;
 
 var() string Lines;			// Dialogue Line.
 var() color TextColor;			// Current font color for dialogue.
@@ -111,10 +111,9 @@ function InitScroll(Canvas C)
 function RunCredits(Canvas C)
 {
 
-    local int CurrentCommand, CurrentAlign, XStart, CurrentSize, OldY;
+    local int CurrentCommand, CurrentAlign, CurrentSize, OldY;
     local string CurrentCredit, CurrentCredit2, ActualCredit;
     local float CurrentOffset, CreditLen, XL, YL, XL2, YL2, XL3, CurrentGap, boundTop, boundBottom;
-    local vector CurrentColour;
     local texture Pic;
     local int PicSizeX,PicSizeY;
     local color BlackColor;
@@ -371,6 +370,69 @@ function Dialogue(canvas C)
 
     C.DrawColor = TextColor;
     C.DrawText(Lines, False);
+}
+
+simulated function bool DisplayMessages( canvas Canvas )
+{
+	local float XL, YL;
+	local int I, J, YPos;
+	local console Console;
+	local MessageStruct ShortMessages[4];
+	local string MessageString[4];
+	local name MsgType;
+
+	Console = PlayerPawn(Owner).Player.Console;
+
+	Canvas.Font = Font'WhiteFont';
+
+	if ( !Console.Viewport.Actor.bShowMenu )
+		DrawTypingPrompt(Canvas, Console);
+
+	if ( (Console.TextLines > 0) && (!Console.Viewport.Actor.bShowMenu || Console.Viewport.Actor.bShowScores) )
+	{
+		MsgType = Console.GetMsgType(Console.TopLine);
+		J = Console.TopLine;
+
+		I = 0;
+		while (I < 4 && J >= 0)
+		{
+			MsgType = Console.GetMsgType(J);
+			if (MsgType != '' &&
+				MsgType != 'Log' &&
+				Len(Console.GetMsgText(J)) > 0 &&
+				Console.GetMsgTick(J) > 0.0)
+			{
+				MessageString[I] = Console.GetMsgText(J);
+				if (MsgType == 'Say' || MsgType == 'TeamSay')
+					ShortMessages[I].PRI = Console.GetMsgPlayer(J);
+
+				ShortMessages[I++].Type = MsgType;
+			}
+			J--;
+		}
+
+		J = 0;
+		Canvas.Font = Font'WhiteFont';
+		for (I = 3; I >= 0; I--)
+			if (Len(MessageString[I]) > 0)
+			{
+				YPos = 2 + J;
+				if ( !DrawMessageHeader(Canvas, ShortMessages[I], YPos) )
+				{
+					if (ShortMessages[I].Type == 'DeathMessage' || ShortMessages[I].Type == 'RedCriticalEvent')
+						Canvas.DrawColor = RedColor;
+					else if (ShortMessages[I].Type == 'CriticalEvent' || ShortMessages[I].Type == 'LowCriticalEvent')
+						Canvas.DrawColor = MakeColor(0, 128, 255);
+					else
+						Canvas.DrawColor = MakeColor(200, 200, 200);
+					Canvas.SetPos(ArmorOffset+4, YPos);
+				}
+				Canvas.StrLen(MessageString[I], XL, YL);
+				Canvas.DrawText(MessageString[I], false );
+				J+=YL;
+			}
+	}
+	return true;
 }
 
 defaultproperties
