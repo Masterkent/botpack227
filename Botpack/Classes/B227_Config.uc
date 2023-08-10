@@ -26,6 +26,7 @@ var(Weapon) globalconfig bool bPulseGunGuideBeam;
 var(Weapon) globalconfig bool bPulseGunHardcoreDamage; // 150% damage in non-deathmatch games
 var(Weapon) globalconfig bool bPulseGunLimitWallEffect;
 var(Weapon) globalconfig bool bRedeemerUseDirectPointers;
+var(Weapon) globalconfig bool bSniperRifleAdjustZoom;
 var(Weapon) globalconfig bool bTraceFireThroughWarpZones;
 var(Weapon) globalconfig bool bTranslocatorModuleRecovery;
 var(Weapon) globalconfig bool bUseEmitterSmokeTrails;
@@ -70,6 +71,7 @@ defaultproperties
 	bPulseGunHardcoreDamage=False
 	bPulseGunLimitWallEffect=True
 	bRedeemerUseDirectPointers=False
+	bSniperRifleAdjustZoom=True
 	bTraceFireThroughWarpZones=True
 	bTranslocatorModuleRecovery=False
 	bUseEnergyAmplifier=True

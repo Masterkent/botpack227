@@ -823,6 +823,12 @@ function bool RestartPlayer( pawn aPlayer )
 		return false;
 	}
 
+	if (aPlayer.Weapon != none && !aPlayer.Weapon.bDeleteMe)
+	{
+		aPlayer.Weapon.GotoState('');
+		aPlayer.Weapon = none;
+	}
+
 	B227_Player = aPlayer;
 	bResult = Super.RestartPlayer(aPlayer);
 	B227_Player = none;

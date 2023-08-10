@@ -38,19 +38,15 @@ function ShowScores( canvas Canvas )
 	for ( i=0; i<32; i++ )
 		Ordered[i] = None;
 
-	for ( i=0; i<32; i++ )
-	{
-		if (OwnerGame.PRIArray[i] != None)
+	foreach AllActors(class'UTC_PlayerReplicationInfo', PRI)
+		if ( !PRI.bIsSpectator || PRI.bWaitingPlayer )
 		{
-			PRI = OwnerGame.PRIArray[i];
-			if ( !PRI.bIsSpectator || PRI.bWaitingPlayer )
-			{
-				Ordered[PlayerCount] = PRI;
-				PlayerCount++;
-				PlayerCounts[PRI.Team]++;
-			}
+			Ordered[PlayerCount] = PRI;
+			PlayerCount++;
+			PlayerCounts[PRI.Team]++;
+			if (PlayerCount == ArrayCount(Ordered))
+				break;
 		}
-	}
 
 	SortScores(PlayerCount);
 	Canvas.Font = MyFonts.GetMediumFont(B227_ScaledFontScreenWidth(Canvas));

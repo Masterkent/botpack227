@@ -448,7 +448,7 @@ simulated function PostRender( canvas Canvas )
 	else
 		Canvas.Style = ERenderStyle.STY_Normal;
 
-	FovScale = 1 / Tan(FClamp(PlayerPawn(Owner).DesiredFOV, 1, 170) / 360 * Pi);
+	FovScale = 1 / Tan(FClamp(PlayerPawn(Owner).FOVAngle, 1, 170) / 360 * Pi);
 
 	foreach VisibleCollidingActors(class'Pawn', P, 2000,, true)
 	{

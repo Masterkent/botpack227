@@ -301,15 +301,14 @@ function ShowScores( canvas Canvas )
 	for ( i=0; i<ArrayCount(Ordered); i++ )
 		Ordered[i] = None;
 	foreach AllActors(class'UTC_PlayerReplicationInfo', PRI)
-	{
 		if ( !PRI.bIsSpectator || PRI.bWaitingPlayer )
 		{
 			Ordered[PlayerCount] = PRI;
 			PlayerCount++;
-			if ( PlayerCount == ArrayCount(Ordered) )
+			if (PlayerCount == ArrayCount(Ordered))
 				break;
 		}
-	}
+
 	SortScores(PlayerCount);
 
 	CanvasFont = Canvas.Font;

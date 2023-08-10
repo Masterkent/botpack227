@@ -248,6 +248,8 @@ function BroadcastRegularDeathMessage(pawn Killer, pawn Other, name damageType)
 		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, class'UT_Eightball');
 	else if (damageType == 'Gibbed')
 		BroadcastLocalizedMessage(DeathMessageClass, 8, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, None);
+	else if (damageType == 'stomped')
+		BroadcastLocalizedMessage(DeathMessageClass, 0, Killer.PlayerReplicationInfo, Other.PlayerReplicationInfo, None);
 	else
 	{
 		if (B227_WeaponDeathMessagesMode == 2 && B227_DamageWeaponClass != none && B227_DamageWeaponClass != class'Weapon')
