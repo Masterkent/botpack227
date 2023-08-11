@@ -75,7 +75,7 @@ simulated function PostRender( canvas Canvas )
     Canvas.DrawColor.R = 0;
     Canvas.DrawColor.G = 255;
     Canvas.DrawColor.B = 0;
-    Scale = class'SniperRifle'.static.B227_CalcZoomScale(P);
+    Scale = class'SniperRifle'.static.B227_CalcZoomScale(P, Canvas);
     Canvas.DrawText("X"$int(Scale)$"."$int(10 * Scale - 10 * int(Scale)));
   }
   else if (isinstate('clientnewclip')||isinstate('newclip'))

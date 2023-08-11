@@ -22,8 +22,8 @@ replication
 
 simulated event PostBeginPlay()
 {
-	Super.PostBeginPlay();
-	AdjustClientProperties();
+	if (Level.NetMode != NM_DedicatedServer)
+		SetupFootStepManager();
 }
 
 simulated event Tick(float DeltaTime)
@@ -124,46 +124,10 @@ function SetTranslatorMessage(Translator PlayerTranslator, string Message)
 	TransferTranslatorMessage(PlayerTranslator, Message, bAppend);
 }
 
-simulated function AdjustClientProperties()
+simulated function SetupFootStepManager()
 {
-	local tvplayer ONPPlayer;
-
-	if (Level.NetMode == NM_DedicatedServer)
-		return;
-
-	ONPPlayer = tvplayer(Owner);
-	if (ONPPlayer != none)
-		ClientAdjustONPPlayerSounds(ONPPlayer);
-}
-
-simulated function ClientAdjustONPPlayerSounds(tvplayer Player)
-{
-	Player.BreathAgain = Sound'BotPack.MaleSounds.gasp02';
-	Player.Deaths[0] = none;
-	Player.Deaths[1] = none;
-	Player.Deaths[2] = none;
-	Player.Deaths[3] = none;
-	Player.Deaths[4] = none;
-	Player.Deaths[5] = none;
-	Player.Die = none;
-	Player.Drown = Sound'BotPack.MaleSounds.drownM02';
-	Player.FootStep1 = Sound'BotPack.FemaleSounds.stone02';
-	Player.FootStep2 = Sound'BotPack.FemaleSounds.stone04';
-	Player.FootStep3 = Sound'BotPack.FemaleSounds.stone05';
-	Player.GaspSound = Sound'BotPack.MaleSounds.hgasp1';
-	Player.HitSound1 = Sound'BotPack.MaleSounds.injurL2';
-	Player.HitSound2 = Sound'BotPack.MaleSounds.injurL04';
-	Player.HitSound3 = Sound'BotPack.MaleSounds.injurM04';
-	Player.HitSound4 = Sound'BotPack.MaleSounds.injurH5';
-	Player.JumpSound = none;
-	Player.JumpSounds[0] = Sound'BotPack.MaleSounds.jump1';
-	Player.JumpSounds[1] = Sound'BotPack.MaleSounds.jump1';
-	Player.JumpSounds[2] = Sound'BotPack.MaleSounds.jump1';
-	Player.Land = Sound'UnrealShare.Generic.Land1';
-	Player.LandGrunt = Sound'BotPack.MaleSounds.land01';
-	Player.UWHit1 = Sound'BotPack.MaleSounds.UWinjur41';
-	Player.UWHit2 = Sound'BotPack.MaleSounds.UWinjur42';
-	Player.WaterStep = Sound'UnrealShare.Generic.LSplash';
+	if (Level.FootprintManager == none || Level.FootprintManager == class'FootStepManager')
+		Level.FootprintManager = class'B227_ONPFootStepManager';
 }
 
 simulated function SetClientRealSpeed(float Speed)

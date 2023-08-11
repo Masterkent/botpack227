@@ -142,7 +142,11 @@ simulated function PostBeginPlay() //new shadow
   //-if ( Level.NetMode != NM_DedicatedServer )
   //-  Shadow = Spawn(class'TVshadow',self);
   if (Level.NetMode != NM_DedicatedServer)
+  {
     class'UTC_Pawn'.static.B227_InitPawnShadow(self);
+    if (Level.FootprintManager == none || Level.FootprintManager == class'FootStepManager')
+      Level.FootprintManager = class'B227_XidiaFootStepManager';
+  }
   if ( (Role == ROLE_Authority) && (Level.NetMode != NM_Standalone) )
     BossRef = class<Actor>(DynamicLoadObject("Botpack.TBoss",class'Class'));
 

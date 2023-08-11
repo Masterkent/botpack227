@@ -212,7 +212,11 @@ simulated function PostBeginPlay() //new shadow
   //-if ( Level.NetMode != NM_DedicatedServer )
   //-  Shadow = Spawn(class'TVshadow',self);
   if (Level.NetMode != NM_DedicatedServer)
+  {
     class'UTC_Pawn'.static.B227_InitPawnShadow(self);
+    if (Level.FootprintManager == none || Level.FootprintManager == class'FootStepManager')
+      Level.FootprintManager = class'B227_ONPFootStepManager';
+  }
   if ( (Role == ROLE_Authority) && (Level.NetMode != NM_Standalone) )
     BossRef = class<Actor>(DynamicLoadObject("Botpack.TBoss",class'Class'));
 
@@ -1085,13 +1089,19 @@ ClientAdjustPosition     //shouldn't be calling: adjust so state is set.
   event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator CameraRotation )
   {
     local vector X, Y, Z;
+    local float FOVScale;
+
     if ( ViewTarget != None ){
        Global.PlayerCalcview(ViewActor,CameraLocation,CameraRotation);
        return;
     }
     CameraRotation = ViewRotation;
     // View rotation.
-    DesiredFOV = 125;
+    FOVScale = FMin(
+        Tan(FClamp(DefaultFOV, 90, 179) * Pi / 360),
+        0.75 * Player.Console.FrameX / FMax(1.0, Player.Console.FrameY));
+    FOVScale = FMax(1.0, FOVScale * (4.0 / 3.0) / (16.0 / 9.0));
+    DesiredFOV = Atan(FOVScale * Tan(125 * Pi / 360)) * 360 / Pi;
     ViewActor = self;
     CameraLocation = Location;
     if( bBehindView ){

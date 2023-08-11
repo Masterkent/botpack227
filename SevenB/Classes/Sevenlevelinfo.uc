@@ -116,6 +116,11 @@ simulated function PostNetBeginPlay(){ //register on clients
       p.Linfo=self;
 }
 
+function class<Actor> B227_SevenBVersionClass()
+{
+	return class'B227_SevenB_Version'; // makes class B227_SevenB_Version loaded
+}
+
 defaultproperties
 {
      DefaultInventory(0)=Class'SevenB.TvTranslator'

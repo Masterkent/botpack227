@@ -207,10 +207,19 @@ auto state WatchingTheMovie
 
 function float B227_ScaleFOV(float FOV)
 {
-	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * Tan(FClamp(DefaultFOV, 90, 179) * Pi / 360)) * 360 / Pi;
+	local float FOVScale;
+
+	if (Player.Console == none)
+		return FOV;
+
+	FOVScale = FMin(
+		Tan(FClamp(DefaultFOV, 90, 179) * Pi / 360),
+		0.75 * Player.Console.FrameX / FMax(1.0, Player.Console.FrameY));
+
+	return Atan(FOVScale * Tan(FClamp(FOV, 1, 179) * Pi / 360)) * 360 / Pi;
 }
 
 defaultproperties
 {
-				AnimSequence="None"
+	AnimSequence="None"
 }

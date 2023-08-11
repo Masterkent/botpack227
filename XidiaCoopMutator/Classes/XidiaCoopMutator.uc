@@ -53,6 +53,7 @@ function LevelStartupAdjustments()
 	Level.bSupportsRealCrouching = true;
 	AdjustExplodingEffects();
 	AdjustSpeechEvents();
+	DeleteIrrelevantActors();
 	DeleteRemovableMovers();
 	DisableFadeViewTriggers();
 	AdjustNextLevel();
@@ -101,9 +102,19 @@ function AdjustSpeechEvents()
 			aSpecialerEvent.Tag = '';
 }
 
+function DeleteIrrelevantActors()
+{
+	local Actor A;
+
+	foreach AllActors(class'Actor', A)
+		if (A.bGameRelevant && !A.bNet)
+			A.Destroy();
+}
+
 function DeleteRemovableMovers()
 {
 	local Mover Mover;
+
 	foreach AllActors(class'Mover', Mover)
 		if (!Mover.bStatic && !Mover.bNoDelete)
 			Mover.Destroy();
@@ -655,13 +666,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "XidiaCoopMutator v1.8";
+	return "XidiaCoopMutator v2.0";
 }
 
 defaultproperties
 {
-	VersionInfo="XidiaCoopMutator v1.8 [2023-01-28]"
-	Version="1.8"
+	VersionInfo="XidiaCoopMutator v2.0 [2023-08-11]"
+	Version="2.0"
 	bReplaceUnrealWeapons=False
 	bUseXidiaJumpBoots=True
 	bUseXidiaWeaponsSupply=True

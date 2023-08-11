@@ -33,7 +33,7 @@ simulated function PostRender( canvas Canvas )
 		Canvas.DrawColor.R = 0;
 		Canvas.DrawColor.G = 255;
 		Canvas.DrawColor.B = 0;
-		Scale = B227_CalcZoomScale(P);
+		Scale = B227_CalcZoomScale(P, Canvas);
 		Canvas.DrawText("X"$int(Scale)$"."$int(10 * Scale - 10 * int(Scale)));
 
 		Canvas.Style = ERenderStyle.STY_Normal;
@@ -307,17 +307,20 @@ function vector B227_GetFireStartTrace()
 	return Owner.Location + Pawn(Owner).EyeHeight * Z;
 }
 
-static function float B227_CalcZoomScale(PlayerPawn P)
+static function float B227_CalcZoomScale(PlayerPawn P, Canvas Canvas)
 {
-	local float DefaultFOV, ZoomLevel;
+	local float DefaultFOV;
+	local float FOVScale;
+	local float ZoomLevel;
 
 	if (class'B227_Config'.default.bSniperRifleAdjustZoom)
 	{
-		DefaultFOV = FClamp(P.DefaultFOV, 1.0, 170.0);
+		DefaultFOV = FClamp(P.DefaultFOV, 90.0, 170.0);
+		FOVScale = FMin(Tan(DefaultFOV * Pi / 360.0), 0.75 * Canvas.SizeX / FMax(1.0, Canvas.SizeY));
 		ZoomLevel = FClamp(P.ZoomLevel, 0.001, 1.0);
 
 		P.DesiredFOV = FClamp(
-			Atan(Tan((90.0 - (ZoomLevel * 88.0)) * Pi / 360.0) * Tan(DefaultFOV * Pi / 360.0)) * 360.0 / Pi,
+			Atan(FOVScale * Tan((90.0 - (ZoomLevel * 88.0)) * Pi / 360.0)) * 360.0 / Pi,
 			1,
 			170);
 		return Tan(DefaultFOV * Pi / 360.0) / Tan(P.DesiredFOV * Pi / 360);

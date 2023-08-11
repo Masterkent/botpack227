@@ -69,7 +69,18 @@ simulated function UpdateClientPlayerState(PlayerPawn Player)
 	if (Player.IsInState('PlayerShip') && PlayerState != 'PlayerShip' && PlayerState != '')
 		Player.GotoState(PlayerState);
 	if (bShipLevel)
-		Player.DesiredFOV = 125;
+		Player.DesiredFOV = GetPlayerShipFOV(Player);
+}
+
+static function float GetPlayerShipFOV(PlayerPawn Player)
+{
+	local float FOVScale;
+
+	FOVScale = FMin(
+		Tan(FClamp(Player.DefaultFOV, 90, 179) * Pi / 360),
+		0.75 * Player.Player.Console.FrameX / FMax(1.0, Player.Player.Console.FrameY));
+	FOVScale = FMax(1.0, FOVScale * (4.0 / 3.0) / (16.0 / 9.0));
+	return Atan(FOVScale * Tan(125 * Pi / 360)) * 360 / Pi;
 }
 
 function SetPlayerWaiting(tvplayer Player)

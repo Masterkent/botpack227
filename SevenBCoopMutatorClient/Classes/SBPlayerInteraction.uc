@@ -19,7 +19,13 @@ replication
 }
 
 
-simulated function Tick(float DeltaTime)
+simulated event PostBeginPlay()
+{
+	if (Level.NetMode != NM_DedicatedServer)
+		SetupFootStepManager();
+}
+
+simulated event Tick(float DeltaTime)
 {
 	if (Level.NetMode == NM_Client)
 		Level.bSupportsRealCrouching = bRealCrouching;
@@ -115,6 +121,12 @@ function SetTranslatorMessage(Translator PlayerTranslator, string Message)
 		bAppend = true;
 	}
 	TransferTranslatorMessage(PlayerTranslator, Message, bAppend);
+}
+
+simulated function SetupFootStepManager()
+{
+	if (Level.FootprintManager == none || Level.FootprintManager == class'FootStepManager')
+		Level.FootprintManager = class'B227_XidiaFootStepManager';
 }
 
 defaultproperties

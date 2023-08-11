@@ -573,7 +573,7 @@ function TweenToSwimming(float tweentime)
 function PlayGreetAnim(){
   if (greetanim=='Wave'&&weapon!=none&&weapon.mass>19&&hasanim('WaveL')) //allow large weapon holding wave anim!
     Playanim ('WaveL',0.5+0.4*frand(),0.2);
-  else
+  else if (GreetAnim != '' && HasAnim(GreetAnim))
     Playanim (greetanim,0.5+0.4*frand(),0.2);
   if (bShouldWait)
     PlayVoice(2,9,true); //got point

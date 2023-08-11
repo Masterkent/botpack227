@@ -92,6 +92,11 @@ simulated function PostNetBeginPlay(){ //register on clients
       p.Linfo=self;
 }
 
+function class<Actor> B227_OlextrasVersionClass()
+{
+	return class'B227_olextras_Version'; // makes class B227_olextras_Version loaded
+}
+
 defaultproperties
 {
      DefaultInventory(0)=Class'olextras.TvTranslator'

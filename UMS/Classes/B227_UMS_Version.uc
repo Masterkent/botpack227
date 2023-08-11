@@ -3,6 +3,6 @@ class B227_UMS_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 UMS v1.0 [2023-08-10]"
-	Version="1.0"
+	VersionInfo="B227 UMS v1.1 [2023-08-11]"
+	Version="1.1"
 }
