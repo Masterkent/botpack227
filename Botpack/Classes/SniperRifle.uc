@@ -316,14 +316,14 @@ static function float B227_CalcZoomScale(PlayerPawn P, Canvas Canvas)
 	if (class'B227_Config'.default.bSniperRifleAdjustZoom)
 	{
 		DefaultFOV = FClamp(P.DefaultFOV, 90.0, 170.0);
-		FOVScale = FMin(Tan(DefaultFOV * Pi / 360.0), 0.75 * Canvas.SizeX / FMax(1.0, Canvas.SizeY));
+		FOVScale = FMin(Tan(DefaultFOV * Pi / 360.0), FMax(1.0, 0.75 * Canvas.SizeX / FMax(1.0, Canvas.SizeY)));
 		ZoomLevel = FClamp(P.ZoomLevel, 0.001, 1.0);
 
 		P.DesiredFOV = FClamp(
 			Atan(FOVScale * Tan((90.0 - (ZoomLevel * 88.0)) * Pi / 360.0)) * 360.0 / Pi,
 			1,
 			170);
-		return Tan(DefaultFOV * Pi / 360.0) / Tan(P.DesiredFOV * Pi / 360);
+		return FOVScale / Tan(P.DesiredFOV * Pi / 360);
 	}
 	else
 		return P.DefaultFOV / P.DesiredFOV;

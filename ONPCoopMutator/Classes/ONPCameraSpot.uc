@@ -88,7 +88,7 @@ simulated event PostNetBeginPlay()
 
 event Trigger(Actor ActorOther, Pawn PawnInstigator) {
 
-  if (PlayerPawn(PawnInstigator) != None)
+  if (PlayerPawn(PawnInstigator) != None && Level.NetMode != NM_DedicatedServer)
     CameraSpotSet(PlayerPawn(PawnInstigator));
   }
 
@@ -99,7 +99,7 @@ event Trigger(Actor ActorOther, Pawn PawnInstigator) {
 
 event UnTrigger(Actor ActorOther, Pawn PawnInstigator) {
 
-  if (PlayerPawn(PawnInstigator) != None)
+  if (PlayerPawn(PawnInstigator) != None && Level.NetMode != NM_DedicatedServer)
     CameraSpotUnset(PlayerPawn(PawnInstigator));
   }
   
@@ -112,14 +112,12 @@ simulated event Tick(float TimeDelta) {
 
   local bool FlagActive;
 
-  if (PlayerLocal == None) {
-    foreach AllActors(class 'PlayerPawn', PlayerLocal)
-      if (Viewport(PlayerLocal.Player) != None)
-        break;
+  if (PlayerLocal == none && Level.NetMode != NM_DedicatedServer) {
+    PlayerLocal = Level.GetLocalPlayerPawn();
 
     if (PlayerLocal == None)
       return;
-    }
+  }
 
   FlagActive = PlayerLocal.ViewTarget == Self;
 
@@ -133,7 +131,7 @@ simulated event Tick(float TimeDelta) {
     FadeCaption = 1.0;
 
   FlagActivePrev = FlagActive;
-  }
+}
 
 
 // ============================================================================
@@ -220,9 +218,14 @@ simulated function RenderOverlayTextures(Canvas Canvas, ERenderStyle Style, Text
 
 simulated function CameraSpotSet(PlayerPawn PlayerViewer) {
 
+  local float AspectRatio;
+  local float FOVScale;
+
+  AspectRatio = PlayerViewer.Player.Console.FrameX / FMax(1.0, PlayerViewer.Player.Console.FrameY);
+  FOVScale = FMin(Tan(FClamp(PlayerViewer.DefaultFOV, 90, 179) * Pi / 360), FMax(1.0, 0.75 * AspectRatio));
   PlayerViewer.ViewTarget = Self;
   PlayerViewer.bBehindView = false;
-  PlayerViewer.FovAngle = FMax(FieldOfView, (360 / Pi) * Atan(Tan(FieldOfView * Pi / 360) * Tan(PlayerViewer.MainFOV * Pi / 360)));
+  PlayerViewer.FovAngle = Atan(Tan(FieldOfView * Pi / 360) * FOVScale) * 360 / Pi;
   PlayerViewer.DesiredFOV = PlayerViewer.FovAngle;
 
   if (ChallengeHUD(PlayerViewer.MyHUD) == None)

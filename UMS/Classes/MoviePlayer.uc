@@ -214,7 +214,7 @@ function float B227_ScaleFOV(float FOV)
 
 	FOVScale = FMin(
 		Tan(FClamp(DefaultFOV, 90, 179) * Pi / 360),
-		0.75 * Player.Console.FrameX / FMax(1.0, Player.Console.FrameY));
+		FMax(1.0, 0.75 * Player.Console.FrameX / FMax(1.0, Player.Console.FrameY)));
 
 	return Atan(FOVScale * Tan(FClamp(FOV, 1, 179) * Pi / 360)) * 360 / Pi;
 }

@@ -27,7 +27,8 @@ function SetViewOfPlayer()
 			oInst.EndZoom();
 		oInst.ViewTarget = Self;
 		oFOV = oInst.DesiredFOV;
-		oInst.DesiredFOV = B227_ScaleFOV(ViewFOV, oInst.MainFOV);
+		if (Level.NetMode == NM_Standalone)
+			oInst.DesiredFOV = B227_ScaleFOV(ViewFOV, oInst.DefaultFOV, B227_GetAspectRatio(oInst));
 		oInst.bBehindView = bSwitchToBehindView;
 	}
 }
@@ -36,7 +37,8 @@ function ResetViewOfPlayer()
 {
 	if (oInst.ViewTarget == Self)
 	{
-		oInst.DesiredFOV = oFOV;
+		if (Level.NetMode == NM_Standalone)
+			oInst.DesiredFOV = oFOV;
 		oInst.bBehindView = False;
 		oInst.ViewTarget = None;
 	}
@@ -115,9 +117,18 @@ function ShakeView( float shaketime, float RollMag, float vertmag)
 	ClientShake(shake);
 }
 
-static function float B227_ScaleFOV(float FOV, float MainFOV)
+static function float B227_ScaleFOV(float FOV, float DefaultFOV, float AspectRatio)
 {
-	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * Tan(FClamp(MainFOV, 90, 179) * Pi / 360)) * 360 / Pi;
+	local float FOVScale;
+
+	FOVScale = FMin(Tan(FClamp(DefaultFOV, 90, 179) * Pi / 360), FMax(1.0, 0.75 * AspectRatio));
+
+	return Atan(Tan(FClamp(FOV, 1, 179) * Pi / 360) * FOVScale) * 360 / Pi;
+}
+
+static function float B227_GetAspectRatio(PlayerPawn P)
+{
+	return P.Player.Console.FrameX / FMax(1.0, P.Player.Console.FrameY);
 }
 
 defaultproperties
