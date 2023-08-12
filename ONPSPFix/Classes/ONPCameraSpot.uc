@@ -88,7 +88,7 @@ simulated event PostNetBeginPlay()
 
 event Trigger(Actor ActorOther, Pawn PawnInstigator) {
 
-  if (PlayerPawn(PawnInstigator) != None && Level.NetMode != NM_DedicatedServer)
+  if (PlayerPawn(PawnInstigator) != None)
     CameraSpotSet(PlayerPawn(PawnInstigator));
   }
 
@@ -99,7 +99,7 @@ event Trigger(Actor ActorOther, Pawn PawnInstigator) {
 
 event UnTrigger(Actor ActorOther, Pawn PawnInstigator) {
 
-  if (PlayerPawn(PawnInstigator) != None && Level.NetMode != NM_DedicatedServer)
+  if (PlayerPawn(PawnInstigator) != None)
     CameraSpotUnset(PlayerPawn(PawnInstigator));
   }
   
@@ -221,12 +221,16 @@ simulated function CameraSpotSet(PlayerPawn PlayerViewer) {
   local float AspectRatio;
   local float FOVScale;
 
-  AspectRatio = PlayerViewer.Player.Console.FrameX / FMax(1.0, PlayerViewer.Player.Console.FrameY);
-  FOVScale = FMin(Tan(FClamp(PlayerViewer.DefaultFOV, 90, 179) * Pi / 360), FMax(1.0, 0.75 * AspectRatio));
+  if (Viewport(PlayerViewer.Player) != none)
+  {
+    AspectRatio = PlayerViewer.Player.Console.FrameX / FMax(1.0, PlayerViewer.Player.Console.FrameY);
+    FOVScale = FMin(Tan(FClamp(PlayerViewer.DefaultFOV, 90, 179) * Pi / 360), FMax(1.0, 0.75 * AspectRatio));
+    PlayerViewer.FovAngle = Atan(Tan(FieldOfView * Pi / 360) * FOVScale) * 360 / Pi;
+    PlayerViewer.DesiredFOV = PlayerViewer.FovAngle;
+  }
+
   PlayerViewer.ViewTarget = Self;
   PlayerViewer.bBehindView = false;
-  PlayerViewer.FovAngle = Atan(Tan(FieldOfView * Pi / 360) * FOVScale) * 360 / Pi;
-  PlayerViewer.DesiredFOV = PlayerViewer.FovAngle;
 
   if (ChallengeHUD(PlayerViewer.MyHUD) == None)
     return;
@@ -250,8 +254,11 @@ simulated function CameraSpotUnset(PlayerPawn PlayerViewer) {
   if (PlayerViewer.ViewTarget == Self)
     PlayerViewer.ViewTarget = None;
   ///PlayerViewer.FovAngle = PlayerViewer.default.FovAngle;
-  PlayerViewer.FovAngle = PlayerViewer.DefaultFOV;
-  PlayerViewer.DesiredFOV = PlayerViewer.DefaultFOV;
+  if (Viewport(PlayerViewer.Player) != none)
+  {
+    PlayerViewer.FovAngle = PlayerViewer.DefaultFOV;
+    PlayerViewer.DesiredFOV = PlayerViewer.DefaultFOV;
+  }
 
   if (ChallengeHUD(PlayerViewer.MyHUD) == None)
     return;
