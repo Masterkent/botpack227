@@ -800,10 +800,18 @@ function Server_FixCurrentMap_ONP_map07PlanningX()
 
 function Server_FixCurrentMap_ONP_map08DisposalX()
 {
+	local Trigger Trigger;
+
 	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
 	SetNamedTriggerPawnClassProximity("Trigger31");
+	SetNamedTriggerPawnClassProximity("Trigger75");
+
+	MakeEventRepeater('gloop', 1.0);
+	foreach AllActors(class'Trigger', Trigger)
+		if (Trigger.Event == 'gloop')
+			Trigger.RepeatTriggerTime = 0;
 }
 
 function Server_FixCurrentMap_ONP_map09SurfaceX()
@@ -1221,8 +1229,15 @@ function Server_FixCurrentMap_ONP_map21Welcome()
 
 function Server_FixCurrentMap_ONP_map22Disposal()
 {
+	local Trigger Trigger;
+
 	LoadLevelMover("Mover34").StayOpenTime = 4;
 	SetNamedTriggerPawnClassProximity("Trigger31");
+
+	MakeEventRepeater('gloop', 1.0);
+	foreach AllActors(class'Trigger', Trigger)
+		if (Trigger.Event == 'gloop')
+			Trigger.RepeatTriggerTime = 0;
 }
 
 function Server_FixCurrentMap_ONP_map23Newfoe()
@@ -1494,6 +1509,18 @@ function MakeLocalMessageEventFor(string SpecialEventName)
 function InterpolateSpecialEvent(string SpecialEventName)
 {
 	class'ONPInterpolateSpecialEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
+}
+
+function MakeEventRepeater(name EventName, float RepeatTriggerTime)
+{
+	local ONPEventRepeater EventRepeater;
+
+	EventRepeater = Spawn(class'ONPEventRepeater',, EventName);
+	if (EventRepeater != none)
+	{
+		EventRepeater.Event = EventName;
+		EventRepeater.RepeatTriggerTime = RepeatTriggerTime;
+	}
 }
 
 simulated function EliminateStaticActor(string ActorName)
