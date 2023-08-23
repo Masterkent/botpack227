@@ -13,7 +13,6 @@ var SavedMove PendingMove;
 
 // NOTE: Ported code should use bPressedJump instead of bJumpStatus (according to the meaning of ServerMove's NewbPressedJump)
 
-var transient bool B227_bSkipNestedCalls;
 var transient float B227_LastAdminLoginTimestamp;
 
 replication
@@ -313,49 +312,16 @@ exec function Speech(int Type, int Index, int Callsign)
 	}
 }
 
-exec function Admin(string CommandLine)
-{
-	if (B227_bSkipNestedCalls)
-		return;
-
-	if (UTC_GameInfo(Level.Game) != none)
-		super.Admin(CommandLine);
-	else
-	{
-		B227_bSkipNestedCalls = true;
-		super.Admin(CommandLine);
-		B227_bSkipNestedCalls = false;
-	}
-}
-
 exec function AdminLogin(string Password)
 {
-	if (B227_bSkipNestedCalls)
-		return;
-
 	if (UTC_GameInfo(Level.Game) != none)
 		UTC_GameInfo(Level.Game).AdminLogin(self, Password);
-	else if (Level.Game.GameRules != none)
-	{
-		B227_bSkipNestedCalls = true;
-		Level.Game.GameRules.ExecAdminCmd(self, "AdminLogin" @ Password);
-		B227_bSkipNestedCalls = false;
-	}
 }
 
 exec function AdminLogout()
 {
-	if (B227_bSkipNestedCalls)
-		return;
-
 	if (UTC_GameInfo(Level.Game) != none)
 		UTC_GameInfo(Level.Game).AdminLogout(self);
-	else if (Level.Game.GameRules != none)
-	{
-		B227_bSkipNestedCalls = true;
-		Level.Game.GameRules.ExecAdminCmd(self, "AdminLogout");
-		B227_bSkipNestedCalls = false;
-	}
 }
 
 exec function Mutate(string MutateString)

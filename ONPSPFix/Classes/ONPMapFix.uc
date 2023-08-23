@@ -460,11 +460,19 @@ function Server_FixCurrentMap_ONP_map08DisposalX()
 
 function Server_FixCurrentMap_ONP_map09SurfaceX()
 {
+	local TeamCannon Cannon;
+
+	foreach AllActors(class'TeamCannon', Cannon)
+		Cannon.SetPropertyText("B227_bAttackAnyDamageInstigators", "true");
+
 	SetNamedTriggerPawnClassProximity("Trigger6");
 	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
-	CreatureFactory(LoadLevelActor("CreatureFactory0")).bCovert = false;
-	CreatureFactory(LoadLevelActor("CreatureFactory1")).bCovert = false;
-	CreatureFactory(LoadLevelActor("CreatureFactory2")).bCovert = false;
+	if (Level.Game.Difficulty >= 3)
+	{
+		CreatureFactory(LoadLevelActor("CreatureFactory0")).bCovert = false;
+		CreatureFactory(LoadLevelActor("CreatureFactory1")).bCovert = false;
+		CreatureFactory(LoadLevelActor("CreatureFactory2")).bCovert = false;
+	}
 }
 
 function Server_FixCurrentMap_ONP_map11CobaltX()

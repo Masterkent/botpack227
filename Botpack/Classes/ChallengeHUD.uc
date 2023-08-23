@@ -102,7 +102,6 @@ var globalconfig bool B227_bVerticalScaling;
 var globalconfig float B227_UpscaleHUD;
 
 var float B227_XScale;
-var int B227_CanvasScaleSupport;
 
 var float B227_LastRankUpdateTimestamp;
 var int B227_LastRankedScore;
@@ -1840,19 +1839,17 @@ function B227_InitUpscale(Canvas Canvas)
 {
 	local float CanvasScale;
 
-	if (B227_CanvasScaleSupport > 0)
+	if (B227_SupportsCanvasScale())
 	{
 		CanvasScale = FClamp(B227_UpscaleHUD, 1.0, 16.0);
 		class'UTC_HUD'.static.B227_SetDesiredCanvasScale(self, CanvasScale);
 		Canvas.PushCanvasScale(CanvasScale, true);
 	}
-	else if (B227_CanvasScaleSupport == 0)
-		B227_CanvasScaleSupport = int(DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none) * 2 - 1;
 }
 
 function B227_ResetUpscale(Canvas Canvas)
 {
-	if (B227_CanvasScaleSupport > 0)
+	if (B227_SupportsCanvasScale())
 		Canvas.PopCanvasScale();
 }
 

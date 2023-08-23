@@ -19,6 +19,7 @@ var() int MyTeam;
 var Actor GunBase;
 var() localized string PreKillMessage, PostKillMessage;
 
+var bool B227_bAttackAnyDamageInstigators;
 var bool B227_bPermanentDamagedState;
 
 function PostBeginPlay()
@@ -81,7 +82,9 @@ function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 	}
 	else if (instigatedBy == none)
 		return;
-	else if (Enemy == none && !IsInState('TrackWarhead') && !B227_SameTeamAsOf(instigatedBy))
+	else if (Enemy == none &&
+		!IsInState('TrackWarhead') &&
+		B227_IsPotentialDamageEnemy(instigatedBy))
 	{
 		Enemy = instigatedBy;
 		GotoState('ActiveCannon');
@@ -385,15 +388,25 @@ function bool B227_SameTeamAsOf(Pawn P)
 		SameTeamAs(P.PlayerReplicationInfo.Team);
 }
 
+function bool B227_IsPotentialEnemy(Pawn P)
+{
+	return P.bIsPlayer && P.Health > 0 && !P.bDeleteMe && !B227_SameTeamAsOf(P);
+}
+
+function bool B227_IsPotentialDamageEnemy(Pawn P)
+{
+	if (P.Health <= 0 || P.bDeleteMe)
+		return false;
+	return B227_bAttackAnyDamageInstigators && TeamCannon(P) == none || !B227_SameTeamAsOf(P);
+}
+
 function bool B227_FindEnemy()
 {
 	local Pawn P;
 
 	for (P = Level.PawnList; P != none; P = P.NextPawn)
 		if (P.bCollideActors &&
-			P.bIsPlayer &&
-			!B227_SameTeamAsOf(P) &&
-			P.Health > 0 &&
+			B227_IsPotentialEnemy(P) &&
 			!P.IsA('TeamCannon') &&
 			LineOfSightTo(P))
 		{

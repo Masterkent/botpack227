@@ -24,8 +24,9 @@ struct HUDLocalizedMessage
 
 var globalconfig bool B227_bVerticalCrosshairScaling;
 
-var private float B227_DesiredCanvasScale;
-var private string B227_DesiredCanvasScaleHUD;
+var transient private float B227_DesiredCanvasScale;
+var transient private string B227_DesiredCanvasScaleHUD;
+var transient private int B227_CanvasScaleSupport;
 
 event Destroyed()
 {
@@ -212,6 +213,56 @@ static function B227_SetDesiredCanvasScale(HUD Hud, float Scale)
 static function B227_ResetDesiredCanvasScale()
 {
 	default.B227_DesiredCanvasScale = 0;
+}
+
+static function bool B227_SupportsCanvasScale()
+{
+	if (default.B227_CanvasScaleSupport > 0)
+		return true;
+	if (default.B227_CanvasScaleSupport == 0)
+	{
+		default.B227_CanvasScaleSupport = int(DynamicLoadObject("Engine.Canvas.ScaleFactor", class'Object', true) != none) * 2 - 1;
+		return default.B227_CanvasScaleSupport > 0;
+	}
+	return false;
+}
+
+static function bool B227_PushCanvasScale(Canvas Canvas, float Scale, optional bool bAbsolute)
+{
+	if (B227_SupportsCanvasScale())
+	{
+		Canvas.PushCanvasScale(Scale, bAbsolute);
+		return true;
+	}
+	return false;
+}
+
+static function bool B227_PopCanvasScale(Canvas Canvas)
+{
+	if (B227_SupportsCanvasScale())
+	{
+		Canvas.PopCanvasScale();
+		return true;
+	}
+	return false;
+}
+
+static function float B227_GetHudScaler()
+{
+	if (B227_SupportsCanvasScale())
+		return FClamp(float(GetDefaultObject(class'HUD').GetPropertyText("HudScaler")), 1.0, 16.0);
+	return 1.0;
+}
+
+static function bool B227_ApplyHudScaler(Canvas Canvas, optional out float Scale)
+{
+	if (B227_SupportsCanvasScale())
+	{
+		Scale = FClamp(float(GetDefaultObject(class'HUD').GetPropertyText("HudScaler")), 1.0, 16.0);
+		Canvas.PushCanvasScale(Scale, true);
+		return true;
+	}
+	return false;
 }
 
 static function color B227_MultiplyColor(color Color, float Factor)

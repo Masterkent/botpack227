@@ -61,7 +61,7 @@ function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
 {
   MakeNoise(1.0);
   Health -= NDamage;
-  if (Health <0)
+  if (Health <= 0)
   {
     PlaySound(DeActivateSound, SLOT_None,5.0);
     skinnedFrag(class'Fragment1',texture'JCannon1', Momentum,1.0,17);  //ripped from cannon
@@ -70,7 +70,7 @@ function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
   }
   else if ( instigatedBy == None )
     return;
-  else if ( (Enemy == None) && IsEnemy(instigatedby) )
+  else if ( Enemy == None && B227_IsPotentialDamageEnemy(instigatedBy) )
   {
     Enemy = instigatedBy;
     GotoState('ActiveCannon');
@@ -137,6 +137,13 @@ state ActiveCannon
 		}
 		GotoState('Idle');
 	}
+}
+
+function bool B227_IsPotentialDamageEnemy(Pawn P)
+{
+	if (P.Health <= 0 || P.bDeleteMe)
+		return false;
+	return B227_bAttackAnyDamageInstigators && TeamCannon(P) == none || IsEnemy(P);
 }
 
 defaultproperties

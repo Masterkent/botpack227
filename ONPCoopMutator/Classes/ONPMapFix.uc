@@ -816,6 +816,11 @@ function Server_FixCurrentMap_ONP_map08DisposalX()
 
 function Server_FixCurrentMap_ONP_map09SurfaceX()
 {
+	local TeamCannon Cannon;
+
+	foreach AllActors(class'TeamCannon', Cannon)
+		Cannon.SetPropertyText("B227_bAttackAnyDamageInstigators", "true");
+
 	SetNamedTriggerPawnClassProximity("Trigger6");
 	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
 	LoadLevelActor("Trigger23").Tag = '';
@@ -1045,6 +1050,8 @@ function Server_FixCurrentMap_ONP_map24CoreX()
 	MakeLocalMessageEventFor("SpecialEvent127"); // Health Regeneration
 	MakeMessageEventFor("SpecialEvent128");
 	MakeMessageEventFor("SpecialEvent133");
+
+	LoadLevelTrigger("Trigger57").Tag = 'dispone';
 
 	SteelBox = Decoration(LoadLevelActor("SteelBox3"));
 	SteelBox.SetLocation(vect(-10130, -8850, 0) + vect(0, 0, 1) * SteelBox.Location.Z);

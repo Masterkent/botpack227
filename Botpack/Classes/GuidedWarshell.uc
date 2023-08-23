@@ -429,7 +429,7 @@ simulated function PostRender( canvas Canvas )
 	local Pawn P;
 	local int XPos, YPos;
 	local Vector X,Y,Z, Dir;
-	local float Scale, FovScale;
+	local float Scale, FovScale, HudScale;
 	local float CrosshairHSize, CrosshairVSize;
 	local float XL, YL;
 
@@ -437,8 +437,15 @@ simulated function PostRender( canvas Canvas )
 		return;
 
 	GetAxes(Rotation, X,Y,Z);
-	if (Canvas.ClipY < 768)
-		Canvas.Font = Font'TinyRedFont';
+	FovScale = 1 / Tan(FClamp(PlayerPawn(Owner).FOVAngle, 1, 170) / 360 * Pi);
+	HudScale = class'UTC_HUD'.static.B227_GetHudScaler();
+
+	if (HudScale > 1.0)
+		Canvas.Font = Font'SmallFont';
+	else if (Canvas.ClipY <= 600)
+		Canvas.Font = Font'TinyFont';
+	else if (Canvas.ClipY <= 768)
+		Canvas.Font = Font'SmallFont';
 	else
 		Canvas.Font = Font'WhiteFont';
 	Canvas.DrawColor = MakeColor(255, 0, 0);
@@ -447,8 +454,6 @@ simulated function PostRender( canvas Canvas )
 		Canvas.Style = ERenderStyle.STY_Translucent;
 	else
 		Canvas.Style = ERenderStyle.STY_Normal;
-
-	FovScale = 1 / Tan(FClamp(PlayerPawn(Owner).FOVAngle, 1, 170) / 360 * Pi);
 
 	foreach VisibleCollidingActors(class'Pawn', P, 2000,, true)
 	{
@@ -466,13 +471,21 @@ simulated function PostRender( canvas Canvas )
 			Dir = Dir / (Dir Dot X);
 			XPos = 0.5 * (Canvas.SizeX + Canvas.SizeX * (Dir Dot Y) * FovScale);
 			YPos = 0.5 * (Canvas.SizeY - Canvas.SizeX * (Dir Dot Z) * FovScale);
+
+			if (HudScale > 1.0)
+				class'UTC_HUD'.static.B227_PushCanvasScale(Canvas, HudScale, true);
+
 			if (!class'B227_Config'.default.bRedeemerUseDirectPointers)
-				YPos -= CrosshairVSize + 2 * YL;
+				YPos -= CrosshairVSize + 2 * YL * HudScale;
+
+			Canvas.SetPos((XPos / HudScale - XL / 2), (YPos + CrosshairVSize) / HudScale);
+			Canvas.DrawText(int(Dist), true);
+
+			if (HudScale > 1.0)
+				class'UTC_HUD'.static.B227_PopCanvasScale(Canvas);
 
 			Canvas.SetPos(XPos - 0.5 * CrosshairHSize, YPos - 0.5 * CrosshairVSize);
 			Canvas.DrawIcon(texture'CrossHair6', Scale);
-			Canvas.SetPos(XPos - 12, YPos + CrosshairVSize);
-			Canvas.DrawText(int(Dist), true);
 		}
 	}
 

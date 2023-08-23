@@ -43,6 +43,7 @@ simulated function PostRender( canvas Canvas )
 	}
 
 	Canvas.Reset();
+	class'UTC_HUD'.static.B227_PushCanvasScale(Canvas, 1.0, true);
 
 	if (GuidedShell != none && !GuidedShell.bDeleteMe)
 		GuidedShell.PostRender(Canvas);
@@ -67,6 +68,7 @@ simulated function PostRender( canvas Canvas )
 		Canvas.DrawIcon(Texture'Readout', FMax(1, XScale));
 	}
 
+	class'UTC_HUD'.static.B227_PopCanvasScale(Canvas);
 	Canvas.Reset();
 }
 
