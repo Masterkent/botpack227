@@ -198,6 +198,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map01FirstDay();
 	else if (CurrentMap ~= "ONP-map02Detour")
 		Server_FixCurrentMap_ONP_map02Detour();
+	else if (CurrentMap ~= "ONP-map03Watchyourstep")
+		Server_FixCurrentMap_ONP_map03Watchyourstep();
 	else if (CurrentMap ~= "ONP-map04LabEntrance")
 		Server_FixCurrentMap_ONP_map04LabEntrance();
 	else if (CurrentMap ~= "ONP-map05FriendlyFire")
@@ -246,6 +248,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map30Ruins();
 	else if (CurrentMap ~= "ONP-map31Dogsofwar")
 		Server_FixCurrentMap_ONP_map31Dogsofwar();
+	else if (CurrentMap ~= "ONP-map32Gauntlet")
+		Server_FixCurrentMap_ONP_map32Gauntlet();
 	else if (CurrentMap ~= "ONP-map35Genetics")
 		Server_FixCurrentMap_ONP_map35Genetics();
 	else if (CurrentMap ~= "ONP-map36Birthing")
@@ -751,6 +755,7 @@ function Server_FixCurrentMap_ONP_map02LinesofCommX()
 	LoadLevelMover("Mover24").StayOpenTime = 4.0;
 	EarthQuake(LoadLevelActor("Earthquake1")).bThrowPlayer = false;
 	EarthQuake(LoadLevelActor("Earthquake2")).bThrowPlayer = false;
+
 	MakeMessageEventFor("SpecialEvent4");
 	MakeMessageEventFor("SpecialEvent11");
 	MakeMessageEventFor("SpecialEvent28");
@@ -787,6 +792,7 @@ function Server_FixCurrentMap_ONP_map06ProcessingX()
 
 	AssignInitialState(LoadLevelActor("Trigger58"), 'NormalTrigger');
 	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
+
 	MakeMessageEventFor("SpecialEvent1");
 	MakeMessageEventFor("SpecialEvent5");
 }
@@ -796,6 +802,9 @@ function Server_FixCurrentMap_ONP_map07PlanningX()
 	LoadLevelMover("Mover0").StayOpenTime = 4.0;
 	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true;
 	SetNamedTriggerPawnClassProximity("Trigger23");
+	MakeFallingMoverController("Mover65");
+	MakeFallingMoverController("Mover83");
+	MakeFallingMoverController("Mover98");
 }
 
 function Server_FixCurrentMap_ONP_map08DisposalX()
@@ -821,6 +830,7 @@ function Server_FixCurrentMap_ONP_map09SurfaceX()
 	foreach AllActors(class'TeamCannon', Cannon)
 		Cannon.SetPropertyText("B227_bAttackAnyDamageInstigators", "true");
 
+	MakeFallingMoverController("Mover65");
 	SetNamedTriggerPawnClassProximity("Trigger6");
 	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
 	LoadLevelActor("Trigger23").Tag = '';
@@ -858,6 +868,7 @@ function Server_FixCurrentMap_ONP_map10AmbushX()
 function Server_FixCurrentMap_ONP_map11CobaltX()
 {
 	LoadLevelTrigger("Trigger8").bTriggerOnceOnly = true;
+
 	MakeMessageEventFor("SpecialEvent10");
 	MakeMessageEventFor("SpecialEvent30");
 	MakeMessageEventFor("SpecialEvent56");
@@ -1042,8 +1053,6 @@ function Server_ModifyCurrentMap_ONP_map24CoreX()
 
 function Server_FixCurrentMap_ONP_map24CoreX()
 {
-	local Decoration SteelBox;
-
 	DisablePlayerStart("PlayerStart0");
 	LoadLevelTrigger("Trigger110").bTriggerOnceOnly = true;
 
@@ -1053,15 +1062,8 @@ function Server_FixCurrentMap_ONP_map24CoreX()
 
 	LoadLevelTrigger("Trigger57").Tag = 'dispone';
 
-	SteelBox = Decoration(LoadLevelActor("SteelBox3"));
-	SteelBox.SetLocation(vect(-10130, -8850, 0) + vect(0, 0, 1) * SteelBox.Location.Z);
-	SteelBox.bPushable = false;
-	SteelBox.bMovable = false;
-
-	SteelBox = Decoration(LoadLevelActor("SteelBox4"));
-	SteelBox.SetLocation(vect(-12750, -3230, 0) + vect(0, 0, 1) * SteelBox.Location.Z);
-	SteelBox.bPushable = false;
-	SteelBox.bMovable = false;
+	MakeDecorationUnmovableAt("SteelBox3", vect(-10130, -8850, 10842.6));
+	MakeDecorationUnmovableAt("SteelBox4", vect(-12750, -3230, 2714.57));
 
 	SetEventTriggersPawnClassProximity('Death');
 	SetEventTriggersPawnClassProximity('electric');
@@ -1080,6 +1082,14 @@ function Server_FixCurrentMap_ONP_map01FirstDay()
 function Server_FixCurrentMap_ONP_map02Detour()
 {
 	DisableTeleporter("fadeoutTeleporter3");
+	LoadLevelMover("Mover0").MoveTime = 1.0;
+	MakeFallingMoverController("Mover1");
+}
+
+function Server_FixCurrentMap_ONP_map03Watchyourstep()
+{
+	MakeFallingMoverController("Mover6");
+	MakeDecorationUnmovable("SmallSteelBox4");
 }
 
 function Server_FixCurrentMap_ONP_map04LabEntrance()
@@ -1088,6 +1098,8 @@ function Server_FixCurrentMap_ONP_map04LabEntrance()
 	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = false;
 	LoadLevelMover("Mover79").StayOpenTime = 4;
 	SetEventTriggersPawnClassProximity('aarrhh');
+	MakeFallingMoverController("Mover50");
+	MakeFallingMoverController("Mover51");
 	MakeLocalMessageEventFor("SpecialEvent27");
 }
 
@@ -1095,6 +1107,8 @@ function Server_FixCurrentMap_ONP_map05FriendlyFire()
 {
 	DisableTeleporter("fadeoutTeleporter1");
 	SetNamedTriggerPawnClassProximity("Trigger1");
+	MakeFallingMoverController("Mover79");
+
 	MakeMessageEventFor("SpecialEvent27");
 	MakeLocalMessageEventFor("SpecialEvent39");
 }
@@ -1115,6 +1129,7 @@ function Server_FixCurrentMap_ONP_map07Questionableethics()
 function Server_FixCurrentMap_ONP_map09ComplexSituation()
 {
 	SetEventTriggersPawnClassProximity('aarrhh');
+
 	MakeMessageEventFor("SpecialEvent5");
 	MakeMessageEventFor("SpecialEvent7");
 	MakeMessageEventFor("SpecialEvent10");
@@ -1197,6 +1212,8 @@ function Server_FixCurrentMap_ONP_map19Teleporter()
 	LoadLevelTrigger("Trigger32").bTriggerOnceOnly = true;
 	SetEventTriggersPawnClassProximity('killkill');
 	SetEventTriggersPawnClassProximity('killkill2');
+	MakeFallingMoverController("Mover0");
+
 	MakeMessageEventFor("SpecialEvent13");
 	MakeMessageEventFor("SpecialEvent16");
 	MakeMessageEventFor("SpecialEvent22");
@@ -1231,6 +1248,7 @@ function Server_FixCurrentMap_ONP_map21Welcome()
 {
 	LoadLevelMover("Mover0").StayOpenTime = 4;
 	SetNamedTriggerPawnClassProximity("Trigger23");
+	MakeFallingMoverController("Mover65");
 	MakeMessageEventFor("SpecialEvent16");
 }
 
@@ -1254,6 +1272,13 @@ function Server_FixCurrentMap_ONP_map23Newfoe()
 
 function Server_FixCurrentMap_ONP_map25Communications()
 {
+	MakeFallingMoverController("Mover5");
+	MakeFallingMoverController("Mover6");
+	MakeFallingMoverController("Mover7");
+	MakeFallingMoverController("Mover8");
+	MakeFallingMoverController("Mover9");
+	MakeFallingMoverController("Mover93");
+
 	MakeMessageEventFor("SpecialEvent5");
 	MakeMessageEventFor("SpecialEvent6");
 	MakeMessageEventFor("SpecialEvent8");
@@ -1261,11 +1286,7 @@ function Server_FixCurrentMap_ONP_map25Communications()
 
 function Server_FixCurrentMap_ONP_map26EBE()
 {
-	local Decoration SteelBox;
-
-	SteelBox = Decoration(LoadLevelActor("SteelBox7"));
-	SteelBox.bPushable = false;
-	SteelBox.bMovable = false;
+	MakeDecorationUnmovable("SteelBox7");
 
 	Common_FixCurrentMap_ONP_map26EBE();
 
@@ -1313,6 +1334,7 @@ function Server_FixCurrentMap_ONP_map28Bellyofthebeast()
 	SetEventTriggersPawnClassProximity('zapped');
 	SetNamedTriggerPawnClassProximity("Trigger5");
 	SetNamedTriggerPawnClassProximity("Trigger40");
+
 	MakeMessageEventFor("SpecialEvent7");
 	MakeMessageEventFor("SpecialEvent8");
 	MakeMessageEventFor("SpecialEvent16");
@@ -1332,6 +1354,11 @@ function Server_FixCurrentMap_ONP_map30Ruins()
 function Server_FixCurrentMap_ONP_map31Dogsofwar()
 {
 	MakeMessageEventFor("SpecialEvent29");
+}
+
+function Server_FixCurrentMap_ONP_map32Gauntlet()
+{
+	MakeFallingMoverController("Mover0");
 }
 
 function Server_FixCurrentMap_ONP_map35Genetics()
@@ -1375,6 +1402,34 @@ function Server_FixCurrentMap_ONP_map39Escape()
 
 	foreach AllActors(class'EarthQuake', EQ)
 		EQ.bThrowPlayer = false;
+
+	LoadLevelMover("Mover50").MoveTime = 1.0; // Pipe
+	Dispatcher(LoadLevelActor("Dispatcher0")).OutDelays[1] = 1.0; // Pipe landing
+
+	MakeFallingMoverController("Mover14");
+	MakeFallingMoverController("Mover15");
+	MakeFallingMoverController("Mover22");
+	MakeFallingMoverController("Mover25");
+	MakeFallingMoverController("Mover48");
+	MakeFallingMoverController("Mover87", 0, 0.5);
+	MakeFallingMoverController("Mover88", 0, 0.5);
+	MakeFallingMoverController("Mover89", 0, 0.5);
+	MakeFallingMoverController("Mover90", 0, 0.5);
+	MakeFallingMoverController("Mover91", 0, 0.5);
+	MakeFallingMoverController("Mover92", 0, 0.5);
+	MakeFallingMoverController("Mover93", 0, 0.5);
+	MakeFallingMoverController("Mover94", 0, 0.5);
+	MakeFallingMoverController("Mover95", 0, 0.5);
+	MakeFallingMoverController("Mover96", 0, 0.5);
+	MakeFallingMoverController("Mover97", 0, 0.5);
+	MakeFallingMoverController("Mover98", 0, 0.5);
+	MakeFallingMoverController("Mover99", 0, 0.5);
+	MakeFallingMoverController("Mover100", 0, 0.5);
+	MakeFallingMoverController("Mover101", 0, 0.5);
+	MakeFallingMoverController("Mover102", 0, 0.5);
+	MakeFallingMoverController("Mover103", 0, 0.5);
+	MakeFallingMoverController("Mover104", 0, 0.5);
+	MakeFallingMoverController("Mover109");
 
 	MakeMessageEventFor("SpecialEvent5");
 }
@@ -1527,6 +1582,51 @@ function MakeEventRepeater(name EventName, float RepeatTriggerTime)
 	{
 		EventRepeater.Event = EventName;
 		EventRepeater.RepeatTriggerTime = RepeatTriggerTime;
+	}
+}
+
+function MakeFallingMoverController(string MoverName, optional int KeyMovementBitmask, optional float GravityScale)
+{
+	local Mover M;
+	local ONPFallingMoverController Controller;
+
+	M = LoadLevelMover(MoverName);
+	if (M != none)
+	{
+		Controller = Spawn(class'ONPFallingMoverController', M, M.Tag);
+		if (Controller != none)
+		{
+			Controller.KeyMovementBitmask = KeyMovementBitmask;
+			if (GravityScale > 0)
+				Controller.GravityScale = GravityScale;
+		}
+		if (M.MoverEncroachType != ME_CrushWhenEncroach)
+			M.MoverEncroachType = ME_IgnoreWhenEncroach;
+	}
+}
+
+function MakeDecorationUnmovable(string DecorationName)
+{
+	local Decoration Deco;
+
+	Deco = Decoration(LoadLevelActor(DecorationName));
+	if (Deco != none)
+	{
+		Deco.bPushable = false;
+		Deco.bMovable = false;
+	}
+}
+
+function MakeDecorationUnmovableAt(string DecorationName, vector Pos)
+{
+	local Decoration Deco;
+
+	Deco = Decoration(LoadLevelActor(DecorationName));
+	if (Deco != none)
+	{
+		Deco.SetLocation(Pos);
+		Deco.bPushable = false;
+		Deco.bMovable = false;
 	}
 }
 
