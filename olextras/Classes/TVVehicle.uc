@@ -316,7 +316,7 @@ function bool Eject (){ //ejects controller
   }
 }
 function Bump (actor other){
-  if (Controller==none&&other.Isa('tvplayer'))
+  if (Controller==none && tvplayer(other) != none)
     GetIn(tvplayer(other));
   else
     ProcessCollision(other,-1*normal(Velocity+other.velocity)); //fake

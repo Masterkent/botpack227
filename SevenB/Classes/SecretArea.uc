@@ -35,7 +35,8 @@ function Touch (actor Other){
     Instigator=pawn(Other);
     Other=none;
     Instigator.SecretCount++;
-    tvplayer(Instigator).ScoreHolder.AddPoints(Points);
+    if (tvplayer(Instigator) != none)
+      tvplayer(Instigator).ScoreHolder.AddPoints(Points);
     Instigator.ClientMessage(FoundMessage,FoundMessageType);
     if (FoundSound!=none)
       PlaySound(FoundSound, SLOT_Misc, 2.0);

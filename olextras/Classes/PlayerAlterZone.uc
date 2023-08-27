@@ -16,7 +16,7 @@ simulated event ActorEntered( actor Other )
   if (Other.bIsPawn&&Other.Role>Role_SimulatedProxy&&Pawn(Other).bIsPlayer){
     if (Other.Role==Role_Authority)
       Pawn(Other).JumpZ=JumpZ;
-    if (Other.IsA('tvplayer'))
+    if (tvplayer(Other) != none)
       for (i=0;i<3;i++)
         tvPlayer(Other).Jumpsounds[i]=JumpSounds[i];
   }
@@ -29,7 +29,7 @@ simulated event ActorLeaving( actor Other )
   if (Other.bIsPawn&&Other.Role>Role_SimulatedProxy&&Pawn(Other).bIsPlayer){
     if (Other.Role==Role_Authority)
       Pawn(Other).JumpZ=Pawn(Other).default.JumpZ;
-    if (Other.IsA('tvplayer'))
+    if (tvplayer(Other) != none)
       for (i=0;i<3;i++)
         tvPlayer(Other).Jumpsounds[i]=tvPlayer(Other).default.JumpSounds[i];
   }

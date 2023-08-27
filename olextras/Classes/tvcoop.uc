@@ -138,7 +138,7 @@ if ( left(URL,4) ~= "np36")
     Level.ServerTravel( "Np02DavidM", false);
     return;
   }
-if (aPlayer.IsA('tvplayer')){
+if (tvplayer(aPlayer) != none){
     if (Linfo.bJet)
       aPlayer.health=tvplayer(aplayer).oldhealth;
 if (!storedfollowers&&Linfo.FollowersCanLeave){

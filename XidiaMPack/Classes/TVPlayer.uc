@@ -2108,7 +2108,7 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 { //FIX LATER!
   if (skinactor.mesh!=LodMesh'botpack.fighter2M'){
     if (skinactor.level.netmode==nm_standalone){
-      if (skinactor.Isa('tvplayer') && tvsp(skinactor.level.game).linfo!=none && !tvsp(skinactor.level.game).linfo.bIsMissionPack) //change skin
+      if (tvplayer(skinactor) != none && tvsp(skinactor.level.game).linfo!=none && !tvsp(skinactor.level.game).linfo.bIsMissionPack) //change skin
         SetXiGoldSkin(tvplayer(skinactor));
       else
         SetXidiaSkin(skinactor,default.defaultskinname,Default.DefaultPackage$"cmdo2Blake",255);

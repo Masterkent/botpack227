@@ -10,7 +10,7 @@ class BlockShip expands Keypoint;
 
 simulated function Bump(actor other){
   local float speed;
-  if (other.Isa('tvplayer')&&other.IsInState('playership')){
+  if (tvplayer(other) != none && other.IsInState('playership')){
     tvplayer(other).CheckWall=false;
     speed=vsize(other.velocity);
     other.velocity.z=0;

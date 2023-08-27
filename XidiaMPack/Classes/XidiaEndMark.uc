@@ -51,7 +51,7 @@ local actor A;
 function TVPlayer FindPlayer(){
   local pawn p;
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
-    if (p.IsA('TvPlayer'))
+    if (tvplayer(p) != none)
       return tvplayer(p);
 }
 

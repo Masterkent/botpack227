@@ -136,7 +136,7 @@ if ( left(URL,4) ~= "np36")     //ADD CO-OP MAP HACK HERE!
     Level.ServerTravel( "Np02DavidM", false);
     return;
   }
-if (aPlayer.IsA('tvplayer')){
+if (tvplayer(aPlayer) != none){
     if (Linfo.bJet)
       aPlayer.health=tvplayer(aplayer).oldhealth;
 }

@@ -177,7 +177,7 @@ local int i;
 
 if (TvHUD(aPlayer.myhud)!=none)
   TVHUD(aPlayer.myhud).BlackOut=true;
-if (aPlayer.Isa('tvplayer')){
+if (tvplayer(aPlayer) != none){
   if (Linfo.bJet)
     aPlayer.health=tvplayer(aplayer).oldhealth;
   tvplayer(aPlayer).ScoreHolder.AccumTime+=tvplayer(aPlayer).MyTime;

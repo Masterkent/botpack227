@@ -26,13 +26,12 @@ function PlayerFreeze (tvplayer p, bool Freeze){
   }
 }
 function SetFreeze(bool binv, pawn EventInstigator){
-local pawn p;
+local tvplayer p;
   if (bFreezeAllPlayers){
-    for (p=level.pawnlist;p!=none;p=p.nextpawn)
-      If (p.isa('tvplayer'))
-         PlayerFreeze(tvplayer(p),binv);
+    foreach AllActors(class'tvplayer', p)
+       PlayerFreeze(p,binv);
   }
-  else if (eventinstigator.Isa('tvplayer'))
+  else if (tvplayer(eventinstigator) != none)
     PlayerFreeze(tvplayer(eventinstigator),binv);
 }
 
@@ -40,7 +39,7 @@ state() TriggerToggled
 {
   function Trigger( actor Other, pawn EventInstigator )
   {
-     if (eventinstigator.Isa('tvplayer'))
+     if (tvplayer(eventinstigator) != none)
         SetFreeze(tvplayer(EventInstigator).playermod!=1,EventInstigator);
   }
 }

@@ -15,7 +15,8 @@ var () bool bUseLocalPlayerName; //for messages use local player name......
 
 function Trigger( actor Other, pawn EventInstigator )
 {
-  local pawn p, q;
+  local pawn p;
+  local PlayerPawn q;
   local ScriptedHumanMessage SHM;
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
     if (p.tag==HumanTag&&p.Isa('scriptedhuman')){
@@ -25,9 +26,12 @@ function Trigger( actor Other, pawn EventInstigator )
        if (SpeechText=="")
          return;
        if (bUseLocalPlayerName){
-           for( q=Level.PawnList; q!=None; q=q.nextPawn )
-             if (q.IsA('tvplayer'))
+           foreach AllActors(class'PlayerPawn', q) {
+             if (tvplayer(q) != none)
                 tvplayer(q).SayMessage(SpeechText,GetSoundDuration(Speech));
+             else
+                q.TeamMessage(q.PlayerReplicationInfo, SpeechText, 'Say');
+           }
        }
        else if (P.MenuName!=""){
          SHM=spawn(class'ScriptedHumanMessage');

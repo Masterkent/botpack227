@@ -24,7 +24,7 @@ event BroadcastSayMessage( coerce string Msg, float time, pawn EventInstigator)
   Type = 'Say';
 
   for( P=Level.PawnList; P!=None; P=P.nextPawn ){
-    if (P.IsA('tvplayer'))
+    if (tvplayer(P) != none)
       tvplayer(P).SayMessage(Msg,time,EventInstigator.PlayerReplicationInfo);
     else if( P.bIsPlayer || P.IsA('MessagingSpectator') )
     {

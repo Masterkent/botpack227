@@ -13,7 +13,7 @@ function Actor CheckTarget()
     return None;
   if (!Owner.IsA('PlayerPawn'))
     return Super.CheckTarget();
-  if (Owner.IsA('tvplayer')&&tvplayer(Owner).playermod==1) //no locking in cutscenes.
+  if (tvplayer(Owner) != none && tvplayer(Owner).playermod==1) //no locking in cutscenes.
     return None;
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
     if (p.bisplayer||p.Isa('nali')||p.Isa('cow')||p.Isa('bird1')||p.IsA('NaliRabbit')||(p.IsA('follower')&&Follower(p).IsFriend()))
