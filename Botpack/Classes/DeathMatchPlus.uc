@@ -1691,11 +1691,18 @@ function B227_EvaluatePlayerStartScore(
 	}
 	else if (NarrowScore == 0)
 	{
-		if (FastTrace(PlayerStartLocation, OtherPlayer.Location))
+		if (B227_PlayerStartIsVisibleTo(PlayerStartLocation, OtherPlayer))
 			Score -= 10000;
 		if (NextDist < 2000)
 			DistScore = FMin(DistScore, 2 * (NextDist - 2000));
 	}
+}
+
+static function bool B227_PlayerStartIsVisibleTo(vector Pos, Pawn P)
+{
+	return
+		P.FastTrace(Pos, P.Location) ||
+		P.FastTrace(Pos + vect(0, 0, 1) * P.CollisionHeight, P.Location + vect(0, 0, 1) * P.CollisionHeight);
 }
 
 function B227_UpdateGRILimits()
