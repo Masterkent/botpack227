@@ -457,7 +457,7 @@ function TweenToSwimming(float tweentime)
 
 function SwimAnimUpdate(bool bNotForward)
 {
-	if ( !bAnimTransition && (GetAnimGroup(AnimSequence) != 'Gesture') && (AnimSequence != 'Swim') )
+	if ( !bAnimTransition && !IsGestureAnim(AnimSequence) && (AnimSequence != 'Swim') )
 		TweenToSwimming(0.1);
 }
 
@@ -499,6 +499,15 @@ function PlayChatting()
 		LoopAnim('gunfix', 0.7, 0.25);
 }
 
+function bool IsGestureAnim(name Sequence)
+{
+	return
+		GetAnimGroup(Sequence) == 'Gesture' ||
+		Sequence == 'Shield' ||
+		Sequence == 'Fighter' ||
+		Sequence == 'gunfix';
+}
+
 state PlayerWalking
 {
 	function ProcessMove(float DeltaTime, vector NewAccel, eDodgeDir DodgeMove, rotator DeltaRot)
@@ -509,13 +518,15 @@ state PlayerWalking
 			!bIsCrouching &&
 			(!bAnimTransition || AnimFrame > 0) &&
 			bool(Acceleration) &&
-			(AnimSequence == 'Shield' || AnimSequence == 'Fighter' || AnimSequence == 'gunfix'))
+			IsGestureAnim(AnimSequence))
 		{
 			bAnimTransition = true;
 			TweenToRunning(0.1);
 		}
 	}
 }
+
+
 
 function MultimeshPackageRef()
 {
@@ -529,8 +540,8 @@ defaultproperties
 	Footstep1=Sound'UnrealShare.Cow.walkC'
 	Footstep2=Sound'UnrealShare.Cow.walkC'
 	Footstep3=Sound'UnrealShare.Cow.walkC'
-	UWHit1=Sound'UnrealShare.Male.MUWHit1'
-	UWHit2=Sound'UnrealShare.Male.MUWHit2'
+	UWHit1=Sound'SKPInjur4'
+	UWHit2=Sound'SKPInjur4'
 	Die=Sound'SKPDeath1'
 	Die2=Sound'SKPDeath2'
 	Die3=Sound'SKPDeath3'

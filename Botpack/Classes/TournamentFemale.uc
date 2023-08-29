@@ -116,7 +116,7 @@ defaultproperties
 	HitSound4=Sound'Botpack.FemaleSounds.hinjur4'
 	GaspSound=Sound'Botpack.FemaleSounds.lgasp1'
 	UWHit1=Sound'Botpack.FemaleSounds.UWhit01'
-	UWHit2=Sound'UnrealShare.Male.MUWHit2'
+	UWHit2=Sound'Botpack.FemaleSounds.UWhit01'
 	LandGrunt=Sound'Botpack.FemaleSounds.lland1'
 	StatusDoll=Texture'Botpack.Icons.Woman'
 	StatusBelt=Texture'Botpack.Icons.WomanBelt'

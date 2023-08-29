@@ -123,7 +123,8 @@ defaultproperties
      Deaths(3)=Sound'Botpack.FemaleSounds.decap01'
      Deaths(4)=Sound'Botpack.FemaleSounds.death41'
      Deaths(5)=Sound'Botpack.FemaleSounds.death42'
-     UWHit2=Sound'UnrealShare.Male.MUWHit2'
+     UWHit1=Sound'Botpack.FemaleSounds.UWhit01'
+     UWHit2=Sound'Botpack.FemaleSounds.UWhit01'
      JumpSound=Sound'Botpack.FemaleSounds.Fjump1'
      CarcassType=Class'Botpack.TFemale1Carcass'
      bIsFemale=True

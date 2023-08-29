@@ -114,7 +114,7 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
 			Bot(Defender).SendTeamMessage(None, 'OTHER', 13, 15);
 		LastHelpMessage = Level.TimeSeconds;
 	}
-	if ( Health < 0 )
+	if ( Health <= 0 )
 		DestroyFort(instigatedBy);
 	else
 	{

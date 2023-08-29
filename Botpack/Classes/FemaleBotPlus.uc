@@ -136,7 +136,7 @@ defaultproperties
 	Deaths(4)=Sound'Botpack.FemaleSounds.death41'
 	Deaths(5)=Sound'Botpack.FemaleSounds.death42'
 	UWHit1=Sound'Botpack.FemaleSounds.UWhit01'
-	UWHit2=Sound'UnrealShare.Male.MUWHit2'
+	UWHit2=Sound'Botpack.FemaleSounds.UWhit01'
 	LandGrunt=Sound'Botpack.FemaleSounds.lland1'
 	JumpSound=Sound'Botpack.FemaleSounds.Fjump1'
 	StatusDoll=Texture'Botpack.Icons.Woman'

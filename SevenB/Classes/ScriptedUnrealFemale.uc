@@ -20,7 +20,7 @@ defaultproperties
      Deaths(3)=Sound'UnrealShare.Female.death2afem'
      Deaths(4)=Sound'UnrealShare.Female.death4cfem'
      UWHit1=Sound'UnrealShare.Female.FUWHit1'
-     UWHit2=Sound'UnrealShare.Male.MUWHit2'
+     UWHit2=Sound'UnrealShare.Female.FUWHit1'
      LandGrunt=Sound'UnrealShare.Female.lland1fem'
      JumpSound=Sound'UnrealShare.Female.jump1fem'
      CarcassType=Class'UnrealShare.FemaleBody'

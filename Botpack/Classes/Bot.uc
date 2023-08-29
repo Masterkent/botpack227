@@ -6719,7 +6719,7 @@ ignores Bump, Hitwall, WarnTarget;
 	{
 		Global.TakeDamage(Damage, instigatedBy, hitlocation, momentum, damageType);
 
-		if (Health < 0 || bDeleteMe)
+		if (Health <= 0 || bDeleteMe)
 			return;
 
 		if (Enemy == None)

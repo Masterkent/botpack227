@@ -17,7 +17,7 @@ defaultproperties
 	HitSound2=linjur2fem
 	LandGrunt=lland1fem
 	UWHit1=FUWHit1
-	UWHit2=MUWHit2
+	UWHit2=FUWHit1
 	Die=death1dfem
 	bIsFemale=true
 	StatusDoll=Texture'Botpack.Icons.Woman'
