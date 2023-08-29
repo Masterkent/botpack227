@@ -547,6 +547,9 @@ function Server_FixCurrentMap_ONP_map20InterloperX()
 
 function Server_FixCurrentMap_ONP_map21NestX()
 {
+	LoadLevelMover("RotatingMover0").Tag = 'hiveoff_stop_rotating';
+	Spawn(class'ONPEventUntrigger',, 'hiveoff').Event = 'hiveoff_stop_rotating';
+
 	SetEventTriggersPawnClassProximity('wasted');
 }
 
