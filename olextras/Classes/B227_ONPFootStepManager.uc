@@ -6,12 +6,14 @@ var Sound FootStepSound_OnWood;
 
 static function bool OverrideFootstep(Pawn Other, out Sound Step, out byte WetSteps)
 {
+	local float TraceDist;
 	local Texture HitTexture;
 
 	if (super.OverrideFootstep(Other, Step, WetSteps))
 		return true;
 
-	Other.TraceSurfHitInfo(Other.Location, Other.Location - vect(0,0,30),,, HitTexture);
+	TraceDist = Other.CollisionHeight + Other.CollisionRadius + 30;
+	Other.TraceSurfHitInfo(Other.Location, Other.Location - vect(0,0,1) * TraceDist,,, HitTexture);
 	if (HitTexture != none)
 		Step = GetFootStepSound(HitTexture);
 

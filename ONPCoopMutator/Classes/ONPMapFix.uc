@@ -1350,6 +1350,14 @@ function Server_FixCurrentMap_ONP_map28Bellyofthebeast()
 
 function Server_FixCurrentMap_ONP_map30Ruins()
 {
+	local ONPSurfaceDamageTrigger DamageTrigger;
+
+	LoadLevelActor("SpecialEvent2").Tag = '';
+	DamageTrigger = Spawn(class'ONPSurfaceDamageTrigger',, 'lavakill');
+	DamageTrigger.TextureName = 'Lava1';
+	DamageTrigger.DamagePerSec = 50;
+	DamageTrigger.DamageType = 'Burned';
+
 	LoadLevelTrigger("Trigger19").bTriggerOnceOnly = true;
 	MakeMessageEventFor("SpecialEvent45");
 }
@@ -1367,6 +1375,7 @@ function Server_FixCurrentMap_ONP_map32Gauntlet()
 function Server_FixCurrentMap_ONP_map35Genetics()
 {
 	SetEventTriggersPawnClassProximity('fallwaste');
+	MakeFallingMoverController("Mover0");
 }
 
 function Server_FixCurrentMap_ONP_map36Birthing()

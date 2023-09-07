@@ -3,6 +3,6 @@ class B227_XidiaMPack_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 XidiaMPack v1.5 [2023-08-27]"
-	Version="1.5"
+	VersionInfo="B227 XidiaMPack v1.6 [2023-09-02]"
+	Version="1.6"
 }
