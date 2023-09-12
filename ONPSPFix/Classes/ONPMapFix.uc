@@ -409,6 +409,8 @@ function Server_FixCurrentMap_NP32Strogg()
 
 function Server_FixCurrentMap_ONP_map01FirstDayX()
 {
+	MakeFallingMoverController("Mover6");
+	MakeFallingMoverController("Mover41");
 	SetEventTriggersPawnClassProximity('arhh');
 	SetNamedTriggerPawnClassProximity("Trigger52");
 }
@@ -440,6 +442,7 @@ function Server_FixCurrentMap_ONP_map06ProcessingX()
 			SetTriggerPawnClassProximity(Trigger);
 
 	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
+	SetTriggerPawnClassProximity(LoadLevelTrigger("Trigger5"));
 }
 
 function Server_FixCurrentMap_ONP_map07PlanningX()
@@ -456,6 +459,7 @@ function Server_FixCurrentMap_ONP_map08DisposalX()
 	local Trigger Trigger;
 
 	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger59").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
 	SetNamedTriggerPawnClassProximity("Trigger31");

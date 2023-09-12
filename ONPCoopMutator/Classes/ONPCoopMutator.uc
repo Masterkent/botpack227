@@ -1138,7 +1138,7 @@ function string GetHumanName()
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v6.5 [2023-09-05]"
+	VersionInfo="ONPCoopMutator v6.5 [2023-09-12]"
 	Version="6.5"
 	bUseONPPlayerPawnType=False
 	bUseONPHUD=False

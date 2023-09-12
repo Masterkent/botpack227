@@ -742,6 +742,8 @@ function Server_FixCurrentMap_NP35MClane()
 function Server_FixCurrentMap_ONP_map01FirstDayX()
 {
 	LoadLevelActor("Trigger12").Tag = '';
+	MakeFallingMoverController("Mover6");
+	MakeFallingMoverController("Mover41");
 	SetEventTriggersPawnClassProximity('arhh');
 	SetNamedTriggerPawnClassProximity("Trigger52");
 }
@@ -792,6 +794,7 @@ function Server_FixCurrentMap_ONP_map06ProcessingX()
 
 	AssignInitialState(LoadLevelActor("Trigger58"), 'NormalTrigger');
 	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
+	SetTriggerPawnClassProximity(LoadLevelTrigger("Trigger5"));
 
 	MakeMessageEventFor("SpecialEvent1");
 	MakeMessageEventFor("SpecialEvent5");
@@ -812,6 +815,7 @@ function Server_FixCurrentMap_ONP_map08DisposalX()
 	local Trigger Trigger;
 
 	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger59").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
 	SetNamedTriggerPawnClassProximity("Trigger31");
