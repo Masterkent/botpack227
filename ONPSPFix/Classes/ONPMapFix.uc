@@ -788,6 +788,14 @@ function Server_FixCurrentMap_ONP_map37Halted()
 
 function Server_FixCurrentMap_ONP_map38Tothecore()
 {
+	local class<Actor> ONPLaserDisablerClass;
+	local Actor LaserDisabler;
+
+	ONPLaserDisablerClass = class<Actor>(DynamicLoadObject(Class.Outer.Name $ "." $ "ONPLaserDisabler", class'Class'));
+	LaserDisabler = Spawn(ONPLaserDisablerClass,,, vect(5056, -6848, -2606));
+	LaserDisabler.SetCollisionSize(96, 40);
+	LaserDisabler.SetPropertyText("Delay", "15");
+
 	SetEventTriggersPawnClassProximity('turfed');
 	SetNamedTriggerPawnClassProximity("Trigger5");
 }

@@ -159,6 +159,7 @@ function Server_FixCurrentMap_XidiaES_Map3_ReOP()
 function Server_FixCurrentMap_XidiaES_Map4_DeadMines()
 {
 	local Trigger Trigger;
+	local BlockMonsters BlockMonsters;
 
 	if (class'XidiaTriggerIfMoverIsStopped'.static.CreateFor(Level, "Mover18", 'Trigger_Tram001', 'Tram001') != none)
 	{
@@ -170,6 +171,9 @@ function Server_FixCurrentMap_XidiaES_Map4_DeadMines()
 	LoadLevelTrigger("Trigger43").bTriggerOnceOnly = false;
 	LoadLevelTrigger("Trigger46").bInitiallyActive = true;
 	class'XidiaSafeFall'.static.CreateAtActor(Level, "Mover44", 512, 512);
+
+	BlockMonsters = Spawn(class'XidiaBlockMonsters',,, vect(3211, -8848, -2848));
+	BlockMonsters.SetCollisionSize(160, 100);
 }
 
 function Server_FixCurrentMap_XidiaES_Map6_BlackWidow()
