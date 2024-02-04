@@ -11,20 +11,21 @@ struct Remapping
 	var() config bool bApplyMapFixes;
 };
 
-var() config bool bUseONPPlayerPawnType;
-var() config bool bUseONPHUD;
-var() config bool bUseONPWeaponsSupply;
-var() config bool bUseONPSpeech;
+var() config bool bAdjustNPCFriendlyFire;
+var() config bool bDisableFlashlightReplacement;
+var() config bool bDiscardItemsOnGameEnd;
+var() config bool bInfiniteSpecialItems;
+var() config bool bPreventFallingOutOfWorld;
+var() config bool bReplaceONPTranslocator;
 var() config bool bUseAircraftLevels;
+var() config bool bUseClassicUnrealTravellingPickups;
+var() config bool bUseONPHUD;
+var() config bool bUseONPPlayerPawnType;
+var() config bool bUseONPSpeech;
+var() config bool bUseONPWeaponsSupply;
 var() config bool bUseRealCrouch;
 var() config bool bUseSpeechMenuForU1Players;
 var() config string WeaponReplacementMode; // possible values: "", "ONP", "ONP-Basic", "Unreal", "Advanced", "Powerful"
-var() config bool bUseClassicUnrealTravellingPickups;
-var() config bool bReplaceONPTranslocator;
-var() config bool bDisableFlashlightReplacement;
-var() config bool bInfiniteSpecialItems;
-var() config bool bDiscardItemsOnGameEnd;
-var() config bool bPreventFallingOutOfWorld;
 var() config string ONPGameEndURL;
 var() config string PXGameEndURL;
 var() config string PX0GameEndURL;
@@ -1133,27 +1134,28 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v6.6";
+	return "ONPCoopMutator v6.7";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v6.6 [2023-12-21]"
-	Version="6.6"
-	bUseONPPlayerPawnType=False
-	bUseONPHUD=False
-	bUseONPWeaponsSupply=True
-	bUseONPSpeech=False
+	VersionInfo="ONPCoopMutator v6.7 [2024-02-03]"
+	Version="6.7"
+	bAdjustNPCFriendlyFire=True
+	bDisableFlashlightReplacement=True
+	bDiscardItemsOnGameEnd=True
+	bInfiniteSpecialItems=True
+	bPreventFallingOutOfWorld=True
+	bReplaceONPTranslocator=True
 	bUseAircraftLevels=True
+	bUseClassicUnrealTravellingPickups=False
+	bUseONPHUD=False
+	bUseONPPlayerPawnType=False
+	bUseONPSpeech=False
+	bUseONPWeaponsSupply=True
 	bUseRealCrouch=True
 	bUseSpeechMenuForU1Players=True
 	WeaponReplacementMode=ONP-Basic
-	bUseClassicUnrealTravellingPickups=False
-	bReplaceONPTranslocator=True
-	bDisableFlashlightReplacement=True
-	bInfiniteSpecialItems=True
-	bDiscardItemsOnGameEnd=True
-	bPreventFallingOutOfWorld=True
 	ONPGameEndURL="NP02DavidM#"
 	PXGameEndURL="ONP-map01FirstDayX#"
 	PX0GameEndURL="ONP-map01FirstDayX#"

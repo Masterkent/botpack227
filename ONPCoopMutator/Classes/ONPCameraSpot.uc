@@ -112,7 +112,10 @@ simulated event Tick(float TimeDelta) {
 
   local bool FlagActive;
 
-  if (PlayerLocal == none && Level.NetMode != NM_DedicatedServer) {
+  if (Level.NetMode == NM_DedicatedServer)
+    return;
+
+  if (PlayerLocal == none) {
     PlayerLocal = Level.GetLocalPlayerPawn();
 
     if (PlayerLocal == None)

@@ -86,6 +86,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map08DisposalX();
 	else if (CurrentMap ~= "ONP-map09SurfaceX")
 		Server_FixCurrentMap_ONP_map09SurfaceX();
+	else if (CurrentMap ~= "ONP-map10AmbushX")
+		Server_FixCurrentMap_ONP_map10AmbushX();
 	else if (CurrentMap ~= "ONP-map11CobaltX")
 		Server_FixCurrentMap_ONP_map11CobaltX();
 	else if (CurrentMap ~= "ONP-map12DamX")
@@ -134,6 +136,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map13Processing();
 	else if (CurrentMap ~= "ONP-map14Mine")
 		Server_FixCurrentMap_ONP_map14Mine();
+	else if (CurrentMap ~= "ONP-map15CrossCountry")
+		Server_FixCurrentMap_ONP_map15CrossCountry();
 	else if (CurrentMap ~= "ONP-map16Dam")
 		Server_FixCurrentMap_ONP_map16Dam();
 	else if (CurrentMap ~= "ONP-map19Teleporter")
@@ -144,6 +148,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map22Disposal();
 	else if (CurrentMap ~= "ONP-map23Newfoe")
 		Server_FixCurrentMap_ONP_map23Newfoe();
+	else if (CurrentMap ~= "ONP-map24Agenda")
+		Server_FixCurrentMap_ONP_map24Agenda();
 	else if (CurrentMap ~= "ONP-map25Communications")
 		Server_FixCurrentMap_ONP_map25Communications();
 	else if (CurrentMap ~= "ONP-map26EBE")
@@ -154,6 +160,8 @@ function Server_FixCurrentMap_Xenome()
 		Server_FixCurrentMap_ONP_map28Bellyofthebeast();
 	else if (CurrentMap ~= "ONP-map30Ruins")
 		Server_FixCurrentMap_ONP_map30Ruins();
+	else if (CurrentMap ~= "ONP-map31Dogsofwar")
+		Server_FixCurrentMap_ONP_map31Dogsofwar();
 	else if (CurrentMap ~= "ONP-map32Gauntlet")
 		Server_FixCurrentMap_ONP_map32Gauntlet();
 	else if (CurrentMap ~= "ONP-map35Genetics")
@@ -251,7 +259,7 @@ function Server_FixCurrentMap_NP08Hourences()
 
 function Server_FixCurrentMap_NP09Silver()
 {
-	Dispatcher(LoadLevelActor("Dispatcher9")).OutEvents[1] = '';
+	LoadLevelDispatcher("Dispatcher9").OutEvents[1] = '';
 	EliminateStaticActor("BlockAll10");
 }
 
@@ -421,6 +429,7 @@ function Server_FixCurrentMap_ONP_map02LinesofCommX()
 		CreatureFactory(LoadLevelActor("CreatureFactory2")).prototype;
 
 	LoadLevelTrigger("Trigger13").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger54").bTriggerOnceOnly = true; // MusicEvent3
 	EarthQuake(LoadLevelActor("Earthquake1")).bThrowPlayer = false;
 	EarthQuake(LoadLevelActor("Earthquake2")).bThrowPlayer = false;
 }
@@ -489,6 +498,11 @@ function Server_FixCurrentMap_ONP_map09SurfaceX()
 	}
 }
 
+function Server_FixCurrentMap_ONP_map10AmbushX()
+{
+	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
+}
+
 function Server_FixCurrentMap_ONP_map11CobaltX()
 {
 	LoadLevelTrigger("Trigger8").bTriggerOnceOnly = true;
@@ -501,21 +515,19 @@ function Server_FixCurrentMap_ONP_map12DamX()
 
 function Server_FixCurrentMap_ONP_map13SignsX()
 {
+	LoadLevelTrigger("Trigger11").bTriggerOnceOnly = true; // MusicEvent5
 	SetNamedTriggerPawnClassProximity("Trigger30");
 }
 
 function Server_FixCurrentMap_ONP_map14SoothsayerX()
 {
 	local Teleporter Telep;
-	local Counter TeleporterEnergyUp;
 
 	Telep = Teleporter(LoadLevelActor("Teleporter0"));
 	Telep.bEnabled = false;
 	Telep.Tag = 'TeleporterEnergyUp';
 
-	TeleporterEnergyUp = Spawn(class'Counter',, 'energyup');
-	TeleporterEnergyUp.Event = 'TeleporterEnergyUp';
-	TeleporterEnergyUp.NumToCount = 1;
+	EventToEvent('energyup', 'TeleporterEnergyUp', true);
 
 	SetNamedTriggerPawnClassProximity("Trigger64");
 }
@@ -527,6 +539,9 @@ function Server_FixCurrentMap_ONP_map15RevelationX()
 
 function Server_FixCurrentMap_ONP_map16BoldX()
 {
+	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
+	LoadLevelTrigger("Trigger105").bInitiallyActive = true;
+	LoadLevelActor("SpecialEvent49").Tag = '';
 	SetEventTriggersPawnClassProximity('diced');
 	SetEventTriggersPawnClassProximity('wasted');
 }
@@ -534,12 +549,17 @@ function Server_FixCurrentMap_ONP_map16BoldX()
 function Server_FixCurrentMap_ONP_map18FriendX()
 {
 	LoadLevelTrigger("Trigger15").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger11");
+	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
 }
 
 function Server_FixCurrentMap_ONP_map19IceX()
 {
 	LoadLevelTrigger("Trigger49").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger68").bTriggerOnceOnly = true; // MusicEvent5
+	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true; // MusicEvent1
 	LoadLevelTrigger("Trigger87").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger88").bTriggerOnceOnly = true; // MusicEvent5
 	SetNamedTriggerPawnClassProximity("Trigger73");
 }
 
@@ -580,10 +600,13 @@ function Server_FixCurrentMap_ONP_map23PowerPlayX()
 
 function Server_FixCurrentMap_ONP_map24CoreX()
 {
+	LoadLevelTrigger("Trigger95").bTriggerOnceOnly = true; // MusicEvent2
+	LoadLevelTrigger("Trigger96").bTriggerOnceOnly = true; // MusicEvent3
 	LoadLevelTrigger("Trigger110").bTriggerOnceOnly = true;
 	SetEventTriggersPawnClassProximity('Death');
 	SetEventTriggersPawnClassProximity('electric');
 	SetNamedTriggerPawnClassProximity("Trigger56");
+	LoadLevelActor("BlockAll4").SetCollisionSize(256, 20);
 }
 
 
@@ -609,6 +632,7 @@ function Server_FixCurrentMap_ONP_map04LabEntrance()
 {
 	LoadLevelTrigger("Trigger44").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = false;
+	LoadLevelTrigger("Trigger63").bTriggerOnceOnly = true; // MusicEvent3
 	LoadLevelMover("Mover79").StayOpenTime = 4;
 	SetEventTriggersPawnClassProximity('aarrhh');
 	MakeFallingMoverController("Mover50");
@@ -635,6 +659,7 @@ function Server_FixCurrentMap_ONP_map07Questionableethics()
 function Server_FixCurrentMap_ONP_map09ComplexSituation()
 {
 	SetEventTriggersPawnClassProximity('aarrhh');
+	LoadLevelMusicEvent("MusicEvent2").bOnceOnly = true;
 }
 
 function Server_FixCurrentMap_ONP_map13Processing()
@@ -650,18 +675,20 @@ function Server_FixCurrentMap_ONP_map14Mine()
 	InterpolateSpecialEvent("SpecialEvent10");
 }
 
+function Server_FixCurrentMap_ONP_map15CrossCountry()
+{
+	LoadLevelTrigger("Trigger6").bTriggerOnceOnly = true; // MusicEvent0
+}
+
 function Server_FixCurrentMap_ONP_map16Dam()
 {
-	local Counter BlockerDoor;
 	local ONPCameraSpot Cam;
 
 	foreach AllActors(class'ONPCameraSpot', Cam, 'blockerdoor')
 		Cam.Tag = 'blockerdoor_trigger';
 
 	LoadLevelTrigger("Trigger10").Event = 'blockerdoor_trigger';
-	BlockerDoor = Spawn(class'Counter',, 'blockerdoor_trigger');
-	BlockerDoor.Event = 'blockerdoor';
-	BlockerDoor.NumToCount = 1;
+	EventToEvent('blockerdoor_trigger', 'blockerdoor', true);
 }
 
 function Server_FixCurrentMap_ONP_map19Teleporter()
@@ -694,7 +721,14 @@ function Server_FixCurrentMap_ONP_map22Disposal()
 
 function Server_FixCurrentMap_ONP_map23Newfoe()
 {
+	LoadLevelMusicEvent("MusicEvent0").bOnceOnly = true;
+	LoadLevelMusicEvent("MusicEvent2").bOnceOnly = true;
 	SetNamedTriggerPawnClassProximity("Trigger21");
+}
+
+function Server_FixCurrentMap_ONP_map24Agenda()
+{
+	LoadLevelMusicEvent("MusicEvent0").bOnceOnly = true;
 }
 
 function Server_FixCurrentMap_ONP_map25Communications()
@@ -764,6 +798,13 @@ function Server_FixCurrentMap_ONP_map30Ruins()
 	LoadLevelTrigger("Trigger19").bTriggerOnceOnly = true;
 }
 
+function Server_FixCurrentMap_ONP_map31Dogsofwar()
+{
+	LoadLevelTrigger("Trigger2").bTriggerOnceOnly = true;
+	LoadLevelMusicEvent("MusicEvent1").bOnceOnly = true;
+	LoadLevelMusicEvent("MusicEvent3").bOnceOnly = true;
+}
+
 function Server_FixCurrentMap_ONP_map32Gauntlet()
 {
 	MakeFallingMoverController("Mover0");
@@ -777,6 +818,7 @@ function Server_FixCurrentMap_ONP_map35Genetics()
 
 function Server_FixCurrentMap_ONP_map36Birthing()
 {
+	LoadLevelMusicEvent("MusicEvent2").bOnceOnly = true;
 	SetEventTriggersPawnClassProximity('Death');
 	SetNamedTriggerPawnClassProximity("Trigger11");
 }
@@ -808,7 +850,7 @@ function Server_FixCurrentMap_ONP_map39Escape()
 		EQ.bThrowPlayer = false;
 
 	LoadLevelMover("Mover50").MoveTime = 1.0; // Pipe
-	Dispatcher(LoadLevelActor("Dispatcher0")).OutDelays[1] = 1.0; // Pipe landing
+	LoadLevelDispatcher("Dispatcher0").OutDelays[1] = 1.0; // Pipe landing
 
 	MakeFallingMoverController("Mover14");
 	MakeFallingMoverController("Mover15");
@@ -855,6 +897,16 @@ simulated function Mover LoadLevelMover(string MoverName)
 function Trigger LoadLevelTrigger(string TriggerName)
 {
 	return Trigger(DynamicLoadObject(Outer.Name $ "." $ TriggerName, class'Trigger'));
+}
+
+function Dispatcher LoadLevelDispatcher(string DispatcherName)
+{
+	return Dispatcher(LoadLevelActor(DispatcherName));
+}
+
+function MusicEvent LoadLevelMusicEvent(string MusicEventName)
+{
+	return MusicEvent(LoadLevelActor(MusicEventName));
 }
 
 function MakeMoverTriggerableOnceOnly(string MoverName, optional bool bProtect)
@@ -920,6 +972,15 @@ function DisableTeleporter(string TeleporterName)
 function InterpolateSpecialEvent(string SpecialEventName)
 {
 	class'ONPInterpolateSpecialEvent'.static.WrapSpecialEvent(SpecialEvent(LoadLevelActor(SpecialEventName)));
+}
+
+function EventToEvent(name Tag, name Event, bool bTriggerOnceOnly)
+{
+	local ONPEventToEvent ONPEventToEvent;
+
+	ONPEventToEvent = Spawn(class'ONPEventToEvent',, Tag);
+	ONPEventToEvent.Event = Event;
+	ONPEventToEvent.bTriggerOnceOnly = bTriggerOnceOnly;
 }
 
 function MakeEventRepeater(name EventName, float RepeatTriggerTime)

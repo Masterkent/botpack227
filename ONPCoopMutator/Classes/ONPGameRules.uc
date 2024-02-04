@@ -219,6 +219,27 @@ function RegisterONPLevelInfo(actor newinfo)
 	log ("Successfully bound level information",'ONP');
 }
 
+function ModifyDamage(Pawn Victim, Pawn Instigator, out int Damage, vector HitLocation, name DamageType, out vector Momentum)
+{
+	if (MutatorPtr.bAdjustNPCFriendlyFire &&
+		(CoopGame(Level.Game) != none && CoopGame(Level.Game).bNoFriendlyFire ||
+			CoopGame(Level.Game) == none && class'CoopGame'.default.bNoFriendlyFire) &&
+		IsFriendlyFollower(Instigator) &&
+		Victim != none &&
+		Victim.PlayerReplicationInfo != none)
+	{
+		if (Damage > 0)
+			Damage = 0;
+		if (bool(Momentum))
+			Momentum = vect(0, 0, 0);
+	}
+}
+
+static function bool IsFriendlyFollower(Pawn P)
+{
+	return P != none && P.IsA('Follower') && P.AttitudetoPlayer >= ATTITUDE_Friendly;
+}
+
 function bool PreventDeath(Pawn P, Pawn Killer, name DamageType)
 {
 	return MutatorPtr.bPreventFallingOutOfWorld &&
@@ -275,6 +296,7 @@ function float PlayerJumpZScaling()
 defaultproperties
 {
 	bHandleDeaths=True
+	bModifyDamage=True
 	bNotifyLogin=True
 	bNotifySpawnPoint=True
 }
