@@ -3,7 +3,7 @@
 
 class NCSkaarjBullet extends Projectile;
 
-auto state Flying
+auto simulated state Flying
 {
 	simulated function Timer()
 	{
@@ -44,13 +44,18 @@ auto state Flying
 		destroy();
 	}
 
-	function BeginState()
+	function InitProjectile()
 	{
 		if ( ScriptedPawn(Instigator) != None )
 			Speed = ScriptedPawn(Instigator).ProjectileSpeed;
 		Velocity = Vector(Rotation) * speed;
 		PlaySound(SpawnSound);
-		SetTimer(0.20,False);
+	}
+
+	simulated function BeginState()
+	{
+		InitProjectile();
+		SetTimer(0.20, False);
 	}
 
 Begin:
@@ -78,4 +83,5 @@ defaultproperties
      LightHue=165
      LightSaturation=186
      LightRadius=4
+     ExplosionDecal=Class'UnrealShare.QueenScorch'
 }
