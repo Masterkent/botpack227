@@ -57,6 +57,8 @@ state Activated
 
     if (bUsesCharge && Charge < 400)
       s.LightBrightness = byte(Charge*0.6+10);
+    else if (s.default.B227_bLowBrightness && !bUsesCharge)
+      s.LightBrightness = 212;
     else
       s.LightBrightness = s.default.LightBrightness;
 

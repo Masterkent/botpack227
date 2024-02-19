@@ -12,12 +12,15 @@ var bool bHideMe; // [U227] unused
 var vector DecalPos; //position to spawn the decal at
 var vector RepLoc; //replicated location hack
 var rotator B227_RepHitNormal;
+var bool B227_bRepLowBrightness;
 
 //decal spawning (client and server if rendered)
 var SBFlashDecal r, r2;
 var vector lastloc;
 
 var bool B227_bNoGoodFlashDecalSupport;
+
+var config bool B227_bLowBrightness;
 
 // -1 - don't use decals for the beam
 //  0 - use decals only on 227j+ clients
@@ -33,6 +36,8 @@ replication
   //-  DecalPos, RepLoc;
 	reliable if (Role == ROLE_Authority && !bNetOwner)
 		RepLoc, B227_RepHitNormal;
+	reliable if (Role == ROLE_Authority)
+		B227_bRepLowBrightness;
 }
 
 /*-simulated function PostNetBeginPlay(){ //yes, it is unsafe.. but I must do this for location updates
@@ -91,6 +96,11 @@ simulated event Tick(float delta)
 		HitLocation = Location - HitLocation * B227_DistToWall;
 		DecalPos = HitLocation + HitNormal * B227_DecalDistToWall;
 	}
+
+	if (Level.NetMode != NM_Client)
+		B227_bRepLowBrightness = default.B227_bLowBrightness;
+	if (B227_bRepLowBrightness && Pawn(Owner) != none)
+		LightRadius = FMin(VSize(HitLocation - Pawn(Owner).Location) / 200, 14) + 4.0;
 
 	// decal handling
 	if (Level.NetMode == NM_DedicatedServer ||
