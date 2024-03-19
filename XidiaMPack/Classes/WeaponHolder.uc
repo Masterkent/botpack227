@@ -13,6 +13,9 @@ var () bool bNoDropWeapon;  //xidia thing for cray
 var weapon MyWeapon; //my weapon ;p
 var float ticker;
 var(Sounds) sound FootStep1;
+
+var bool B227_bEvalAttitude; // Prevents infinite recursion
+
 //no drop weapon hack
 function Died(pawn Killer, name damageType, vector HitLocation)
 {
@@ -44,11 +47,24 @@ simulated function PreBeginPlay(){
 
 function eAttitude AttitudeToCreature(Pawn Other)
 {
-  if (other.IsA('WeaponHolder'))   //prevent inf recursion
-    return ATTITUDE_FRIENDLY;
-  //HATE creatures who collaborate with players.
-  if ((other.isa('skaarj'))&&(other.enemy!=self||(other.IsA('scriptedpawn')&&ScriptedPawn(other).AttitudeTo(self)>=Attitude_Ignore)))
-    return ATTITUDE_FRIENDLY; //always nice to skaarj & other evil ones.
+  local EAttitude OtherAttitude;
+
+  // nice to skaarj & other evil ones.
+  if (other.IsA('WeaponHolder') || other.isa('skaarj'))
+  {
+    if (Other.Enemy == none || Other.Enemy.Class != Class)
+      return ATTITUDE_Friendly;
+    if (ScriptedPawn(other) != none && !B227_bEvalAttitude)
+    {
+      B227_bEvalAttitude = true;
+      OtherAttitude = ScriptedPawn(other).AttitudeTo(self);
+      B227_bEvalAttitude = false;
+      if (OtherAttitude > ATTITUDE_Ignore)
+        return ATTITUDE_Friendly;
+      if (OtherAttitude == ATTITUDE_Hate || OtherAttitude == ATTITUDE_Frenzy || OtherAttitude == ATTITUDE_Threaten)
+        return ATTITUDE_Hate;
+    }
+  }
   if (other.attitudetoplayer<=ATTITUDE_Ignore&&other.enemy!=self) //MY ENEMIES ENEMY, SO "TOLERATE" HIM.
     return ATTITUDE_IGNORE;
   return ATTITUDE_HATE; //HE HELPS PLAYER. K33L HIM!
@@ -376,11 +392,13 @@ auto state Startup
   function BeginState()
   {
     Super.BeginState();
-    bIsPlayer = true; // temporarily, till have weapon
+    //-bIsPlayer = true; // temporarily, till have weapon
   }
 
   function SetHome()
   {
+    local Weapon ReplacingWeapon;
+
     Super.SetHome();
     if (WeaponType==class'enforcer') //quick hack
       WeaponType=class'Spenf';
@@ -400,11 +418,25 @@ auto state Startup
     if ( WeaponType != None )
     {
       MyWeapon = Spawn(WeaponType);
-      if ( MyWeapon != None )
-        MyWeapon.ReSpawnTime = 0.0;
+      if (MyWeapon == none)
+        foreach AllActors(class'Weapon', ReplacingWeapon)
+          if (ReplacingWeapon.Instigator == self && ReplacingWeapon.IsInState('Pickup'))
+          {
+            MyWeapon = ReplacingWeapon;
+            break;
+          }
     }
     if ( MyWeapon != None )
-      MyWeapon.Touch(self);     //gives weapon
+    {
+      MyWeapon.RespawnTime = 0;
+      MyWeapon.LifeSpan = MyWeapon.default.LifeSpan; // prevents destruction when spawning in destructive zones
+      MyWeapon.Instigator = self;
+      MyWeapon.BecomeItem();
+      AddInventory(MyWeapon);
+      MyWeapon.BringUp();
+      MyWeapon.GiveAmmo(self);
+      MyWeapon.WeaponSet(self);
+    }
     else{
       bIsPlayer=false;
       CombatStyle=-1.0;
@@ -629,8 +661,9 @@ function ChooseAttackMode()
     local eAttitude AttitudeToEnemy;
     local pawn changeEn;
 
-    if ((Enemy == None) || (Enemy.Health <= 0))
+    if (Enemy == none || Enemy.bDeleteMe || Enemy.Health <= 0 || Enemy == self)
     {
+      Enemy = none;
       if (Orders == 'Attacking')
         Orders = '';
       WhatToDoNext('','');
@@ -903,6 +936,17 @@ function bool ChooseTeamAttackFor(ScriptedPawn TeamMember)
   return true;
 }
 function PlayDodge(bool bDuckLeft);
+
+
+function Killed(Pawn Killer, Pawn Other, name DamageType)
+{
+	if (Enemy == Other)
+	{
+		bFire = 0;
+		bAltFire = 0;
+	}
+	super.Killed(Killer, Other, DamageType);
+}
 
 function B227_SetWeaponPosition()
 {

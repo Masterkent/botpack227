@@ -40,7 +40,7 @@ function bool IsRelevant( actor Other )
   switch( TriggeringType )
   {
     case TT_GoodGuyProximity:
-      return Pawn(Other)!=None && (Pawn(Other).bIsPlayer || (Other.Isa('follower')&&Follower(other).IsFriend()));
+      return Pawn(Other)!=None && (Pawn(Other).bIsPlayer || (Follower(Other) != none && Follower(other).IsFriend()));
     case TT_PawnProximity:
       return Pawn(Other)!=None && ( Pawn(Other).Intelligence > BRAINS_None );
     case TT_ClassProximity:

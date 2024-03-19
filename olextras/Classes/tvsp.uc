@@ -157,7 +157,7 @@ for (p=level.pawnlist;p!=none;p=p.nextpawn){
     log ("WARNING: OUT OF FOLLOWER ARRAY SPACE",'ONP');
     break;
   }
-  if (P.IsA('Follower')&&Follower(p).DoTravel(tvplayer(aPlayer),i)){
+  if (Follower(P) != none && Follower(p).DoTravel(tvplayer(aPlayer),i)){
     if (p.class==class'followingmercenaryelite')  //elite flag.
       tvPlayer(aPlayer).Friendlies[i]+=1;
     if (p.class==class'nalitrooper') //nali flags
@@ -265,7 +265,7 @@ for (i=0;i<8;i++){
   pa=spawn(paCL,,'traveled',pstart.location,pstart.rotation);
   if (pa!=none){
     bSuccess=true;
-    if (pa.IsA('weaponholder')){ //weapon holder altering
+    if (WeaponHolder(pa) != none){ //weapon holder altering
       p.friendlies[i]/=10;
       switch(p.friendlies[i]%10){
         case 0:
@@ -302,7 +302,7 @@ for (i=0;i<8;i++){
     }
     if (p.friendlies[i]/10>0)
       pa.health=p.friendlies[i]/10; //health :P
-    if (pa.IsA('scriptedhuman'))
+    if (ScriptedHuman(pa) != none)
       scriptedhuman(pa).ParseSkinInfo(p.friendlynames[i]);
     else if (p.friendlynames[i]!="")
       pa.menuname=p.friendlynames[i];  //more options
@@ -545,7 +545,7 @@ function ScoreKill(pawn Killer, pawn Other)    //does not affect PRI stuff.
     scoreholder.AddPoints(-198);
     return;
   }
-  if (Other==none||Other.bIsPlayer||((Killer==none||Killer==Other)&&(Other.Enemy==none||(!Other.Enemy.bIsPlayer&&!Other.Enemy.IsA('follower')))))
+  if (Other==none||Other.bIsPlayer||((Killer==none||Killer==Other)&&(Other.Enemy==none||(!Other.Enemy.bIsPlayer && Follower(Other.Enemy) == none))))
     return; //ignore (mapper forced kill/other enemy kill/whatever.
   if (Killer==none){
     Killer=Other.Enemy; //assume enemy killed other somehow (knocking into lava/whatever)
@@ -554,11 +554,11 @@ function ScoreKill(pawn Killer, pawn Other)    //does not affect PRI stuff.
   scoreholder.scoreit(Other); //count as thing dead.
   if ((theplayer.ReducedDamageType=='All'&&!bGODModeAllowed)||theplayer.IsInState('cheatflying'))
     Scoreholder.AddPoints(-200); //cheater!
-  if ((Other.IsA('follower')&&Follower(Other).IsFriend())||Other.IsA('nalirabbit')||Other.IsA('cow')||Other.IsA('nali')){
+  if ((Follower(Other) != none && Follower(Other).IsFriend())||Other.IsA('nalirabbit')||Other.IsA('cow')||Other.IsA('nali')){
     scoreholder.KilledFollowers++;
     if (Killer.bisplayer) //stupid player killed him
       scoreholder.AddPoints(-90);
-    else if (!Killer.IsA('Follower')||!Follower(Killer).IsFriend()){ //other enemy killed him: player failed to save
+    else if (Follower(Killer) == none || !Follower(Killer).IsFriend()){ //other enemy killed him: player failed to save
       if (bSuicide)
         scoreholder.AddPoints(-10); //not much of a lost.
       else
@@ -566,7 +566,7 @@ function ScoreKill(pawn Killer, pawn Other)    //does not affect PRI stuff.
     }
     return;       //no points lost if killed in friendly fire by other followers.
   }
-  if (Killer.IsA('follower')&&Follower(Killer).IsFriend()){
+  if (Follower(Killer) != none && Follower(Killer).IsFriend()){
     ScoreHolder.KilledByFollowers++;
     if (Other.Isa('scriptedpawn')&&ScriptedPawn(Other).bIsBoss)
       ScoreHolder.AddPoints(75);
@@ -608,7 +608,7 @@ function ScoreDamage(int Damage, Pawn Victim, Pawn Damager){
     ScoreHolder.AddPoints(-0.5*min(Damage,600));
     return;
   }
-  if (Victim==none||((Damager==none||Damager==Victim)&&(Victim.Enemy==none||(!Victim.Enemy.bIsPlayer&&!Victim.Enemy.IsA('follower')))))
+  if (Victim==none||((Damager==none||Damager==Victim)&&(Victim.Enemy==none||(!Victim.Enemy.bIsPlayer && Follower(Victim.Enemy) == none))))
     return; //ignore (mapper forced kill/other enemy kill/whatever.
   RealDamage=Victim.health-max(Victim.Health-damage,0); //limits damage to total health (so weapons like flak don't record extra damage)
   if (Damager==none){
@@ -620,11 +620,11 @@ function ScoreDamage(int Damage, Pawn Victim, Pawn Damager){
     Damage=RealDamage; //or else too much points from SSL...
   if (Victim.bIsPlayer){
     ScoreHolder.DamageTaken+=min(Damage,600);
-    if (!Damager.IsA('follower')||!Follower(Damager).IsFriend()) //followers suck and like to hit player
+    if (Follower(Damager) == none || !Follower(Damager).IsFriend()) //followers suck and like to hit player
       ScoreHolder.AddPoints(-0.25*min(Damage,600));
     return;
   }
-  if ((Victim.IsA('follower')&&Follower(Victim).IsFriend())||Victim.IsA('nalirabbit')||Victim.IsA('cow')||Victim.IsA('nali')){
+  if ((Follower(Victim) != none && Follower(Victim).IsFriend())||Victim.IsA('nalirabbit')||Victim.IsA('cow')||Victim.IsA('nali')){
     if (Damager.bIsPlayer){   //friendly fire by player
       ScoreHolder.FriendlyDamage+=RealDamage;
       if (bTemp<12)
@@ -653,7 +653,7 @@ function PlayTeleportEffect( actor Incoming, bool bOut, bool bSound)
 function int ReduceDamage(int Damage, name DamageType, pawn injured, pawn instigatedBy)
 {
   if (injured!=none && InstigatedBy!=none){
-    if (injured.bIsPlayer && InstigatedBy.IsA('follower') && Follower(InstigatedBy).IsFriend())
+    if (injured.bIsPlayer && Follower(InstigatedBy) != none && Follower(InstigatedBy).IsFriend())
       Damage*=fmin(difficulty*difficulty/9.0,1.0);
    }
    return Super.ReduceDamage(Damage,DamageType,injured,instigatedby);

@@ -32,8 +32,12 @@ var () string MyName;  //the actual name of pawn. if "", then is set to menuname
 var name LandAnim;
 //for footsteps (note that generally reads from the tvshadow!)
 var(Sounds) sound FootStep1;
+
+var B227_FollowerEnemiesInfo B227_FollowerEnemiesInfo;
+var bool B227_bBackUp;
+
 //replication
-replication{
+replication {
   reliable if (role==role_authority)
     PaPRI, MyName, bCoward;    //HUD info . MyName is replicated due to respawning.
 }
@@ -43,7 +47,7 @@ replication{
 
 function bool IsValidTarget(pawn apawn){ //return true if p can become enemy.   override to be friendly to other classes.
   return (apawn.health>0&&(apawn.attitudetoplayer<attitude_friendly)&&(apawn.isa('TeamCannon')||(apawn.IsA('scriptedpawn')&&
-    (!Apawn.Isa('follower')||!Follower(Apawn).IsFriend())&&!Apawn.Isa('cow')&&!Apawn.IsA('Nali'))));
+    (Follower(Apawn)==none || !Follower(Apawn).IsFriend()) && !Apawn.Isa('cow') && !Apawn.IsA('Nali'))));
 }
 simulated function bool IsFriend(){ //return true if I am good, false if bad
   return (Enemy==none||!Enemy.bisplayer||AttitudeTo(Enemy)>Attitude_Ignore); //false if fighting a player.
@@ -73,7 +77,7 @@ final function float VsizeSquared(vector A){
 //attitude. Can overload in subclass...
 function eAttitude AttitudeToCreature(Pawn Other)
 {
-  if ((Other.Isa('follower')&&Follower(Other).IsFriend())||Other.IsA('nali'))
+  if ((Follower(Other) != none && Follower(Other).IsFriend()) || Other.IsA('nali'))
     return ATTITUDE_Friendly;
   else if (other.isa('scriptedpawn')&&!other.isa('cow'))  //simply ignores bad mercs.  though will hate if they attack him!
    return ATTITUDE_Hate;
@@ -128,6 +132,7 @@ simulated event PreBeginPlay() //follower skill adjust.  designed so that he sux
     skill=fclamp(skill,0,3);
   }
   projectilespeed*=1+0.1*skill; //mult
+  B227_InitFollowerEnemiesInfo();
 }
 /*   //Caused GPF's...
 final function Sound GetTexSound(){ //return shadow sound
@@ -335,6 +340,8 @@ function NotifyNewEnemy(scriptedpawn NewEnemy){ //tell an enemy that I am target
 }
 function tick(float deltatime){ //enemy checks
   local pawn apawn;
+  local byte Attacked;
+
   if (!IsFriend()||(bcoward&&OnlyAttackWhenControlled)||(physics==Phys_Falling)||IsInState('fallingstate'))
     return;
   ticker+=deltatime;
@@ -344,10 +351,10 @@ function tick(float deltatime){ //enemy checks
   hated=none; //reset.
   for (aPawn=level.pawnlist;apawn!=none;apawn=apawn.nextpawn)
   {
-    if (apawn!=self&&IsValidTarget(apawn)&&(hated==none||!apawn.bisfemale)&&cansee(aPawn))     {
+    if (apawn != self && IsValidTarget(apawn) && (hated==none || !B227_IsAttackedEnemy(aPawn, Attacked)) && CanSee(aPawn))     {
       Hated = aPawn;   //valid target
-      if (apawn.target==pa&&!apawn.bisfemale){ //if he is fighting player & no other follower is attacking
-        apawn.bisfemale=true;
+      if (apawn.target == pa && !B227_IsAttackedEnemy(aPawn, Attacked)){ //if he is fighting player & no other follower is attacking
+        B227_AddAttackedEnemy(aPawn);
         SetEnemy(aPawn);
         gotostate('attacking');  // ATTACK!
         NotifyNewEnemy(scriptedpawn(apawn));
@@ -357,7 +364,7 @@ function tick(float deltatime){ //enemy checks
      }
   }
   if (hated!=none) { //best target.
-      hated.bisfemale=true;
+      B227_AddAttackedEnemy(hated);
       SetEnemy(hated);
       gotostate('attacking');
       NotifyNewEnemy(scriptedpawn(hated));
@@ -442,7 +449,7 @@ state following
     local vector VelDir, OtherDir;
     local float speed;
 
-    if (Pawn(Other) != None&&other!=pa&&(!other.isa('Follower')||!Follower(other).IsFriend()))
+    if (Pawn(Other) != None && other != pa && (Follower(other) == none || !Follower(other).IsFriend()))
     {
       AnnoyedBy(Pawn(Other));
       if ( SetEnemy(Pawn(Other)) )
@@ -459,7 +466,7 @@ state following
       SpeakTo(ScriptedPawn(Other));
     else if (bcanspeak && other==pa)
       speak();
-    if (other==pa||(other.isa('follower')&&vsize(other.velocity)>0&&pawn(other).bisfemale)){ //back up, as boss wants me to move.
+    if (other==pa || (Follower(other) != none && vsize(other.velocity)>0 && Follower(Other).B227_bBackUp)){ //back up, as boss wants me to move.
       if (!bumped&&base!=none&&((base.isa('mover')&&mover(base).mymarker!=none)
        ||(pa.base!=none&&pa.base.isa('mover')&&mover(pa.base).mymarker!=none))){ //check mover
         //speed=ticker;
@@ -703,14 +710,14 @@ state following
   groundspeed=default.groundspeed;
   disable('tick');
   disable('hitwall');
-  bisfemale=true; //flag to detect
+  B227_bBackUp = true; //flag to detect
   setmovementphysics();
   playrunning();
   if (temp==none)
     temp=pa;
   Acceleration = AccelRate * Normal(Location - temp.Location);
   sleep(0.2); //allow that much time.
-  bisfemale=false; //flag to detect
+  B227_bBackUp = false; //flag to detect
   enable('bump');
   enable('hitwall');
   sleep(0.2);    //enable notifiers and continue moving backwards.
@@ -825,7 +832,7 @@ state Waiting
 
   function Bump(actor Other)
   {
-    if (Pawn(Other) != None&&other!=pa&&(!other.isa('Follower')||!Follower(other).IsFriend()))
+    if (Pawn(Other) != None && other != pa && (Follower(other) == none || !Follower(other).IsFriend()))
     {
       if (Enemy == Other)
         bReadyToAttack = True; //can melee right away
@@ -846,7 +853,7 @@ state Waiting
     else if (bcanspeak && other==pa)
       speak();
 
-    if (Pawn(Other) != None&&(other==pa||((other.isa('Follower')&&Follower(other).IsFriend())&&vsize(other.velocity)>0&&pawn(other).bisfemale))){ //back up, as boss wants me to move.
+    if (Pawn(Other) != None && (other==pa || ((Follower(other) != none && Follower(other).IsFriend()) && vsize(other.velocity)>0 && Follower(other).B227_bBackUp))){ //back up, as boss wants me to move.
       // bumped=true;
       disable('bump');
       gotostate('waiting','backup');
@@ -872,12 +879,12 @@ state Waiting
   Backup:
   groundspeed=default.groundspeed;
   setmovementphysics();
-  bisfemale=true; //flag to detect
+  B227_bBackUp = true; //flag to detect
   playrunning();
   Acceleration = AccelRate * Normal(Location - pa.Location);
   disable('timer');
   sleep(0.2); //allow that much time.
-  bisfemale=false; //flag to detect
+  B227_bBackUp = false; //flag to detect
   enable('bump');
   enable('timer');
   sleep(0.2);    //enable notifiers and continue moving backwards.
@@ -1170,6 +1177,8 @@ function BotVoiceMessage(name messagetype, byte messageID, Pawn Sender)
 		(messageID == 1 || messageID == 3 || messageID == 4))
 	{
 		bShouldWait = messageID == 1;
+		if (messageID == 3 && IsInState('StakeOut'))
+			Enemy = none;
 		if (Enemy != none)
 			return;
 		if (IsInState('TakeHit') || IsInState('FallingState'))
@@ -1221,6 +1230,34 @@ function FollowerFreelance()
 		GotoState('Greeting');
 	else
 		DoRoam();
+}
+
+function B227_InitFollowerEnemiesInfo()
+{
+	foreach AllActors(class'B227_FollowerEnemiesInfo', B227_FollowerEnemiesInfo)
+		return;
+	B227_FollowerEnemiesInfo = Spawn(class'B227_FollowerEnemiesInfo');
+}
+
+function B227_AddAttackedEnemy(Pawn Enemy)
+{
+	if (B227_FollowerEnemiesInfo != none)
+		B227_FollowerEnemiesInfo.AddEnemy(Enemy, self);
+}
+
+function bool B227_IsAttackedEnemy(Pawn Enemy, optional out byte Attacked)
+{
+	if (Attacked == 0)
+	{
+		if (B227_FollowerEnemiesInfo != none && B227_FollowerEnemiesInfo.IsAttackedEnemy(Enemy))
+		{
+			Attacked = 2;
+			return true;
+		}
+		Attacked = 1;
+		return false;
+	}
+	return Attacked == 2;
 }
 
 defaultproperties

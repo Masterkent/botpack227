@@ -63,7 +63,7 @@ function eAttitude AttitudeToCreature(Pawn Other)
   if (!evil)
     return Super.AttitudeToCreature(Other);
   //HATE creatures who collaborate with players.
-  if ((other.isa('skaarj')||(other.Isa('WeaponHolder')&&WeaponHolder(Other).Evil))&&other.enemy!=self)
+  if ((other.isa('skaarj') || (WeaponHolder(other) != none && WeaponHolder(Other).Evil)) && other.enemy!=self)
     return ATTITUDE_FRIENDLY; //always nice to skaarj & other evil ones.
   if (other.attitudetoplayer<ATTITUDE_Ignore&&other.enemy!=self) //MY ENEMIES ENEMY, SO "TOLERATE" HIM.
     return ATTITUDE_IGNORE;
@@ -368,7 +368,7 @@ auto state Startup
   function BeginState()
   {
     Super.BeginState();
-    bIsPlayer = true; // temporarily, till have weapon
+    //-bIsPlayer = true; // temporarily, till have weapon
     if (!Evil)
       AttitudetoPlayer=Attitude_Friendly;
     else
@@ -377,6 +377,8 @@ auto state Startup
 
   function SetHome()
   {
+    local Weapon ReplacingWeapon;
+
     Super.SetHome();
     if (WeaponType==class'oldpistol') //quick hack
       WeaponType=class'NoammoDpistol';
@@ -391,11 +393,25 @@ auto state Startup
     if ( WeaponType != None )
     {
       MyWeapon = Spawn(WeaponType);
-      if ( MyWeapon != None )
-        MyWeapon.ReSpawnTime = 0.0;
+      if (MyWeapon == none)
+        foreach AllActors(class'Weapon', ReplacingWeapon)
+          if (ReplacingWeapon.Instigator == self && ReplacingWeapon.IsInState('Pickup'))
+          {
+            MyWeapon = ReplacingWeapon;
+            break;
+          }
     }
     if ( MyWeapon != None )
-      MyWeapon.Touch(self);     //gives weapon
+    {
+      MyWeapon.RespawnTime = 0;
+      MyWeapon.LifeSpan = MyWeapon.default.LifeSpan; // prevents destruction when spawning in destructive zones
+      MyWeapon.Instigator = self;
+      MyWeapon.BecomeItem();
+      AddInventory(MyWeapon);
+      MyWeapon.BringUp();
+      MyWeapon.GiveAmmo(self);
+      MyWeapon.WeaponSet(self);
+    }
     else{
       CombatStyle=-1.0;
       Aggressiveness=-10.000000;
@@ -619,8 +635,9 @@ function ChooseAttackMode()
     local eAttitude AttitudeToEnemy;
     local pawn changeEn;
 
-    if ((Enemy == None) || (Enemy.Health <= 0))
+    if (Enemy == none || Enemy.bDeleteMe || Enemy.Health <= 0 || Enemy == self)
     {
+      Enemy = none;
       if (Orders == 'Attacking')
         Orders = '';
       WhatToDoNext('','');
@@ -805,7 +822,8 @@ ignores enemynotvisible;   //really stupid bug!!!  makes no sense at all really.
     GotoState('Attacking');
   }
   else if (enemy!=none)   //needed to add this.
-   GotoState('Attacking');
+    //- GotoState('Attacking'); // B227: Replaced 'Attacking' with 'StakeOut' because of possible state change loop Hunting -> Attacking -> Hunting -> ...
+    GotoState('StakeOut');
   else if (Orders == 'Patroling')
     GotoState('Patroling');
   else if (Orders == 'Guarding')
@@ -905,6 +923,16 @@ function bool ChooseTeamAttackFor(ScriptedPawn TeamMember)
   return true;
 }
 function PlayDodge(bool bDuckLeft);
+
+function Killed(Pawn Killer, Pawn Other, name DamageType)
+{
+	if (Enemy == Other)
+	{
+		bFire = 0;
+		bAltFire = 0;
+	}
+	super.Killed(Killer, Other, DamageType);
+}
 
 function B227_SetWeaponPosition()
 {

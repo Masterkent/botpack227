@@ -1141,7 +1141,7 @@ simulated function DrawMOTD(Canvas Canvas)
 //Check the last trace.
 simulated function bool TraceIdentify(canvas Canvas)
 {
-  if ( Pawn(Hit)!=none && ((Pawn(Hit).bIsPlayer) ||(Hit.isa('follower')&&Follower(Hit).IsFriend())))
+  if ( Pawn(Hit)!=none && ((Pawn(Hit).bIsPlayer) ||(Follower(Hit) != none && Follower(Hit).IsFriend())))
   {
     IdentifyTarget = Pawn(Hit);
     IdentifyFadeTime = 3.0;
@@ -1221,7 +1221,7 @@ simulated function DrawIdentifyInfo(canvas Canvas, float PosX, float PosY)
 
   if (identifytarget.playerreplicationinfo==none){ //orders :)
 
-    if (!IdentifyTarget.IsA('Follower')||Follower(IdentifyTarget).bcoward)
+    if (Follower(IdentifyTarget) == none || Follower(IdentifyTarget).bcoward)
        return;
     IF (Follower(IdentifyTarget).PaPRI==none)
       Following="Nobody";
@@ -1448,7 +1448,7 @@ simulated function DrawCrossHair( canvas Canvas, int StartX, int StartY )
     Canvas.DrawColor = GoldColor;
   else if (!Hit.bIsPawn)
     Canvas.DrawColor = WhiteColor;
-  else if (Hit.Isa('playerpawn')||(Hit.IsA('Follower')&&Follower(Hit).IsFriend()))  //combatent allies
+  else if (Hit.Isa('playerpawn') || (Follower(Hit) != none && Follower(Hit).IsFriend()))  //combatent allies
     Canvas.DrawColor = CyanColor;
   else if (Hit.IsA('Nali')||Hit.IsA('Cow')||Hit.IsA('Bird1')||Hit.IsA('NaliRabbit'))  //neutrals
     Canvas.DrawColor = GreenColor;

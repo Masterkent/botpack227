@@ -245,7 +245,7 @@ if (other.isa('scriptedpawn')){
       scriptedpawn(other).bGreenBlood=true; //for MClane's green skaarj.  Will affect all translucent creatures however!
     }
   }
-  if (!Other.Isa('follower')){ //projectile speed thing
+  if (Follower(Other) == none){ //projectile speed thing
     Dif=FClamp(pawn(other).Skill+level.game.Difficulty, 0, 3);
     if (Dif>1.0)
      scriptedpawn(other).projectilespeed*=0.9+0.1*Dif;
@@ -309,7 +309,7 @@ else if (Other.IsA('CreatureChunks')&&other.Instigator!=none&&Other.Instigator.S
   MinipulateSkin(Other,Other.Instigator);   //go greeb
 }
 else if (Other.IsA('olCreatureCarcass')&&Other.Instigator!=none){
-  if (Other.Instigator.IsA('Follower'))
+  if (Follower(Other.Instigator) != none)
     Carcass(Other).Rats=byte(Follower(Other.Instigator).IsFriend());
   else if (Other.Instigator.IsA('Nali')||Other.Instigator.IsA('cow'))
     Carcass(Other).Rats=2;

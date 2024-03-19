@@ -147,7 +147,7 @@ if (!storedfollowers&&Linfo.FollowersCanLeave){
       log ("WARNING: OUT OF FOLLOWER ARRAY SPACE",'ONP');
       break;
     }
-    if (P.IsA('Follower')&&Follower(p).DoTravel(tvplayer(aPlayer),i)){
+    if (Follower(P) != none && Follower(p).DoTravel(tvplayer(aPlayer),i)){
       if (p.class==class'followingmercenaryelite')  //elite flag.
         tvPlayer(aPlayer).Friendlies[i]+=1;
       if (p.class==class'nalitrooper') //nali flags
@@ -255,7 +255,7 @@ for (i=0;i<8;i++){
   }
   pa=spawn(paCL,,'traveled',pstart.location,pstart.rotation);
   if (pa!=none){
-    if (pa.IsA('weaponholder')){ //weapon holder altering
+    if (WeaponHolder(pa) != none){ //weapon holder altering
       p.friendlies[i]/=10;
       switch(p.friendlies[i]%10){
         case 0:
@@ -292,7 +292,7 @@ for (i=0;i<8;i++){
     }
 
     pa.health=p.friendlies[i]/10; //health :P
-    if (pa.IsA('scriptedhuman'))
+    if (ScriptedHuman(pa) != none)
       scriptedhuman(pa).ParseSkinInfo(p.friendlynames[i]);
     else
       pa.menuname=p.friendlynames[i];  //more options
@@ -482,16 +482,16 @@ function ScoreKill(pawn Killer, pawn Other)    //Use singleplayer scoring system
     Other.PlayerReplicationInfo.Score-=170; //yuo suck!
     return;
   }
-  if ((Killer==none||Killer==Other)&&(Other.Enemy==none||(!Other.Enemy.bIsPlayer&&!Other.Enemy.IsA('follower'))))
+  if ((Killer==none || Killer==Other) && (Other.Enemy==none || (!Other.Enemy.bIsPlayer && Follower(Other.Enemy) == none)))
     return; //ignore (mapper forced kill/other enemy kill/whatever.
   if (Killer==none){
     Killer=Other.Enemy; //assume enemy killed other somehow (knocking into lava/whatever)
     bSuicide=true;
   }
-  if (Other.IsA('follower')&&Follower(Other).IsFriend()){
+  if (Follower(Other) != none && Follower(Other).IsFriend()){
     if (Killer.bisplayer) //stupid player killed him
       Killer.PlayerReplicationInfo.Score-=90;
-    else if (Follower(Other).PaPRI!=none&&(!Killer.IsA('Follower')||!Follower(Killer).IsFriend())){ //other enemy killed him: player failed to save
+    else if (Follower(Other).PaPRI != none && (Follower(Killer) == none || !Follower(Killer).IsFriend())){ //other enemy killed him: player failed to save
       if (bSuicide)
         CoOpPoints(-10); //not much of a lost.
       else
@@ -499,7 +499,7 @@ function ScoreKill(pawn Killer, pawn Other)    //Use singleplayer scoring system
     }
     return;       //no points lost if killed in friendly fire by other followers.
   }
-  if (Killer.IsA('follower')&&Follower(Killer).IsFriend()){
+  if (Follower(Killer) != none && Follower(Killer).IsFriend()){
     if (Follower(Killer).paPRI==none) //no one to grant pts to.
       return;
     if (Other.Isa('scriptedpawn')&&ScriptedPawn(Other).bIsBoss)
@@ -531,18 +531,18 @@ function ScoreDamage(int Damage, Pawn Victim, Pawn Damager){
     Damager.PlayerReplicationInfo.Score-=1.5*Damage;
     return;
   }
-  if (Victim==none||((Damager==none||Damager==Victim)&&(Victim.Enemy==none||(!Victim.Enemy.bIsPlayer&&!Victim.Enemy.IsA('follower')))))
+  if (Victim==none || ((Damager==none || Damager==Victim) && (Victim.Enemy == none || (!Victim.Enemy.bIsPlayer && Follower(Victim.Enemy) == none))))
     return; //ignore (mapper forced kill/other enemy kill/whatever.
   if (Damager==none){
     Damager=Victim.Enemy; //assume enemy killed other somehow :p
     bSuicide=true;
   }
   if (Victim.bIsPlayer){
-    if (!Damager.IsA('follower')||!Follower(Damager).IsFriend()) //followers suck and like to hit player
+    if (Follower(Damager) == none || !Follower(Damager).IsFriend()) //followers suck and like to hit player
        Victim.PlayerReplicationInfo.Score-=0.25*min(Damage,600);
     return;
   }
-  if (Victim.IsA('Follower')&&Follower(Victim).IsFriend()){
+  if (Follower(Victim) != none && Follower(Victim).IsFriend()){
     if (Damager.bIsPlayer)   //friendly fire by player
        Damager.PlayerReplicationInfo.Score-=0.25*damage;
     return;   //other-wise don't care
@@ -559,7 +559,7 @@ function ScoreDamage(int Damage, Pawn Victim, Pawn Damager){
 function int ReduceDamage(int Damage, name DamageType, pawn injured, pawn instigatedBy)
 {
   if (injured!=none && InstigatedBy!=none){
-    if (injured.bIsPlayer && InstigatedBy.IsA('follower') && Follower(InstigatedBy).IsFriend())
+    if (injured.bIsPlayer && Follower(InstigatedBy) != none && Follower(InstigatedBy).IsFriend())
        Damage*=fmin(difficulty*difficulty/9.0,1.0);
    }
    return Super.ReduceDamage(Damage,DamageType,injured,instigatedby);

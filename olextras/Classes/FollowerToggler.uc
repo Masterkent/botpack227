@@ -18,7 +18,7 @@ function Trigger( actor Other, pawn EventInstigator )
 {
   local pawn p;
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
-    if (P.Tag==FollowerTag&&P.IsA('follower')){
+    if (P.Tag==FollowerTag && Follower(P) != none){
       if (Become==Follower){
         Follower(P).OnlyAttackWhenControlled=false;
         Follower(P).bCoward=false;

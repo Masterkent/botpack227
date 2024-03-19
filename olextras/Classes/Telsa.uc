@@ -57,7 +57,7 @@ function bool BoltIsAttacking (actor p){
   return false;
 }
 function bool CheckScripted(pawn p){
-  if (p.IsA('follower')&&follower(p).IsFriend())
+  if (Follower(p) != none && Follower(p).IsFriend())
      return AttackAllies;
   return AttackEnemies;
 }

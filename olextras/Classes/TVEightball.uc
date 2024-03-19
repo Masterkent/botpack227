@@ -16,11 +16,11 @@ function Actor CheckTarget()
   if (tvplayer(Owner) != none && tvplayer(Owner).playermod==1) //no locking in cutscenes.
     return None;
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
-    if (p.bisplayer||p.Isa('nali')||p.Isa('cow')||p.Isa('bird1')||p.IsA('NaliRabbit')||(p.IsA('follower')&&Follower(p).IsFriend()))
+    if (p.bisplayer||p.Isa('nali')||p.Isa('cow')||p.Isa('bird1')||p.IsA('NaliRabbit')||(Follower(p) != none && Follower(p).IsFriend()))
       p.bProjTarget=!p.bProjTarget;
   A=Super.CheckTarget();
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
-    if (p.bisplayer||p.Isa('nali')||p.Isa('cow')||p.Isa('bird1')||p.IsA('NaliRabbit')||(p.IsA('follower')&&Follower(p).IsFriend()))
+    if (p.bisplayer||p.Isa('nali')||p.Isa('cow')||p.Isa('bird1')||p.IsA('NaliRabbit')||(Follower(p) != none && Follower(p).IsFriend()))
       p.bProjTarget=!p.bProjTarget;
   return A;
 }

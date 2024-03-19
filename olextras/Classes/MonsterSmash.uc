@@ -323,7 +323,7 @@ function ScoreKill(pawn Killer, pawn Other)    //does not affect PRI stuff.
   local int OldScore;
   OldScore=theplayer.Scoreholder.Score;
   Super.ScoreKill(Killer,Other);
-  if (!Other.Isa('scriptedPawn')||(Other.IsA('follower')&&Follower(Other).IsFriend()))
+  if (!Other.Isa('scriptedPawn')||(Follower(Other) != none && Follower(Other).IsFriend()))
     return;
   if (Other.IsA('GasBag')&&GasBag(Other).ParentBag!=none) //giant hack
     return;

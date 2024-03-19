@@ -128,7 +128,7 @@ Function bool AddToFollowerList(Follower aFollower){
   if (i==8)     //no space
     return false;
   Follower[i]=aFollower;
-  if (aFollower.Isa('scriptedhuman'))
+  if (ScriptedHuman(aFollower) != none)
     j=5;
   else{
     switch (aFollower.class){
@@ -1498,11 +1498,11 @@ exec function FollowerDebug(){ //Universal debugger
 local pawn temp;
   if (level.netmode==nm_client)
     return;
-if (UnrealHUD(myhud).IdentifyFadeTime != 0.0&&UnrealHUD(myhud).identifytarget.Isa('Follower'))
+if (UnrealHUD(myhud).IdentifyFadeTime != 0.0 && Follower(UnrealHUD(myhud).identifytarget) != none)
  temp=UnrealHUD(myhud).identifytarget;
 else{
   for (temp=level.pawnlist;temp!=none;temp=temp.nextpawn)
-    if (temp.isa('Follower'))
+    if (Follower(temp) != none)
       break;
 }
 clientmessage(temp.menuname@"("$temp.class$") Animation :"$temp.animsequence$" is at frame "$temp.animframe$" Playing at "$temp.AnimRate$" .  Done? "$temp.bAnimFinished);
@@ -1863,7 +1863,7 @@ local pawn p;
       speech(2,1,0);
       break;
     }
-    else if (p.isa('Follower')&&Follower(p).pa!=none){
+    else if (Follower(p) != none && Follower(p).pa != none){
       speech(2,3,0);
       break;
     }
@@ -1881,9 +1881,11 @@ exec function Speech( int Type, int Index, int Callsign )
   local float rand;
   if (type==2&&(index==1||index==3)){
     for (p=level.pawnlist;p!=none;p=p.nextpawn)
-      if (p.isa('Follower')&&Follower(p).pa!=none){
+      if (Follower(p) != none && Follower(p).pa != none){
         Follower(p).bShouldWait=(index==1);
         //if (index==1&&!p.isinstate('waiting'))
+        if (Index == 3 && P.IsInState('StakeOut'))
+          P.Enemy = none;
         if(P.Enemy!=none)
           Continue;
         else if (P.IsInState('TakeHit')||P.IsInState('FallingState')){ //don't change state!

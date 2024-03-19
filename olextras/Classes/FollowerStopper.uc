@@ -21,7 +21,7 @@ function Trigger( actor Other, pawn EventInstigator )
   local pawn p;
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
     if (FollowerTag=='ALL'||p.tag==FollowerTag)
-      if (p.isa('Follower')){
+      if (Follower(p) != none){
         Follower(p).Setpa(none);
         Follower(P).DoRoam();
       }

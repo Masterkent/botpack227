@@ -14,6 +14,8 @@ var float ticker;
 var(Sounds) sound FootStep1;
 var () bool bImmuneToHeadShot; //if true, headshots do no damage
 
+var bool B227_bEvalAttitude; // Prevents infinite recursion
+
 //headshot immunity:
 function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,
             Vector momentum, name damageType)
@@ -86,11 +88,24 @@ simulated function PreBeginPlay(){
 
 function eAttitude AttitudeToCreature(Pawn Other)
 {
-  if (other.IsA('WeaponHolder'))   //prevent inf recursion
-    return ATTITUDE_FRIENDLY;
-  //HATE creatures who collaborate with players.
-  if ((other.isa('skaarj'))&&(other.enemy!=self||(other.IsA('scriptedpawn')&&ScriptedPawn(other).AttitudeTo(self)>=Attitude_Ignore)))
-    return ATTITUDE_FRIENDLY; //always nice to skaarj & other evil ones.
+  local EAttitude OtherAttitude;
+
+  // nice to skaarj & other evil ones.
+  if (other.IsA('WeaponHolder') || other.isa('skaarj'))
+  {
+    if (Other.Enemy == none || Other.Enemy.Class != Class)
+      return ATTITUDE_Friendly;
+    if (ScriptedPawn(other) != none && !B227_bEvalAttitude)
+    {
+      B227_bEvalAttitude = true;
+      OtherAttitude = ScriptedPawn(other).AttitudeTo(self);
+      B227_bEvalAttitude = false;
+      if (OtherAttitude > ATTITUDE_Ignore)
+        return ATTITUDE_Friendly;
+      if (OtherAttitude == ATTITUDE_Hate || OtherAttitude == ATTITUDE_Frenzy || OtherAttitude == ATTITUDE_Threaten)
+        return ATTITUDE_Hate;
+    }
+  }
   if (other.attitudetoplayer<=ATTITUDE_Ignore&&other.enemy!=self) //MY ENEMIES ENEMY, SO "TOLERATE" HIM.
     return ATTITUDE_IGNORE;
   return ATTITUDE_HATE; //HE HELPS PLAYER. K33L HIM!
@@ -474,61 +489,79 @@ auto state Startup
   function BeginState()
   {
     Super.BeginState();
-    bIsPlayer = true; // temporarily, till have weapon
+    //-bIsPlayer = true; // temporarily, till have weapon
   }
 
   function SetHome()
   {
-    local int i;
-    local bool bhasweapon;
-		Super.SetHome();
-		//set up 5 possible weapons
-		for (i=0;i<5;i++)
-		 if (WeaponType[i]!=none){
-			switch(WeaponType[i]){
-  		  case class'PulseGun':
-      		WeaponType[i] = class'SevenPulsegun';
-      		break;
-    		case class'ShockRifle':
-      		WeaponType[i] = class'SevenShockRifle';
-      		break;
-    		case class'Minigun2':
-      		WeaponType[i] = class'SevenChainGun';
-      		break;
-    		case class'Enforcer': //or not :p
-      		WeaponType[i] = class'SevenMachineMag';
-      		break;
-    		case class'SniperRifle':
-      		WeaponType[i] = class'SevenSniperRifle';
-      		break;
-    		case class'UT_FlakCannon':
-      		WeaponType[i] = class'SBFlechetteCannon';
-      		break;
-    		case class'UT_Eightball':
-      		WeaponType[i] = class'TVeightball';
-      		break;
-    		case class'ripper':
-      		WeaponType[i] = class'SBBloodRipper';
-      		break;
-  		}
-    	if ( WeaponType[i] != None )
-    	{
-      	MyWeapon = Spawn(WeaponType[i]);
-      	if ( MyWeapon != None )
-        	MyWeapon.ReSpawnTime = 0.0;
-    	}
-    	if ( MyWeapon != None ){
-    		bhasweapon=true;
-      	MyWeapon.Touch(self);     //gives weapon
-      }
+	local int i;
+	local bool bhasweapon;
+	local Weapon ReplacingWeapon;
+
+	Super.SetHome();
+	//set up 5 possible weapons
+	for (i=0;i<5;i++)
+		if (WeaponType[i]!=none)
+		{
+			switch(WeaponType[i])
+			{
+				case class'PulseGun':
+					WeaponType[i] = class'SevenPulsegun';
+					break;
+				case class'ShockRifle':
+					WeaponType[i] = class'SevenShockRifle';
+					break;
+				case class'Minigun2':
+					WeaponType[i] = class'SevenChainGun';
+					break;
+				case class'Enforcer': //or not :p
+					WeaponType[i] = class'SevenMachineMag';
+					break;
+				case class'SniperRifle':
+					WeaponType[i] = class'SevenSniperRifle';
+					break;
+				case class'UT_FlakCannon':
+					WeaponType[i] = class'SBFlechetteCannon';
+					break;
+				case class'UT_Eightball':
+					WeaponType[i] = class'TVeightball';
+					break;
+				case class'ripper':
+					WeaponType[i] = class'SBBloodRipper';
+					break;
+			}
+			if ( WeaponType[i] != None )
+			{
+				MyWeapon = Spawn(WeaponType[i]);
+				if (MyWeapon == none)
+					foreach AllActors(class'Weapon', ReplacingWeapon)
+						if (ReplacingWeapon.Instigator == self && ReplacingWeapon.IsInState('Pickup'))
+						{
+							MyWeapon = ReplacingWeapon;
+							break;
+						}
+			}
+			if ( MyWeapon != None )
+			{
+				bhasweapon=true;
+				MyWeapon.RespawnTime = 0;
+				MyWeapon.LifeSpan = MyWeapon.default.LifeSpan; // prevents destruction when spawning in destructive zones
+				MyWeapon.Instigator = self;
+				MyWeapon.BecomeItem();
+				AddInventory(MyWeapon);
+				MyWeapon.BringUp();
+				MyWeapon.GiveAmmo(self);
+				MyWeapon.WeaponSet(self);
+			}
 		}
-		bIsPlayer=false;
-    if (!bhasWeapon){
-  	  CombatStyle=-1.0;
-    	Aggressiveness=-10.000000;
-    }
-    else
-    	SwitchToBestWeapon(); //select best
+	bIsPlayer=false;
+	if (!bhasWeapon)
+	{
+		CombatStyle=-1.0;
+		Aggressiveness=-10.000000;
+	}
+	else
+		SwitchToBestWeapon(); //select best
   }
 }
 //swimming :P
@@ -748,8 +781,9 @@ function ChooseAttackMode()
     local eAttitude AttitudeToEnemy;
     local pawn changeEn;
 
-    if ((Enemy == None) || (Enemy.Health <= 0))
+    if (Enemy == none || Enemy.bDeleteMe || Enemy.Health <= 0 || Enemy == self)
     {
+      Enemy = none;
       if (Orders == 'Attacking')
         Orders = '';
       WhatToDoNext('','');
@@ -1022,6 +1056,17 @@ function bool ChooseTeamAttackFor(ScriptedPawn TeamMember)
   return true;
 }
 function PlayDodge(bool bDuckLeft);
+
+
+function Killed(Pawn Killer, Pawn Other, name DamageType)
+{
+	if (Enemy == Other)
+	{
+		bFire = 0;
+		bAltFire = 0;
+	}
+	super.Killed(Killer, Other, DamageType);
+}
 
 function B227_SetWeaponPosition()
 {

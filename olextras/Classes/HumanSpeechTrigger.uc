@@ -19,7 +19,7 @@ function Trigger( actor Other, pawn EventInstigator )
   local PlayerPawn q;
   local ScriptedHumanMessage SHM;
   for (p=level.pawnlist;p!=none;p=p.nextpawn)
-    if (p.tag==HumanTag&&p.Isa('scriptedhuman')){
+    if (p.tag==HumanTag && ScriptedHuman(p) != none){
        scriptedhuman(p).Scream(Speech,SLOT_TALK,SpeechVolume,true,SpeechRadius);
        p.speechtime=FaceLastingTime;
        scriptedhuman(p).SpeechTimeCur=FaceLastingTime;
