@@ -207,13 +207,18 @@ simulated function FixLightEffects()
 
 function Server_FixCurrentMap_NP02DavidM()
 {
-	local ScriptedPawn Pawn;
+	local ScriptedPawn ScriptedPawn;
+	local Pawn P;
 	local Trigger Trigger;
 	local ONPPlayerMoveTrigger MoveTrigger;
 
-	Pawn = ScriptedPawn(LoadLevelActor("SkaarjScout0"));
-	Pawn.AttitudeToPlayer = ATTITUDE_Ignore;
-	Pawn.bHateWhenTriggered = true;
+	ScriptedPawn = ScriptedPawn(LoadLevelActor("SkaarjScout0"));
+	ScriptedPawn.AttitudeToPlayer = ATTITUDE_Ignore;
+	ScriptedPawn.bHateWhenTriggered = true;
+
+	P = LoadLevelPawn("Mercenary4");
+	if (P != none)
+		P.Event = 'mercisnowdead';
 
 	Trigger = LoadLevelTrigger("Trigger3");
 	MoveTrigger = class'ONPPlayerMoveTrigger'.static.StaticReplaceTrigger(Trigger);
@@ -277,7 +282,7 @@ function Server_FixCurrentMap_NP13DrPest()
 
 	LoadLevelTrigger("Trigger4").TriggerType = TT_PlayerProximity;
 
-	P = Pawn(LoadLevelActor("SkaarjTrooper0", true));
+	P = LoadLevelPawn("SkaarjTrooper0");
 	if (P != none)
 	{
 		P.Health = P.default.Health;
@@ -889,24 +894,29 @@ simulated function Actor LoadLevelActor(string ActorName, optional bool bMayFail
 	return Actor(DynamicLoadObject(Outer.Name $ "." $ ActorName, class'Actor', bMayFail));
 }
 
-simulated function Mover LoadLevelMover(string MoverName)
+simulated function Mover LoadLevelMover(string ActorName)
 {
-	return Mover(DynamicLoadObject(Outer.Name $ "." $ MoverName, class'Mover'));
+	return Mover(DynamicLoadObject(Outer.Name $ "." $ ActorName, class'Mover'));
 }
 
-function Trigger LoadLevelTrigger(string TriggerName)
+function Trigger LoadLevelTrigger(string ActorName)
 {
-	return Trigger(DynamicLoadObject(Outer.Name $ "." $ TriggerName, class'Trigger'));
+	return Trigger(DynamicLoadObject(Outer.Name $ "." $ ActorName, class'Trigger'));
 }
 
-function Dispatcher LoadLevelDispatcher(string DispatcherName)
+function Dispatcher LoadLevelDispatcher(string ActorName)
 {
-	return Dispatcher(LoadLevelActor(DispatcherName));
+	return Dispatcher(LoadLevelActor(ActorName));
 }
 
-function MusicEvent LoadLevelMusicEvent(string MusicEventName)
+function MusicEvent LoadLevelMusicEvent(string ActorName)
 {
-	return MusicEvent(LoadLevelActor(MusicEventName));
+	return MusicEvent(LoadLevelActor(ActorName));
+}
+
+function Pawn LoadLevelPawn(string ActorName)
+{
+	return Pawn(LoadLevelActor(ActorName, true));
 }
 
 function MakeMoverTriggerableOnceOnly(string MoverName, optional bool bProtect)

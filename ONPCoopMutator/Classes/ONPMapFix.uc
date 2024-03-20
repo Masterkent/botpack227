@@ -312,19 +312,23 @@ function Server_FixCurrentMap_NP02DavidM()
 	local Pawn P;
 	local Trigger Trigger;
 
-	P = Pawn(LoadLevelActor("SkaarjWarrior0", true));
+	P = LoadLevelPawn("SkaarjWarrior0");
 	if (P != none)
 	{
 		P.GroundSpeed = P.default.GroundSpeed;
 		P.JumpZ = P.default.JumpZ;
 	}
 
-	P = Pawn(LoadLevelActor("SkaarjScout1", true));
+	P = LoadLevelPawn("SkaarjScout1");
 	if (P != none)
 	{
 		P.GroundSpeed = P.default.GroundSpeed;
 		P.JumpZ = P.default.JumpZ;
 	}
+
+	P = LoadLevelPawn("Mercenary4");
+	if (P != none)
+		P.Event = 'mercisnowdead';
 
 	LoadLevelTrigger("Trigger22").Event = '';
 
@@ -485,7 +489,7 @@ function Server_FixCurrentMap_NP13DrPest()
 
 	LoadLevelTrigger("Trigger4").TriggerType = TT_PlayerProximity;
 
-	P = Pawn(LoadLevelActor("SkaarjTrooper0", true));
+	P = LoadLevelPawn("SkaarjTrooper0");
 	if (P != none)
 	{
 		P.Health = P.default.Health;
@@ -517,7 +521,7 @@ function Server_FixCurrentMap_NP14MClaneDrPest()
 
 	LoadLevelActor("PlayerStart0").Tag = 'sp1';
 
-	P = Pawn(LoadLevelActor("NaliTrooper1", true));
+	P = LoadLevelPawn("NaliTrooper1");
 	if (P != none)
 		Spawn(class'ONPPhantomPawnAdjustment').ControlledPawn = P;
 }
@@ -951,7 +955,7 @@ function Server_FixCurrentMap_ONP_map14SoothsayerX()
 
 	LoadLevelActor("AlarmPoint18").Event = 'InitTeleporterEnergyUp';
 	NaliDestructionEvent = Spawn(class'ONPPawnDestructionEvent');
-	NaliDestructionEvent.AssignPawn(Pawn(LoadLevelActor("NaliPriest0")));
+	NaliDestructionEvent.AssignPawn(LoadLevelPawn("NaliPriest0"));
 	NaliDestructionEvent.Event = 'InitTeleporterEnergyUp';
 
 	EventToEvent('InitTeleporterEnergyUp', 'energyup', true);
@@ -1007,7 +1011,7 @@ function Server_FixCurrentMap_ONP_map18FriendX()
 	LoadLevelTrigger("Trigger15").bTriggerOnceOnly = true;
 
 	NaliDestructionEvent = Spawn(class'ONPPawnDestructionEvent');
-	NaliDestructionEvent.AssignPawn(Pawn(LoadLevelActor("NaliPriest0")));
+	NaliDestructionEvent.AssignPawn(LoadLevelPawn("NaliPriest0"));
 	NaliDestructionEvent.Event = 'wooddoorup';
 
 	SetNamedTriggerPawnClassProximity("Trigger11");
@@ -1587,24 +1591,29 @@ simulated function Actor LoadLevelActor(string ActorName, optional bool bMayFail
 	return Actor(DynamicLoadObject(outer.name $ "." $ ActorName, class'Actor', bMayFail));
 }
 
-simulated function Mover LoadLevelMover(string MoverName)
+simulated function Mover LoadLevelMover(string ActorName)
 {
-	return Mover(DynamicLoadObject(outer.name $ "." $ MoverName, class'Mover'));
+	return Mover(DynamicLoadObject(outer.name $ "." $ ActorName, class'Mover'));
 }
 
-function Trigger LoadLevelTrigger(string TriggerName)
+function Trigger LoadLevelTrigger(string ActorName)
 {
-	return Trigger(DynamicLoadObject(outer.name $ "." $ TriggerName, class'Trigger'));
+	return Trigger(DynamicLoadObject(outer.name $ "." $ ActorName, class'Trigger'));
 }
 
-function Dispatcher LoadLevelDispatcher(string DispatcherName)
+function Dispatcher LoadLevelDispatcher(string ActorName)
 {
-	return Dispatcher(LoadLevelActor(DispatcherName));
+	return Dispatcher(LoadLevelActor(ActorName));
 }
 
-function MusicEvent LoadLevelMusicEvent(string MusicEventName)
+function MusicEvent LoadLevelMusicEvent(string ActorName)
 {
-	return MusicEvent(LoadLevelActor(MusicEventName));
+	return MusicEvent(LoadLevelActor(ActorName));
+}
+
+function Pawn LoadLevelPawn(string ActorName)
+{
+	return Pawn(LoadLevelActor(ActorName, true));
 }
 
 function MakeMoverTriggerableOnceOnly(string MoverName, optional bool bProtect)

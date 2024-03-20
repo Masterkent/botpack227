@@ -151,12 +151,12 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.28";
+	return "ONPSPFix v1.29";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.28 [2024-02-04]"
-	Version="1.28"
+	VersionInfo="ONPSPFix v1.29 [2024-03-20]"
+	Version="1.29"
 	bPreventFallingOutOfWorld=True
 }
