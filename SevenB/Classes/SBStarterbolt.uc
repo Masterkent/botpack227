@@ -29,7 +29,7 @@ simulated function PostBeginPlay()
 
   if ( instigator == None )
     return;
-  if ( Instigator.IsA('Bot') && Bot(Instigator).bNovice )
+  if ( Bot(Instigator) != none && Bot(Instigator).bNovice )
     aimerror = 2200 + (3 - instigator.skill) * 300;
   else
     aimerror = 1000 + (3 - instigator.skill) * 400;
@@ -110,7 +110,7 @@ simulated function B227_OriginalTick(float DeltaTime)
             StartError -= DeltaTime;
           else if (MyBot!=none && MyBot.bNovice && (Level.TimeSeconds - MyBot.LastPainTime < 0.2) )
             StartError = MyBot.LastPainTime;
-          else if (instigator.Isa('ScriptedPawn') && instigator.skill<2 && (Level.TimeSeconds - ScriptedPawn(instigator).LastPainTime < 0.2) )
+          else if (ScriptedPawn(instigator) != none && instigator.skill<2 && (Level.TimeSeconds - ScriptedPawn(instigator).LastPainTime < 0.2) )
             StartError = ScriptedPawn(instigator).LastPainTime;
           else
             StartError = 0;

@@ -96,6 +96,8 @@ function PreBeginPlay(){
     ForceNoHUD=true;
   if (bCutScene)
     ForceNoHUD=true;
+  if (string(Outer.Name) ~= "XidiaES-Map1-SelfDestruct")
+    bIsMissionPack = true;
   Super.PreBeginPlay();
 }
 

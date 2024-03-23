@@ -65,14 +65,14 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
     else
       Other.PlaySound(Sound 'ChunkHit',, 4.0,,100);
 
-    if ( Other.IsA('Bot') && (FRand() < 0.2) )
+    if ( Bot(Other) != none && (FRand() < 0.2) )
       Pawn(Other).WarnTarget(Pawn(Owner), 500, X);
     rndDam = 45 + Rand(21);
     if ( FRand() < 0.2 )
       X *= 2.5;
     if ( Other.bIsPawn && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight)
-      && (instigator.IsA('PlayerPawn') || (instigator.IsA('Bot') && !Bot(Instigator).bNovice) ||
-        (Other.IsA('ScriptedPawn') && (ScriptedPawn(Other).bIsBoss || level.game.difficulty>=3))) ){
+      && (instigator.IsA('PlayerPawn') || (Bot(instigator) != none && !Bot(Instigator).bNovice) ||
+        (ScriptedPawn(Other) != none && (ScriptedPawn(Other).bIsBoss || level.game.difficulty>=3))) ){
         MyDamageType='Decapitated';
         rndDam*=2;
     }

@@ -32,7 +32,7 @@ function float RateSelf( out int bUseAltMode )
     return -2;
 
   P = Pawn(Owner);
-  if ( (P.Enemy == None) || (Owner.IsA('Bot') && Bot(Owner).bQuickFire) )
+  if ( (P.Enemy == None) || (Bot(Owner) != none && Bot(Owner).bQuickFire) )
   {
     bUseAltMode = 0;
     return AIRating;

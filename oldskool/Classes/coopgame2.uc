@@ -266,7 +266,7 @@ function ScoreKill(pawn Killer, pawn Other)    //make use of sp rules....
     else if (Other.IsA('nalirabbit'))  points= -4;
     else if (Other.IsA('bird1'))  points= -7;
     else if (Other.IsA('cow')) points= -10;
-    if (Other.IsA('ScriptedPawn'))
+    if (ScriptedPawn(Other) != none)
       if (ScriptedPawn(Other).bIsBoss) points *=3;
     killer.killCount++;
     if ( killer.PlayerReplicationInfo != None )

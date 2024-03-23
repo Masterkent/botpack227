@@ -138,7 +138,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   {
     if ( Other.IsA('Pawn') && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight)
       && (instigator.IsA('PlayerPawn') || (instigator.skill > 1))
-      && (!Other.IsA('ScriptedPawn') || !ScriptedPawn(Other).bIsBoss) )
+      && (ScriptedPawn(Other) == none || !ScriptedPawn(Other).bIsBoss) )
       Other.TakeDamage(100, Pawn(Owner), HitLocation, 35000 * X, 'decapitated');
     else
       Other.TakeDamage(45,  Pawn(Owner), HitLocation, 30000.0*X, 'shot');
@@ -173,7 +173,7 @@ state Idle
         PlayerPawn(Owner).ShakeView(ShakeTime, ShakeMag, ShakeVert);
       bPointing=True;
       //taken from sniper rifle: helps bot code :D
-      if ( Owner.IsA('Bot') )
+      if ( Bot(Owner) != none )
       {
         // simulate bot using zoom
         if ( Bot(Owner).bSniping && (FRand() < 0.65) )

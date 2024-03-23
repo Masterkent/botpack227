@@ -14,7 +14,7 @@ var float ticker;
 var(Sounds) sound FootStep1;
 var () bool bImmuneToHeadShot; //if true, headshots do no damage
 
-var bool B227_bEvalAttitude; // Prevents infinite recursion
+var transient bool B227_bEvalAttitude; // Prevents infinite recursion
 
 //headshot immunity:
 function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation,

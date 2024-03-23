@@ -320,7 +320,7 @@ function ScoreKill(pawn Killer, pawn Other)    //does not affect PRI stuff.
     return;       //no points lost if killed in friendly fire by other followers.
   }
   ScoreHolder.killtotal++; //normal player killing enemies.
-  if (Other.Isa('scriptedpawn')&&ScriptedPawn(Other).bIsBoss)
+  if (ScriptedPawn(Other) != none && ScriptedPawn(Other).bIsBoss)
     ScoreHolder.AddPoints(150);
   else if (bSuicide) //knocked off ledge...
     ScoreHolder.AddPoints(50);

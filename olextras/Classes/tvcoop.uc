@@ -502,7 +502,7 @@ function ScoreKill(pawn Killer, pawn Other)    //Use singleplayer scoring system
   if (Follower(Killer) != none && Follower(Killer).IsFriend()){
     if (Follower(Killer).paPRI==none) //no one to grant pts to.
       return;
-    if (Other.Isa('scriptedpawn')&&ScriptedPawn(Other).bIsBoss)
+    if (ScriptedPawn(Other) != none && ScriptedPawn(Other).bIsBoss)
       CoOpPoints(75);
     else if (bSuicide)
       CoOpPoints(25);
@@ -513,7 +513,7 @@ function ScoreKill(pawn Killer, pawn Other)    //Use singleplayer scoring system
   if (Killer.PlayerReplicationInfo==none)
     return;
   //now guarenteed to be a player.
-  if (Other.Isa('scriptedpawn')&&ScriptedPawn(Other).bIsBoss)
+  if (ScriptedPawn(Other) != none && ScriptedPawn(Other).bIsBoss)
     Killer.PlayerReplicationInfo.Score+=150;
   else if (bSuicide) //knocked off ledge...
     Killer.PlayerReplicationInfo.Score+=50;

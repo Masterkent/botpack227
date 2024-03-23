@@ -568,7 +568,7 @@ function ScoreKill(pawn Killer, pawn Other)    //does not affect PRI stuff.
   }
   if (Follower(Killer) != none && Follower(Killer).IsFriend()){
     ScoreHolder.KilledByFollowers++;
-    if (Other.Isa('scriptedpawn')&&ScriptedPawn(Other).bIsBoss)
+    if (ScriptedPawn(Other) != none && ScriptedPawn(Other).bIsBoss)
       ScoreHolder.AddPoints(75);
     else if (bSuicide)
       ScoreHolder.AddPoints(25);
@@ -577,7 +577,7 @@ function ScoreKill(pawn Killer, pawn Other)    //does not affect PRI stuff.
     return;
   }
   ScoreHolder.killtotal++; //normal player killing enemies.
-  if (Other.Isa('scriptedpawn')&&ScriptedPawn(Other).bIsBoss)
+  if (ScriptedPawn(Other) != none && ScriptedPawn(Other).bIsBoss)
     ScoreHolder.AddPoints(150);
   else if (bSuicide) //knocked off ledge...
     ScoreHolder.AddPoints(50);

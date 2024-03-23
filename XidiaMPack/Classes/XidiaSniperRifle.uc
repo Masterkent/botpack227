@@ -53,7 +53,7 @@ state Idle
       GotoState('NormalFire');
       bCanClientFire = true;
       bPointing=True;
-      if ( Owner.IsA('Bot') )
+      if ( Bot(Owner) != none )
       {
         // simulate bot using zoom
         if ( Bot(Owner).bSniping && (FRand() < 0.65) )

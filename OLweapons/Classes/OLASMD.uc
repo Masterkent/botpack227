@@ -54,7 +54,7 @@ function AltFire( float Value )
       PlayerPawn(Owner).ClientInstantFlash( -0.4, vect(0, 0, 800));
       PlayerPawn(Owner).ShakeView(ShakeTime, ShakeMag, ShakeVert);
     }
-    if ( Owner.IsA('Bot') )      //help those little bot guys with UT code :D
+    if ( Bot(Owner) != none )      //help those little bot guys with UT code :D
     {
       if ( Owner.IsInState('TacticalMove') && (Owner.Target == Pawn(Owner).Enemy)
        && (Owner.Physics == PHYS_Walking) && !Bot(Owner).bNovice

@@ -3,6 +3,6 @@ class B227_oldskool_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 oldskool v1.4 [2024-03-19]"
-	Version="1.4"
+	VersionInfo="B227 oldskool v1.5 [2024-03-23]"
+	Version="1.5"
 }

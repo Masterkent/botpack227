@@ -36,7 +36,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   {
     if ( !Other.IsA('Pawn') && !Other.IsA('Carcass') )
       spawn(class'SpriteSmokePuff',,,HitLocation+HitNormal*9);
-    if ( Other.IsA('ScriptedPawn') && (FRand() < 0.2) )
+    if ( ScriptedPawn(Other) != none && (FRand() < 0.2) )
       Pawn(Other).WarnTarget(Pawn(Owner), 500, X);
     rndDam = 8 + Rand(6);
     if ( FRand() < 0.2 )

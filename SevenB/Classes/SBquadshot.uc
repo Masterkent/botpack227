@@ -85,7 +85,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
       X *= 2;
      if ( Other.IsA('Pawn') && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight)
       && (instigator.IsA('PlayerPawn') || (instigator.skill > 2))
-      && (!Other.IsA('ScriptedPawn') || !ScriptedPawn(Other).bIsBoss) )
+      && (ScriptedPawn(Other) == none || !ScriptedPawn(Other).bIsBoss) )
       	Other.TakeDamage(15+rand(13), Pawn(Owner), HitLocation, 35000 * X, 'decapitated');  //approx 2x power headshot
     else
     Other.TakeDamage(8+rand(7), Pawn(Owner), HitLocation, 5000.0*X, mydamagetype);

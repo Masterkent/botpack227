@@ -173,7 +173,7 @@ state Idle
 			GotoState('NormalFire');
       bCanClientFire = true;
       bPointing=True;
-      if ( Owner.IsA('Bot') )
+      if ( Bot(Owner) != none )
       {
         // simulate bot using zoom
         if ( Bot(Owner).bSniping && (FRand() < 0.65) )
@@ -372,7 +372,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
     if ( Other.bIsPawn )
       Other.PlaySound(Sound 'ChunkHit',, 4.0,,100);
     if ( Other.bIsPawn && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight)
-      && (instigator.IsA('PlayerPawn') || (instigator.IsA('Bot') && !Bot(Instigator).bNovice)) )
+      && (instigator.IsA('PlayerPawn') || (Bot(instigator) != none && !Bot(Instigator).bNovice)) )
       Other.TakeDamage(132, Pawn(Owner), HitLocation, 35000 * X, AltDamageType);
     else
       Other.TakeDamage(66,  Pawn(Owner), HitLocation, 30000.0*X, MyDamageType);

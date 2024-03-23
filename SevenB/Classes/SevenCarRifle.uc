@@ -561,8 +561,8 @@ function ProcessTraceHit( Actor Other, Vector HitLocation, Vector HitNormal, Vec
 
     rndDam = Rand(6) + 6;   //average = 8.5
     if ( Other.bIsPawn && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight)
-      && (instigator.IsA('PlayerPawn') || (instigator.IsA('Bot') && !Bot(Instigator).bNovice)||
-        (Other.IsA('ScriptedPawn') && (ScriptedPawn(Other).bIsBoss || level.game.difficulty>=3))) ){
+      && (instigator.IsA('PlayerPawn') || (Bot(instigator) != none && !Bot(Instigator).bNovice)||
+        (ScriptedPawn(Other) != none && (ScriptedPawn(Other).bIsBoss || level.game.difficulty>=3))) ){
         MyDamageType='Decapitated';
         rndDam*=2.2;
     }

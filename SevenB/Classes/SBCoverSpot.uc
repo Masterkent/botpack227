@@ -10,7 +10,7 @@ var() bool bInitiallyActive;
 function Touch( actor Other )
 {
 	local vector X, Y, Z, DodgeDir;
-	if ( bInitiallyActive && Other.IsA('ScriptedPawn') && pawn(other).enemy!=none ){
+	if ( bInitiallyActive && ScriptedPawn(Other) != none && pawn(other).enemy!=none ){
 		GetAxes(other.Rotation,X,Y,Z);
 		DodgeDir = normal(location - other.location) cross Z;
 		if ( ((location - other.location) Dot Y) > 0 )

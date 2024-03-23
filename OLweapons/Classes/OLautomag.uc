@@ -293,7 +293,7 @@ function setHand(float Hand)
 
 function TraceFire( float Accuracy )
 {
-  if ( Owner.IsA('Bot') && !Bot(Owner).bNovice )
+  if ( Bot(Owner) != none && !Bot(Owner).bNovice )
     Accuracy = FMax(Accuracy, 0.45);
   if (slavemag!=none&&iFireAGun==1)
     slavemag.TraceFire(Accuracy);

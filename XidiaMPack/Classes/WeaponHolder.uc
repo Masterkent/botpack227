@@ -14,7 +14,7 @@ var weapon MyWeapon; //my weapon ;p
 var float ticker;
 var(Sounds) sound FootStep1;
 
-var bool B227_bEvalAttitude; // Prevents infinite recursion
+var transient bool B227_bEvalAttitude; // Prevents infinite recursion
 
 //no drop weapon hack
 function Died(pawn Killer, name damageType, vector HitLocation)

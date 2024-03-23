@@ -173,7 +173,7 @@ function Fire( float Value )
       GotoState('');
       GotoState('FireRockets', 'Begin');
     }
-    else if ( Instigator.IsA('Bot') )
+    else if ( Bot(Instigator) != none )
     {
       if ( LockedTarget != None )
       {
@@ -261,7 +261,7 @@ function Actor CheckTarget()
   }
   else if ( PawnOwner.Enemy == None )
     return None;
-  else if ( Owner.IsA('Bot') && Bot(Owner).bNovice )
+  else if ( Bot(Owner) != none && Bot(Owner).bNovice )
     return None;
   else if ( VSize(PawnOwner.Enemy.Location - PawnOwner.Location) < 2000 )
   {

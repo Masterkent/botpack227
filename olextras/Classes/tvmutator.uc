@@ -208,7 +208,7 @@ if (Level.NetMode!=nm_standalone&&(Other.Isa('PlayerMotionFreeze')||Other.IsA('V
 //-  pawn(other).Shadow = Spawn(class'TVpawnShadow',other,,other.location);
 if (Other.bIsPawn && Pawn(Other).DropWhenKilled != none)
   B227_AdjustInventoryClass(Pawn(Other).DropWhenKilled);
-if (other.isa('scriptedpawn')){
+if (ScriptedPawn(other) != none){
   //-if (other.style==STY_NORMAL&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('Slith')||other.isa('manta')))
   //-  other.style=STY_MASKED; //fix up masking bug on pawns
   if (class'olweapons.uiweapons'.default.busedecals){

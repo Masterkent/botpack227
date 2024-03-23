@@ -91,7 +91,7 @@ function Fire( float Value )
         GotoState('Idle','PendingLock');
         return;
       }
-      else if ( (!Instigator.Isa('bot')||!Bot(Instigator).bNovice)
+      else if ( (Bot(Instigator) == none || !Bot(Instigator).bNovice)
           && (FRand() < 0.7)
           && IsInState('Idle') && (Instigator.Enemy != None)
           && ((Instigator.Enemy == Instigator.Target) || (Instigator.Target == None))

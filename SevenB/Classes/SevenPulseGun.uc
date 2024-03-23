@@ -35,7 +35,7 @@ function float RateSelf( out int bUseAltMode )
     return -2;
 
   P = Pawn(Owner);
-  if ( (P.Enemy == None) || (Owner.IsA('Bot') && Bot(Owner).bQuickFire) )
+  if ( (P.Enemy == None) || (Bot(Owner) != none && Bot(Owner).bQuickFire) )
   {
     bUseAltMode = 0;
     return AIRating;
@@ -81,7 +81,7 @@ state AltFiring
       GotoState('Pickup');
       return;
     }
-    if ( (P.bAltFire == 0) || (P.IsA('Bot')
+    if ( (P.bAltFire == 0) || (Bot(P) != none
           && ((P.Enemy == None) || (Level.TimeSeconds - Bot(P).LastSeenTime > 5))) )
     {
       P.bAltFire = 0;

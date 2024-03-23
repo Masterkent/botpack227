@@ -67,7 +67,7 @@ function scoreit(pawn WhatDied)
     else if (WhatDied.IsA('manta')) mantas++;
     else if (WhatDied.IsA('fly')) flies++;
     else if (WhatDied.IsA('pupae')) pupae++;
-    if (WhatDied.IsA('ScriptedPawn'))
+    if (ScriptedPawn(WhatDied) != none)
       if (ScriptedPawn(WhatDied).bIsBoss) points *=3;          //bonus for killing bosses.....
     Score += points;
     Killtotal += 1;
