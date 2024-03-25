@@ -113,6 +113,8 @@ function Server_FixCurrentMap_ONP()
 		Server_FixCurrentMap_NP17Chico();
 	else if (CurrentMap ~= "NP18Chico")
 		Server_FixCurrentMap_NP18Chico();
+	else if (CurrentMap ~= "NP19Part1Chico")
+		Server_FixCurrentMap_NP19Part1Chico();
 	else if (CurrentMap ~= "NP19Part2Chico")
 		Server_FixCurrentMap_NP19Part2Chico();
 	else if (CurrentMap ~= "NP19Part3ChicoHour")
@@ -562,6 +564,22 @@ function Server_FixCurrentMap_NP18Chico()
 	MakeNetVisibilityCylinderAt('NetVisCylinder_3', "PathNode81", 3000, 1200);
 }
 
+function Server_FixCurrentMap_NP19Part1Chico()
+{
+	local ONPPlayerTriggeringActor TriggeringActor;
+	local Pawn P;
+
+	TriggeringActor = LoadLevelTrigger("Trigger57").Spawn(class'ONPPlayerTriggeringActor',, 'mainlift');
+	TriggeringActor.SetBase(LoadLevelMover("Mover73"));
+
+	P = LoadLevelPawn("SkaarjGunner2");
+	if (P != none)
+		P.AttitudeToPlayer = ATTITUDE_Hate;
+	P = LoadLevelPawn("SkaarjOfficer2");
+	if (P != none)
+		P.AttitudeToPlayer = ATTITUDE_Hate;
+}
+
 function Server_ModifyCurrentMap_NP19Part2Chico()
 {
 	if (!MutatorPtr.bUseAircraftLevels)
@@ -621,7 +639,12 @@ function Server_FixCurrentMap_NP22DavidM()
 
 function Server_FixCurrentMap_NP23Kew()
 {
+	local ONPBlockAllPanel BlockAll;
+
 	DisableTeleporter("Teleporter1");
+	BlockAll = Spawn(class'ONPBlockAllPanel',,, vect(-1511, -994, -935), rot(-3500, 29152, 0));
+	BlockAll.Skin = Texture(DynamicLoadObject("DavidMGras.Ground1", class'Texture', true)); // for footstep sounds
+	BlockAll.SetScale(8);
 }
 
 function Server_FixCurrentMap_NP24MClane()

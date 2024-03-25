@@ -376,7 +376,12 @@ function Server_FixCurrentMap_NP22DavidM()
 
 function Server_FixCurrentMap_NP23Kew()
 {
+	local ONPBlockAllPanel BlockAll;
+
 	DisableTeleporter("Teleporter1");
+	BlockAll = Spawn(class'ONPBlockAllPanel',,, vect(-1511, -994, -935), rot(-3500, 29152, 0));
+	BlockAll.Skin = Texture(DynamicLoadObject("DavidMGras.Ground1", class'Texture', true)); // for footstep sounds
+	BlockAll.SetScale(8);
 }
 
 function Server_FixCurrentMap_NP27DavidM()
