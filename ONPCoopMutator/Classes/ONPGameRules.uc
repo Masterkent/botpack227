@@ -109,20 +109,30 @@ function ModifyPlayerVoicePack(Pawn Player)
 
 	if (Player.PlayerReplicationInfo.VoiceType == None)
 	{
+		if (UTC_PlayerPawn(Player) != none)
+		{
+			Player.PlayerReplicationInfo.VoiceType = class'UTC_PlayerPawn'.static.B227_GetVoiceType(PlayerPawn(Player));
+			if (Player.PlayerReplicationInfo.VoiceType != none)
+				return;
+		}
 		if (Player.PlayerReplicationInfo.bIsFemale)
 		{
-			if (Player.Mesh == mesh'UnrealShare.Female1')
+			if (Player.Mesh == none)
+				Player.PlayerReplicationInfo.VoiceType = class'VoiceFemaleTwo';
+			else if (Player.Mesh.Name == 'Female1' || Player.Mesh.Name == 'FCommando')
 				Player.PlayerReplicationInfo.VoiceType = class'VoiceFemaleOne';
 			else
 				Player.PlayerReplicationInfo.VoiceType = class'VoiceFemaleTwo';
 		}
 		else
 		{
-			if (Player.Mesh == mesh'UnrealI.Nali2')
+			if (Player.Mesh == none)
+				Player.PlayerReplicationInfo.VoiceType = class'VoiceMaleTwo';
+			else if (Player.Mesh.Name == 'Nali2' || Player.Mesh.Name == 'TNaliMesh')
 				Player.PlayerReplicationInfo.VoiceType = class'ONPNaliVoice';
-			else if (Player.Mesh == mesh'UnrealI.sktrooper')
+			else if (Player.Mesh.Name == 'sktrooper' || Player.Mesh.Name == 'TSkM')
 				Player.PlayerReplicationInfo.VoiceType = class'ONPSkaarjVoice';
-			else if (Player.Mesh == mesh'UnrealI.Male1')
+			else if (Player.Mesh.Name == 'Male1' || Player.Mesh.Name == 'Commando')
 				Player.PlayerReplicationInfo.VoiceType = class'VoiceMaleOne';
 			else
 				Player.PlayerReplicationInfo.VoiceType = class'VoiceMaleTwo';
