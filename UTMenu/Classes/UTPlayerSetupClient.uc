@@ -257,7 +257,7 @@ simulated function VoiceChanged()
 		}
 		GetPlayerOwner().UpdateURL("Voice", VoicePackCombo.GetValue2(), True);
 
-		if( ClassCombo.GetValue2() ~= string(GetPlayerOwner().Class) && GetPlayerOwner().IsA('TournamentPlayer') )
+		if( ClassCombo.GetValue2() ~= string(GetPlayerOwner().Class) && TournamentPlayer(GetPlayerOwner()) != none )
 			TournamentPlayer(GetPlayerOwner()).SetVoice(VoicePackClass);
 	}
 }

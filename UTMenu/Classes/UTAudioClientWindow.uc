@@ -59,20 +59,29 @@ function Created()
 	MessageSettingsCombo.AddItem(MessageSettings[1]);
 	MessageSettingsCombo.AddItem(MessageSettings[2]);
 	MessageSettingsCombo.AddItem(MessageSettings[3]);
-	if(P.bNoVoiceMessages)
+	if (P != none)
+	{
+		if (P.bNoVoiceMessages)
+			MessageSettingsCombo.SetSelectedIndex(3);
+		else if (P.bNoVoiceTaunts)
+			MessageSettingsCombo.SetSelectedIndex(2);
+		else if (P.bNoAutoTaunts)
+			MessageSettingsCombo.SetSelectedIndex(1);
+		else
+			MessageSettingsCombo.SetSelectedIndex(0);
+	}
+	else if (class'TournamentPlayer'.default.bNoVoiceMessages)
 		MessageSettingsCombo.SetSelectedIndex(3);
-	else
-	if(P.bNoVoiceTaunts)
+	else if (class'TournamentPlayer'.default.bNoVoiceTaunts)
 		MessageSettingsCombo.SetSelectedIndex(2);
-	else
-	if(P.bNoAutoTaunts)
+	else if (class'TournamentPlayer'.default.bNoAutoTaunts)
 		MessageSettingsCombo.SetSelectedIndex(1);
 	else
 		MessageSettingsCombo.SetSelectedIndex(0);
 	ControlOffset += 25;
 
 	NoMatureLanguageCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
-	NoMatureLanguageCheck.bChecked = TournamentPlayer(GetPlayerOwner()).bNoMatureLanguage;
+	NoMatureLanguageCheck.bChecked = class'TournamentPlayer'.default.bNoMatureLanguage;
 	NoMatureLanguageCheck.SetText(NoMatureLanguageText);
 	NoMatureLanguageCheck.SetHelpText(NoMatureLanguageHelp);
 	NoMatureLanguageCheck.SetFont(F_Normal);
@@ -82,7 +91,10 @@ function Created()
 	// Announcer Volume
 	AnnouncerVolumeSlider = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', CenterPos, ControlOffset, CenterWidth, 1));
 	AnnouncerVolumeSlider.SetRange(0, 4, 1);
-	AnnouncerVolumeSlider.SetValue(P.AnnouncerVolume);
+	if (P != none)
+		AnnouncerVolumeSlider.SetValue(P.AnnouncerVolume);
+	else
+		AnnouncerVolumeSlider.SetValue(class'TournamentPlayer'.default.AnnouncerVolume);
 	AnnouncerVolumeSlider.SetText(AnnouncerVolumeText);
 	AnnouncerVolumeSlider.SetHelpText(AnnouncerVolumeHelp);
 	AnnouncerVolumeSlider.SetFont(F_Normal);
@@ -124,7 +136,10 @@ function ExtraMessageOptions()
 	VoiceMessagesCheck.HideWindow();
 
 	AutoTauntCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, VoiceMessagesCheck.WinTop, CenterWidth, 1));
-	AutoTauntCheck.bChecked = TournamentPlayer(GetPlayerOwner()).bAutoTaunt;
+	if (TournamentPlayer(GetPlayerOwner()) != none)
+		AutoTauntCheck.bChecked = TournamentPlayer(GetPlayerOwner()).bAutoTaunt;
+	else
+		AutoTauntCheck.bChecked = class'TournamentPlayer'.default.bAutoTaunt;
 	AutoTauntCheck.SetText(AutoTauntText);
 	AutoTauntCheck.SetHelpText(AutoTauntHelp);
 	AutoTauntCheck.SetFont(F_Normal);
@@ -205,26 +220,51 @@ function MessageSettingsChanged()
 	switch(MessageSettingsCombo.GetSelectedIndex())
 	{
 	case 1:
-		P.bNoVoiceMessages = False;
-		P.bNoVoiceTaunts = False;
-		P.bNoAutoTaunts = True;
+		class'TournamentPlayer'.default.bNoVoiceMessages = false;
+		class'TournamentPlayer'.default.bNoVoiceTaunts = false;
+		class'TournamentPlayer'.default.bNoAutoTaunts = true;
+		if (P != none)
+		{
+			P.bNoVoiceMessages = False;
+			P.bNoVoiceTaunts = False;
+			P.bNoAutoTaunts = True;
+		}
 		break;
 	case 2:
-		P.bNoVoiceMessages = False;
-		P.bNoVoiceTaunts = True;
-		P.bNoAutoTaunts = True;
+		class'TournamentPlayer'.default.bNoVoiceMessages = false;
+		class'TournamentPlayer'.default.bNoVoiceTaunts = true;
+		class'TournamentPlayer'.default.bNoAutoTaunts = true;
+		if (P != none)
+		{
+			P.bNoVoiceMessages = False;
+			P.bNoVoiceTaunts = True;
+			P.bNoAutoTaunts = True;
+		}
 		break;
 	case 3:
-		P.bNoVoiceMessages = True;
-		P.bNoVoiceTaunts = True;
-		P.bNoAutoTaunts = True;
+		class'TournamentPlayer'.default.bNoVoiceMessages = true;
+		class'TournamentPlayer'.default.bNoVoiceTaunts = true;
+		class'TournamentPlayer'.default.bNoAutoTaunts = true;
+		if (P != none)
+		{
+			P.bNoVoiceMessages = True;
+			P.bNoVoiceTaunts = True;
+			P.bNoAutoTaunts = True;
+		}
 		break;
 	default:
-		P.bNoVoiceMessages = False;
-		P.bNoVoiceTaunts = False;
-		P.bNoAutoTaunts = False;
+		class'TournamentPlayer'.default.bNoVoiceMessages = false;
+		class'TournamentPlayer'.default.bNoVoiceTaunts = false;
+		class'TournamentPlayer'.default.bNoAutoTaunts = false;
+		if (P != none)
+		{
+			P.bNoVoiceMessages = False;
+			P.bNoVoiceTaunts = False;
+			P.bNoAutoTaunts = False;
+		}
 		break;
 	}
+	SaveConfigs();
 }
 
 function Hardware3DChecked()
@@ -278,21 +318,31 @@ function VoiceMessagesChecked()
 
 function AutoTauntChecked()
 {
-	TournamentPlayer(GetPlayerOwner()).SetAutoTaunt(AutoTauntCheck.bChecked);
+	if (TournamentPlayer(GetPlayerOwner()) != none)
+		TournamentPlayer(GetPlayerOwner()).SetAutoTaunt(AutoTauntCheck.bChecked);
+	class'TournamentPlayer'.default.bAutoTaunt = AutoTauntCheck.bChecked;
+	SaveConfigs();
 }
 
 function AnnouncerVolumeChanged()
 {
-	TournamentPlayer(GetPlayerOwner()).AnnouncerVolume = AnnouncerVolumeSlider.GetValue();
+	if (TournamentPlayer(GetPlayerOwner()) != none)
+		TournamentPlayer(GetPlayerOwner()).AnnouncerVolume = AnnouncerVolumeSlider.GetValue();
+	class'TournamentPlayer'.default.AnnouncerVolume = AnnouncerVolumeSlider.GetValue();
+	SaveConfigs();
 }
 
 function NoMatureLanguageChanged()
 {
-	TournamentPlayer(GetPlayerOwner()).bNoMatureLanguage = NoMatureLanguageCheck.bChecked;
+	if (TournamentPlayer(GetPlayerOwner()) != none)
+		TournamentPlayer(GetPlayerOwner()).bNoMatureLanguage = NoMatureLanguageCheck.bChecked;
+	class'TournamentPlayer'.default.bNoMatureLanguage = NoMatureLanguageCheck.bChecked;
+	SaveConfigs();
 }
 
 function SaveConfigs()
 {
+	class'TournamentPlayer'.static.StaticSaveConfig();
 	Super.SaveConfigs();
 	GetPlayerOwner().SaveConfig();
 }

@@ -32,7 +32,7 @@ function Created()
 	else
 		bInstantRocket = class'TournamentPlayer'.default.bInstantRocket;
 	InstantRocketCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', ControlLeft, ControlOffset, ControlWidth, 1));
-	InstantRocketCheck.bChecked = TournamentPlayer(GetPlayerOwner()).bInstantRocket;
+	InstantRocketCheck.bChecked = bInstantRocket;
 	InstantRocketCheck.SetText(InstantRocketText);
 	InstantRocketCheck.SetHelpText(InstantRocketHelp);
 	InstantRocketCheck.SetFont(F_Normal);
