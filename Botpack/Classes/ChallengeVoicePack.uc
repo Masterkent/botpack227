@@ -404,6 +404,8 @@ function PlayerSpeech( int Type, int Index, int Callsign )
 			}
 			break;
 		case 3:			// Taunts
+			if (class'TournamentPlayer'.default.bNoMatureLanguage && MatureTaunt[Clamp(Index, 0, numTaunts-1)] > 0)
+				return;
 			SendMode = 'GLOBAL';	// Send to all teams.
 			Recipient = None;		// Send to everyone.
 			break;

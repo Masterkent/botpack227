@@ -72,20 +72,14 @@ state Activated
 			UsedUp();
 		else
 		{
-			Pawn(Owner).Visibility = Min(10, Pawn(Owner).Visibility);
-			if (Owner.Style != STY_Translucent)
-				Owner.SetDisplayProperties(
-					ERenderStyle.STY_Translucent,
-					FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
-					false,
-					true);
-			else if (Pawn(Owner).Weapon != none && Pawn(Owner).Weapon.Style != STY_Translucent)
-				Pawn(Owner).Weapon.SetDisplayProperties(ERenderStyle.STY_Translucent,
-									 FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
-									 false,
-									 true);
+			B227_UpdateOwnerVisibility();
 			B227_SetShieldBeltEffectsVisibility(false);
 		}
+	}
+
+	event Tick(float DeltaTime)
+	{
+		B227_UpdateOwnerVisibility();
 	}
 
 	function BeginState()
@@ -126,6 +120,22 @@ function B227_SetShieldBeltEffectsVisibility(bool bVisible)
 	}
 	foreach Owner.ChildActors(class'UT_ShieldBeltEffect', UTBeltEffect)
 		UTBeltEffect.bHidden = !bVisible;
+}
+
+function B227_UpdateOwnerVisibility()
+{
+	Pawn(Owner).Visibility = Min(10, Pawn(Owner).Visibility);
+	if (Owner.Style != STY_Translucent)
+		Owner.SetDisplayProperties(
+			ERenderStyle.STY_Translucent,
+			FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
+			false,
+			true);
+	if (Pawn(Owner).Weapon != none && Pawn(Owner).Weapon.Style != STY_Translucent)
+		Pawn(Owner).Weapon.SetDisplayProperties(ERenderStyle.STY_Translucent,
+			FireTexture'Botpack227_Base.Belt_fx.Invis.Invis',
+			false,
+			true);
 }
 
 defaultproperties
