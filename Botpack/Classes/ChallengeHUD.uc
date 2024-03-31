@@ -392,7 +392,7 @@ simulated function DrawStatus(Canvas Canvas)
 	{
 		if (Inv.bIsAnArmor)
 		{
-			if ( Inv.IsA('UT_Shieldbelt') )
+			if (Inv.IsA('ShieldBelt') || Inv.IsA('UT_Shieldbelt'))
 				bShieldbelt = true;
 			else if ( Inv.IsA('Thighpads') )
 			{

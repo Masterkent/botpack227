@@ -60,6 +60,10 @@ var string DelayedResponse;
 var bool bDelayedResponse;
 var PlayerReplicationInfo DelayedSender;
 
+var config byte B227_DisabledTaunt[32];
+
+var bool B227_bToggleDisabledTaunt;
+
 function string GetCallSign( PlayerReplicationInfo P )
 {
 	if ( P == None )
@@ -224,38 +228,42 @@ function SetClientTauntMessage(int messageIndex, PlayerReplicationInfo Recipient
 {
 	messageIndex = Clamp(messageIndex, 0, numTaunts-1);
 
+	if (default.B227_DisabledTaunt[messageIndex] > 0)
+		messageIndex = -1;
+
 	// check if need to avoid a mature taunt
 	if ( class'TournamentPlayer'.Default.bNoMatureLanguage || class'DeathMatchPlus'.Default.bLowGore )
-	{
-		while ( MatureTaunt[messageIndex] > 0 )
+		while ( messageIndex >= 0 && MatureTaunt[messageIndex] > 0 )
 			messageIndex--;
 
-		if ( messageIndex < 0 )
-		{
-			SetTimer(0.0, false);
-			Destroy();
-			return;
-		}
+	if ( messageIndex < 0 )
+	{
+		SetTimer(0.0, false);
+		Destroy();
+		return;
 	}
+
 	DelayedResponse = DelayedResponse$TauntString[messageIndex];
 	MessageSound = TauntSound[messageIndex];
 }
 
 function SetTauntMessage(int messageIndex, PlayerReplicationInfo Recipient, out Sound MessageSound, out Float MessageTime)
 {
+	if (default.B227_DisabledTaunt[messageIndex] > 0)
+		messageIndex = -1;
+
 	// check if need to avoid a mature taunt
 	if ( class'TournamentPlayer'.Default.bNoMatureLanguage || class'DeathMatchPlus'.Default.bLowGore )
-	{
-		while ( MatureTaunt[messageIndex] > 0 )
+		while ( messageIndex >= 0 && MatureTaunt[messageIndex] > 0 )
 			messageIndex--;
 
-		if ( messageIndex < 0 )
-		{
-			SetTimer(0.0, false);
-			Destroy();
-			return;
-		}
+	if ( messageIndex < 0 )
+	{
+		SetTimer(0.0, false);
+		Destroy();
+		return;
 	}
+
 	DelayedResponse = DelayedResponse$TauntString[messageIndex];
 	MessageSound = TauntSound[messageIndex];
 	SetTimer(1.0, false);
@@ -404,8 +412,18 @@ function PlayerSpeech( int Type, int Index, int Callsign )
 			}
 			break;
 		case 3:			// Taunts
-			if (class'TournamentPlayer'.default.bNoMatureLanguage && MatureTaunt[Clamp(Index, 0, numTaunts-1)] > 0)
+			Index = Clamp(Index, 0, numTaunts - 1);
+			if (default.B227_bToggleDisabledTaunt &&
+				(Level.NetMode == NM_Standalone || PlayerPawn(Owner) != none && PlayerPawn(Owner).bAdmin))
+			{
+				B227_ToggleDisabledTaunt(Index);
 				return;
+			}
+			if (default.B227_DisabledTaunt[Index] > 0 ||
+				class'TournamentPlayer'.default.bNoMatureLanguage && MatureTaunt[Index] > 0)
+			{
+				return;
+			}
 			SendMode = 'GLOBAL';	// Send to all teams.
 			Recipient = None;		// Send to everyone.
 			break;
@@ -466,6 +484,29 @@ function B227_PlayVoice(sound Sound)
 		PlayerPawn(Owner).PlaySound(Sound, SLOT_Misc, 16.0);
 	}
 	Owner.SetPropertyText("bIsVoicePlayer", "false");
+}
+
+function B227_ToggleDisabledTaunt(int Index)
+{
+	local PlayerPawn P;
+	local string Message;
+
+	default.B227_DisabledTaunt[Index] = int(default.B227_DisabledTaunt[Index] == 0);
+
+	if (default.B227_DisabledTaunt[Index] > 0)
+		Message = "disabled";
+	else
+		Message = "enabled";
+	Message = Owner.GetHumanName() @ Message @ "taunt from" @ Class $ ":";
+
+	foreach AllActors(class'PlayerPawn', P)
+		if (P.bAdmin || Level.NetMode == NM_Standalone)
+		{
+			P.ClientMessage(Message,, true);
+			P.ClientMessage("    " $ default.TauntString[Index]);
+		}
+
+	StaticSaveConfig();
 }
 
 defaultproperties
