@@ -228,7 +228,7 @@ function SetClientTauntMessage(int messageIndex, PlayerReplicationInfo Recipient
 {
 	messageIndex = Clamp(messageIndex, 0, numTaunts-1);
 
-	if (default.B227_DisabledTaunt[messageIndex] > 0)
+	if (class'B227_Config'.default.bFilterTaunts && default.B227_DisabledTaunt[messageIndex] > 0)
 		messageIndex = -1;
 
 	// check if need to avoid a mature taunt
@@ -249,7 +249,7 @@ function SetClientTauntMessage(int messageIndex, PlayerReplicationInfo Recipient
 
 function SetTauntMessage(int messageIndex, PlayerReplicationInfo Recipient, out Sound MessageSound, out Float MessageTime)
 {
-	if (default.B227_DisabledTaunt[messageIndex] > 0)
+	if (class'B227_Config'.default.bFilterTaunts && default.B227_DisabledTaunt[messageIndex] > 0)
 		messageIndex = -1;
 
 	// check if need to avoid a mature taunt
@@ -419,7 +419,7 @@ function PlayerSpeech( int Type, int Index, int Callsign )
 				B227_ToggleDisabledTaunt(Index);
 				return;
 			}
-			if (default.B227_DisabledTaunt[Index] > 0 ||
+			if (class'B227_Config'.default.bFilterTaunts && default.B227_DisabledTaunt[Index] > 0 ||
 				class'TournamentPlayer'.default.bNoMatureLanguage && MatureTaunt[Index] > 0)
 			{
 				return;

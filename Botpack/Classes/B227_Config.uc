@@ -8,6 +8,7 @@ var(DMMutator) globalconfig bool bUseFlakShellAmmo;
 var(DMMutator) globalconfig bool bLogNonUTInventory;
 var(HUD) globalconfig bool bUseTahomaFonts;
 var(HUD) globalconfig bool bYellowTeamSayMessages;
+var(Misc) globalconfig bool bFilterTaunts;
 var(Misc) globalconfig bool bFixLoaded;
 var(Misc) globalconfig bool bModifyArmorBalance;
 var(Misc) globalconfig bool bModifyPlayerStartLookup;
