@@ -448,7 +448,8 @@ function Server_FixCurrentMap_NP08Hourences()
 
 function Server_FixCurrentMap_NP09Silver()
 {
-	LoadLevelDispatcher("Dispatcher9").OutEvents[1] = '';
+	LoadLevelDispatcher("Dispatcher4").OutEvents[4] = '';
+	LoadLevelMover("Mover7").MoverEncroachType = ME_IgnoreWhenEncroach; // ME_CrushWhenEncroach may kill the Titan
 
 	// allows players to reuse the lift
 	LoadLevelMover("Mover1").bTriggerOnceOnly = false;
@@ -714,8 +715,7 @@ function Server_FixCurrentMap_NP29DavidM()
 
 function Server_FixCurrentMap_NP31DavidM()
 {
-	class'olextras.SuperAmmoShockRifle'.default.bTravel = false;
-	class'BotPack.SuperShockCore'.default.bTravel = false;
+	MutatorPtr.bTemporarySuperShockRifle = true;
 	LoadLevelMover("Mover42").Tag = '';
 	LoadLevelMover("AttachMover3").Tag = '';
 	MakeMoverTriggerableOnceOnly("Mover6");

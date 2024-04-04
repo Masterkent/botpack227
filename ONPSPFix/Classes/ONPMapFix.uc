@@ -264,7 +264,8 @@ function Server_FixCurrentMap_NP08Hourences()
 
 function Server_FixCurrentMap_NP09Silver()
 {
-	LoadLevelDispatcher("Dispatcher9").OutEvents[1] = '';
+	LoadLevelDispatcher("Dispatcher4").OutEvents[4] = '';
+	LoadLevelMover("Mover7").MoverEncroachType = ME_IgnoreWhenEncroach; // ME_CrushWhenEncroach may kill the Titan
 	EliminateStaticActor("BlockAll10");
 }
 

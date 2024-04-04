@@ -35,6 +35,8 @@ var() config bool bDebugMode;
 var ONPGameRules GameRulesPtr;
 var ONPLevelInfo LInfo;
 
+var bool bTemporarySuperShockRifle;
+
 event PostBeginPlay()
 {
 	if (RemoveDuplicatedMutator())
@@ -82,9 +84,6 @@ function RegisterClientPackage()
 
 function LevelStartupAdjustments()
 {
-	class'olextras.SuperAmmoShockRifle'.default.bTravel = true; // always true except when map sets it to false
-	class'BotPack.SuperShockCore'.default.bTravel = true; // always true except when map sets it to false
-	class'olextras.TvTranslocator'.default.bTravel = false; // always false
 	Level.bSupportsRealCrouching = bUseRealCrouch;
 
 	Spawn(class'ONPClientAdjustments');
@@ -371,8 +370,8 @@ function MinipulateSkin (actor Other, actor In){
 //convert explosion chains to the UT style one
 function actor ReplaceNonInv(Actor other,class<actor> NewC)
 {
-  	local actor A;
-  	if (level.game.Difficulty == 0 && !Other.bDifficulty0 ||
+	local actor A;
+	if (level.game.Difficulty == 0 && !Other.bDifficulty0 ||
 		level.game.Difficulty == 1 && !Other.bDifficulty1 ||
 		level.game.Difficulty == 2 && !Other.bDifficulty2 ||
 		level.game.Difficulty >= 3 && !Other.bDifficulty3 ||
@@ -396,7 +395,7 @@ function actor ReplaceNonInv(Actor other,class<actor> NewC)
 		A.bProjTarget = Other.bProjTarget;
 		A.SetCollisionSize(Other.CollisionRadius, Other.CollisionHeight);
 	}
-  	return A;
+	return A;
 }
 
 function ReplaceExploChain(ExplosionChain other)
@@ -600,28 +599,39 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	if (!CheckONPReplacement(Other))
 		return false;
 
-	if (Inventory(Other) != none && Inventory(Other).bHeldItem)
-		return true;
+	if (Inventory(Other) != none)
+	{
+		if (Inventory(Other).bHeldItem)
+			return true;
+
+		if (bTemporarySuperShockRifle &&
+			(Other.Class == class'olextras.SuperAmmoShockRifle' || Other.Class == class'BotPack.SuperShockCore'))
+		{
+			Other.bTravel = false;
+		}
+		if (Other.Class == class'olextras.TvTranslocator')
+			Other.bTravel = false;
+	}
 
 	if (!InventoryReplacement(Other, false))
 		return false;
 
-	if (other.class == class'ExplosionChain')
+	if (Other.Class == class'ExplosionChain')
 	{
 		ReplaceExploChain(ExplosionChain(other));
 		return false;
 	}
-	if (other.class == class'TranslatorBook' && !bUseONPHUD)
+	if (Other.Class == class'TranslatorBook' && !bUseONPHUD)
 	{
 		ReplaceTransBook(TranslatorBook(other));
 		return false;
 	}
-	if (other.class == class'TranslatorEvent')
+	if (Other.Class == class'TranslatorEvent')
 	{
 		ReplaceTransEvent(TranslatorEvent(other));
 		return false;
 	}
-	if (other.class == class'TvTranslatorEvent' && !bUseONPHUD)
+	if (Other.Class == class'TvTranslatorEvent' && !bUseONPHUD)
 	{
 		ReplaceTvTransEvent(TvTranslatorEvent(other));
 		return false;
@@ -639,7 +649,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 			ScriptedPawnAdjustment(ScriptedPawn(Other));
 		Pawn(Other).DropWhenKilled = InventoryClassReplacement(Pawn(Other).DropWhenKilled, true);
 	}
-	else if (false &&(other.class == class'tree5' || other.class == class'tree6'))
+	else if (false &&(Other.Class == class'tree5' || Other.Class == class'tree6'))
 	{
 		//replace palm trees w/ new mesh
 		other.mesh = class'leetpalm'.default.mesh;
@@ -647,7 +657,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		other.MultiSkins[0]=Texture'Jdmisgay12';
 	//  other.MultiSkins[0].DrawScale=0.96;
 		other.SetCollisionSize(0.8 * other.CollisionRadius, other.default.CollisionHeight * other.DrawScale);
-		if (other.class == class'tree5')
+		if (Other.Class == class'tree5')
 			other.drawscale *= 3.3;
 		else
 			other.drawscale *= 3.85;
@@ -685,7 +695,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 
 function bool CheckONPReplacement(Actor Other)
 {
-	if (Other.class == class'CodeConsole')
+	if (Other.Class == class'CodeConsole')
 		return ReplaceCodeConsole(CodeConsole(Other));
 	return true;
 }
@@ -1019,10 +1029,10 @@ function bool InventoryReplacement(Actor Other, bool bBasic)
 	local class<Inventory> NewInventoryType;
 	if (Inventory(Other) != none)
 	{
-		NewInventoryType = InventoryClassReplacement(class<Inventory>(Other.class), bBasic);
+		NewInventoryType = InventoryClassReplacement(class<Inventory>(Other.Class), bBasic);
 		if (NewInventoryType == none)
 			return false;
-		if (NewInventoryType != Other.class)
+		if (NewInventoryType != Other.Class)
 		{
 			if (Inventory(Other) != none && Other.Instigator != none && Other.Location == Other.Instigator.Location)
 				return false;
@@ -1134,13 +1144,13 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v6.10";
+	return "ONPCoopMutator v6.11";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v6.10 [2024-03-26]"
-	Version="6.10"
+	VersionInfo="ONPCoopMutator v6.11 [2024-04-04]"
+	Version="6.11"
 	bAdjustNPCFriendlyFire=True
 	bDisableFlashlightReplacement=True
 	bDiscardItemsOnGameEnd=True
