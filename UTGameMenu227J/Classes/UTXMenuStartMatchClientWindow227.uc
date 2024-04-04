@@ -298,6 +298,7 @@ function IterateDifficulties()
 		DifficultyCombo.AddItem(class'UMenuNewGameClientWindow'.default.Skills[i]);
 	DifficultyCombo.SetSelectedIndex(GetSelectedDifficultyLevel());
 	DifficultyLabel.SetText(class'UMenuNewGameClientWindow'.default.SkillStrings[GetSelectedDifficultyLevel()]);
+	UpdateDifficultyComboTextColor();
 }
 
 function IterateGameClasses()
@@ -583,6 +584,7 @@ function DifficultyChanged()
 	class'UMenuNewGameClientWindow'.default.LastSelectedSkill = DifficultyCombo.GetSelectedIndex();
 	class'UMenuNewGameClientWindow'.static.StaticSaveConfig();
 	DifficultyLabel.SetText(class'UMenuNewGameClientWindow'.default.SkillStrings[class'UMenuNewGameClientWindow'.default.LastSelectedSkill]);
+	UpdateDifficultyComboTextColor();
 }
 
 function MutatorsChanged()
@@ -608,6 +610,14 @@ function FilterMapsChanged()
 function int GetSelectedDifficultyLevel()
 {
 	return Clamp(class'UMenuNewGameClientWindow'.default.LastSelectedSkill, 0, MAX_SP_DIFFICULTY_LEVELS - 1);
+}
+
+function UpdateDifficultyComboTextColor()
+{
+	if (class'UMenuNewGameClientWindow'.default.LastSelectedSkill > 3)
+		DifficultyCombo.EditBox.TextColor = MakeColor(255, 96, 0);
+	else
+		DifficultyCombo.EditBox.TextColor = MakeColor(0, 0, 0);
 }
 
 function ProcessSelectedGameClass()

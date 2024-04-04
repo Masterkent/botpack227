@@ -46,6 +46,6 @@ function CloseActiveWindow()
 
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v3.1 [2024-04-01]"
-	Version="3.1"
+	VersionInfo="UTGameMenu227 v3.2 [2024-04-04]"
+	Version="3.2"
 }
