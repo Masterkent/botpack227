@@ -211,14 +211,26 @@ function Server_FixCurrentMap_NP02DavidM()
 	local Pawn P;
 	local Trigger Trigger;
 	local ONPPlayerMoveTrigger MoveTrigger;
+	local Carcass Carc;
+	local ONPGibInstigator ONPGibInstigator;
 
 	ScriptedPawn = ScriptedPawn(LoadLevelActor("SkaarjScout0"));
 	ScriptedPawn.AttitudeToPlayer = ATTITUDE_Ignore;
 	ScriptedPawn.bHateWhenTriggered = true;
 
+	foreach AllActors(class'Carcass', Carc, 'mercisnowdead')
+		Carc.Destroy();
+
+	AlarmPoint(LoadLevelActor("AlarmPoint25")).bDestroyAlarmTriggerer = false;
+
 	P = LoadLevelPawn("Mercenary4");
 	if (P != none)
+	{
+		ONPGibInstigator = Spawn(class'ONPGibInstigator',, 'mercisnowdead');
+		ONPGibInstigator.Instigator = P;
+		ONPGibInstigator.ThrowVelocity = ThrowStuff(LoadLevelActor("ThrowStuff0")).throwVect;
 		P.Event = 'mercisnowdead';
+	}
 
 	Trigger = LoadLevelTrigger("Trigger3");
 	MoveTrigger = class'ONPPlayerMoveTrigger'.static.StaticReplaceTrigger(Trigger);
@@ -372,7 +384,16 @@ function Server_FixCurrentMap_NP19Part3ChicoHour()
 
 function Server_FixCurrentMap_NP22DavidM()
 {
+	local ONPBlockAllPanel BlockAll;
+	local Actor EClip;
+
 	DisableTeleporter("Teleporter1");
+	BlockAll = Spawn(class'ONPBlockAllPanel',,, vect(1283, -576, -98), rot(-764, 19308, 0));
+	BlockAll.Skin = Texture(DynamicLoadObject("DavidMGras.Ground1", class'Texture', true)); // for footstep sounds
+	BlockAll.SetScale(12);
+
+	EClip = LoadLevelActor("EClip0");
+	EClip.SetLocation(EClip.Location + vect(0, 0, 4));
 }
 
 function Server_FixCurrentMap_NP23Kew()
@@ -408,7 +429,7 @@ function Server_FixCurrentMap_NP29DavidM()
 
 function Server_FixCurrentMap_NP31DavidM()
 {
-	MakeMoverTriggerableOnceOnly("Mover6");
+	LoadLevelActor("skaarjeyes0").Style = STY_Translucent;
 }
 
 function Server_FixCurrentMap_NP32Strogg()

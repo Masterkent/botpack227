@@ -107,12 +107,15 @@ function LevelStartupAdjustments()
 function AdjustSpecialerEvents()
 {
 	local SpecialerEvent aSpecialerEvent;
+	local HumanSpeechTrigger HumanSpeechTrigger;
 
 	if (!bUseONPSpeech)
 	{
 		foreach AllActors(class'SpecialerEvent', aSpecialerEvent)
 			if (aSpecialerEvent.MyMessageType == 'Say')
 				aSpecialerEvent.Tag = '';
+		foreach AllActors(class'HumanSpeechTrigger', HumanSpeechTrigger)
+			HumanSpeechTrigger.Tag = '';
 	}
 }
 
@@ -1144,13 +1147,13 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v6.11";
+	return "ONPCoopMutator v6.12";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v6.11 [2024-04-04]"
-	Version="6.11"
+	VersionInfo="ONPCoopMutator v6.12 [2024-04-11]"
+	Version="6.12"
 	bAdjustNPCFriendlyFire=True
 	bDisableFlashlightReplacement=True
 	bDiscardItemsOnGameEnd=True

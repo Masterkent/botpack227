@@ -313,6 +313,8 @@ function Server_FixCurrentMap_NP02DavidM()
 {
 	local Pawn P;
 	local Trigger Trigger;
+	local Carcass Carc;
+	local ONPGibInstigator ONPGibInstigator;
 
 	P = LoadLevelPawn("SkaarjWarrior0");
 	if (P != none)
@@ -328,9 +330,21 @@ function Server_FixCurrentMap_NP02DavidM()
 		P.JumpZ = P.default.JumpZ;
 	}
 
+	class'ONPSafeFall'.static.CreateAtActor(Level, "WaterZone0", 512, 128);
+
+	foreach AllActors(class'Carcass', Carc, 'mercisnowdead')
+		Carc.Destroy();
+
+	AlarmPoint(LoadLevelActor("AlarmPoint25")).bDestroyAlarmTriggerer = false;
+
 	P = LoadLevelPawn("Mercenary4");
 	if (P != none)
+	{
+		ONPGibInstigator = Spawn(class'ONPGibInstigator',, 'mercisnowdead');
+		ONPGibInstigator.Instigator = P;
+		ONPGibInstigator.ThrowVelocity = ThrowStuff(LoadLevelActor("ThrowStuff0")).throwVect;
 		P.Event = 'mercisnowdead';
+	}
 
 	LoadLevelTrigger("Trigger22").Event = '';
 
@@ -635,7 +649,16 @@ function Server_ModifyCurrentMap_NP21Atje()
 
 function Server_FixCurrentMap_NP22DavidM()
 {
+	local ONPBlockAllPanel BlockAll;
+	local Actor EClip;
+
 	DisableTeleporter("Teleporter1");
+	BlockAll = Spawn(class'ONPBlockAllPanel',,, vect(1283, -576, -98), rot(-764, 19308, 0));
+	BlockAll.Skin = Texture(DynamicLoadObject("DavidMGras.Ground1", class'Texture', true)); // for footstep sounds
+	BlockAll.SetScale(12);
+
+	EClip = LoadLevelActor("EClip0");
+	EClip.SetLocation(EClip.Location + vect(0, 0, 4));
 }
 
 function Server_FixCurrentMap_NP23Kew()
@@ -715,10 +738,24 @@ function Server_FixCurrentMap_NP29DavidM()
 
 function Server_FixCurrentMap_NP31DavidM()
 {
+	local Mover Mover;
+	local ONPMoverOpener ONPMoverOpener;
+	local ONPZonedTrigger ONPZonedTrigger;
+
+	LoadLevelActor("skaarjeyes0").Style = STY_Translucent;
+
+	LoadLevelActor("ViewSpot4").Spawn(class'ONPViewSpot',, 'trapcam4');
+
+	Mover = LoadLevelMover("Mover6");
+	ONPMoverOpener = Spawn(class'ONPMoverOpener', Mover, 'open_homosexualdoor');
+	ONPZonedTrigger = Spawn(class'ONPZonedTrigger');
+	ONPZonedTrigger.ReplaceTrigger(LoadLevelTrigger("Trigger12"));
+	ONPZonedTrigger.bTriggerOnceOnly = false;
+	ONPZonedTrigger.Event = 'open_homosexualdoor';
+	LoadLevelDispatcher("Dispatcher13").OutEvents[2] = 'open_homosexualdoor';
+
 	MutatorPtr.bTemporarySuperShockRifle = true;
 	LoadLevelMover("Mover42").Tag = '';
-	LoadLevelMover("AttachMover3").Tag = '';
-	MakeMoverTriggerableOnceOnly("Mover6");
 }
 
 function Server_FixCurrentMap_NP32Strogg()

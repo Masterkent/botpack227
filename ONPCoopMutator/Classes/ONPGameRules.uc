@@ -231,6 +231,8 @@ function RegisterONPLevelInfo(actor newinfo)
 
 function ModifyDamage(Pawn Victim, Pawn Instigator, out int Damage, vector HitLocation, name DamageType, out vector Momentum)
 {
+	local ONPSafeFall ONPSafeFall;
+
 	if (MutatorPtr.bAdjustNPCFriendlyFire &&
 		(CoopGame(Level.Game) != none && CoopGame(Level.Game).bNoFriendlyFire ||
 			CoopGame(Level.Game) == none && class'CoopGame'.default.bNoFriendlyFire) &&
@@ -243,6 +245,13 @@ function ModifyDamage(Pawn Victim, Pawn Instigator, out int Damage, vector HitLo
 		if (bool(Momentum))
 			Momentum = vect(0, 0, 0);
 	}
+
+	if (DamageType == 'fell')
+		foreach Victim.TouchingActors(class'ONPSafeFall', ONPSafeFall)
+		{
+			Damage = 0;
+			return;
+		}
 }
 
 static function bool IsFriendlyFollower(Pawn P)
