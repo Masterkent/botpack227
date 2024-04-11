@@ -556,6 +556,10 @@ else
   Super.PrevItem();
 }
 exec function NextItem(){
+if (SelectedItem.bDeleteMe) {
+  super.NextItem();
+  return;
+}
 if (PlayerMod==1)
   return;
 if (PlayerMod==2){

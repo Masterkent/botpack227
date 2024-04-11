@@ -77,7 +77,6 @@ function AddDefaultInventory(pawn PlayerPawn ){
   local int i;
   local byte PlayerHas[20];
   local tvscorekeeper scoreholder;
-  local bool bKilledSelected;
   if( PlayerPawn.IsA('Spectator')||bLoadingSave)
     return;
   scoreholder=tvscorekeeper(playerpawn.FindInventoryType(class'tvscorekeeper'));
@@ -112,8 +111,6 @@ function AddDefaultInventory(pawn PlayerPawn ){
           XidiaAutoMag(inv).hastwoMag=true; //post accept reads this :)
       }
       else if (i<8&&Linfo.InventoryToDestroy[i]==inv.class&&Linfo.NetOptions[i+20]<2){
-        if (PlayerPawn.SelectedItem==Inv)
-          bKilledSelected=true;
         Inv.destroy();       //remove
       }
     }
@@ -127,8 +124,6 @@ function AddDefaultInventory(pawn PlayerPawn ){
     else
       GivePickup(class<pickup>(LInfo.defaultInventory[i]),PlayerPawn);
   }
-  if (bKilledSelected)
-    PlayerPawn.NextItem();
 }
 
 //gives a pickup to a pawn.

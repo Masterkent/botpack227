@@ -13,6 +13,7 @@ var config string TimeDif[10]; //float 2 pt + dif. i.e. (321321.. time is 321.32
 var config string KillHash[10]; //hashed statistics..
 var config string TimeHash[10]; //hashed Times for level
 var config int MaxDif; //maximum difficulty beaten + 1
+var config byte B227_DifficultyBeaten[7];
 
 var UMenuLabelControl pnames[10];   //names
 var UMenuLabelControl Dates[10];   //date score set.

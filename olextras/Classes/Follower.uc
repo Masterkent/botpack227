@@ -1148,7 +1148,7 @@ function bool SetEnemy( Pawn NewEnemy )
 }
 simulated function postnetbeginplay(){ //better prediction
   super.postnetbeginplay();
-  bisplayer=true;
+  //-bisplayer=true;
 }
 //Friendly Fire Stuff/
 //Determine if projectile would probably hit player.

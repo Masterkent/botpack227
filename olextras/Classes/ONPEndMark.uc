@@ -77,12 +77,19 @@ local AwardNotifyWindow Award;
  level.game.SecretGoals=0;
  P.SecretCount=0;
  //REWARDS
- if (level.game.difficulty+1>class'TVHSClient'.default.MaxDif){
-  WindowConsole(P.Player.Console).bQuickKeyEnable = true;  //ensures it will then close.....
-  WindowConsole(P.Player.Console).LaunchUWindow();   //open window.....
-  Award=AwardNotifyWindow(WindowConsole(P.Player.Console).Root.CreateWindow(class'AwardNotifyWindow', 100, 100, 200, 200));
-  AwardClient(Award.ClientArea).SetAwards(level.game.difficulty);
-  p.setpause(true);
+ //-if (level.game.difficulty+1>class'TVHSClient'.default.MaxDif){
+ if (Level.Game.Difficulty < 7 &&
+     class'TVHSClient'.default.B227_DifficultyBeaten[Level.Game.Difficulty] == 0) {
+   class'TVHSClient'.default.B227_DifficultyBeaten[Level.Game.Difficulty] = 1;
+   if (WindowConsole(P.Player.Console) != none) {
+     WindowConsole(P.Player.Console).bQuickKeyEnable = true;  //ensures it will then close.....
+     WindowConsole(P.Player.Console).LaunchUWindow();   //open window.....
+     Award=AwardNotifyWindow(WindowConsole(P.Player.Console).Root.CreateWindow(class'AwardNotifyWindow', 100, 100, 200, 200));
+     AwardClient(Award.ClientArea).SetAwards(level.game.difficulty);
+     p.setpause(true);
+   }
+   else
+     class'TVHSClient'.static.StaticSaveConfig();
  }
  class'TVHSClient'.static.SaveScores(P.scoreHolder,P.PlayerReplicationInfo.PlayerName); //implement enterable names?
  Enable('tick');

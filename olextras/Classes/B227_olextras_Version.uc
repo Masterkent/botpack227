@@ -3,6 +3,6 @@ class B227_olextras_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 olextras v1.10 [2024-03-23]"
-	Version="1.10"
+	VersionInfo="B227 olextras v1.11 [2024-04-11]"
+	Version="1.11"
 }
