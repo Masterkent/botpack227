@@ -3,6 +3,6 @@ class B227_SevenB_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 SevenB v2.8 [2024-04-10]"
-	Version="2.8"
+	VersionInfo="B227 SevenB v2.9 [2024-04-13]"
+	Version="2.9"
 }

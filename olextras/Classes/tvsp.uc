@@ -611,8 +611,8 @@ function ScoreDamage(int Damage, Pawn Victim, Pawn Damager){
     bSuicide=true;
     bTemp=11; //"other" damage
   }
-  if (bTemp==10)
-    Damage=RealDamage; //or else too much points from SSL...
+  //-if (bTemp==10) // B227: some movers can cause a lot of damage too
+  //-  Damage=RealDamage; //or else too much points from SSL...
   if (Victim.bIsPlayer){
     ScoreHolder.DamageTaken+=min(Damage,600);
     if (Follower(Damager) == none || !Follower(Damager).IsFriend()) //followers suck and like to hit player
@@ -624,7 +624,7 @@ function ScoreDamage(int Damage, Pawn Victim, Pawn Damager){
       ScoreHolder.FriendlyDamage+=RealDamage;
       if (bTemp<12)
         ScoreHolder.Weapons[btemp].DamageInstigated+=RealDamage;
-      ScoreHolder.AddPoints(-0.25*damage);
+      ScoreHolder.AddPoints(-0.25*RealDamage);
     }
     return;   //other-wise don't care
   }
@@ -634,9 +634,9 @@ function ScoreDamage(int Damage, Pawn Victim, Pawn Damager){
   if (bTemp<12)
     ScoreHolder.Weapons[btemp].DamageInstigated+=RealDamage;
   if (bSuicide)
-    ScoreHolder.AddPoints(0.15*damage);
+    ScoreHolder.AddPoints(0.15*RealDamage);
   else
-    ScoreHolder.AddPoints(0.5*damage);
+    ScoreHolder.AddPoints(0.5*RealDamage);
 }
 //David didn't like UT's
 function PlayTeleportEffect( actor Incoming, bool bOut, bool bSound)
