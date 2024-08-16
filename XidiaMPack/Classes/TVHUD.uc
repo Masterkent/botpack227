@@ -11,6 +11,7 @@ class TVHUD expands oldskoolHUD;
 
 //Items (64x64 images):
 #exec OBJ LOAD FILE="XidiaMPackResources.u" PACKAGE=XidiaMPack
+#exec TEXTURE IMPORT NAME=B227_RipperE FILE=Textures\RipperE.PCX GROUP="Icons" MIPS=OFF FLAGS=2
 
 //Weapon Pictures (HUD Base w/ all weapons shown)  //128x64  add ripper?  WHERE IS DPISTOL?
 //full ammo:
@@ -206,7 +207,7 @@ simulated function HudSetup (Canvas Canvas){
     WeapIcons[11]=Texture'bioE';
     WeapIcons[21]=Texture'bioN';
     WeapIcons[7]=Texture'RipperF';
-    WeapIcons[17]=Texture'RipperE';
+    WeapIcons[17]=Texture'B227_RipperE';
     WeapIcons[27]=Texture'RipperN';
   }
   else if (tvplayer(owner).linfo!=none){

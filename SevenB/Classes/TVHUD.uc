@@ -11,6 +11,7 @@ class TVHUD expands oldskoolHUD;
 
 //Items (64x64 images):
 #exec OBJ LOAD FILE="SevenBResources.u" PACKAGE=SevenB
+#exec TEXTURE IMPORT NAME=B227_RipperE FILE=Textures\RipperE.PCX GROUP="Icons" MIPS=OFF FLAGS=2
 
 //Weapon Pictures (HUD Base w/ all weapons shown)  //128x64  add ripper?  WHERE IS DPISTOL?
 //full ammo:
@@ -1407,7 +1408,7 @@ defaultproperties
      WeapIcons(14)=Texture'SevenB.Icons.asmdE'
      WeapIcons(15)=Texture'SevenB.Icons.pulseE'
      WeapIcons(16)=Texture'SevenB.Icons.sniperE'
-     WeapIcons(17)=Texture'SevenB.Icons.ripperE'
+     WeapIcons(17)=Texture'SevenB.Icons.B227_RipperE'
      WeapIcons(18)=Texture'SevenB.Icons.FlakE'
      WeapIcons(19)=Texture'SevenB.Icons.EballE'
      WeapIcons(20)=Texture'SevenB.Icons.CARifleN'
