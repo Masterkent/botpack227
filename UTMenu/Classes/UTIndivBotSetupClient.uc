@@ -1,4 +1,4 @@
-class UTIndivBotSetupClient extends UMenuBotSetupBase;
+class UTIndivBotSetupClient extends B227_UMenuBotSetupBase;
 
 var ChallengeBotInfo BotInfo;
 
@@ -155,7 +155,13 @@ function ResetBots()
 {
 	local class<ChallengeBotInfo> C;
 	C = BotInfo.Class;
-	BotInfo.Destroy();
+	if (BotInfo != none)
+	{
+		C = BotInfo.Class;
+		BotInfo.Destroy();
+	}
+	else
+		C = class<ChallengeBotInfo>(DynamicLoadObject("Botpack.ChallengeBotInfo", class'Class'));
 	class'ChallengeBotInfo'.static.ResetConfig();
 	BotInfo = GetEntryLevel().Spawn(C);
 
@@ -302,13 +308,18 @@ function LoadCurrent()
 {
 	local int i;
 
+	NewPlayerClass = class<Pawn>(DynamicLoadObject(BotInfo.GetBotClassName(ConfigureBot), class'Class'));
+	MeshName = GetPlayerOwner().GetItemName(String(NewPlayerClass.Default.Mesh));
+
 	NameEdit.SetValue(BotInfo.GetBotName(ConfigureBot));
 	i = TeamCombo.FindItemIndex2(string(BotInfo.BotTeams[ConfigureBot]));
 	if(i == -1)
 		i = 255;
 	TeamCombo.SetSelectedIndex(i);
 	ClassCombo.SetSelectedIndex(Max(ClassCombo.FindItemIndex2(BotInfo.GetBotClassName(ConfigureBot), True), 0));
+	IterateSkins();
 	SkinCombo.SetSelectedIndex(Max(SkinCombo.FindItemIndex2(BotInfo.GetBotSkin(ConfigureBot), True), 0));
+	IterateFaces(SkinCombo.GetValue2());
 	FaceCombo.SetSelectedIndex(Max(FaceCombo.FindItemIndex2(BotInfo.BotFaces[ConfigureBot], True), 0));
 	FavoriteWeaponCombo.SetSelectedIndex(Max(FavoriteWeaponCombo.FindItemIndex2(BotInfo.FavoriteWeapon[ConfigureBot], True), 0));
 	AccuracySlider.SetValue(100*(BotInfo.BotAccuracy[ConfigureBot]+1));
