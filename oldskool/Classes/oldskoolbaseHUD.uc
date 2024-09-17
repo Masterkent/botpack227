@@ -329,18 +329,21 @@ simulated function postrender(canvas canvas){
     //start unreal messages loop.  (would normally be at end of console (end of postrender) here is pretty close...
   drawunrealmessages(canvas);
 }
+
 simulated function HUDSetup(canvas canvas)
 {
-Super.Hudsetup(canvas);
-bResChanged = (Canvas.ClipX != OldClipX);
+  Super.Hudsetup(canvas);
+  bResChanged = (Canvas.ClipX != OldClipX);
   OldClipX = Canvas.ClipX;
-Playerowner=Playerpawn(Owner);
+  Playerowner=Playerpawn(Owner);
   if ( PlayerOwner.ViewTarget == None )            //set pawnowner stuff....
     PawnOwner = PlayerOwner;
   else if ( PlayerOwner.ViewTarget.bIsPawn )
     PawnOwner = Pawn(PlayerOwner.ViewTarget);
   else
-    PawnOwner = PlayerOwner;}
+    PawnOwner = PlayerOwner;
+}
+
 function DrawTalkFace(Canvas Canvas, float YPos)
 {
   if ( Hudmode<5 )
@@ -718,7 +721,7 @@ simulated function DrawInventory(Canvas Canvas, int X, int Y, bool bDrawOne)
 {
   local bool bGotNext, bGotPrev, bGotSelected;
   local inventory Inv,Prev, Next, SelectedItem;
-  local int TempX,TempY, HalfHUDX, HalfHUDY, AmmoIconSize, i;
+  local int HalfHUDX, HalfHUDY, AmmoIconSize, i;
 
   if ( HudMode < 4 ) //then draw HalfHUD
   {
@@ -828,22 +831,8 @@ simulated function DrawInventory(Canvas Canvas, int X, int Y, bool bDrawOne)
   {
     if( Translator.bCurrentlyActivated )
     {
-      Canvas.bCenter = false;
-      Canvas.Font = Canvas.MedFont;
-      TempX = Canvas.ClipX;
-      TempY = Canvas.ClipY;
-      CurrentMessage = Translator.NewMessage;
-      Canvas.Style = 2;
-      Canvas.SetPos(Canvas.ClipX/2-128, Canvas.ClipY/2-68);
-      Canvas.DrawIcon(texture'TranslatorHUD3', 1.0);
-      Canvas.SetOrigin(Canvas.ClipX/2-110,Canvas.ClipY/2-52);
-      Canvas.SetClip(225,110);
-      Canvas.SetPos(0,0);
-      Canvas.Style = 1;
-      Canvas.DrawText(CurrentMessage, False);
-      HUDSetup(canvas);
-      Canvas.ClipX = TempX;
-      Canvas.ClipY = TempY;
+      Translator.DrawTranslator(Canvas);
+      HUDSetup(Canvas);
     }
     else
       bFlashTranslator = ( Translator.bNewMessage || Translator.bNotNewMessage );
