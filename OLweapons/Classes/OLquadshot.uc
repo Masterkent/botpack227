@@ -61,41 +61,48 @@ function setHand(float Hand)
   else
     Mesh = mesh'olweapons.QuadShotHeldR';
 }
+
 simulated function PostRender( canvas Canvas )   //render amount of clips left.....
 {
-  local PlayerPawn P;
-  local float multiplier;
-  Super.PostRender(Canvas);
-  P = PlayerPawn(Owner);
-  if  (P != None)
-  {
-          if (p.myhud.isa('challengehud'))
-      multiplier=0.8;
-      else
-      multiplier=0.9;
-    //shotsleft=min(shotsleft, ammotype.ammoamount); //happened somehow, but I couldn't track it down, so the fix is right here....
-    Canvas.DrawColor.B = 0;
-    if (shotsleft < 3 ){       //set colour according to shots left.....
-    Canvas.DrawColor.R = 255;
-    Canvas.DrawColor.G = 0;}
-    else{
-    Canvas.DrawColor.R = 0;
-    Canvas.DrawColor.G = 255;}
-    if(P.Handedness != 1){
-    Canvas.SetPos(0.05 * Canvas.ClipX , multiplier * Canvas.ClipY);
-            Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont;  }
-            else {
-            Canvas.SetPos(0.85 * Canvas.ClipX , multiplier * Canvas.ClipY);
-            Canvas.Style = ERenderStyle.STY_Translucent;
-            Canvas.Font = Canvas.SmallFont; }
-            Canvas.DrawText("In Gun: "$ShotsLeft);
+    local PlayerPawn P;
+    local float multiplier;
 
-    Canvas.Reset();
-    Canvas.DrawColor.R = 255;
-    Canvas.DrawColor.G = 255;
-    Canvas.DrawColor.B = 255;
-  }
+    Super.PostRender(Canvas);
+
+    P = PlayerPawn(Owner);
+    if  (P != None)
+    {
+        if (ChallengeHUD(P.myhud) != none)
+            multiplier=0.8;
+        else
+            multiplier=0.9;
+        //shotsleft=min(shotsleft, ammotype.ammoamount); //happened somehow, but I couldn't track it down, so the fix is right here....
+        Canvas.DrawColor.B = 0;
+        if (shotsleft < 3 )
+        {
+            //set colour according to shots left.....
+            Canvas.DrawColor.R = 255;
+            Canvas.DrawColor.G = 0;
+        }
+        else
+        {
+            Canvas.DrawColor.R = 0;
+            Canvas.DrawColor.G = 255;
+        }
+        if (P.Handedness != 1)
+            Canvas.SetPos(0.05 * Canvas.ClipX , multiplier * Canvas.ClipY);
+        else
+            Canvas.SetPos(0.85 * Canvas.ClipX , multiplier * Canvas.ClipY);
+
+        Canvas.Style = ERenderStyle.STY_Translucent;
+        class'FontInfo'.static.B227_SetStaticScaledSmallFont(Canvas, true);
+        Canvas.DrawText("In Gun: "$ShotsLeft);
+
+        Canvas.Reset();
+        Canvas.DrawColor.R = 255;
+        Canvas.DrawColor.G = 255;
+        Canvas.DrawColor.B = 255;
+    }
 }
 function PlayPostSelect()
 {

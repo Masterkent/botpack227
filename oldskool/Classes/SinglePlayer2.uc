@@ -377,4 +377,7 @@ defaultproperties
      HUDType=Class'OldSkool.oldskoolhud'
      GameName="Single Player"
      MutatorClass=Class'OldSkool.spoldskool'
+     BotMenuType=""
+     RulesMenuType=""
+     SettingsMenuType="UMenu.UMenuSinglePlayerSettingsSClient"
 }

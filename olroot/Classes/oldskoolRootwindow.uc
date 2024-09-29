@@ -26,12 +26,8 @@ var bool bswaptrack;  //music bug related vars
 var float swaptime;
 //var vool cshpcheck;
 
-var bool B227_bEnabled;
-
 function Created()
 {
-  default.B227_bEnabled = true;
-
   Super(UwindowRootWindow).Created();
 
   if (ticky==None){                        //music ticker.....
@@ -139,6 +135,26 @@ return false;
 if (musicclass=="utemple.utemple"||musicclass=="unreal4.unreal4"||musicclass=="nali.nali"||musicclass=="skytwn.skytwn")
 return true;
 return false;
+}
+
+static function bool B227_IsEnabled(Object Context)
+{
+	local PlayerPawn Player;
+	local WindowConsole WindowConsole;
+
+	foreach Context.AllObjects(class'PlayerPawn', Player)
+		if (Viewport(Player.Player) != none)
+		{
+			WindowConsole = WindowConsole(Player.Player.Console);
+			if (WindowConsole != none)
+				break;
+		}
+	return WindowConsole != none && oldskoolRootwindow(WindowConsole.Root) != none;
+}
+
+static function class<Actor> B227_VersionClass()
+{
+	return class'B227_olroot_Version'; // makes class B227_olroot_Version loaded
 }
 
 defaultproperties

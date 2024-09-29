@@ -59,6 +59,8 @@ function Created()
   local bool bFoundSavedMapPack;
   local int ControlWidth, ControlLeft, ControlRight;
   local int CenterWidth, CenterPos;
+  local int DifficultiesNum;
+
   log ("Map Client Opened");
 
   Super.Created();
@@ -158,20 +160,22 @@ function Created()
   SkillCombo.SetHelpText(class'umenu.umenunewgameclientwindow'.default.SkillHelp);
   SkillCombo.SetFont(F_Normal);
   SkillCombo.SetEditable(False);
-  for (I=0; I<4; I++)
+
+  DifficultiesNum = int(GetDefaultObject(class'UMenuNewGameClientWindow').GetPropertyText("Skills[]"));
+  for (I=0; I<DifficultiesNum; I++)
     SkillCombo.AddItem(class'umenu.umenunewgameclientwindow'.default.Skills[I]);
   //deathmatch plus difficulty info is irrevelent to this....... Ut intro also gives no dif. level...
-  if (GetLevel().Game.Difficulty <4 && !GetLevel().Game.Isa('DeathMatchPlus')){
+  if (GetLevel().Game.Difficulty < DifficultiesNum && !GetLevel().Game.Isa('DeathMatchPlus')){
   SkillCombo.SetSelectedIndex(GetLevel().Game.Difficulty);
   BotmatchParent.Difficulty=GetLevel().Game.Difficulty;}
   else{
   //defaults at medium
   BotmatchParent.Difficulty=1;
   SkillCombo.SetSelectedIndex(1); }
-  if (GetLevel().Game.Difficulty <4&& !GetLevel().Game.Isa('DeathMatchPlus'))
-  SkillLabel.SetText(class'umenu.umenunewgameclientwindow'.default.SkillStrings[GetLevel().Game.Difficulty]);
+  if (GetLevel().Game.Difficulty < DifficultiesNum && !GetLevel().Game.Isa('DeathMatchPlus'))
+    SkillLabel.SetText(class'umenu.umenunewgameclientwindow'.default.SkillStrings[GetLevel().Game.Difficulty]);
   else
-  SkillLabel.SetText(class'umenu.umenunewgameclientwindow'.default.SkillStrings[1]);
+    SkillLabel.SetText(class'umenu.umenunewgameclientwindow'.default.SkillStrings[1]);
   SkillLabel.Align = TA_Center;
 
 
@@ -391,7 +395,7 @@ function BeforePaint(Canvas C, float X, float Y)        //set up size.......
 
   SkillCombo.SetSize(CenterWidth, 1);
   SkillCombo.WinLeft = CenterPos;
-  SkillCombo.EditBoxWidth = 90;
+  SkillCombo.EditBoxWidth = 150;
 
   SkillLabel.SetSize(CenterWidth, 1);
   SkillLabel.WinLeft = CenterPos;

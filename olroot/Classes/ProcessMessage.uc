@@ -19,7 +19,6 @@ function MessageBoxDone(UWindowMessageBox W, MessageBoxResult Result)    //idiot
 //receiver.messageboxdone(w,result);
 	if (W == box && Result == MR_Yes)
 	{
-		class'oldskoolRootwindow'.default.B227_bEnabled = false;
 		//check if saved root exists.
 		if (class'oldskoolRootwindow'.default.savedroot == "" ||
 			class<UWindowRootWindow>(DynamicLoadObject(class'oldskoolRootwindow'.default.savedroot, class'class', true)) == none)
@@ -30,6 +29,7 @@ function MessageBoxDone(UWindowMessageBox W, MessageBoxResult Result)    //idiot
 		Root.Console.default.RootWindow = Root.Console.RootWindow; //allows oldskool item to work right.
 		Root.Console.SaveConfig();
 		Root.Console.ResetUWindow();    //reinitialize root.
+		Root.Console.LaunchUWindow();
 	}
 }
 //don't run these

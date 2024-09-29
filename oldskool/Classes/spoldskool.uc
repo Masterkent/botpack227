@@ -82,658 +82,356 @@ function postbeginplay(){
 //decals spawnnotify:
 //log ("OldSkool Amp'd: SPOldSkool Postbeginplay called");
 }
-function FixContents(out class<Actor> conts){  //mag, minigun, armor and kev not swapped do ro replacewith stuff
-  if (conts==none)
-    return;
-  if (conts==class'ShieldBelt'){
-    if (bshield)
-      conts=class'osUT_ShieldBelt';
-    else
-      conts=class'osShieldBelt';
-   }
-  else if (conts==class'powershield'){
-    if (bshield)
-      conts=class'olweapons.shieldBeltpower';
-    else
-     conts=class'olweapons.ospowershield';
-  }
-  else if (conts==class'superhealth'&&bmegahealth)
-    conts=class'healthpack';
-  else if (conts==class'health'&&bmed)
-    conts=class'medbox';
-  else if (conts==class'weaponpowerup')
-    conts=class'osDispersionpowerup';
-  else if (conts==class'amplifier'&&!bdamage) //do to modifications in replacewith, cannot swap damage
-    conts=class'osamplifier';
-  else if (conts==class'jumpboots'&&bjump)
-    conts=class'UT_jumpboots';
-  else if (conts==class'sludge'&&bBioRifle)
-    conts=class'bioammo';
-  else if (conts==class'ASMDAmmo'&&basmd )
-    conts=class'ShockCore';
-  else if (conts==class'RocketCan'&&beball)
-    conts=class'botpack.RocketPack';
-  else if (conts==class'StingerAmmo'&&bstingy)
-    conts=class'botpack.PAmmo';
-  else if (conts==class'RazorAmmo'&&brazor)
-    conts=class'botpack.BladeHopper';
-  else if (conts==class'RifleRound' &&brifle)
-    conts=class'botpack.RifleShell';
-  else if (conts==class'RifleAmmo'&&brifle)
-    conts=class'botpack.bulletbox';
-  else if (conts==class'FlakBox'&&bflak)
-    conts=class'botpack.FlakAmmo';
-  else if (conts==class'flakshellammo'&&bflak)
-    conts=class'olweapons.OSFlakshellAmmo';
-  else if (conts==class'ShellBox'&&bmag)
-    conts=class'botpack.MiniAmmo';
-  else if (conts==class'Clip'&&bmag)
-    conts=class'botpack.EClip';
-  else if (conts==class'pulsegun')                            //set up UT: SP stuff for old new maps.....
-    conts=class'olweapons.OSPulseGun';
-  else if (conts==class'shockrifle')
-    conts=class'olweapons.osShockRifle';
-  else if ( conts==class'Stinger')                             //set up decal/network weapons.....
-    {
-    if (bstingy)
-      conts=class'olweapons.OSPulseGun';
-    else
-      conts=class'olweapons.olstinger';
-    }
-  else if ( conts==class'Rifle')
-    {
-    if (brifle)
-    conts=class'botpack.SniperRifle';
-    else
-    conts=class'olweapons.olRifle';
-    }
-  else if ( conts==class'Razorjack' )
-    {
-    if (brazor)
-    conts=class'botpack.ripper';
-    else
-    conts=class'olweapons.olrazorjack';
-    }
-  else if (conts==class'quadshot') //some maps had this?
-      conts=class'olweapons.olquadshot';
-  else if ( conts==class'Eightball')
-    {
-    if (beball)
-    conts=class'botpack.UT_Eightball';
-    else
-    conts=class'olweapons.olEightball';
-    }
-  else if (conts==class'FlakCannon')
-    {
-    if (bflak)
-    conts=class'botpack.UT_flakcannon';
-    else
-    conts=class'olweapons.olFlakCannon';
-    }
-  else if (conts==class'ASMD')
-  {
-    if (basmd)
-    conts=class'olweapons.osShockRifle';
-    else
-    conts=class'olweapons.olasmd';
-    }
-  else if (conts==class'GesBioRifle')  {
-    if (bbiorifle)
-    conts=class'botpack.UT_BioRifle' ;
-    else
-    conts=class'olweapons.olgesBioRifle';
-    }
-    else if (conts==class'dispersionpistol' )
-      conts=class'olweapons.oldpistol';
+function FixContents(out class<Actor> conts)
+{  //mag, minigun, armor and kev not swapped do ro replacewith stuff
+	if (conts == none)
+		return;
+	if (conts == class'ShieldBelt' || conts == class'osShieldBelt')
+	{
+		if (bshield)
+			conts = class'osUT_ShieldBelt';
+		else
+			conts = class'osShieldBelt';
+	}
+	else if (conts == class'PowerShield' || conts == class'olweapons.ospowershield')
+	{
+		if (bshield)
+			conts = class'olweapons.shieldBeltpower';
+		else
+			conts = class'olweapons.ospowershield';
+	}
+	else if (conts == class'SuperHealth' && bmegahealth)
+		conts = class'healthpack';
+	else if (conts == class'health' && bmed)
+		conts = class'medbox';
+	else if (conts == class'Amplifier' && !bdamage) //do to modifications in replacewith, cannot swap damage
+		conts = class'osamplifier';
+	else if (conts == class'JumpBoots' && bjump)
+		conts = class'UT_jumpboots';
+	else if (conts == class'WeaponPowerup')
+		conts = class'osDispersionpowerup';
+	else if (ClassIsChildOf(conts, class'Clip') && bmag)
+		conts = class'botpack.EClip';
+	else if (ClassIsChildOf(conts, class'ShellBox') && bmag)
+		conts = class'Botpack.MiniAmmo';
+	else if (ClassIsChildOf(conts, class'StingerAmmo') && bstingy)
+		conts = class'Botpack.PAmmo';
+	else if (ClassIsChildOf(conts, class'ASMDAmmo') && basmd)
+		conts = class'ShockCore';
+	else if (ClassIsChildOf(conts, class'RocketCan') && beball)
+		conts = class'Botpack.RocketPack';
+	else if (ClassIsChildOf(conts, class'FlakShellAmmo') && bflak)
+		conts = class'olweapons.OSFlakshellAmmo';
+	else if (ClassIsChildOf(conts, class'FlakBox') && bflak)
+		conts = class'Botpack.FlakAmmo';
+	else if (ClassIsChildOf(conts, class'RazorAmmo') && brazor)
+		conts = class'Botpack.BladeHopper';
+	else if (ClassIsChildOf(conts, class'Sludge') && bBioRifle)
+		conts = class'BioAmmo';
+	else if (ClassIsChildOf(conts, class'RifleRound') && brifle)
+		conts = class'Botpack.RifleShell';
+	else if (ClassIsChildOf(conts, class'RifleAmmo') && brifle)
+		conts = class'Botpack.bulletbox';
+	else if (conts == class'dispersionpistol')
+		conts = class'olweapons.oldpistol';
+	else if (conts == class'AutoMag' || conts == class'olweapons.olautomag')
+	{
+		if (bmag)
+			conts = class'Botpack.Enforcer';
+		else
+			conts = class'olweapons.olautomag';
+	}
+	else if (conts == class'Stinger' || conts == class'olweapons.olstinger')                             //set up decal/network weapons.....
+	{
+		if (bstingy)
+			conts = class'olweapons.OSPulseGun';
+		else
+			conts=class'olweapons.olstinger';
+	}
+	else if (conts == class'ASMD' || conts == class'olweapons.olasmd')
+	{
+		if (basmd)
+			conts = class'olweapons.osShockRifle';
+		else
+			conts = class'olweapons.olasmd';
+	}
+	else if (conts == class'Eightball' || conts == class'olweapons.olEightball')
+	{
+		if (beball)
+			conts = class'botpack.UT_Eightball';
+		else
+			conts = class'olweapons.olEightball';
+	}
+	else if (conts == class'FlakCannon' || conts == class'olweapons.olFlakCannon')
+	{
+		if (bflak)
+			conts = class'botpack.UT_flakcannon';
+		else
+			conts = class'olweapons.olFlakCannon';
+	}
+	else if (conts == class'Razorjack' || conts == class'olweapons.olrazorjack')
+	{
+		if (brazor)
+			conts = class'botpack.ripper';
+		else
+			conts = class'olweapons.olrazorjack';
+	}
+	else if (conts == class'GesBioRifle' || conts == class'olweapons.olgesBioRifle')
+	{
+		if (bbiorifle)
+			conts = class'botpack.UT_BioRifle' ;
+		else
+			conts = class'olweapons.olgesBioRifle';
+	}
+	else if (conts == class'Rifle' || conts == class'olweapons.olRifle')
+	{
+		if (brifle)
+			conts = class'Botpack.SniperRifle';
+		else
+			conts = class'olweapons.olRifle';
+	}
+	else if (conts == class'Minigun' || conts == class'olweapons.olMinigun')
+	{
+		if (bmini)
+			conts = class'Botpack.Minigun2';
+		else
+			conts = class'olweapons.olMinigun';
+	}
+	else if (conts == class'quadshot') //some maps had this?
+		conts = class'olweapons.olquadshot';
+	else if (conts == class'PulseGun')                            //set up UT: SP stuff for old new maps.....
+		conts = class'olweapons.OSPulseGun';
+	else if (conts == class'shockrifle')
+		conts = class'olweapons.osShockRifle';
 }
 
 
 //main mutator logic:
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
-  local transhack hack;  //OSA 2.2 Illumination hack fix
-  // replace Unreal I inventory actors by their Unreal Tournament equivalents
-  // set bSuperRelevant to false if want the gameinfo's super.IsRelevant() function called
-  // to check on relevancy of this actor.
+	//-local transhack hack;  //OSA 2.2 Illumination hack fix
+	// replace Unreal I inventory actors by their Unreal Tournament equivalents
+	// set bSuperRelevant to false if want the gameinfo's super.IsRelevant() function called
+	// to check on relevancy of this actor.
+	local class<Actor> ActorClass;
 
-  if (!B227_bCheckReplacement)
-    return true;
+	if (!B227_bCheckReplacement)
+		return true;
 
-  //weaps...
-if (other.isa('transporter')){   //OSA 2.2 transport fix.
-hack=spawn(class'transhack',,other.tag,other.location);
-hack.Offset=transporter(other).Offset;
-other.disable('trigger'); //my version is better :P
-return true; //keep its navigation properties.  With trigger disabled it can't do anything and the hack manages it.
-}
-if (Decoration(Other) != none){    //fix content (falling stuff)
-  //-if (other.isa('tree')||left(getitemname(string(other.class)),5)~="plant")
-  //-  other.style=STY_MASKED; //fix up mask bug in D3D?
-  fixcontents(decoration(other).Contents);
-  fixcontents(decoration(other).Content2);
-  fixcontents(decoration(other).Content3);
-}
-if (MusicEvent(Other) != none && MusicEvent(Other).Song==none&&level.song==none){ //need to set to null
-  musicevent(other).song=music'olroot.null';
-  return true;
-}
-//-if (other.style==STY_NORMAL&&other.isa('pawn')&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('bird1')||other.isa('Slith')||other.isa('manta')))
-//-  other.style=STY_MASKED; //fix up masking bug on pawns
-if (Other.bIsPawn && Pawn(Other).DropWhenKilled != none)
-  B227_AdjustInventoryClass(Pawn(Other).DropWhenKilled);
-if (Weapon(Other) != none && Weapon(Other).AmmoName != none)
-  Weapon(Other).AmmoName = class<Ammo>(B227_ReplaceInventoryClass(Weapon(Other).AmmoName));
-if (Inventory(other) != none) //so pickup messages work......
-  class'UTC_Inventory'.static.B227_SetPickupMessageClass(Inventory(other), none);
-//here we swap baddie projectiles around.... (neither a spawn notify nor mutator would affect the projectiles so I had to do it the hard way :(
-else if (ScriptedPawn(other) != none){
-if (class'olweapons.uiweapons'.default.busedecals){
-//if (other.isa('skaarjtrooper'))
-//scriptedpawn(other).Shadow = Spawn(class'PlayerShadow',other,,other.location);
-//else //what is the difference?  update(actor l) only works if a pawn has a weapon. thus I use olpawnshadow.  playershadow works for troopers though, so might was well be used.
-//-if (!other.isa('tentacle'))     //no decal for them.
-//-  scriptedpawn(other).Shadow = Spawn(class'olpawnShadow',other,,other.location);
-if (scriptedpawn(other).RangedProjectile==Class'UnrealShare.BruteProjectile')
-scriptedpawn(other).RangedProjectile=Class'oldskool.olBruteProjectile';
-if (scriptedpawn(other).RangedProjectile==Class'Unreali.mercrocket')
-scriptedpawn(other).RangedProjectile=Class'oldskool.olmercrocket';
-else if (scriptedpawn(other).RangedProjectile==Class'UnrealI.GasBagBelch')
-scriptedpawn(other).RangedProjectile=Class'oldskool.olGasBagBelch';
-else if (scriptedpawn(other).RangedProjectile==Class'UnrealI.KraalBolt')
-scriptedpawn(other).RangedProjectile=Class'oldskool.olkraalbolt';
-else if (scriptedpawn(other).RangedProjectile==Class'UnrealI.EliteKrallBolt')
-scriptedpawn(other).RangedProjectile=Class'oldskool.ol1337krallbolt';
-else if (scriptedpawn(other).RangedProjectile==Class'Unrealshare.skaarjprojectile')           //no slith thankz to the hitwall not being simulated (and me too lazy to redo it ;)
-scriptedpawn(other).RangedProjectile=Class'oldskool.olskaarjprojectile';
-else if (scriptedpawn(other).RangedProjectile==Class'Unreali.queenprojectile')
-scriptedpawn(other).RangedProjectile=Class'oldskool.olqueenprojectile';
-else if (scriptedpawn(other).RangedProjectile==Class'Unrealshare.tentacleprojectile')
-scriptedpawn(other).RangedProjectile=Class'oldskool.oltentacleprojectile';
-else if (scriptedpawn(other).RangedProjectile==Class'SlithProjectile')
-scriptedpawn(other).RangedProjectile=Class'olSlithProjectile';
-else if (scriptedpawn(other).RangedProjectile==Class'Unreali.warlordrocket')
-scriptedpawn(other).RangedProjectile=Class'oldskool.olwarlordrocket';  }
-//if (busedecals||level.netmode!=nm_standalone)
-if (B227_bPermaCarcasses &&
-	class<CreatureCarcass>(ScriptedPawn(Other).CarcassType) != none &&
-	ScriptedPawn(Other).CarcassType == ScriptedPawn(Other).default.CarcassType)
-{
-	ScriptedPawn(Other).CarcassType = class'olCreatureCarcass';
-}
-//get those skaarjy right.....                   i.e sets weapons so won't screw up player.  Warning: this makes the skaarj even deadlier ;)
+	// Not needed in Unreal 227
+	//-if (other.isa('transporter'))
+	//-{   //OSA 2.2 transport fix.
+	//-	hack=spawn(class'transhack',,other.tag,other.location);
+	//-	hack.Offset=transporter(other).Offset;
+	//-	other.disable('trigger'); //my version is better :P
+	//-	return true; //keep its navigation properties.  With trigger disabled it can't do anything and the hack manages it.
+	//-}
+	if (Decoration(Other) != none)
+	{    //fix content (falling stuff)
+		//-if (other.isa('tree')||left(getitemname(string(other.class)),5)~="plant")
+		//-  other.style=STY_MASKED; //fix up mask bug in D3D?
+		FixContents(Decoration(Other).Contents);
+		fixcontents(Decoration(Other).Content2);
+		FixContents(Decoration(Other).Content3);
+	}
+	if (MusicEvent(Other) != none && MusicEvent(Other).Song == none && level.song == none)
+	{
+		MusicEvent(Other).song = music'olroot.null';
+		return true;
+	}
+	//-if (other.style==STY_NORMAL&&other.isa('pawn')&&(other.isa('skaarjwarrior')||other.isa('krall')||other.isa('warlord')||other.isa('bird1')||other.isa('Slith')||other.isa('manta')))
+	//-  other.style=STY_MASKED; //fix up masking bug on pawns
+	if (Other.bIsPawn && Pawn(Other).DropWhenKilled != none)
+		B227_AdjustInventoryClass(Pawn(Other).DropWhenKilled);
+	if (Weapon(Other) != none && Weapon(Other).AmmoName != none)
+		Weapon(Other).AmmoName = class<Ammo>(B227_ReplaceInventoryClass(Weapon(Other).AmmoName));
+	if (Inventory(other) != none) //so pickup messages work......
+		class'UTC_Inventory'.static.B227_SetPickupMessageClass(Inventory(other), none);
+	//here we swap baddie projectiles around.... (neither a spawn notify nor mutator would affect the projectiles so I had to do it the hard way :(
+	else if (ScriptedPawn(other) != none)
+	{
+		if (class'olweapons.uiweapons'.default.busedecals)
+		{
+			//if (other.isa('skaarjtrooper'))
+			//scriptedpawn(other).Shadow = Spawn(class'PlayerShadow',other,,other.location);
+			//else //what is the difference?  update(actor l) only works if a pawn has a weapon. thus I use olpawnshadow.  playershadow works for troopers though, so might was well be used.
+			//-if (!other.isa('tentacle'))     //no decal for them.
+			//-  scriptedpawn(other).Shadow = Spawn(class'olpawnShadow',other,,other.location);
+			if (scriptedpawn(other).RangedProjectile == Class'UnrealShare.BruteProjectile')
+				scriptedpawn(other).RangedProjectile = Class'oldskool.olBruteProjectile';
+			if (scriptedpawn(other).RangedProjectile == Class'Unreali.mercrocket')
+				scriptedpawn(other).RangedProjectile = Class'oldskool.olmercrocket';
+			else if (scriptedpawn(other).RangedProjectile == Class'UnrealI.GasBagBelch')
+				scriptedpawn(other).RangedProjectile=Class'oldskool.olGasBagBelch';
+			else if (scriptedpawn(other).RangedProjectile == Class'UnrealI.KraalBolt')
+				scriptedpawn(other).RangedProjectile=Class'oldskool.olkraalbolt';
+			else if (scriptedpawn(other).RangedProjectile == Class'UnrealI.EliteKrallBolt')
+				scriptedpawn(other).RangedProjectile=Class'oldskool.ol1337krallbolt';
+			else if (scriptedpawn(other).RangedProjectile == Class'Unrealshare.skaarjprojectile')           //no slith thankz to the hitwall not being simulated (and me too lazy to redo it ;)
+				scriptedpawn(other).RangedProjectile=Class'oldskool.olskaarjprojectile';
+			else if (scriptedpawn(other).RangedProjectile == Class'Unreali.queenprojectile')
+				scriptedpawn(other).RangedProjectile=Class'oldskool.olqueenprojectile';
+			else if (scriptedpawn(other).RangedProjectile == Class'Unrealshare.tentacleprojectile')
+				scriptedpawn(other).RangedProjectile=Class'oldskool.oltentacleprojectile';
+			else if (scriptedpawn(other).RangedProjectile == Class'SlithProjectile')
+				scriptedpawn(other).RangedProjectile=Class'olSlithProjectile';
+			else if (scriptedpawn(other).RangedProjectile == Class'Unreali.warlordrocket')
+				scriptedpawn(other).RangedProjectile = Class'oldskool.olwarlordrocket';
+		}
+		//if (busedecals||level.netmode!=nm_standalone)
+		if (B227_bPermaCarcasses &&
+			class<CreatureCarcass>(ScriptedPawn(Other).CarcassType) != none &&
+			ScriptedPawn(Other).CarcassType == ScriptedPawn(Other).default.CarcassType)
+		{
+			ScriptedPawn(Other).CarcassType = class'olCreatureCarcass';
+		}
 
-if (SkaarjTrooper(Other) != none){
-    if (skaarjtrooper(Other).weapontype==Class'unreali.Stinger')
-    {
-    if (bstingy)
-    skaarjtrooper(Other).weapontype=Class'olweapons.osPulseGun';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olstinger';
-    }
-    if ( skaarjtrooper(Other).weapontype==Class'unreali.Rifle')
-    {
-    if (brifle)
-    skaarjtrooper(Other).weapontype=Class'botpack.SniperRifle';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olRifle';
-    }
-    if (skaarjtrooper(Other).weapontype==Class'unreali.Razorjack')
-    {
-    if (brazor)
-    skaarjtrooper(Other).weapontype=Class'botpack.ripper';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olrazorjack';
-    }
-    if ( skaarjtrooper(Other).weapontype==Class'unreali.Minigun')
-    {
-    if (bmini)
-    skaarjtrooper(Other).weapontype=Class'botpack.Minigun2';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olMinigun';
-    }
-    if ( skaarjtrooper(Other).weapontype==Class'unreali.automag')                         //no special mags allowed in SP......
-    {
-    if (bmag)
-    skaarjtrooper(Other).weapontype=Class'botpack.Enforcer';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olautomag';
-    }
-    if ( skaarjtrooper(Other).weapontype==Class'Eightball')
-    {
-    if (beball)
-    skaarjtrooper(Other).weapontype=Class'botpack.UT_Eightball';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olEightball';
-    }
-    if (skaarjtrooper(Other).weapontype==Class'FlakCannon')
-    {
-    if (bflak)
-    skaarjtrooper(Other).weapontype=Class'botpack.UT_flakcannon';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olFlakCannon';
-    }
-    if ( skaarjtrooper(Other).weapontype==Class'unreali.ASMD')
-    {
-    if (basmd)
-    skaarjtrooper(Other).weapontype=Class'olweapons.osShockRifle';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olasmd';
-    }
-    if ( skaarjtrooper(Other).weapontype==Class'GesBioRifle'){
-    if (bbiorifle)
-    skaarjtrooper(Other).weapontype=Class'botpack.UT_BioRifle';
-    else
-    skaarjtrooper(Other).weapontype=Class'olweapons.olgesBioRifle';
-    }                                             //tourney weaps
-    if ( skaarjtrooper(Other).weapontype==Class'dispersionpistol')           //always change......
-    skaarjtrooper(Other).weapontype=Class'olweapons.oldpistol';
-    if ( skaarjtrooper(Other).weapontype==Class'shockrifle' && !(skaarjtrooper(Other).weapontype==Class'osshockrifle'))
-    skaarjtrooper(Other).weapontype=Class'olweapons.osshockrifle';
-    if ( skaarjtrooper(Other).weapontype==Class'pulsegun' && !(skaarjtrooper(Other).weapontype==Class'ospulsegun'))
-    skaarjtrooper(Other).weapontype=Class'olweapons.ospulsegun';
- /*   if ( skaarjtrooper(Other).weapontype==Class'sniperrifle' && !(skaarjtrooper(Other).weapontype==Class'ossniperrifle'))
-    skaarjtrooper(Other).weapontype=Class'olweapons.ossniperrifle';      */  }
-    return true;
-   }
-else //anything else forget about it.....
-return true;
-if (Weapon(Other) != none)            //set up decal/network weapons.....
-  {
-    if (TournamentWeapon(Other) != none){
-    if (uiweapons(Other) != none){
-    return true;}                              //possible options for "new" maps....
- /*   If (Other.Isa('Olstinger')&&bstingy){
-    ReplaceWith(Other, "olweapons.osPulseGun");
-    return false;}
-    If (Other.Isa('Olautomag')&&bmag){
-    ReplaceWith(Other, "botpack.enforcer");
-    return false;}
-    If (Other.Isa('Olminigun')&&bmini){
-    ReplaceWith(Other, "botpack.minigun2");
-    return false;}
-    If (Other.Isa('Olgesbiorifle')&&bbiorifle){
-    ReplaceWith(Other, "botpack.ut_biorifle");
-    return false;}
-    If (Other.Isa('Olasmd')&&basmd){
-    ReplaceWith(Other, "olweapons.osshockrifle");
-    return false;}
-    If (Other.Isa('Oleightball')&&beball){
-    ReplaceWith(Other, "botpack.ut_eightball");
-    return false;}
-    If (Other.Isa('Olflakcannon')&&bflak){
-    ReplaceWith(Other, "botpack.ut_flakcannon");
-    return false;}
-    If (Other.Isa('Olrazorjack')&&brazor){
-    ReplaceWith(Other, "botpack.ripper");
-    return false;}
-    If (Other.Isa('Olrifle')&&brifle){
-    ReplaceWith(Other, "olweapons.ossniperrifle");
-    return false;}
-    return true;
-    }     */
-    if ( Other.class==class'pulsegun')                            //set up UT: SP stuff for old new maps.....
-    {
-    ReplaceWith(Other, "olweapons.OSPulseGun");
-    return false;
-    }
- /*   if ( Other.IsA('sniperrifle')&&!Other.Isa('OSsniperrifle'))
-    {
-    ReplaceWith( Other, "olweapons.OSSniperRifle" );
-    return false;
-    } */
+		//get those skaarjy right.....                   i.e sets weapons so won't screw up player.  Warning: this makes the skaarj even deadlier ;)
+		if (SkaarjTrooper(Other) != none)
+			SkaarjTrooper(Other).WeaponType = class<Weapon>(B227_ReplaceInventoryClass(SkaarjTrooper(Other).WeaponType));
+		return true;
+	}
+	else //anything else forget about it.....
+		return true;
 
-    if ( Other.class==class'shockrifle')
-    {
-    ReplaceWith( Other, "olweapons.osShockRifle" );
-    return false;
-    }
-    return true;}
-    if ( Other.class==class'Stinger')                             //set up decal/network weapons.....
-    {
-    if (bstingy)
-    ReplaceWith(Other, "olweapons.OSPulseGun");
-    else
-    ReplaceWith(Other, "olweapons.olstinger");
-    return false;
-    }
-    if ( Other.class==class'Rifle')
-    {
-    if (brifle)
-    ReplaceWith( Other, "botpack.SniperRifle" );
-    else
-    ReplaceWith( Other, "olweapons.olRifle" );
-    return false;
-    }
-    if ( Other.class==class'Razorjack' )
-    {
-    if (brazor)
-    ReplaceWith(Other, "botpack.ripper");
-    else
-    ReplaceWith( Other, "olweapons.olrazorjack" );
-    return false;
-    }
-    if (other.class==class'quadshot'){ //some maps had this?
-      ReplaceWith(Other,"olweapons.olquadshot");
-      return false;
-    }
-    if ( Other.class==class'Minigun')
-    {
-    if (bmini)
-    ReplaceWith( Other, "botpack.Minigun2" );
-    else
-    ReplaceWith( Other, "olweapons.olMinigun" );
-    return false;
-    }
-    if ( Other.class==class'AutoMag')
-    {
-    if (bmag)
-    ReplaceWith( Other, "botpack.Enforcer" );
-    else
-    ReplaceWith( Other, "olweapons.olautomag" );
-    return false;
-    }
-    if ( Other.class==class'Eightball')
-    {
-    if (beball)
-    ReplaceWith( Other, "botpack.UT_Eightball" );
-    else
-    ReplaceWith( Other, "olweapons.olEightball" );
-    return false;
-    }
-    if ( Other.class==class'FlakCannon')
-    {
-    if (bflak)
-    ReplaceWith( Other, "botpack.UT_flakcannon" );
-    else
-    ReplaceWith( Other, "olweapons.olFlakCannon" );
-    return false;
-    }
-    if ( Other.class==class'ASMD')
-    {
-    if (basmd)
-    ReplaceWith( Other, "olweapons.osShockRifle" );
-    else
-    ReplaceWith( Other, "olweapons.olasmd" );
-    return false;
-    }
-    if ( Other.class==class'GesBioRifle' )  {
-    if (bbiorifle)
-    ReplaceWith( Other, "botpack.UT_BioRifle" );
-    else
-    ReplaceWith( Other, "olweapons.olgesBioRifle" );
-    return false;
-    }
-    if ( Other.class==class'dispersionpistol' ){ //for Vrikers where you pick it up......
-    ReplaceWith( Other, "olweapons.oldpistol" );
-    return false;}
-  return true;  //some other wierd weapon that got in here :D
-  }
-  //ammo
-  if (Ammo(Other) != none)                           //ammo sets for correct item place.......
-  {
-    if (string(Ammo(Other).PickupSound)~="UnrealShare.Pickups.AmmoSnd" &&
-        B227_bModifyAmmoPickupSound)
-    {          //fix up this stuff.....
-      Ammo(Other).PickupSound=Sound'BotPack.Pickups.AmmoPick';
-      //- Ammo(Other).bClientAnim=True;
-    }
-    if (TournamentAmmo(Other) != none)           //for UT: SP.......
-    {
-      //-if ( Other.IsA('shockcore')){    //check not default ammo...
-      //-  shockcore(other).icon=Texture'UnrealShare.Icons.I_ASMD';
-      //-  return true;
-      //-}
-      if (RocketPack(Other) != none)  {
-        RocketPack(Other).UsedInWeaponSlot[5]=0;
-        RocketPack(Other).UsedInWeaponSlot[9]=1;
-        //-RocketPack(Other).Icon=Texture'UnrealShare.Icons.I_RocketAmmo';
-        return true;
-      }
-      if (PAmmo(Other) != none)
-      {
-        Pammo(Other).UsedInWeaponSlot[3]=0;
-        Pammo(Other).UsedInWeaponSlot[5]=1;
-        Pammo(Other).Icon=Texture'pulseicon';       //ph34r |\/|y 1c0|\| |\/|4k1|\|9 5k1llz!!!!!!!
-        return true;
-      }
-      if (BladeHopper(Other) != none)
-      {
-        bladehopper(other).UsedInWeaponSlot[7]=0;
-        bladehopper(other).UsedInWeaponSlot[6]=1;
-        //-bladehopper(other).Icon=Texture'UnrealI.Icons.I_RazorAmmo';
-        return true;
-      }
-      if (BulletBox(Other) != none)
-      {
-        bulletbox(other).UsedInWeaponSlot[9]=0;
-        bulletbox(other).UsedInWeaponSlot[0]=1;
-        return true;
-      }
-      if (FlakAmmo(Other) != none)
-      {
-        flakammo(other).UsedInWeaponSlot[6]=0;
-        flakammo(other).UsedInWeaponSlot[8]=1;
-        //-flakammo(other).Icon=Texture'UnrealI.Icons.I_FlakAmmo';
-        return true;
-      }
-      if (MiniAmmo(Other) != none)
-      {
-        miniammo(other).UsedInWeaponSlot[0]=int(bmag && !bmini);
-        miniammo(other).UsedInWeaponSlot[7]=1;
-        //-miniammo(other).Icon=Texture'UnrealShare.Icons.I_ShellAmmo';
-        return true;
-      }
-      if (BioAmmo(Other) != none)
-      {
-        bioammo(other).UsedInWeaponSlot[8]=0;
-        bioammo(other).UsedInWeaponSlot[3]=1;
-        //-bioammo(other).Icon=Texture'UnrealI.Icons.I_SludgeAmmo';
-        return true;
-      }
-      return true;
-    }
+	if (Weapon(Other) != none)
+	{
+		if (Minigun2(Other) != none && !bmag)     //if we have automags we gotta do this.....
+			Minigun2(Other).AmmoName = Class'UnrealShare.ShellBox';
+	}
+	else if (Ammo(Other) != none)                           //ammo sets for correct item place.......
+	{
+		if (string(Ammo(Other).PickupSound) ~= "UnrealShare.Pickups.AmmoSnd" &&
+			B227_bModifyAmmoPickupSound)
+		{
+			//fix up this stuff.....
+			Ammo(Other).PickupSound = Sound'BotPack.Pickups.AmmoPick';
+			//- Ammo(Other).bClientAnim=True;
+		}
+		if (TournamentAmmo(Other) != none)           //for UT: SP.......
+		{
+			//-if ( Other.IsA('shockcore')){    //check not default ammo...
+			//-  shockcore(other).icon=Texture'UnrealShare.Icons.I_ASMD';
+			//-  return true;
+			//-}
+			if (RocketPack(Other) != none)
+			{
+				RocketPack(Other).UsedInWeaponSlot[5]=0;
+				RocketPack(Other).UsedInWeaponSlot[9]=1;
+				//-RocketPack(Other).Icon=Texture'UnrealShare.Icons.I_RocketAmmo';
+				return true;
+			}
+			if (PAmmo(Other) != none)
+			{
+				Pammo(Other).UsedInWeaponSlot[3]=0;
+				Pammo(Other).UsedInWeaponSlot[5]=1;
+				Pammo(Other).Icon=Texture'pulseicon';       //ph34r |\/|y 1c0|\| |\/|4k1|\|9 5k1llz!!!!!!!
+				return true;
+			}
+			if (BladeHopper(Other) != none)
+			{
+				bladehopper(other).UsedInWeaponSlot[7]=0;
+				bladehopper(other).UsedInWeaponSlot[6]=1;
+				//-bladehopper(other).Icon=Texture'UnrealI.Icons.I_RazorAmmo';
+				return true;
+			}
+			if (BulletBox(Other) != none)
+			{
+				bulletbox(other).UsedInWeaponSlot[9]=0;
+				bulletbox(other).UsedInWeaponSlot[0]=1;
+				return true;
+			}
+			if (FlakAmmo(Other) != none)
+			{
+				flakammo(other).UsedInWeaponSlot[6]=0;
+				flakammo(other).UsedInWeaponSlot[8]=1;
+				//-flakammo(other).Icon=Texture'UnrealI.Icons.I_FlakAmmo';
+				return true;
+			}
+			if (MiniAmmo(Other) != none)
+			{
+				miniammo(other).UsedInWeaponSlot[0]=int(bmag && !bmini);
+				miniammo(other).UsedInWeaponSlot[7]=1;
+				//-miniammo(other).Icon=Texture'UnrealShare.Icons.I_ShellAmmo';
+				return true;
+			}
+			if (BioAmmo(Other) != none)
+			{
+				bioammo(other).UsedInWeaponSlot[8]=0;
+				bioammo(other).UsedInWeaponSlot[3]=1;
+				//-bioammo(other).Icon=Texture'UnrealI.Icons.I_SludgeAmmo';
+				return true;
+			}
+			return true;
+		}
 
-    if (Other.Class == class'ShellBox' && !bmag && bmini)
-    {
-      ShellBox(Other).UsedInWeaponSlot[0] = 0;
-      ShellBox(Other).UsedInWeaponSlot[7] = 1;
-    }
+		if (Other.Class == class'ShellBox' && !bmag && bmini)
+		{
+			ShellBox(Other).UsedInWeaponSlot[0] = 0;
+			ShellBox(Other).UsedInWeaponSlot[7] = 1;
+		}
+	}
 
-    if ( Other.IsA('ASMDAmmo')&& !Other.IsA('Defaultammo')&&basmd ){    //check not default ammo...
-      ReplaceWith( Other, "botpack.ShockCore" );
-      return false;
-    }
-    if ( Other.IsA('RocketCan')&&beball)  {
-      ReplaceWith( Other, "botpack.RocketPack" );
-      return false;
-    }
-    if ( Other.IsA('StingerAmmo') &&bstingy)
-    {  ReplaceWith(Other, "botpack.PAmmo");     //no icon :( anyone?
-      return false;
-    }
-    if ( Other.IsA('RazorAmmo')&&brazor)
-    {ReplaceWith( Other, "botpack.BladeHopper" );
-      return false;
-    }
-    if ( Other.IsA('RifleRound') &&brifle)
-    { ReplaceWith( Other, "botpack.RifleShell" );
-      return false;
-    }
-    if ( Other.IsA('RifleAmmo')&&!Other.IsA('RifleRound')&&brifle)
-    { ReplaceWith( Other, "botpack.bulletbox" );
-      return false;
-    }
-    if ( Other.IsA('FlakBox')&&!Other.Isa('flakshellammo')&&bflak)
-    {  ReplaceWith( Other, "botpack.FlakAmmo" );
-      return false;
-    }
-    if (Other.Isa('flakshellammo')&&bflak)
-    {  ReplaceWith( Other, "olweapons.OSFlakshellAmmo" );
-      return false;
-    }
-    if ( Other.IsA('ShellBox')&&!Other.Isa('clip')&&Other.Location != vect(0,0,0)&&Other.owner==None )
-    { if(bmag){
-    ReplaceWith( Other, "botpack.MiniAmmo" );
-      return false;  }
-      if (bmini){ //only set slots.....
-      //-miniammo(other).UsedInWeaponSlot[0]=0;
- //-miniammo(other).UsedInWeaponSlot[7]=1;
- return true;}
-    }
-if ( Other.IsA('Clip') &&bmag&&Other.Location != vect(0,0,0)&&Other.owner==None )
-    { if (bmag){
-    ReplaceWith( Other, "botpack.EClip" );
-      return false; }
-      if (bmini){ //only set slots.....
-      //-miniammo(other).UsedInWeaponSlot[0]=0;
- //-miniammo(other).UsedInWeaponSlot[7]=1;
- return true;}
-    }
-    if ( Other.IsA('Sludge')&&bbiorifle)
-{   ReplaceWith( Other, "botpack.bioammo" );
-    return false;}
-    return true; //other stuff...
-    }
-//items
-if (Pickup(Other) != none)
-{
-//-if (Other.Isa('armor2')){              //icon.....
-//-armor2(other).Icon=Texture'UnrealShare.Icons.I_Armor';
-//-return true;}
-
-//-if (Other.Isa('thighpads')){  //stronger pads......    (kev suit standarts)
-//-thighpads(other).Icon=Texture'UnrealShare.Icons.I_kevlar'; //to stop confusion :D
-//-return true;}
-if (TournamentPickup(Other) != none)        //sure ok :D
-      return true;
-  if ( Other.IsA('JumpBoots') &&bjump)
-  {
-    ReplaceWith( Other, "Botpack.UT_JumpBoots" );
-    return false;
-  }
-  if ( Other.IsA('Amplifier')&&!Other.Isa('OSamplifier')) {
-    if (bdamage)ReplaceWith( Other, "Botpack.UDamage" );else
-    ReplaceWith( Other, "olweapons.osamplifier" );        //special amp (supports the olweapons...)
-    return false;
-  }
-  if ( Other.IsA('WeaponPowerUp')&&!Other.Isa('OSDispersionpowerup') ){
-replacewith( Other, "olWeapons.OsDispersionpowerup");//supports oldpistol
-return false; }
-
-  if ( Other.IsA('KevlarSuit') &&bpad) {
-  ReplaceWith( Other, "Botpack.ThighPads");
-  return false;
-  }
-  if ( Other.IsA('SuperHealth')&&bmegahealth)
- {
-    ReplaceWith( Other, "Botpack.HealthPack" );
-    return false;
-  }
-  if ( Other.IsA('Armor')&&barmor)
-  {
-  ReplaceWith( Other, "Botpack.Armor2" );
-    return false;
-  }
-  if ( Other.class==class'unrealshare.health' &&bmed)
-    {
-    ReplaceWith( Other, "Botpack.MedBox" );
-    return false;
-  }
-  if ( Other.IsA('ShieldBelt') &&!Other.Isa('Powershield')) {                  //shieldbelt effects....
-    if (bshield)
-    ReplaceWith( Other, "olweapons.osUT_ShieldBelt" );
-    else
-    ReplaceWith( Other, "olweapons.osShieldBelt" );
-    return false;
-  }
-if ( Other.IsA('Powershield')){
-    if (bshield)
-    ReplaceWith( Other, "olweapons.shieldBeltpower" );
-    else
-    ReplaceWith( Other, "olweapons.ospowershield" );
-    return false;
-  }
-return true; //other inventory (like invis.) that's not allowed to change for cheating reasons.......
+	ActorClass = B227_ReplaceInventoryClass(Inventory(Other).Class);
+	if (Other.Class == ActorClass)
+		return true;
+	B227_ReplacingActor = none;
+	B227_ReplaceActor(Other, ActorClass);
+	if (B227_ReplacingActor != none)
+		B227_AdjustReplacingInventory(Inventory(B227_ReplacingActor), Inventory(Other));
+	return false;
 }
 
-  bSuperRelevant = 0;
-  return true;
-}
 //keeps even more inportant stuff......
 function bool ReplaceWith(actor Other, string aClassName)
 {
-  local Actor A;
-  local class<Actor> aClass;
-  if (PropSetup)
-    return false;
-  if
-  (  (level.game.Difficulty==0 && !Other.bDifficulty0 )          //as gameinfo's isn't called...we'll just make up for it here.....
-  ||  (level.game.Difficulty==1 && !Other.bDifficulty1 )
-  ||  (level.game.Difficulty==2 && !Other.bDifficulty2 )
-  ||  (level.game.Difficulty>=3 && !Other.bDifficulty3 )
-  ||  (!Other.bSinglePlayer && (Level.NetMode==NM_Standalone) )
-  ||  (!Other.bNet && ((Level.NetMode == NM_DedicatedServer) || (Level.NetMode == NM_ListenServer)) )
-  ||  (!Other.bNetSpecial  && (Level.NetMode==NM_Client)) )
-    return False;
-  if( FRand() > Other.OddsOfAppearing )
-    return False;
-  if ( Inventory(Other) != none && (Other.Location == vect(0,0,0)) )
-    return false;
-  aClass = class<Actor>(DynamicLoadObject(aClassName, class'Class'));
-  if ( aClass != None )
-    A = Other.Spawn(aClass,,Other.tag,Other.Location, Other.Rotation);
-  if ( Inventory(Other) != none )
-  {
-    if ( Inventory(Other).MyMarker != None )
-    {
-      Inventory(Other).MyMarker.markedItem = Inventory(A);
-      if ( Inventory(A) != None )
-      {
-        Inventory(A).MyMarker = Inventory(Other).MyMarker;
-        A.SetLocation(A.Location
-          + (A.CollisionHeight - Other.CollisionHeight) * vect(0,0,1));
-      }
-      Inventory(Other).MyMarker = None;
-    }
-    else if (Inventory(A) != none && Inventory(Other).bhelditem)
-    {
-      Inventory(A).bHeldItem = true;
-      Inventory(A).Respawntime = 0.0;
-    }
-  }
-  if ( A != None )
-  {
-        if (ThighPads(A) != none){   //kev suit pads.....
-    Thighpads(A).charge=100;
-    Thighpads(A).armorabsorption=80;
-Thighpads(A).AbsorptionPriority=6;}
-    if (Armor2(A) != none)
-    armor2(A).ArmorAbsorption=90;
-    if (UDamage(A) != none) {               //9 sec Udamage......
-    udamage(A).charge=90;
-udamage(A).finalcount=2;  }
-    if (Minigun2(A) != none && !bmag)     //if we have automags we gotta do this.....
-      Minigun2(A).AmmoName = Class'UnrealShare.ShellBox';
-    //-if (a.IsA('enforcer')&&!bmini)     //if we have minigunz we gotta do this..... // B227 note: actually, this is a mistake - see below
-    //-enforcer(a).AmmoName=Class'UnrealShare.ShellBox';
-    // B227 note: if bmag is true, an Enforcer can't successfully spawn a ShellBox, because it will be immediately replaced with MiniAmmo;
-    //            if bmag is false, automags won't be replaced with Enforcers.
-    if (a.Isa('olautomag')&&Other.Isa('automag')&&automag(other).hitdamage==70){//h4x for Ballad of Ash
-    olautomag(A).hitdamage=automag(other).hitdamage;
-    olautomag(A).altfiresound=automag(other).AltFireSound;
-    olautomag(A).firesound=automag(other).FireSound;
-     olautomag(A).misc1sound=automag(other).Misc1Sound;
-     olautomag(A).misc2sound=automag(other).Misc2Sound;
-     olautomag(A).selectsound=automag(other).SelectSound;
-     }
-
-    A.event = Other.event;
-    A.tag = Other.tag;
-    A.RotationRate= Other.RotationRate; ///other important info.....
-    return true;
-  }
-  return false;
+	local Actor A;
+	local class<Actor> aClass;
+	if (PropSetup)
+		return false;
+	if ((level.game.Difficulty==0 && !Other.bDifficulty0 )          //as gameinfo's isn't called...we'll just make up for it here.....
+		||  (level.game.Difficulty==1 && !Other.bDifficulty1 )
+		||  (level.game.Difficulty==2 && !Other.bDifficulty2 )
+		||  (level.game.Difficulty>=3 && !Other.bDifficulty3 )
+		||  (!Other.bSinglePlayer && (Level.NetMode==NM_Standalone) )
+		||  (!Other.bNet && ((Level.NetMode == NM_DedicatedServer) || (Level.NetMode == NM_ListenServer)) )
+		||  (!Other.bNetSpecial  && (Level.NetMode==NM_Client)) )
+	{
+		return False;
+	}
+	if (FRand() > Other.OddsOfAppearing)
+		return False;
+	if (Inventory(Other) != none && (Other.Location == vect(0,0,0)))
+		return false;
+	aClass = class<Actor>(DynamicLoadObject(aClassName, class'Class'));
+	if ( aClass != None )
+		A = Other.Spawn(aClass,,Other.tag,Other.Location, Other.Rotation);
+	if ( Inventory(Other) != none )
+	{
+		if ( Inventory(Other).MyMarker != None )
+		{
+			Inventory(Other).MyMarker.markedItem = Inventory(A);
+			if ( Inventory(A) != None )
+			{
+				Inventory(A).MyMarker = Inventory(Other).MyMarker;
+				A.SetLocation(A.Location + (A.CollisionHeight - Other.CollisionHeight) * vect(0,0,1));
+			}
+			Inventory(Other).MyMarker = None;
+		}
+		else if (Inventory(A) != none && Inventory(Other).bhelditem)
+		{
+			Inventory(A).bHeldItem = true;
+			Inventory(A).Respawntime = 0.0;
+		}
+	}
+	if (A != None)
+	{
+		B227_AdjustReplacingInventory(Inventory(A), Inventory(Other));
+		return true;
+	}
+	return false;
 }
+
 //quick save and quickload...... (a cheat code too!!!!)
 function Mutate(string MutateString, PlayerPawn Sender)
 { local class<Mappack> Packclass;
@@ -849,6 +547,40 @@ function class<Inventory> B227_ReplaceInventoryClass(class<Inventory> InventoryC
 	if (ClassIsChildOf(ActorClass, class'Inventory'))
 		return class<Inventory>(ActorClass);
 	return InventoryClass;
+}
+
+function B227_AdjustReplacingInventory(Inventory NewInventory, Inventory OldInventory)
+{
+	if (NewInventory == none || OldInventory == none)
+		return;
+
+	if (ThighPads(NewInventory) != none)
+	{
+		//kev suit pads.....
+		NewInventory.Charge = 100;
+		NewInventory.ArmorAbsorption = 80;
+		NewInventory.AbsorptionPriority = 6;
+	}
+	else if (Armor2(NewInventory) != none)
+		NewInventory.ArmorAbsorption = 90;
+	else if (UDamage(NewInventory) != none)
+	{
+		//9 sec Udamage......
+		NewInventory.Charge = 90;
+		UDamage(NewInventory).FinalCount = 2;
+	}
+	else if (olautomag(NewInventory) != none && AutoMag(OldInventory) != none && AutoMag(OldInventory).HitDamage==70)
+	{
+		//h4x for Ballad of Ash
+		olautomag(NewInventory).HitDamage = AutoMag(OldInventory).HitDamage;
+		olautomag(NewInventory).AltFireSound = AutoMag(OldInventory).AltFireSound;
+		olautomag(NewInventory).firesound = AutoMag(OldInventory).FireSound;
+		olautomag(NewInventory).misc1sound = AutoMag(OldInventory).Misc1Sound;
+		olautomag(NewInventory).misc2sound = AutoMag(OldInventory).Misc2Sound;
+		olautomag(NewInventory).selectsound = AutoMag(OldInventory).SelectSound;
+	}
+
+	NewInventory.RotationRate = OldInventory.RotationRate;
 }
 
 function class<Actor> B227_VersionClass()
