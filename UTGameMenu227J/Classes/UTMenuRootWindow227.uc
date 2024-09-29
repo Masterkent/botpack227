@@ -44,8 +44,16 @@ function CloseActiveWindow()
 		bShowedManagerWindow = false;
 }
 
+static function bool IsEnabled()
+{
+	return
+		class'LevelInfo'.static.GetLocalPlayerPawn() != none &&
+		WindowConsole(class'LevelInfo'.static.GetLocalPlayerPawn().Player.Console) != none &&
+		UTMenuRootWindow227(WindowConsole(class'LevelInfo'.static.GetLocalPlayerPawn().Player.Console).Root) != none;
+}
+
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v3.2 [2024-04-04]"
-	Version="3.2"
+	VersionInfo="UTGameMenu227 v3.3 [2024-09-29]"
+	Version="3.3"
 }

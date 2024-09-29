@@ -4,7 +4,7 @@ var localized string MenuCaptionDisable;
 
 function Setup()
 {
-	if (class'UTMenuRootWindow227'.default.bEnabled)
+	if (class'UTMenuRootWindow227'.static.IsEnabled())
 		MenuCaption = MenuCaptionDisable;
 }
 
@@ -16,12 +16,11 @@ function Execute()
 	Root = MenuItem.Owner.Root;
 	Console = Root.Console;
 
-	if (class'UTMenuRootWindow227'.default.bEnabled)
+	if (class'UTMenuRootWindow227'.static.IsEnabled())
 		Console.RootWindow = "UMenu.UMenuRootWindow";
 	else
 		Console.RootWindow = string(class'UTMenuRootWindow227');
 
-	class'UTMenuRootWindow227'.default.bEnabled = !class'UTMenuRootWindow227'.default.bEnabled;
 	Console.default.RootWindow = Console.RootWindow;
 	Console.SaveConfig();
 	Console.ResetUWindow();
