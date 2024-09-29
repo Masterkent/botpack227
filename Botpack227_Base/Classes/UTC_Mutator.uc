@@ -226,6 +226,25 @@ function RegisterHUDMutator()
 	bHUDMutator = true;
 }
 
+function bool B227_ReplaceActor(Actor Actor, class<Actor> NewActorClass)
+{
+	if (NewActorClass == none)
+		return false;
+
+	if (Inventory(Actor) != none)
+	{
+		// Note: Other.Region doesn't refer to the relevant zone for dynamically spawned actors
+		if (!bool(Actor.Location) ||
+			Level.GetLocZone(Actor.Location).ZoneNumber == 0 ||
+			Pawn(Actor.Owner) != none)
+		{
+			return false;
+		}
+	}
+
+	return B227_ReplaceWith(Actor, NewActorClass);
+}
+
 function bool B227_ReplaceWith(Actor Actor, class<Actor> NewActorClass)
 {
 	local Actor A;
