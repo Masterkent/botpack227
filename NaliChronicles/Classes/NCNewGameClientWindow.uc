@@ -17,6 +17,7 @@ function Created()
 	local int ControlWidth, ControlLeft, ControlRight;
 	local int CenterWidth, CenterPos;
 	local int I, S;
+	local int DifficultiesNum;
 
 	Super.Created();
 
@@ -36,11 +37,17 @@ function Created()
 	SkillCombo.SetHelpText(SkillHelp);
 	SkillCombo.SetFont(F_Normal);
 	SkillCombo.SetEditable(False);
+	DifficultiesNum = int(GetDefaultObject(class'UMenuNewGameClientWindow').GetPropertyText("Skills[]"));
 	for (I=0; I<4; I++)
 		SkillCombo.AddItem(Skills[I]);
-	SkillCombo.SetSelectedIndex(GetLevel().Game.Difficulty);
+	for (I = 4; I < DifficultiesNum; ++I)
+		SkillCombo.AddItem(class'UMenu.UMenuNewGameClientWindow'.default.Skills[I]);
+	SkillCombo.SetSelectedIndex(Clamp(GetLevel().Game.Difficulty, 0, DifficultiesNum - 1));
 	SkillLabel = UMenuLabelControl(CreateWindow(class'UMenuLabelControl', CenterPos, 45, CenterWidth, 1));
-	SkillLabel.SetText(SkillStrings[GetLevel().Game.Difficulty + 1]);
+	if (SkillCombo.GetSelectedIndex() < 4)
+		SkillLabel.SetText(SkillStrings[SkillCombo.GetSelectedIndex()]);
+	else
+		SkillLabel.SetText(class'UMenu.UMenuNewGameClientWindow'.default.SkillStrings[SkillCombo.GetSelectedIndex()]);
 	SkillLabel.Align = TA_Center;
 
 	// OKButton
@@ -95,7 +102,10 @@ function Notify(UWindowDialogControl C, byte E)
 
 function OKClicked()
 {
-	GetPlayerOwner().ClientTravel(StartMap, TRAVEL_Absolute, false);
+	local string URL;
+
+	URL = StartMap $ "?Difficulty=" $ SkillCombo.GetSelectedIndex();
+	GetPlayerOwner().ClientTravel(URL, TRAVEL_Absolute, false);
 
 	Close();
 	Root.Console.CloseUWindow();
@@ -103,7 +113,10 @@ function OKClicked()
 
 function SkillChanged()
 {
-	SkillLabel.SetText(SkillStrings[SkillCombo.GetSelectedIndex()]);
+	if (SkillCombo.GetSelectedIndex() < 4)
+		SkillLabel.SetText(SkillStrings[SkillCombo.GetSelectedIndex()]);
+	else
+		SkillLabel.SetText(class'UMenu.UMenuNewGameClientWindow'.default.SkillStrings[SkillCombo.GetSelectedIndex()]);
 }
 
 defaultproperties

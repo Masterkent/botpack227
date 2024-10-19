@@ -161,7 +161,7 @@ function bool CheckSkill(int inbook, int minskill) {
 function GainExp(int inbook, float inExp) {
 	local int levelindex;
 
-	if (SpellSkills[inbook] < 8) {
+	if (inbook < ArrayCount(SpellSkills) && SpellSkills[inbook] < 8) {
 		SpellExp[inbook] += inExp;
 		levelindex = SpellSkills[inbook];
 		while (SpellExp[inbook] >= LevelNeeds[levelindex+1] && SpellSkills[inbook] < 8) {

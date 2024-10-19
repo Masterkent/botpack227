@@ -66,6 +66,15 @@ function Trigger( actor Other, pawn EventInstigator )
 		bTalkAfterTrigger = false;
 }
 
+auto state StartUp
+{
+	event BeginState()
+	{
+		super.BeginState();
+		MaxStepHeight = FMax(MaxStepHeight, 1); // B227 fix for always falling pawns
+	}
+}
+
 State Patroling
 {
 	function Trigger( actor Other, pawn EventInstigator )
@@ -270,7 +279,8 @@ state Conversing // new talking state
 
 	function Landed(vector HitNormal)
 	{
-		SetPhysics(PHYS_None);
+		//-SetPhysics(PHYS_None);
+		Acceleration = vect(0,0,0);
 	}
 
 	function BeginState()
@@ -297,11 +307,11 @@ state Conversing // new talking state
 			return;
 		}
 
-		DesiredRotation = rotator(location-talkingto.location);
-		DesiredRotation.yaw += 32768;
-		DesiredRotation.pitch = 0;
-		DesiredRotation.roll = 0;
-		SetRotation(DesiredRotation);
+		//-DesiredRotation = rotator(location-talkingto.location);
+		//-DesiredRotation.yaw += 32768;
+		//-DesiredRotation.pitch = 0;
+		//-DesiredRotation.roll = 0;
+		//-SetRotation(DesiredRotation);
 
 		timepoint = leftoffpoint - 1;
 		if (timepoint < 0)
@@ -390,7 +400,8 @@ state Conversing // new talking state
 	}
 
 TurnFromWall:
-	if ( NearWall(2 * CollisionRadius + 50) )
+
+	if (talkingto == none && NearWall(2 * CollisionRadius + 50))
 	{
 		PlayTurning();
 		TurnTo(Focus);
@@ -399,16 +410,25 @@ TurnFromWall:
 Begin:
 	//TurnToward(talkingto);
 	TweenToWaiting(0.4);
-	DesiredRotation = rotator(location-talkingto.location);
-	DesiredRotation.yaw += 32768;
-	DesiredRotation.pitch = 0;
-	DesiredRotation.roll = 0;
-	SetRotation(DesiredRotation);
+	//-DesiredRotation = rotator(location-talkingto.location);
+	//-DesiredRotation.yaw += 32768;
+	//-DesiredRotation.pitch = 0;
+	//-DesiredRotation.roll = 0;
+	//-SetRotation(DesiredRotation);
 	bReadyToAttack = false;
-	if (Physics != PHYS_Falling)
-		SetPhysics(PHYS_None);
+	//-if (Physics != PHYS_Falling)
+	//-	SetPhysics(PHYS_None);
 KeepWaiting:
 	NextAnim = '';
+B227_FaceTalkingTo:
+	if (talkingto != none && !talkingto.bDeleteMe && talkingto.Health > 0 && NeedToTurn(talkingto.Location))
+	{
+		PlayTurning();
+		TurnToward(talkingto);
+		FinishAnim();
+	}
+	Sleep(0.0);
+	Goto('B227_FaceTalkingTo');
 }
 
 function damageAttitudeTo(pawn Other)

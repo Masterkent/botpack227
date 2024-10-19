@@ -22,5 +22,5 @@ state UWindow
 defaultproperties
 {
      RootWindow="NaliChronicles.NCRootWindow"
-     ShowDesktop=False
+     ShowDesktop=True
 }
