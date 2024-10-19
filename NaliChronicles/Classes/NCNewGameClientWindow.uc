@@ -42,7 +42,7 @@ function Created()
 		SkillCombo.AddItem(Skills[I]);
 	for (I = 4; I < DifficultiesNum; ++I)
 		SkillCombo.AddItem(class'UMenu.UMenuNewGameClientWindow'.default.Skills[I]);
-	SkillCombo.SetSelectedIndex(Clamp(GetLevel().Game.Difficulty, 0, DifficultiesNum - 1));
+	SkillCombo.SetSelectedIndex(Min(GetLevel().Game.Difficulty, DifficultiesNum - 1));
 	SkillLabel = UMenuLabelControl(CreateWindow(class'UMenuLabelControl', CenterPos, 45, CenterWidth, 1));
 	if (SkillCombo.GetSelectedIndex() < 4)
 		SkillLabel.SetText(SkillStrings[SkillCombo.GetSelectedIndex()]);

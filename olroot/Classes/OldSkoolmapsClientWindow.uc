@@ -166,16 +166,15 @@ function Created()
     SkillCombo.AddItem(class'umenu.umenunewgameclientwindow'.default.Skills[I]);
   //deathmatch plus difficulty info is irrevelent to this....... Ut intro also gives no dif. level...
   if (GetLevel().Game.Difficulty < DifficultiesNum && !GetLevel().Game.Isa('DeathMatchPlus')){
-  SkillCombo.SetSelectedIndex(GetLevel().Game.Difficulty);
-  BotmatchParent.Difficulty=GetLevel().Game.Difficulty;}
-  else{
-  //defaults at medium
-  BotmatchParent.Difficulty=1;
-  SkillCombo.SetSelectedIndex(1); }
-  if (GetLevel().Game.Difficulty < DifficultiesNum && !GetLevel().Game.Isa('DeathMatchPlus'))
-    SkillLabel.SetText(class'umenu.umenunewgameclientwindow'.default.SkillStrings[GetLevel().Game.Difficulty]);
-  else
-    SkillLabel.SetText(class'umenu.umenunewgameclientwindow'.default.SkillStrings[1]);
+    SkillCombo.SetSelectedIndex(GetLevel().Game.Difficulty);
+    BotmatchParent.Difficulty = GetLevel().Game.Difficulty;
+  }
+  else {
+    //defaults at medium
+    BotmatchParent.Difficulty=1;
+    SkillCombo.SetSelectedIndex(1);
+  }
+  SkillLabel.SetText(class'UMenu.UMenuNewGameClientWindow'.default.SkillStrings[SkillCombo.GetSelectedIndex()]);
   SkillLabel.Align = TA_Center;
 
 
