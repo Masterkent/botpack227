@@ -324,10 +324,10 @@ state Conversing // new talking state
 			NaliMage(talkingto) != none &&
 			NCHUD(NaliMage(talkingto).myHUD) != none
 		) {
-			realspeaktime = NCHUD(NaliMage(talkingto).myHUD).modifySpeakTime(convspeaktime[timepoint]);
+			realspeaktime = B227_GetCurrentConvSpeakTime(timepoint, true);
 		}
 		else
-			realspeaktime = class'NCHUD'.static.B227_modifySpeakTime(convspeaktime[timepoint]);
+			realspeaktime = B227_GetCurrentConvSpeakTime(timepoint, false);
 
 		if ( (Level.TimeSeconds-LastEventTime) >= realspeaktime) {
 			GoToState('Conversing','Begin');
@@ -337,10 +337,9 @@ state Conversing // new talking state
 					NaliMage(talkingto).ConvString = convstrings[leftoffpoint];
 					NaliMage(talkingto).CurrentTalker = gettagged(convspeakers[leftoffpoint]);
 					NaliMage(talkingto).TalkBegin = Level.TimeSeconds;
-					if (Level.NetMode == NM_Standalone && NCHUD(NaliMage(talkingto).myHUD) != none)
-						NaliMage(talkingto).TalkLast = NCHUD(NaliMage(talkingto).myHUD).modifySpeakTime(convspeaktime[leftoffpoint]);
-					else
-						NaliMage(talkingto).TalkLast = class'NCHUD'.static.B227_modifySpeakTime(convspeaktime[leftoffpoint]);
+					NaliMage(talkingto).TalkLast = B227_GetCurrentConvSpeakTime(
+						leftoffpoint,
+						Level.NetMode == NM_Standalone && NCHUD(NaliMage(talkingto).myHUD) != none);
 				}
 				else
 					B227_SendConversationMessage();
@@ -612,6 +611,28 @@ function B227_SendConversationMessage()
 		SpeakerName = Speaker.MenuName;
 
 	talkingto.ClientMessage(SpeakerName $ ":" @ convstrings[leftoffpoint]);
+}
+
+function float B227_GetCurrentConvSpeakTime(int ConvSpeakIndex, bool bSinglePlayer)
+{
+	local float SpeakTime;
+
+	if (bSinglePlayer)
+		SpeakTime = NCHUD(NaliMage(talkingto).myHUD).modifySpeakTime(ConvSpeakTime[ConvSpeakIndex]);
+	else
+		SpeakTime = class'NCHUD'.static.B227_modifySpeakTime(ConvSpeakTime[ConvSpeakIndex]);
+	if (SpeakTime <= 0)
+	{
+		if (ConvSounds[ConvSpeakIndex] != none)
+			SpeakTime = GetSoundDuration(ConvSounds[ConvSpeakIndex]);
+		if (Len(ConvStrings[ConvSpeakIndex]) > 0)
+			SpeakTime = FMax(SpeakTime, Len(ConvStrings[ConvSpeakIndex]) / 20);
+		if (SpeakTime > 0)
+			SpeakTime += 1.0;
+		else
+			SpeakTime = 0.01;
+	}
+	return SpeakTime;
 }
 
 defaultproperties

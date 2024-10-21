@@ -3,6 +3,6 @@ class B227_NaliChronicles_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 NaliChronicles v1.1 [2024-10-19]"
-	Version="1.1"
+	VersionInfo="B227 NaliChronicles v1.2 [2024-10-21]"
+	Version="1.2"
 }

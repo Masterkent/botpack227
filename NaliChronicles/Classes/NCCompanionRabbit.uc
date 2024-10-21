@@ -16,8 +16,15 @@ var travel bool convdone;
 var bool bNewDiary;
 var string DiaryMsg;
 
+event TravelPostAccept()
+{
+	super.TravelPostAccept();
+	convdone = true; // B227 fix: always allow triggering NCRabbitTalk after a level change
+}
+
 function NewConversation() {
-	if (Owner == none) Return;
+	if (NaliMage(Owner) == none)
+		Return;
 	NaliMage(Owner).ConvString = ConvStrings[conversenum];
 	if (PlayerSpeaks[conversenum] > 0)
 		NaliMage(Owner).CurrentTalker = Owner;
@@ -25,8 +32,8 @@ function NewConversation() {
 		NaliMage(Owner).CurrentTalker = self;
 	Owner.PlaySound(ConvSounds[conversenum]);
 	NaliMage(Owner).TalkBegin = Level.TimeSeconds;
-	NaliMage(Owner).TalkLast = NCHUD(NaliMage(Owner).myHUD).modifySpeakTime(convspeaktime[conversenum]);
-	SetTimer(NCHUD(NaliMage(Owner).myHUD).modifySpeakTime(convspeaktime[conversenum]),false);
+	NaliMage(Owner).TalkLast = B227_GetCurrentConvSpeakTime(conversenum);
+	SetTimer(NaliMage(Owner).TalkLast, false);
 	conversenum++;
 }
 
@@ -42,9 +49,9 @@ function Timer() {
 		NaliMage(Owner).CurrentTalker = self;
 	Owner.PlaySound(ConvSounds[conversenum],Slot_Talk);
 	NaliMage(Owner).TalkBegin = Level.TimeSeconds;
-	NaliMage(Owner).TalkLast = NCHUD(NaliMage(Owner).myHUD).modifySpeakTime(convspeaktime[conversenum]);
+	NaliMage(Owner).TalkLast = B227_GetCurrentConvSpeakTime(conversenum);
 	if (ConvSounds[conversenum] != None) {
-		SetTimer(NCHUD(NaliMage(Owner).myHUD).modifySpeakTime(convspeaktime[conversenum]),false);
+		SetTimer(NaliMage(Owner).TalkLast, false);
 		conversenum++;
 	}
 	else {
@@ -84,13 +91,13 @@ auto state Pickup
 					potentialuser.ConvString = convstrings[conversenum];
 					potentialuser.CurrentTalker = self;
 					potentialuser.TalkBegin = Level.TimeSeconds;
-					potentialuser.TalkLast = NCHUD(potentialuser.myHUD).modifySpeakTime(convspeaktime[conversenum]);
+					potentialuser.TalkLast = B227_GetCurrentConvSpeakTime(conversenum);
 					PlaySound(convsounds[conversenum]);
 					LastEventTime = Level.TimeSeconds;
 					conversenum++;
 				}
 				else {
-					if ((Level.TimeSeconds - LastEventTime) >= (NCHUD(potentialuser.myHUD).modifySpeakTime(convspeaktime[conversenum-1]))) {
+					if (Level.TimeSeconds - LastEventTime >= B227_GetCurrentConvSpeakTime(conversenum - 1)) {
 						potentialuser.ConvString = convstrings[conversenum];
 						if (PlayerSpeaks[conversenum] == 1) {
 							potentialuser.CurrentTalker = potentialuser;
@@ -101,7 +108,7 @@ auto state Pickup
 							PlaySound(convsounds[conversenum]);
 						}
 						potentialuser.TalkBegin = Level.TimeSeconds;
-						potentialuser.TalkLast = NCHUD(potentialuser.myHUD).modifySpeakTime(convspeaktime[conversenum]);
+						potentialuser.TalkLast = B227_GetCurrentConvSpeakTime(conversenum);
 						LastEventTime = Level.TimeSeconds;
 						if (ConvSounds[conversenum] == None) {
 							convdone = true;
@@ -141,8 +148,28 @@ function Activate()
 				i++;
 			}
 		}
-		Candidates[Rand(i+1)].Touch(Owner);
+		if (i > 0)
+			Candidates[Rand(i)].Touch(Owner);
 	}
+}
+
+function float B227_GetCurrentConvSpeakTime(int ConvSpeakIndex)
+{
+	local float SpeakTime;
+
+	SpeakTime = NCHUD(NaliMage(Owner).myHUD).modifySpeakTime(ConvSpeakTime[ConvSpeakIndex]);
+	if (SpeakTime <= 0)
+	{
+		if (ConvSounds[ConvSpeakIndex] != none)
+			SpeakTime = GetSoundDuration(ConvSounds[ConvSpeakIndex]);
+		if (Len(ConvStrings[ConvSpeakIndex]) > 0)
+			SpeakTime = FMax(SpeakTime, Len(ConvStrings[ConvSpeakIndex]) / 20);
+		if (SpeakTime > 0)
+			SpeakTime += 1.0;
+		else
+			SpeakTime = 0.01;
+	}
+	return SpeakTime;
 }
 
 defaultproperties
