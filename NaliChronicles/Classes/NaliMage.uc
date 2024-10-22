@@ -103,14 +103,14 @@ exec function skipKeyDwn() { // the player has pressed the skip key - either ski
 	}
 	else { // a conversation - skip to next line
 		foreach allactors(Class'NCTalkerNali',tn) { // check for talking Nali
-			if (tn.talkingto == self && tn.leftoffpoint < ArrayCount(tn.convspeaktime)) {
-				tn.convspeaktime[tn.leftoffpoint - 1] = 0;
+			if (tn.IsInState('Conversing') && tn.talkingto == self && tn.leftoffpoint < ArrayCount(tn.convspeaktime)) {
+				tn.B227_SkipConvTimestamp = Level.TimeSeconds;
 			}
 		}
 		foreach allactors(Class'NCCompanionRabbit',cr) { // check for talking rabbits
 			if (cr.owner == self || (cr.potentialuser == self && VSize(cr.location - location) < 600)) {
 				if (cr.conversenum < ArrayCount(cr.ConvSpeakTime)) {
-					cr.ConvSpeakTime[cr.conversenum-1] = 0;
+					cr.B227_SkipConvTimestamp = Level.TimeSeconds;
 				}
 				if (cr.owner == self && !cr.convdone) {
 					cr.TimerRate = 0;

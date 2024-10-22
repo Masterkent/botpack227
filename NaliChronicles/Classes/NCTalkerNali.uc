@@ -24,6 +24,7 @@ var float ScanTime;
 var bool bPStart;
 
 var int B227_LastConvEventIndex;
+var transient float B227_SkipConvTimestamp;
 
 function ScanForPlayers() {
 	local playerpawn pp;
@@ -329,7 +330,7 @@ state Conversing // new talking state
 		else
 			realspeaktime = B227_GetCurrentConvSpeakTime(timepoint, false);
 
-		if ( (Level.TimeSeconds-LastEventTime) >= realspeaktime) {
+		if (Level.TimeSeconds-LastEventTime >= realspeaktime || B227_SkipConvTimestamp > LastEventTime) {
 			GoToState('Conversing','Begin');
 			LastEventTime = Level.TimeSeconds;
 			if (leftoffpoint < ArrayCount(convspeakers) && convspeakers[leftoffpoint] != '') {

@@ -16,6 +16,8 @@ var travel bool convdone;
 var bool bNewDiary;
 var string DiaryMsg;
 
+var transient float B227_SkipConvTimestamp;
+
 event TravelPostAccept()
 {
 	super.TravelPostAccept();
@@ -97,7 +99,9 @@ auto state Pickup
 					conversenum++;
 				}
 				else {
-					if (Level.TimeSeconds - LastEventTime >= B227_GetCurrentConvSpeakTime(conversenum - 1)) {
+					if (Level.TimeSeconds - LastEventTime >= B227_GetCurrentConvSpeakTime(conversenum - 1) ||
+						B227_SkipConvTimestamp > LastEventTime
+					) {
 						potentialuser.ConvString = convstrings[conversenum];
 						if (PlayerSpeaks[conversenum] == 1) {
 							potentialuser.CurrentTalker = potentialuser;
