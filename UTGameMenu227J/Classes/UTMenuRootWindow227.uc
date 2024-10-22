@@ -54,6 +54,6 @@ static function bool IsEnabled()
 
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v3.3 [2024-09-29]"
-	Version="3.3"
+	VersionInfo="UTGameMenu227 v3.4 [2024-10-22]"
+	Version="3.4"
 }

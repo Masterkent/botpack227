@@ -79,7 +79,7 @@ function CreatePages()
 				BotConfigPage = Pages.AddPage(BotConfigTab, PageClass);
 		}
 	}
-	else if (GameType ~= "default")
+	else if (!class'UTXMenuStartMatchClientWindow227'.default.bCampaign && GameType ~= "default")
 		SettingsPage = Pages.AddPage(SettingsTab, class'UTXMenuSinglePlayerSettingsSClient');
 }
 
@@ -98,7 +98,7 @@ function GameChanged()
 
 	if (GameClass == none)
 	{
-		if (GameType ~= "default")
+		if (!class'UTXMenuStartMatchClientWindow227'.default.bCampaign && GameType ~= "default")
 			SettingsPage = Pages.AddPage(SettingsTab, class'UTXMenuSinglePlayerSettingsSClient');
 		return;
 	}

@@ -489,13 +489,12 @@ function MapSetModeChanged()
 		SetCampaignMode();
 	else
 		SetSingleMapMode();
-
-	default.bCampaign = bCampaign;
 }
 
 function SetSingleMapMode()
 {
 	bCampaign = false;
+	default.bCampaign = bCampaign;
 	LastMapSetMode = "SingleMap";
 	BotmatchParent.bSetGameDifficulty = false;
 
@@ -518,6 +517,7 @@ function SetSingleMapMode()
 function SetCampaignMode()
 {
 	bCampaign = true;
+	default.bCampaign = bCampaign;
 	LastMapSetMode = "Campaign";
 	BotmatchParent.bSetGameDifficulty = true;
 
