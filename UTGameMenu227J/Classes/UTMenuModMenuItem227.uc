@@ -1,11 +1,17 @@
 class UTMenuModMenuItem227 expands UMenuModMenuItem;
 
-var localized string MenuCaptionDisable;
+var localized string MenuCaption_SwitchToUMenu;
+var localized string MenuCaption_SwitchToOtherMenu;
 
 function Setup()
 {
 	if (class'UTMenuRootWindow227'.static.IsEnabled())
-		MenuCaption = MenuCaptionDisable;
+	{
+		if (class'UTMenuRootWindow227'.static.HasPreviousRootWindowType())
+			MenuCaption = MenuCaption_SwitchToOtherMenu;
+		else
+			MenuCaption = MenuCaption_SwitchToUMenu;
+	}
 }
 
 function Execute()
@@ -17,19 +23,29 @@ function Execute()
 	Console = Root.Console;
 
 	if (class'UTMenuRootWindow227'.static.IsEnabled())
-		Console.RootWindow = "UMenu.UMenuRootWindow";
+	{
+		if (class'UTMenuRootWindow227'.static.HasPreviousRootWindowType())
+			ShowRootWindowSelector();
+		else
+			class'UTMenuRootWindow227'.static.SwitchRootWindow(Console, "UMenu.UMenuRootWindow");
+	}
 	else
-		Console.RootWindow = string(class'UTMenuRootWindow227');
+		class'UTMenuRootWindow227'.static.SwitchRootWindow(Console, string(class'UTMenuRootWindow227'));
+}
 
-	Console.default.RootWindow = Console.RootWindow;
-	Console.SaveConfig();
-	Console.ResetUWindow();
-	Console.LaunchUWindow();
+function ShowRootWindowSelector()
+{
+	local UTXMenuRootWindowSelector227 W;
+
+	W = UTXMenuRootWindowSelector227(MenuItem.Owner.Root.CreateWindow(class'UTXMenuRootWindowSelector227', 100, 100, 100, 100));
+	W.SetupSelector();
+	MenuItem.Owner.Root.ShowModal(W);
 }
 
 defaultproperties
 {
 	MenuCaption="Switch to UTGameMenu227"
-	MenuCaptionDisable="Switch to UMenu"
+	MenuCaption_SwitchToUMenu="Switch to UMenu"
+	MenuCaption_SwitchToOtherMenu="Switch to Other Menu"
 	MenuHelp="Changes the game menu"
 }

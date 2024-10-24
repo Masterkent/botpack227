@@ -80,7 +80,7 @@ function CreatePages()
 		}
 	}
 	else if (!class'UTXMenuStartMatchClientWindow227'.default.bCampaign && GameType ~= "default")
-		SettingsPage = Pages.AddPage(SettingsTab, class'UTXMenuSinglePlayerSettingsSClient');
+		SettingsPage = Pages.AddPage(SettingsTab, class'UTXMenuSinglePlayerSettingsSClient227');
 }
 
 function GameChanged()
@@ -99,7 +99,7 @@ function GameChanged()
 	if (GameClass == none)
 	{
 		if (!class'UTXMenuStartMatchClientWindow227'.default.bCampaign && GameType ~= "default")
-			SettingsPage = Pages.AddPage(SettingsTab, class'UTXMenuSinglePlayerSettingsSClient');
+			SettingsPage = Pages.AddPage(SettingsTab, class'UTXMenuSinglePlayerSettingsSClient227');
 		return;
 	}
 

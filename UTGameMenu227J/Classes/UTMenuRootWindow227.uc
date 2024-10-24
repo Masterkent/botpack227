@@ -1,7 +1,10 @@
-class UTMenuRootWindow227 expands UMenuRootWindow;
+class UTMenuRootWindow227 expands UMenuRootWindow
+	config(UTGameMenu227);
 
 var const string VersionInfo;
 var const string Version;
+
+var config string PreviousRootWindowType;
 
 var bool bEnabled;
 var bool bShowedManagerWindow;
@@ -52,8 +55,30 @@ static function bool IsEnabled()
 		UTMenuRootWindow227(WindowConsole(class'LevelInfo'.static.GetLocalPlayerPawn().Player.Console).Root) != none;
 }
 
+static function bool HasPreviousRootWindowType()
+{
+	return InStr(default.PreviousRootWindowType, ".") > 0 && !(default.PreviousRootWindowType ~= "UMenu.UMenuRootWindow");
+}
+
+static function SwitchRootWindow(WindowConsole Console, string RootWindowType)
+{
+	if (Console == none)
+		return;
+	if (Console.Root != none)
+		default.PreviousRootWindowType = string(Console.Root.Class);
+	else
+		default.PreviousRootWindowType = "";
+	StaticSaveConfig();
+
+	Console.RootWindow = RootWindowType;
+	Console.default.RootWindow = Console.RootWindow;
+	Console.SaveConfig();
+	Console.ResetUWindow();
+	Console.LaunchUWindow();
+}
+
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v3.4 [2024-10-22]"
-	Version="3.4"
+	VersionInfo="UTGameMenu227 v4.0 [2024-10-23]"
+	Version="4.0"
 }

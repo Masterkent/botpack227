@@ -1,4 +1,4 @@
-class UTXMenuSinglePlayerSettingsCWindow extends UMenuPageWindow
+class UTXMenuSinglePlayerSettingsCWindow227 extends UMenuPageWindow
 	config(UTGameMenu227);
 
 var globalconfig bool bUseDifficulty;
