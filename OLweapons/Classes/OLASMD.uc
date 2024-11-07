@@ -15,15 +15,16 @@ var float TapTime;
 
 function inventory SpawnCopy( pawn Other )
 {
-  local inventory Copy;
-  local Inventory I;
+  //-local inventory Copy;
+  //-local Inventory I;
 
-  Copy = Super.SpawnCopy(Other);
-  I = Other.FindInventoryType(class'Amplifier');
-  if ( Amplifier(I) != None )
-    ASMD(Copy).Amp = Amplifier(I);
+  //-Copy = Super.SpawnCopy(Other);
+  //-I = Other.FindInventoryType(class'Amplifier');
+  //-if ( Amplifier(I) != None )
+  //-  ASMD(Copy).Amp = Amplifier(I); // B227 note: Always fails due to wrong type cast
 
-  return Copy;
+  //-return Copy;
+  return super.SpawnCopy(Other);
 }
 
 function AltFire( float Value )
@@ -214,6 +215,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
   local Vector Start, X,Y,Z;
   local float Mult;
 
+  Amp = B227_FindActiveAmplifier(Amp);
   if (Amp!=None) Mult = Amp.UseCharge(80);
   else Mult=1.0;
 
@@ -249,6 +251,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   if ( PlayerOwner != None )
     PlayerOwner.ClientInstantFlash( -0.4, vect(450, 190, 650));
     //to here..
+  Amp = B227_FindActiveAmplifier(Amp);
   if (Amp!=None) Mult = Amp.UseCharge(100);
   else Mult=1.0;
   SmokeLocation = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * 3.3 * Y + FireOffset.Z * Z * 3.0;

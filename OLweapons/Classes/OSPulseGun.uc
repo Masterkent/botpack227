@@ -131,7 +131,7 @@ state AltFiring         //all this just to keep using amp power.....
           if (PlasmaBeam == none || PlasmaBeam.bDeleteMe)
               B227_EmitBeam();
           if (PlasmaBeam != none)
-              PlasmaBeam.B227_DamageMult = B227_AmplifyDamage(Max(1, PlasmaBeam.Damage * 0.24));
+              PlasmaBeam.B227_DamageMult = B227_AmplifyDamage(Max(1, PlasmaBeam.Damage * 0.24), Amp);
           SoundVolume = P.SoundDampening * 255;
       }
       else
@@ -165,7 +165,9 @@ state NormalFire
   {
     local float Mult;
     local Vector Start, X,Y,Z;
-      if (Amp!=None) Mult = Amp.UseCharge(80);
+
+    Amp = B227_FindActiveAmplifier(Amp);
+    if (Amp!=None) Mult = Amp.UseCharge(80);
     else Mult=1.0;
     Owner.MakeNoise(Pawn(Owner).SoundDampening);
     GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
@@ -177,13 +179,8 @@ state NormalFire
     if (Tracked != none)
     {
         Tracked.Damage = Tracked.Damage*Mult;
-        if (Amp == none)
-		{
-			Mult = B227_AmplifyDamage(Tracked.Damage);
-			Tracked.Damage *= Mult;
-			if (B227_ShouldModifyPlasmaLighting())
-				Tracked.LightRadius = Clamp(Tracked.LightRadius * Sqrt(Mult), default.LightRadius, 255);
-		}
+        if (B227_ShouldModifyPlasmaLighting())
+            Tracked.LightRadius = Clamp(Tracked.LightRadius * Sqrt(Mult), default.LightRadius, 255);
     }
     return Tracked;
   }

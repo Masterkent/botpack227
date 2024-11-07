@@ -78,6 +78,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
   local PlayerPawn PlayerOwner;
   local float Mult;
 
+  Amp = B227_FindActiveAmplifier(Amp);
   if (Amp!=None) Mult = Amp.UseCharge(80);
   else Mult=1.0;
   Owner.MakeNoise(Pawn(Owner).SoundDampening);
@@ -90,12 +91,8 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
     PlayerOwner.ClientInstantFlash( -0.4, vect(450, 190, 650));
   Tracked = Spawn(ProjClass,,, Start,AdjustedAim);
   if (Tracked != none)
-  {
     Tracked.Damage = Tracked.Damage*Mult;
-    if (Amp == none)
-      Tracked.Damage *= B227_AmplifyDamage(Tracked.Damage);
-  }
-  if ( Level.Game.IsA('DeathMatchPlus') && DeathmatchPlus(Level.Game).bNoviceMode )
+  if (DeathMatchPlus(Level.Game) != none && DeathmatchPlus(Level.Game).bNoviceMode)
     Tracked = None; //no combo move
 
   return Tracked;
@@ -104,6 +101,7 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   local PlayerPawn PlayerOwner;
   local float Mult;
 
+  Amp = B227_FindActiveAmplifier(Amp);
   if (Amp!=None) Mult = Amp.UseCharge(100);
   else Mult=1.0;
   if (Other==None)

@@ -636,11 +636,9 @@ ignores Fire, AltFire, AnimEnd;
 }
 
 
-function float B227_AmplifyDamage(int UseCharge)
+function float B227_AmplifyDamage(int UseCharge, optional Pickup Amp)
 {
-	local Amplifier Amp;
-
-	Amp = B227_FindActiveAmplifier();
+	Amp = B227_FindActiveAmplifier(Amp);
 	if (Amp != none)
 		return Amp.UseCharge(UseCharge);
 	return 1;
@@ -664,13 +662,15 @@ static function bool B227_ShouldUseEnergyAmplifier()
 function B227_AdjustNPCFirePosition();
 
 // Auxiliary
-function Amplifier B227_FindActiveAmplifier()
+function Pickup B227_FindActiveAmplifier(optional Pickup Amp)
 {
 	local Inventory Inv;
 	local int i;
 
 	if (Pawn(Owner) == none)
 		return none;
+	if (Amp != none && Amp.bActive)
+		return Amp;
 	for (Inv = Owner.Inventory; Inv != none && i < 1000; Inv = Inv.Inventory)
 	{
 		if (Inv.bActive && Amplifier(Inv) != none)

@@ -130,6 +130,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 
   Owner.MakeNoise(Pawn(Owner).SoundDampening);
 
+  Amp = B227_FindActiveAmplifier(Amp);
   if (Amp!=None) Mult = Amp.UseCharge(80);
   else Mult=1.0;
 
@@ -244,6 +245,7 @@ state ShootLoad
     local Vector Start, X,Y,Z;
     local float Mult;
 
+    Amp = B227_FindActiveAmplifier(Amp);
     if (Amp!=None) Mult = Amp.UseCharge(ChargeSize*50+50);
     else Mult=1.0;
     Playshootload();
