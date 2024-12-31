@@ -78,7 +78,6 @@ static function string B227_GetString(optional int Switch)
 		case 1:
 			if (Len(default.B227_RelatedPawnInfo_1) == 0)
 				return "";
-
 			return default.B227_RelatedPawnInfo_1 $ class'GameInfo'.default.EnteredMessage;
 		case 2:
 			if (Len(default.B227_RelatedPawnInfo_1) == 0 || Len(default.B227_RelatedPawnInfo_2) == 0)

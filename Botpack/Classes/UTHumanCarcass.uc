@@ -124,6 +124,12 @@ function Initfor(actor Other)
 	Mass = Other.Mass;
 	if ( Buoyancy < 0.8 * Mass )
 		Buoyancy = 0.9 * Mass;
+	if (Bot(Other) != none)
+		bGreenBlood = Bot(Other).bGreenBlood;
+	else if (Bots(Other) != none)
+		bGreenBlood = Bots(Other).bGreenBlood;
+	else if (ScriptedPawn(Other) != none)
+		bGreenBlood = ScriptedPawn(Other).bGreenBlood;
 }
 
 

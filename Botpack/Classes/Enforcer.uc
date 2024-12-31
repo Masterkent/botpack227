@@ -744,8 +744,12 @@ Begin:
 	//- LoopAnim('Sway',0.2, 0.1);
 	// B227 note: Calling PlayAnim right after LoopAnim doesn't work in net game
 	AnimSequence = '';
-	if ( Pawn(Owner).bFire!=0 ) Global.Fire(0.0);
-	if ( Pawn(Owner).bAltFire!=0 ) Global.AltFire(0.0);
+	if (!bIsSlave ||
+		Pawn(Owner).Weapon != none && Pawn(Owner).Weapon.GetStateName() != '' && !Pawn(Owner).Weapon.IsInState('Idle2'))
+	{
+		if ( Pawn(Owner).bFire!=0 ) Global.Fire(0.0);
+		if ( Pawn(Owner).bAltFire!=0 ) Global.AltFire(0.0);
+	}
 	if (AnimSequence == '')
 		LoopAnim('Sway', 0.2, 0.1);
 }
