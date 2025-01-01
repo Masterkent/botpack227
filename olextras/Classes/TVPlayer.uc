@@ -604,6 +604,8 @@ ignores SeePlayer, HearNoise; //we want bump called
   function BeginState()
   {
     local Effects E;
+    local Inventory Inv;
+
     if (level.game!=none)
       minspeed=30*level.game.difficulty+580; //600 easy, 800 unreal
     EyeHeight = BaseEyeHeight;
@@ -649,6 +651,12 @@ ignores SeePlayer, HearNoise; //we want bump called
       if (B227_PlayerShipEffects != none)
         B227_PlayerShipEffects.Destroy();
       B227_PlayerShipEffects = Spawn(class'B227_PlayerShipEffects', self);
+
+      if (Weapon != none)
+        Weapon.GotoState('');
+      for (Inv = Inventory; Inv != none; Inv = Inv.Inventory)
+        if (Inv.bActivatable && Inv.IsInState('Activated'))
+          Inv.Activate();
     }
   }
   function PlayWaiting();

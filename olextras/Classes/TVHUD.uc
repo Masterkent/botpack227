@@ -1044,17 +1044,17 @@ function TelePorting(float TimeToTele){ //when fade-out tele activated. Sp only:
   Goal=tvplayer(owner).Linfo.GoalTime;
   UberGoal=tvplayer(owner).Linfo.UberGoalTime;
   Time=tvplayer(owner).MyTime;
-  if (Goal<=0.0||Time>Goal+20)
+  if ((Goal <= 0.0 || Time > Goal + 20) && (UberGoal <= 0.0 || Time > UberGoal))
     return; //don't even handle.
   if (Time<=UberGoal){
-    Temp="You=Über-l33t! Your time ("$class'tvscoreboard'.static.parseTime(Time)$" s) BEAT Über-Goal Time ("$class'tvscoreboard'.static.parseTime(UberGoal)$" s) by "$class'tvscoreboard'.static.parseTime(UberGoal-Time)$" s!";
+    Temp="You=Uber-l33t! Your time ("$class'tvscoreboard'.static.parseTime(Time)$" s) BEAT Uber-Goal Time ("$class'tvscoreboard'.static.parseTime(UberGoal)$" s) by "$class'tvscoreboard'.static.parseTime(UberGoal-Time)$" s!";
     pts=tvplayer(owner).Linfo.UberGoalPoints+tvplayer(owner).Linfo.UberGoalMult*(UberGoal-Time);
   }
   else if (Time<=Goal){
     Temp="CONGRATULATIONS! Your time ("$class'tvscoreboard'.static.parseTime(Time)$" s) BEAT Goal Time ("$class'tvscoreboard'.static.parseTime(Goal)$" s) by "$class'tvscoreboard'.static.parseTime(Goal-Time)$" s!";
     pts=tvplayer(owner).Linfo.GoalPoints+tvplayer(owner).Linfo.GoalMult*(Goal-Time);
     if (time<=UberGoal+20)
-      Temp=Temp$"  Time was only "$class'tvscoreboard'.static.parseTime(Time-UberGoal)$" s away from Über-Goal!";
+      Temp=Temp$"  Time was only "$class'tvscoreboard'.static.parseTime(Time-UberGoal)$" s away from Uber-Goal!";
   }
   else{
     playerowner.clientMessage("Nice Job! Your time was only "$class'tvscoreboard'.static.parseTime(Time-Goal)$"s away from the Goal Time.",'criticalevent',true);

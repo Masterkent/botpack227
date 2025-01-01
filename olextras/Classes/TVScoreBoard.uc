@@ -189,7 +189,7 @@ function DrawTimes(canvas canvas){
   if (P==none||P.Linfo.bCutScene)
     return;
   if (Uber==""&&P.Linfo.UberGoalTime>0)
-    Uber="Über-Goal Time:"@ParseTime(P.Linfo.UberGoalTime);
+    Uber="Uber-Goal Time:"@ParseTime(P.Linfo.UberGoalTime);
   if (Goal==""&&P.Linfo.GoalTime>0)
     Goal="Goal Time:"@ParseTime(P.Linfo.GoalTime);
   Canvas.bCenter=true;

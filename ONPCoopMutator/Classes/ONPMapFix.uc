@@ -362,7 +362,24 @@ function Server_FixCurrentMap_NP02DavidM()
 
 function Server_FixCurrentMap_NP04Hyperion()
 {
+	local TranslatorEvent TranslatorEvent;
+	local string Message;
+	local Actor NaliFruit;
+	local vector Pos;
+
+	SetTriggerPawnClassProximity(LoadLevelTrigger("Trigger16"));
+
 	InterpolateSpecialEvent("SpecialEvent10");
+
+	TranslatorEvent = TranslatorEvent(LoadLevelActor("TranslatorEvent0"));
+	Message = "Ihneya'Na's Log: The Nali betrayer got his 'device', as the Skaarj seem to call it, today. The Skaarj lord in this area tore out his left eye and replaced it with some weird metal piece. " $ "I don't know what it's doing, but Skaarj are well known for altering other creatures to fit their needs. I hope that does not include us.";
+	if (TranslatorEvent != none && InStr(Message, TranslatorEvent.Message) == 0)
+		TranslatorEvent.Message = Message;
+
+	NaliFruit = LoadLevelActor("NaliFruit3");
+	Pos = NaliFruit.Location;
+	Pos.Z = -2743.000000;
+	NaliFruit.SetLocation(Pos);
 }
 
 function Server_FixCurrentMap_NP05Heiko()
@@ -651,6 +668,7 @@ function Server_FixCurrentMap_NP22DavidM()
 {
 	local ONPBlockAllPanel BlockAll;
 	local Actor EClip;
+	local vector Pos;
 
 	DisableTeleporter("Teleporter1");
 	BlockAll = Spawn(class'ONPBlockAllPanel',,, vect(1283, -576, -98), rot(-764, 19308, 0));
@@ -658,7 +676,9 @@ function Server_FixCurrentMap_NP22DavidM()
 	BlockAll.SetScale(12);
 
 	EClip = LoadLevelActor("EClip0");
-	EClip.SetLocation(EClip.Location + vect(0, 0, 4));
+	Pos = EClip.Location;
+	Pos.Z = -636;
+	EClip.SetLocation(Pos);
 }
 
 function Server_FixCurrentMap_NP23Kew()
@@ -673,6 +693,7 @@ function Server_FixCurrentMap_NP23Kew()
 
 function Server_FixCurrentMap_NP24MClane()
 {
+	SetEventTriggersPawnClassProximity('autsch');
 	class'ONPTriggerStoppedMover'.static.CreateFor(Level, "Mover35");
 	class'ONPTriggerStoppedMover'.static.CreateFor(Level, "Mover43");
 }

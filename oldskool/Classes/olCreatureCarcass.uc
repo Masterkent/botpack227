@@ -47,14 +47,18 @@ function Initfor(actor Other)
     texture.lodset=lodset_skin;
     Fatness = Other.Fatness;
     DrawScale = Other.DrawScale;
+    Style = Other.Style;
     SetCollisionSize(Other.CollisionRadius + 4, Other.CollisionHeight);
     if ( !SetLocation(Location) )
       SetCollisionSize(CollisionRadius - 4, CollisionHeight);
     if (ScriptedPawn(Other) != none)
+    {
       realcarcass = class<CreatureCarcass>(scriptedpawn(other).default.carcasstype); //use default!
+      bGreenBlood = ScriptedPawn(Other).bGreenBlood;
+    }
     if (realcarcass != none)
     {
-      bgreenblood = realcarcass.default.bgreenblood; //copy.
+      //-bgreenblood = realcarcass.default.bgreenblood; //copy.
       bPermanent = realcarcass.default.bPermanent;
       lifespan = realcarcass.default.lifespan;
     }
@@ -94,7 +98,7 @@ function Initfor(actor Other)
       return;
     if (realcarcass==class'NaliCarcass'||realcarcass==class'SkaarjCarcass'||realcarcass==class'TrooperCarcass')
       carc = Spawn(class 'olCreatureChunks');
-    else if ( realcarcass.default.bodyparts[0] != None )
+    else if (realcarcass != none && realcarcass.default.bodyparts[0] != none)
       carc = Spawn(class 'olCreatureChunks',,, Location + realcarcass.default.ZOffset[0] * CollisionHeight * vect(0,0,1));
     if (carc != None)
     {
