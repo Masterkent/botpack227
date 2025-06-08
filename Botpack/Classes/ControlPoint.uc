@@ -52,8 +52,13 @@ function string GetHumanName()
 
 function Touch(Actor Other)
 {
-	if ( !Other.bIsPawn || !Pawn(Other).bIsPlayer || !Level.Game.IsA('Domination') )
+	if (!Other.bIsPawn ||
+		Pawn(Other).PlayerReplicationInfo == none ||
+		Pawn(Other).Health <= 0 ||
+		Domination(Level.Game) == none)
+	{
 		return;
+	}
 
 	Controller = Pawn(Other);
 	if ( Bot(Controller) != none && (Controller.MoveTarget == self) )
@@ -75,7 +80,7 @@ function UpdateStatus()
 	if ( Controller == None )
 		NewTeam = None;
 	else
-        NewTeam = T.GetTeam(Controller.PlayerReplicationInfo.Team);
+		NewTeam = T.GetTeam(Controller.PlayerReplicationInfo.Team);
 
 	if ( NewTeam == ControllingTeam )
 		return;
@@ -103,7 +108,7 @@ function UpdateStatus()
 			if ( (B.Orders != 'Follow') && (B.Orders != 'Hold') )
 			{
 				for ( P=Level.PawnList; P!=None; P=P.NextPawn )
-					if ( P.bIsPlayer && (P.PlayerReplicationInfo.Team == ControllingTeam.TeamIndex) )
+					if ( P.PlayerReplicationInfo != none && (P.PlayerReplicationInfo.Team == ControllingTeam.TeamIndex) )
 					{
 						bNeedDefense = true; // only defend if at least one other player on team
 						B2 = Bot(P);
@@ -154,7 +159,7 @@ function UpdateStatus()
 			Mesh = mesh'DomN';
 			Texture=texture'JDomN0';
 			LightHue=0;
-		    LightSaturation=255;
+			LightSaturation=255;
 		}
 	}
 	else

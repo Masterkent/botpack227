@@ -6,14 +6,17 @@ event InitGame( string Options, out string Error )
 
 	Super.InitGame( Options, Error );
 
-	bRatedGame = true;
-	TimeLimit = 0;
-	RemainingTime = 0;
+	//-bRatedGame = true;
+	//-TimeLimit = 0;
+	//-RemainingTime = 0;
 }
 
 function InitRatedGame(LadderInventory LadderObj, PlayerPawn LadderPlayer)
 {
 	local Weapon W;
+
+	TimeLimit = 0;
+	RemainingTime = 0;
 
 	Super.InitRatedGame(LadderObj, LadderPlayer);
 

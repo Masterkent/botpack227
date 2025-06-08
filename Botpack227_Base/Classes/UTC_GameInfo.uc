@@ -312,7 +312,9 @@ function Killed(Pawn Killer, Pawn Other, name damageType)
 		if (Killer != none && Killer.PlayerReplicationInfo == none)
 		{
 			Message = Killer.KillMessage(damageType, Other);
-			BroadcastMessage(Other.GetHumanName() $ Message, false, 'DeathMessage');
+			if (UTC_Pawn(Killer) == none)
+				Message = Other.GetHumanName() $ Message;
+			BroadcastMessage(Message, false, 'DeathMessage');
 			return;
 		}
 		if ( (DamageType == 'SpecialDamage') && (SpecialDamageString != "") )

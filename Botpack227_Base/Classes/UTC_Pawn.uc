@@ -164,6 +164,22 @@ simulated function SetMesh()
 	Mesh = default.Mesh;
 }
 
+function string KillMessage(name damageType, Pawn Other)
+{
+	local string message;
+
+	message = Level.Game.CreatureKillMessage(damageType, Other);
+
+	if (MenuNameDative != "")
+		message = message $ NameArticle $ MenuNameDative;
+	else
+		message = message $ NameArticle $ MenuName;
+
+	if (UTC_GameInfo(Level.Game) != none)
+		return Other.PlayerReplicationInfo.PlayerName $ message;
+	return message;
+}
+
 exec function bool SwitchToBestWeapon()
 {
 	return UTSF_SwitchToBestWeapon(self);

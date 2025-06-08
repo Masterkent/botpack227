@@ -32,7 +32,11 @@ function PostBeginPlay()
 function string KillMessage( name damageType, pawn Other )
 {
 	if (UTC_GameInfo(Level.Game) != none)
-		return PreKillMessage @ Other.GetHumanName() @ PostKillMessage;
+	{
+		if (Len(PreKillMessage) > 0)
+			return PreKillMessage @ Other.GetHumanName() @ PostKillMessage;
+		return Other.GetHumanName() @ PostKillMessage;
+	}
 	return " " $ PostKillMessage;
 }
 

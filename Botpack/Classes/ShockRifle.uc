@@ -10,7 +10,7 @@ var Projectile Tracked;
 var bool bBotSpecialMove;
 var float TapTime;
 
-var int B227_ShockBeamNumPoints;
+var transient int B227_ShockBeamNumPoints;
 
 function AltFire( float Value )
 {
@@ -442,22 +442,22 @@ function B227_SpawnBeamEffects(out Actor HitActor, out vector HitLocation, out v
 
 	if (B227_ShouldTraceFireThroughWarpZones())
 		bWarped = B227_AdjustTraceResult(Level, StartTrace, B227_FireEndTrace, HitActor, HitLocation, HitNormal, MaxWarps);
-	SpawnEffect(HitLocation, B227_FireStartTrace);
-	if (B227_ShouldTraceFireThroughWarpZones() && bWarped)
+	SpawnEffect(HitLocation, B227_FireStartTrace + X * 20.0);
+	if (bWarped)
 	{
 		HitActor = B227_TraceShot(self, StartTrace, B227_FireEndTrace, HitLocation, HitNormal);
 		BeamStart = StartTrace;
 		while (B227_AdjustTraceResult(Level, StartTrace, B227_FireEndTrace, HitActor, HitLocation, HitNormal, MaxWarps))
 		{
-			B227_SpawnEffectExtension(HitLocation, BeamStart);
+			B227_SpawnEffectExtension(HitLocation, BeamStart, Class);
 			HitActor = B227_TraceShot(self, StartTrace, B227_FireEndTrace, HitLocation, HitNormal);
 			BeamStart = StartTrace;
 		}
-		B227_SpawnEffectExtension(HitLocation, BeamStart);
+		B227_SpawnEffectExtension(HitLocation, BeamStart, Class);
 	}
 }
 
-function B227_SpawnEffectExtension(vector HitLocation, vector BeamLocation)
+function B227_SpawnEffectExtension(vector HitLocation, vector BeamLocation, class<ShockRifle> ShockRifleClass)
 {
 	local Vector DVector;
 	local int NumPoints;
@@ -472,7 +472,7 @@ function B227_SpawnEffectExtension(vector HitLocation, vector BeamLocation)
 
 	class'B227_ShockBeamExtension'.static.Make(
 		self,
-		Class,
+		ShockRifleClass,
 		BeamLocation,
 		BeamRotation,
 		0.05 * B227_ShockBeamNumPoints,

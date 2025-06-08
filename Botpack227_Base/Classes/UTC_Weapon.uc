@@ -341,6 +341,15 @@ function float B227_SoundDampening()
 	return 1.0;
 }
 
+// out StartTrace: if warped, set to new start point after the first warp zone portal; otherwise unchanged.
+// out vector EndTrace: if warped, set to new end point after the first warp zone portal; otherwise unchanged.
+// out Actor HitActor: if warped, is reset to none; otherwise unchanged.
+// out vector HitLocation: if warped, hit location on the nearest warp zone portal plane;
+//     otherwise if passed HitActor is none, set to passed EndTrace;
+//     otherwise unchanged.
+// out vector HitNormal: if HitActor is none, set to -Dir after modification of Dir.
+// optional out vector Dir: set to Normal(EndTrace - StartTrace) before modification of StartTrace and EndTrace.
+//
 static function bool B227_AdjustTraceResult(
 	LevelInfo Level,
 	out vector StartTrace,

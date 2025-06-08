@@ -29,6 +29,12 @@ static function B227_ShockBeamExtension Make(
 	return BeamExtension;
 }
 
+function SpawnShockBeam()
+{
+	if (ShockRifleClass != none)
+		ShockRifleClass.static.B227_SpawnShockBeam(self, Location, Rotation, MoveAmount, NumPuffs);
+}
+
 auto state Idle
 {
 	event Tick(float DeltaTime)
@@ -39,12 +45,6 @@ auto state Idle
 
 state Active
 {
-	function SpawnShockBeam()
-	{
-		if (ShockRifleClass != none)
-			ShockRifleClass.static.B227_SpawnShockBeam(self, Location, Rotation, MoveAmount, NumPuffs);
-	}
-
 Begin:
 	Sleep(Delay);
 	SpawnShockBeam();

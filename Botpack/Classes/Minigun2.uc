@@ -134,6 +134,7 @@ function TraceFire( float Accuracy )
 {
 	local vector HitLocation, HitNormal, X, Y, Z, AimDir;
 	local actor Other;
+	local MTracer MTracer;
 
 	Owner.MakeNoise(Pawn(Owner).SoundDampening);
 	GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
@@ -150,7 +151,13 @@ function TraceFire( float Accuracy )
 	{
 		Count = 0;
 		if ( VSize(HitLocation - B227_FireStartTrace) > 250 )
-			Spawn(class'MTracer',,, B227_FireStartTrace + 96 * AimDir,rotator(B227_FireEndTrace - B227_FireStartTrace));
+			Spawn(class'MTracer',,, B227_FireStartTrace + 96 * AimDir, rotator(B227_FireEndTrace - B227_FireStartTrace));
+		else if (WarpZoneInfo(Level.GetLocZone(HitLocation + HitNormal).Zone) != none)
+		{
+			MTracer = Spawn(class'MTracer',,, B227_FireStartTrace, rotator(B227_FireEndTrace - B227_FireStartTrace));
+			if (MTracer != none)
+				MTracer.AutonomousPhysics(96 / FMax(1.0, MTracer.speed));
+		}
 	}
 	ProcessTraceHit(Other, HitLocation, HitNormal, Normal(B227_FireEndTrace - B227_FireStartTrace), Y, Z);
 }

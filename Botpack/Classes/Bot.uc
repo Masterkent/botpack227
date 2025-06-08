@@ -2695,7 +2695,7 @@ state Holding
 
 	function Landed(vector HitNormal)
 	{
-		SetPhysics(PHYS_None);
+		global.Landed(HitNormal);
 	}
 
 	function BeginState()
@@ -2867,7 +2867,7 @@ state Hold
 
 	function Landed(vector HitNormal)
 	{
-		SetPhysics(PHYS_None);
+		global.Landed(HitNormal);
 	}
 
 	function BeginState()
@@ -5979,9 +5979,15 @@ ignores EnemyNotVisible;
 		local float posZ;
 		local bool bCanSeeLastSeen;
 		local int i;
+		local int PlayerCount;
+
+		if (DeathMatchPlus(Level.Game) != none)
+			PlayerCount = Level.Game.NumPlayers - DeathMatchPlus(Level.Game).NumBots;
+		else if (DeathMatchGame(Level.Game) != none)
+			PlayerCount = Level.Game.NumPlayers - DeathMatchGame(Level.Game).NumBots;
 
 		// If no enemy, or I should see him but don't, then give up
-		if ( Level.TimeSeconds - LastSeenTime > 26 - Level.Game.NumPlayers - DeathMatchPlus(Level.Game).NumBots )
+		if (Level.TimeSeconds - LastSeenTime > 26 - PlayerCount)
 			Enemy = None;
 		if (!B227_HasAliveEnemy())
 		{
@@ -6507,9 +6513,10 @@ ignores seeplayer, hearnoise, bump, hitwall;
 
 	function Landed(vector HitNormal)
 	{
-		if (Velocity.Z < -1.4 * JumpZ)
-			MakeNoise(-0.5 * Velocity.Z/(FMax(JumpZ, 150.0)));
-		bJustLanded = true;
+		//-if (Velocity.Z < -1.4 * JumpZ)
+		//-	MakeNoise(-0.5 * Velocity.Z/(FMax(JumpZ, 150.0)));
+		//-bJustLanded = true;
+		global.Landed(HitNormal);
 	}
 
 	function Timer()
@@ -6771,9 +6778,6 @@ ignores Bump, Hitwall, WarnTarget;
 	{
 		local vector Vel2D;
 
-		if (B227_DodgeDoneTimestamp < 0)
-			B227_DodgeDoneTimestamp = Level.TimeSeconds;
-
 		if ( MoveTarget != None )
 		{
 			Vel2D = Velocity;
@@ -6783,7 +6787,9 @@ ignores Bump, Hitwall, WarnTarget;
 		}
 		//Note - physics changes type to PHYS_Walking by default for landed pawns
 		PlayLanded(Velocity.Z);
-		TakeFallingDamage();
+		//-TakeFallingDamage();
+		global.Landed(HitNormal);
+
 		if (Velocity.Z < -1.4 * JumpZ)
 		{
 			if ( health > 0 )
@@ -7406,7 +7412,12 @@ Begin:
 TryAgain:
 	if ( !bHidden )
 		HidePlayer();
-	Sleep(0.25 + DeathMatchPlus(Level.Game).SpawnWait(self));
+	if (DeathMatchPlus(Level.Game) != none)
+		Sleep(0.25 + DeathMatchPlus(Level.Game).SpawnWait(self));
+	else if (DeathMatchGame(Level.Game) != none)
+		Sleep(0.25 + DeathMatchGame(Level.Game).NumBots * FRand());
+	else
+		Sleep(0.25 + FRand());
 	ReStartPlayer();
 	Goto('TryAgain');
 WaitingForStart:
@@ -7574,6 +7585,19 @@ static function SetMultiSkin(Actor SkinActor, string SkinName, string FaceName, 
 
 
 // B227 additions:
+
+event Landed(vector HitNormal)
+{
+	TakeFallingDamage();
+	if (Velocity.Z < -1.4 * JumpZ)
+		MakeNoise(-0.5 * Velocity.Z/(FMax(JumpZ, 150.0)));
+	SetMovementPhysics();
+
+	bJustLanded = true;
+	if (B227_DodgeDoneTimestamp < 0)
+		B227_DodgeDoneTimestamp = Level.TimeSeconds;
+}
+
 
 function bool B227_PickWallAdjust()
 {

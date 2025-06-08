@@ -274,6 +274,11 @@ function bool B227_ReplaceWith(Actor Actor, class<Actor> NewActorClass)
 			else
 				A.Move((A.CollisionHeight - Actor.CollisionHeight) * vect(0, 0, 1));
 
+			if (Actor.Physics == PHYS_Falling)
+				A.SetPhysics(PHYS_Falling);
+			if (Inventory(Actor).bRotatingPickup != Inventory(Actor).default.bRotatingPickup)
+				Inventory(A).bRotatingPickup = Inventory(Actor).bRotatingPickup;
+
 			if (Inventory(Actor).bHeldItem)
 			{
 				Inventory(A).bHeldItem = true;

@@ -98,6 +98,7 @@ var class<ServerInfo> ServerInfoClass;
 
 var globalconfig string FontInfoClass;
 
+var globalconfig bool B227_bAlwaysShowAmmoBars;
 var globalconfig bool B227_bVerticalScaling;
 var globalconfig float B227_UpscaleHUD;
 
@@ -662,8 +663,10 @@ simulated function DrawGameSynopsis(Canvas Canvas)
 simulated function DrawWeapons(Canvas Canvas)
 {
 	local Weapon W, WeaponSlot[11];
+	local Ammo Ammo;
+	local float AmmoSlot[10];
 	local inventory Inv;
-	local int i, BaseY, BaseX, Pending, WeapX, WeapY;
+	local int i, j, BaseY, BaseX, Pending, WeapX, WeapY;
 	local float AmmoScale, WeaponOffset, WeapScale, WeaponX, TexX, TexY;
 
 	BaseX = 0.5 * (Canvas.ClipX - B227_WeaponBarScale() * Canvas.ClipX);
@@ -696,6 +699,8 @@ simulated function DrawWeapons(Canvas Canvas)
 		Canvas.CurY = BaseY;
 		Canvas.DrawTile(Texture'BotPack.HUDWeapons', 128 * WeapScale, 64 * WeapScale, 128, 64, 128, 64);
 	}
+	if (PawnOwner.PendingWeapon != none)
+		WeaponSlot[W.InventoryGroup] = PawnOwner.PendingWeapon;
 	if ( Level.bHighDetailMode && (PawnOwner.PendingWeapon != None) )
 	{
 		Pending = PawnOwner.PendingWeapon.InventoryGroup;
@@ -712,14 +717,28 @@ simulated function DrawWeapons(Canvas Canvas)
 	i = 0;
 	for ( Inv=PawnOwner.Inventory; Inv!=None; Inv=Inv.Inventory )
 	{
-		if ( Inv.IsA('Weapon') && (Inv != PawnOwner.Weapon) )
+		if (Weapon(Inv) != none && Inv != PawnOwner.Weapon)
 		{
 			W = Weapon(Inv);
 			if ( WeaponSlot[W.InventoryGroup] == None )
 				WeaponSlot[W.InventoryGroup] = W;
-			else if ( (WeaponSlot[W.InventoryGroup] != PawnOwner.Weapon)
-					&& ((W == PawnOwner.PendingWeapon) || (WeaponSlot[W.InventoryGroup].AutoSwitchPriority < W.AutoSwitchPriority)) )
-				WeaponSlot[W.InventoryGroup] = W;
+			else if (WeaponSlot[W.InventoryGroup] != PawnOwner.Weapon &&
+				WeaponSlot[W.InventoryGroup] != PawnOwner.PendingWeapon &&
+				(W.AmmoType == none || W.AmmoType.AmmoAmount > 0))
+			{
+				if (WeaponSlot[W.InventoryGroup].AutoSwitchPriority < W.AutoSwitchPriority ||
+					WeaponSlot[W.InventoryGroup].AmmoType != none && WeaponSlot[W.InventoryGroup].AmmoType.AmmoAmount == 0)
+				{
+					WeaponSlot[W.InventoryGroup] = W;
+				}
+			}
+		}
+		else if (default.B227_bAlwaysShowAmmoBars && Ammo(Inv) != none)
+		{
+			Ammo = Ammo(Inv);
+			for (j = 0; j < 10; ++j)
+				if (Ammo.UsedInWeaponSlot[j] > 0)
+					AmmoSlot[j] = FMax(AmmoSlot[j], Ammo.AmmoAmount / FMax(1, Ammo.MaxAmmo));
 		}
 		i++;
 		if ( i > 1000 )
@@ -800,6 +819,31 @@ simulated function DrawWeapons(Canvas Canvas)
 				Canvas.DrawColor = BaseColor;
 				AmmoScale = 88.0 * WeapScale * FClamp(WeaponSlot[i].AmmoType.AmmoAmount / FMax(1, WeaponSlot[i].AmmoType.MaxAmmo), 0, 1);
 				Canvas.DrawTile(Texture'BotPack.HudElements1', AmmoScale, 8 * WeapScale,64,64,128.0,8.0);
+			}
+		}
+		else if (default.B227_bAlwaysShowAmmoBars)
+		{
+			WeaponX = BaseX + (i - 1) * WeaponOffset + 4 * WeapScale;
+			Canvas.CurX = WeaponX;
+			Canvas.CurY = BaseY + 4 * WeapScale;
+			Canvas.DrawColor = MakeColor(0, 0, 0);
+			if ( (Opacity > 8) || !Level.bHighDetailMode )
+				Canvas.Style = ERenderStyle.STY_Normal;
+			else
+				Canvas.Style = Style;
+			if ( i == 10 )
+				Canvas.DrawTile(Texture'BotPack.HudElements1', TexX, TexY, 0, 0, 25.0, 64.0);
+			else
+				Canvas.DrawTile(Texture'BotPack.HudElements1', TexX, TexY, 25*i, 0, 25.0, 64.0);
+
+			if (AmmoSlot[i % 10] > 0)
+			{
+				// Draw Ammo bar (without having the weapon)
+				Canvas.CurX = WeaponX;
+				Canvas.CurY = BaseY + 52 * WeapScale;
+				Canvas.DrawColor = MakeColor(128, 128, 128);
+				AmmoScale = 88.0 * WeapScale * FClamp(AmmoSlot[i % 10], 0, 1);
+				Canvas.DrawTile(Texture'WhiteTexture', AmmoScale, 8 * WeapScale,64,64,128.0,8.0);
 			}
 		}
 	}

@@ -170,7 +170,7 @@ state Dropped
 		local Pawn aPawn;
 
 		aPawn = Pawn(Other);
-		if ( (aPawn != None) && aPawn.bIsPlayer && (aPawn.Health > 0)
+		if ( (aPawn != None) && aPawn.PlayerReplicationInfo != none && (aPawn.Health > 0)
 			&& !aPawn.IsInState('FeigningDeath') )
 		{
 			aPawn.MoveTimer = -1;
@@ -272,7 +272,7 @@ auto state Home
 		local Bot B;
 
 		aPawn = Pawn(Other);
-		if ( (aPawn != None) && aPawn.bIsPlayer && (aPawn.Health > 0) )
+		if ( (aPawn != None) && aPawn.PlayerReplicationInfo != none && (aPawn.Health > 0) )
 		{
 			// check if scored capture
 			if ( aPawn.PlayerReplicationInfo.Team == Team )
