@@ -59,22 +59,18 @@ function bool HandlePickupQuery( inventory Item )
     {
       ShakeVert = Default.ShakeVert + PowerLevel;
       PowerUpSound = Item.ActivateSound;
+
+      PowerLevel++;
+      AmmoType.MaxAmmo += 10;
+      AmmoType.AddAmmo(10);
+
       if ( Pawn(Owner).Weapon == self )
-      {
-        PowerLevel++;
         GotoState('PowerUp');
-      }
       else if ( (Pawn(Owner).Weapon != Self) && !Pawn(Owner).bNeverSwitchOnPickup )
       {
         Pawn(Owner).Weapon.PutDown();
         Pawn(Owner).PendingWeapon = self;
         GotoState('PowerUp', 'Waiting');
-      }
-      else
-      {
-        PowerLevel++;
-        AmmoType.MaxAmmo += 10;
-        AmmoType.AddAmmo(10);
       }
     }
     Item.SetRespawn();
@@ -139,20 +135,19 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
   AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, (3.5*FRand()-1<PowerLevel));
   if ( (PowerLevel == 0) || (AmmoType.AmmoAmount < 10) )
   {
-    da = DispersionAmmo(Spawn(ProjClass,,, Start,AdjustedAim));
+    da = DispersionAmmo(Spawn(B227_GetProjClass(ProjClass),,, Start, AdjustedAim));
     if ( (AmmoType.AmmoAmount < 1) && Level.Game.bDeathMatch )
       AmmoType.AmmoAmount = 1;
   }
   else
   {
-    if ( (PowerLevel==1) && AmmoType.UseAmmo(2) )
-      da = Spawn(class'olweapons.OSDAmmo2',,, Start,AdjustedAim);
-    if ( (PowerLevel==2) && AmmoType.UseAmmo(4) )
-      da = Spawn(class'olweapons.OSDAmmo3',,, Start,AdjustedAim);
-    if ( (PowerLevel==3) && AmmoType.UseAmmo(5) )
-      da = Spawn(class'olweapons.OSDAmmo4',,, Start ,AdjustedAim);
-    if ( (PowerLevel>=4) && AmmoType.UseAmmo(6) )
-      da = Spawn(class'olweapons.OSDAmmo5',,, Start,AdjustedAim);
+    if (PowerLevel==1 && AmmoType.UseAmmo(2) ||
+      PowerLevel==2 && AmmoType.UseAmmo(4) ||
+      PowerLevel==3 && AmmoType.UseAmmo(5) ||
+      PowerLevel>=4 && AmmoType.UseAmmo(6))
+      {
+        da = DispersionAmmo(Spawn(B227_GetProjClass(ProjClass, PowerLevel),,, Start, AdjustedAim));
+      }
   }
   if ( (da != None) && (Mult>1.0) )
     da.InitSplash(Mult);
@@ -252,7 +247,7 @@ state ShootLoad
     GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
     Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
     AdjustedAim = pawn(owner).AdjustAim(AltProjectileSpeed, Start, AimError, True, True);
-    d = DispersionAmmo(Spawn(AltProjectileClass,,, Start,AdjustedAim));
+    d = DispersionAmmo(Spawn(B227_GetProjClass(AltProjectileClass),,, Start,AdjustedAim));
     if ( d != None )
     {
       d.bAltFire = True;
@@ -315,14 +310,11 @@ ignores fire, altfire, clientfire, clientaltfire;
 
 Raising:
   FinishAnim();
-  PowerLevel++;
 
 Begin:
   if (PowerLevel<5)
   {
-    AmmoType.MaxAmmo += 10;
-    AmmoType.AddAmmo(10);
-   PlayPowerUp();
+    PlayPowerUp();
     bcanclientfire=true;
     FinishAnim();
     if ( bChangeWeapon )
@@ -378,6 +370,38 @@ function TweenToStill()      //handle powerlevelz
   else if (PowerLevel==2) TweenAnim('Idle3',0.1);
   else if (PowerLevel==3) TweenAnim('Idle4',0.1);
   else if (PowerLevel==4) TweenAnim('Idle5',0.1);
+}
+
+// B227 addition
+function class<Projectile> B227_GetProjClass(class<Projectile> ProjClass, optional int PowerLevel)
+{
+	if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+	{
+		if (PowerLevel == 0 && ProjClass == class'OSDispersionAmmo')
+			return class'DispersionAmmo';
+		if (PowerLevel == 1)
+			return class'DAmmo2';
+		if (PowerLevel == 2)
+			return class'DAmmo3';
+		if (PowerLevel == 3)
+			return class'DAmmo4';
+		if (PowerLevel >= 4)
+			return class'DAmmo5';
+	}
+	else
+	{
+		if (PowerLevel == 0)
+			return ProjClass;
+		if (PowerLevel == 1)
+			return class'OSDAmmo2';
+		if (PowerLevel == 2)
+			return class'OSDAmmo3';
+		if (PowerLevel == 3)
+			return class'OSDAmmo4';
+		if (PowerLevel >= 4)
+			return class'OSDAmmo5';
+	}
+	return ProjClass;
 }
 
 defaultproperties

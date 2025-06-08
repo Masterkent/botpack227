@@ -585,7 +585,10 @@ state FireRockets
         }
         if ( LockedTarget != None )
         {
-          s = Spawn( class 'osSeekingRocket',, '', FireLocation,FireRot);
+          if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+            s = Spawn(class'SeekingRocket',,, FireLocation, FireRot);
+          else
+            s = Spawn(class'osSeekingRocket',,, FireLocation, FireRot);
           s.Seeking = LockedTarget;
           s.NumExtraRockets = DupRockets;
           if ( Angle > 0 )
@@ -593,7 +596,10 @@ state FireRockets
         }
         else
         {
-          r = Spawn( class'osrocket',, '', FireLocation,FireRot);
+          if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+            r = Spawn(class'Rocket',,, FireLocation, FireRot);
+          else
+            r = Spawn(class'osrocket',,, FireLocation, FireRot);
           r.NumExtraRockets = DupRockets;
           if (RocketsLoaded>4 && bTightWad) r.bRing=True;
           if ( Angle > 0 )
@@ -602,7 +608,10 @@ state FireRockets
       }
       else
       {
-        g = Spawn( class 'osGrenade',, '', FireLocation,AdjustedAim);
+        if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+          g = Spawn(class'Grenade',,, FireLocation, AdjustedAim);
+        else
+          g = Spawn(class'osGrenade',,, FireLocation, AdjustedAim);
         g.NumExtraGrenades = DupRockets;
         if ( DupRockets > 0 )
         {

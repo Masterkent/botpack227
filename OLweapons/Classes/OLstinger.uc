@@ -21,7 +21,7 @@ function Fire( float Value )
     bCanClientFire = true;
     ClientFire(Value);
     Pawn(Owner).PlayRecoil(FiringSpeed);
-    ProjectileFire(ProjectileClass, ProjectileSpeed, bWarnTarget);
+    ProjectileFire(B227_GetProjClass(ProjectileClass), ProjectileSpeed, bWarnTarget);
   }
 }
 function float RateSelf( out int bUseAltMode )
@@ -99,7 +99,7 @@ state AltFiring
     local vector Start;
     local Rotator StartRot, AltRotation;
 
-    S = Global.ProjectileFire(ProjClass, ProjSpeed, bWarn);
+    S = global.ProjectileFire(B227_GetProjClass(ProjClass), ProjSpeed, bWarn);
     StartRot = S.Rotation;
     Start = S.Location;
     for (i = 0; i< 4; i++)
@@ -110,7 +110,7 @@ state AltFiring
         AltRotation.Pitch += FRand()*3000-1500;
         AltRotation.Yaw += FRand()*3000-1500;
         AltRotation.Roll += FRand()*9000-4500;
-        S = Spawn(AltProjectileClass,,, Start - 2 * VRand(), AltRotation);
+        S = Spawn(B227_GetProjClass(AltProjectileClass),,, Start - 2 * VRand(), AltRotation);
       }
     }
     if (StingerProjectile(S) != none)
@@ -132,6 +132,14 @@ Begin:
 function PlayIdleAnim()
 {
   PlayAnim('Still',,0.05);
+}
+
+// B227 addition
+function class<Projectile> B227_GetProjClass(class<Projectile> ProjClass)
+{
+	if (class'UIweapons'.default.B227_bUseClassicProjectiles && ProjClass == class'OSStingerProjectile')
+		return class'StingerProjectile';
+	return ProjClass;
 }
 
 defaultproperties

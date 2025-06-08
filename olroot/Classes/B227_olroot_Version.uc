@@ -3,6 +3,6 @@ class B227_olroot_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 olroot v1.1 [2024-10-19]"
-	Version="1.1"
+	VersionInfo="B227 olroot v1.2 [2025-02-11]"
+	Version="1.2"
 }

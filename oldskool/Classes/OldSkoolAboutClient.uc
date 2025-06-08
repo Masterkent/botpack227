@@ -23,9 +23,10 @@ function Paint(Canvas C, float X, float Y)
   c.drawcolor.B=0;
   C.Font=root.fonts[F_Bold];
   Y=5;
-  WriteText(C, "OldSkool Amp'd 2.38", Y);
+  WriteText(C, "OldSkool Amp'd 2.38 / B227 edition" @ class'B227_oldskool_Version'.default.Version @
+    "r-" $ class'B227_olroot_Version'.default.Version @ "w-" $ class'B227_olweapons_Version'.default.Version, Y);
   Y+=8;
-  WriteText(C, "By UsAaR33", Y);
+  WriteText(C, "By UsAaR33 / modified by MK", Y);
   Y+=5;
   WriteText(C, "and much code and skins by Psychic_313", Y);
   Y+=5;

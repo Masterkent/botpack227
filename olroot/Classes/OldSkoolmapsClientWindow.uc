@@ -362,15 +362,23 @@ function IterateMaps(string DefaultMap)
 }
 function AfterCreate()
 {
-  if (PackCombo.GetSelectedIndex() == P){
-  BotmatchParent.Map = MapCombo.GetValue2();
-  BotmatchParent.screenshotWindow.SetMap(BotmatchParent.Map);
-  MapCombo.ShowWindow();
-  }
-  else {
-  BotmatchParent.ScreenshotWindow.SetPack(BotmatchParent.SelectedPackType);
-  Mapcombo.HideWindow(); }
+  WindowShown();
 }
+function WindowShown()
+{
+  if (PackCombo.GetSelectedIndex() == P)
+  {
+    BotmatchParent.Map = MapCombo.GetValue2();
+    BotmatchParent.screenshotWindow.SetMap(BotmatchParent.Map);
+    MapCombo.ShowWindow();
+  }
+  else
+  {
+    BotmatchParent.ScreenshotWindow.SetPack(BotmatchParent.SelectedPackType);
+    Mapcombo.HideWindow();
+  }
+}
+
 function BeforePaint(Canvas C, float X, float Y)        //set up size.......
 {
   local int ControlWidth, ControlLeft, ControlRight;

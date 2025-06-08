@@ -91,7 +91,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
   AdjustedAim = pawn(owner).AdjustToss(ProjSpeed, Start, 0, True, (bWarn || (FRand() < 0.4)));
   if ( Owner.IsA('PlayerPawn') )
     PlayerPawn(Owner).ClientInstantFlash( -0.3, vect( 278, 435, 143));
-  return Spawn(ProjClass,,, Start,AdjustedAim);
+  return Spawn(B227_GetProjClass(ProjClass),,, Start, AdjustedAim);
 }
 
 ///////////////////////////////////////////////////////
@@ -209,6 +209,19 @@ function PlayIdleAnim()
 function DripSound()
 {
   Owner.PlaySound(Misc2Sound, SLOT_None, 0.5*Pawn(Owner).SoundDampening);  // Drip
+}
+
+// B227 addition
+function class<Projectile> B227_GetProjClass(class<Projectile> ProjClass)
+{
+	if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+	{
+		if (ProjClass == class'OSBioGel')
+			return class'BioGel';
+		if (ProjClass == class'OSBigBiogel')
+			return class'BigBiogel';
+	}
+	return ProjClass;
 }
 
 defaultproperties

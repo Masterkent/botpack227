@@ -3,6 +3,6 @@ class B227_OLweapons_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 OLweapons v1.4 [2024-11-07]"
-	Version="1.4"
+	VersionInfo="B227 OLweapons v1.5 [2025-04-12]"
+	Version="1.5"
 }

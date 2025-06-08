@@ -107,16 +107,34 @@ function Fire( float Value )
     GetAxes(AdjustedAim,X,Y,Z);
     Spawn(class'WeaponLight',,'',Start+X*20,rot(0,0,0));
     Start = Start + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
-    Spawn( class 'OSMasterChunk',, '', Start, AdjustedAim);
-    Spawn( class 'OSChunk2',, '', Start - Z, AdjustedAim);
-    Spawn( class 'OSChunk3',, '', Start + 2 * Y + Z, AdjustedAim);
-    Spawn( class 'OSChunk4',, '', Start - Y, AdjustedAim);
-    Spawn( class 'OSChunk1',, '', Start + 2 * Y - Z, AdjustedAim);
-    Spawn( class 'OSChunk2',, '', Start, AdjustedAim);
-    Spawn( class 'OSChunk3',, '', Start + Y - Z, AdjustedAim);
+    if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+    {
+      Spawn(class'MasterChunk',, '', Start, AdjustedAim);
+      Spawn(class'Chunk2',,, Start - Z, AdjustedAim);
+      Spawn(class'Chunk3',,, Start + 2 * Y + Z, AdjustedAim);
+      Spawn(class'Chunk4',,, Start - Y, AdjustedAim);
+      Spawn(class'Chunk1',,, Start + 2 * Y - Z, AdjustedAim);
+      Spawn(class'Chunk2',,, Start, AdjustedAim);
+      Spawn(class'Chunk3',,, Start + Y - Z, AdjustedAim);
+    }
+    else
+    {
+      Spawn(class'OSMasterChunk',, '', Start, AdjustedAim);
+      Spawn(class'OSChunk2',,, Start - Z, AdjustedAim);
+      Spawn(class'OSChunk3',,, Start + 2 * Y + Z, AdjustedAim);
+      Spawn(class'OSChunk4',,, Start - Y, AdjustedAim);
+      Spawn(class'OSChunk1',,, Start + 2 * Y - Z, AdjustedAim);
+      Spawn(class'OSChunk2',,, Start, AdjustedAim);
+      Spawn(class'OSChunk3',,, Start + Y - Z, AdjustedAim);
+    }
     // lower skill bots fire less flak chunks (I made it so only those below 2 are affected... cause of slow fire rates.....
     if ( (B == None) || B.Skill > 2 || ((B.Enemy != None) && (B.Enemy.Weapon != None) && B.Enemy.Weapon.bMeleeWeapon) )
-    Spawn( class 'OSChunk4',, '', Start + 2 * Y + Z, AdjustedAim);
+    {
+      if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+        Spawn(class'Chunk4',,, Start + 2 * Y + Z, AdjustedAim);
+      else
+        Spawn(class'OSChunk4',,, Start + 2 * Y + Z, AdjustedAim);
+    }
     ClientFire(Value);
     GoToState('NormalFire');
   }
@@ -156,7 +174,10 @@ function AltFire( float Value )
     Spawn(class'WeaponLight',,'',Start+X*20,rot(0,0,0));
     Start = Start + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
     AdjustedAim = pawn(owner).AdjustToss(AltProjectileSpeed, Start, AimError, True, bAltWarnTarget);
-    Spawn(class'OSflakshell',,, Start,AdjustedAim);
+    if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+      Spawn(class'FlakShell',,, Start, AdjustedAim);
+    else
+      Spawn(class'OSflakshell',,, Start, AdjustedAim);
     ClientAltFire(Value);
     GoToState('AltFiring');
   }

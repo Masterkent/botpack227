@@ -132,6 +132,10 @@ function FixContents(out class<Actor> conts)
 		conts = class'Botpack.RifleShell';
 	else if (ClassIsChildOf(conts, class'RifleAmmo') && brifle)
 		conts = class'Botpack.bulletbox';
+	else if (conts == class'Botpack.EClip' && !bmag && bmini)
+		conts = class'Clip';
+	else if (conts == class'Botpack.MiniAmmo' && !bmag && bmini)
+		conts = class'ShellBox';
 	else if (conts == class'dispersionpistol')
 		conts = class'olweapons.oldpistol';
 	else if (conts == class'AutoMag' || conts == class'olweapons.olautomag')
@@ -231,7 +235,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		//-if (other.isa('tree')||left(getitemname(string(other.class)),5)~="plant")
 		//-  other.style=STY_MASKED; //fix up mask bug in D3D?
 		FixContents(Decoration(Other).Contents);
-		fixcontents(Decoration(Other).Content2);
+		FixContents(Decoration(Other).Content2);
 		FixContents(Decoration(Other).Content3);
 	}
 	if (MusicEvent(Other) != none && MusicEvent(Other).Song == none && level.song == none)
@@ -294,12 +298,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	else //anything else forget about it.....
 		return true;
 
-	if (Weapon(Other) != none)
-	{
-		if (Minigun2(Other) != none && !bmag)     //if we have automags we gotta do this.....
-			Minigun2(Other).AmmoName = Class'UnrealShare.ShellBox';
-	}
-	else if (Ammo(Other) != none)                           //ammo sets for correct item place.......
+	if (Ammo(Other) != none)                           //ammo sets for correct item place.......
 	{
 		if (string(Ammo(Other).PickupSound) ~= "UnrealShare.Pickups.AmmoSnd" &&
 			B227_bModifyAmmoPickupSound)

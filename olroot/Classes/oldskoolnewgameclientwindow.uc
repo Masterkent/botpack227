@@ -123,7 +123,7 @@ function ClosePressed(optional bool bByParent)
     Child.Close(True);
   }
   if(!bByParent)
-    HideWindow();
+    //-HideWindow();
     ParentWindow.Close(bByParent);
 }
 function SaveConfigs()

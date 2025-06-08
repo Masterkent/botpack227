@@ -25,7 +25,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
   GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
   Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Z * Z;
   AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
-  return Spawn(ProjClass,,, Start,AdjustedAim);
+  return Spawn(B227_GetProjClass(ProjClass),,, Start, AdjustedAim);
 }
 
 function tweentostill(){} //wierd bug....
@@ -67,7 +67,7 @@ state AltFiring
     Start = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
     AdjustedAim = pawn(owner).AdjustAim(ProjSpeed, Start, AimError, True, bWarn);
     AdjustedAim.Roll += 12768;
-    return Spawn(ProjClass,,, Start,AdjustedAim);
+    return Spawn(B227_GetProjClass(ProjClass),,, Start,AdjustedAim);
   }
 
 Begin:
@@ -110,6 +110,19 @@ Repeater:
 function PlayIdleAnim()
 {
   LoopAnim('Idle', 0.4);
+}
+
+// B227 addition
+function class<Projectile> B227_GetProjClass(class<Projectile> ProjClass)
+{
+	if (class'UIweapons'.default.B227_bUseClassicProjectiles)
+	{
+		if (ProjClass == class'OSRazorBlade')
+			return class'RazorBlade';
+		if (ProjClass == class'OSRazorBladeAlt')
+			return class'RazorBladeAlt';
+	}
+	return ProjClass;
 }
 
 defaultproperties

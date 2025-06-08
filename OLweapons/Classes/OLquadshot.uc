@@ -232,6 +232,9 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   if ( PlayerPawn(Owner) != None )
     PlayerPawn(Owner).ShakeView(ShakeTime, ShakeMag, ShakeVert);
 
+  if (B227_ShouldTraceFireThroughWarpZones())
+    B227_WarpedTraceFire(self, B227_FireStartTrace, B227_FireEndTrace, 8, Other, HitLocation, HitNormal, X);
+
   if (Other == Level)
     Spawn(class'OSHeavyWallHitEffect',,, HitLocation+HitNormal*9, Rotator(HitNormal));
   else if ( (Other!=self) && (Other!=Owner) && (Other != None) )

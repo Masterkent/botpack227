@@ -255,6 +255,10 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   s = Spawn(class'ut_ShellCase',Pawn(Owner), '', realLoc + 20 * X + FireOffset.Y * Y + Z);
   if ( s != None )
     s.Eject(((FRand()*0.3+0.4)*X + (FRand()*0.2+0.2)*Y + (FRand()*0.3+1.0) * Z)*160);}
+
+  if (B227_ShouldTraceFireThroughWarpZones())
+    B227_WarpedTraceFire(self, B227_FireStartTrace, B227_FireEndTrace, 8, Other, HitLocation, HitNormal, X);
+
   if (Other == Level)
     Spawn(class'Ut_heavyWallHitEffect',,, HitLocation+HitNormal*9, Rotator(HitNormal));
   else if ((Other != self) && (Other != Owner) && (Other != None) )

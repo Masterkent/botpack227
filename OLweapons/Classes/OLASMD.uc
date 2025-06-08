@@ -64,7 +64,7 @@ function AltFire( float Value )
     }
     Pawn(Owner).PlayRecoil(FiringSpeed);
     bPointing=True;
-    ProjectileFire(AltProjectileClass, AltProjectileSpeed, bAltWarnTarget);
+    ProjectileFire(B227_GetProjClass(AltProjectileClass), AltProjectileSpeed, bAltWarnTarget);
     ClientAltFire(value);
     //PlayAltFiring();
     if ( Owner.bHidden )
@@ -74,31 +74,31 @@ function AltFire( float Value )
 
 function TraceFire( float Accuracy )
 {
-  local vector HitLocation, HitNormal, StartTrace, EndTrace, X,Y,Z;
+  local vector HitLocation, HitNormal, X,Y,Z;
   local actor Other;
 
   Owner.MakeNoise(Pawn(Owner).SoundDampening);
   GetAxes(Pawn(owner).ViewRotation,X,Y,Z);
-  StartTrace = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
-  EndTrace = StartTrace + Accuracy * (FRand() - 0.5 )* Y * 1000
+  B227_FireStartTrace = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * Y + FireOffset.Z * Z;
+  B227_FireEndTrace = B227_FireStartTrace + Accuracy * (FRand() - 0.5 )* Y * 1000
     + Accuracy * (FRand() - 0.5 ) * Z * 1000 ;
 
   if ( bBotSpecialMove && (Tracked != None)
     && (((Owner.Acceleration == vect(0,0,0)) && (VSize(Owner.Velocity) < 40)) ||
       (Normal(Owner.Velocity) Dot Normal(Tracked.Velocity) > 0.95)) )
-    EndTrace += 10000 * Normal(Tracked.Location - StartTrace);
+    B227_FireEndTrace += 10000 * Normal(Tracked.Location - B227_FireStartTrace);
   else
   {
     bSplashDamage = false;
-    AdjustedAim = pawn(owner).AdjustAim(1000000, StartTrace, 2.75*AimError, False, False);
+    AdjustedAim = pawn(owner).AdjustAim(1000000, B227_FireStartTrace, 2.75*AimError, False, False);
     bSplashDamage = true;
-    EndTrace += (10000 * vector(AdjustedAim));
+    B227_FireEndTrace += (10000 * vector(AdjustedAim));
   }
 
   Tracked = None;
   bBotSpecialMove = false;
 
-  Other = Pawn(Owner).TraceShot(HitLocation,HitNormal,EndTrace,StartTrace);
+  Other = Pawn(Owner).TraceShot(HitLocation,HitNormal,B227_FireEndTrace,B227_FireStartTrace);
   ProcessTraceHit(Other, HitLocation, HitNormal, vector(AdjustedAim),Y,Z);
 }
 
@@ -234,9 +234,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 
 function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vector X, Vector Y, Vector Z)
 {
-  local vector SmokeLocation,DVector;
-  local rotator SmokeRotation;
-  local float NumPoints,Mult;
+  local float Mult;
   local class<RingExplosion> rc;
   local RingExplosion r;
   local PlayerPawn PlayerOwner;
@@ -254,17 +252,13 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   Amp = B227_FindActiveAmplifier(Amp);
   if (Amp!=None) Mult = Amp.UseCharge(100);
   else Mult=1.0;
-  SmokeLocation = Owner.Location + CalcDrawOffset() + FireOffset.X * X + FireOffset.Y * 3.3 * Y + FireOffset.Z * Z * 3.0;
-  DVector = HitLocation - SmokeLocation;
-  NumPoints = VSize(DVector)/70.0;
-  SmokeLocation += DVector/NumPoints;
-  SmokeRotation = rotator(HitLocation-Owner.Location);
-  if (NumPoints>15) NumPoints=15;
-  if ( NumPoints>1.0 ) SpawnEffect(DVector, NumPoints, SmokeRotation, SmokeLocation);
+
+  B227_SpawnBeamEffects(Other, HitLocation, HitNormal, X, Y, Z);
 
   if ( TazerProj(Other)!=None )
   {
     AmmoType.UseAmmo(2);
+    Other.Instigator = Pawn(Owner);
     TazerProj(Other).SuperExplosion();
   }
   else
@@ -371,6 +365,58 @@ Begin:
   Tracked = None;
   bBotSpecialMove = false;
   Global.Fire(0);
+}
+
+// Auxiliary
+
+function B227_SpawnBeamEffects(out Actor HitActor, out vector HitLocation, out vector HitNormal, out vector X, vector Y, vector Z)
+{
+	local vector StartTrace, BeamStart;
+	local int MaxWarps;
+	local bool bWarped;
+
+	StartTrace = B227_FireStartTrace;
+	MaxWarps = 8;
+
+	if (B227_ShouldTraceFireThroughWarpZones())
+		bWarped = B227_AdjustTraceResult(Level, StartTrace, B227_FireEndTrace, HitActor, HitLocation, HitNormal, MaxWarps);
+	BeamStart = B227_FireStartTrace + FireOffset.Y * (3.3 - 1.0) * Y + FireOffset.Z * Z * (3.0 - 1.0);
+	B227_SpawnEffect(HitLocation, BeamStart, rotator(X));
+	if (bWarped)
+	{
+		HitActor = B227_TraceShot(self, StartTrace, B227_FireEndTrace, HitLocation, HitNormal);
+		BeamStart = StartTrace;
+		while (B227_AdjustTraceResult(Level, StartTrace, B227_FireEndTrace, HitActor, HitLocation, HitNormal, MaxWarps))
+		{
+			GetAxes(rotator(HitLocation - BeamStart), X, Y, Z);
+			B227_SpawnEffect(HitLocation, BeamStart, rotator(X));
+			HitActor = B227_TraceShot(self, StartTrace, B227_FireEndTrace, HitLocation, HitNormal);
+			BeamStart = StartTrace;
+		}
+		GetAxes(rotator(HitLocation - BeamStart), X, Y, Z);
+		B227_SpawnEffect(HitLocation, BeamStart, rotator(X));
+	}
+}
+
+function B227_SpawnEffect(vector HitLocation, vector BeamLocation, rotator BeamRotation)
+{
+	local vector DVector;
+	local float NumPoints;
+
+	DVector = HitLocation - BeamLocation;
+	NumPoints = VSize(DVector)/70.0;
+	BeamLocation += DVector/NumPoints;
+	if (NumPoints > 15)
+		NumPoints = 15;
+	if (NumPoints>1.0)
+		SpawnEffect(DVector, NumPoints, BeamRotation, BeamLocation);
+}
+
+function class<Projectile> B227_GetProjClass(class<Projectile> ProjClass)
+{
+	if (class'UIweapons'.default.B227_bUseClassicProjectiles && ProjClass == class'OLTazerProj')
+		return class'TazerProj';
+	return ProjClass;
 }
 
 defaultproperties

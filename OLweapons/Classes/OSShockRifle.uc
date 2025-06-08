@@ -6,6 +6,8 @@
 class OSShockRifle expands ShockRifle;
 var Pickup Amp;
 
+var transient bool B227_bSuperShockBeam;
+
 function inventory SpawnCopy( pawn Other )
 {
   local inventory Copy;
@@ -114,9 +116,13 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   if ( PlayerOwner != None )
     PlayerOwner.ClientInstantFlash( -0.4, vect(450, 190, 650));
   if (Mult>1.5)   //supershock beem if the amp IS ON!!!!
-  SpawnEffectmult(HitLocation, Owner.Location + CalcDrawOffset() + (FireOffset.X + 20) * X + FireOffset.Y * Y + FireOffset.Z * Z);
+  {
+    B227_bSuperShockBeam = true;
+    B227_SpawnBeamEffects(Other, HitLocation, HitNormal, X, Y, Z);
+    B227_bSuperShockBeam = false;
+  }
   else
-  SpawnEffect(HitLocation, Owner.Location + CalcDrawOffset() + (FireOffset.X + 20) * X + FireOffset.Y * Y + FireOffset.Z * Z);
+    B227_SpawnBeamEffects(Other, HitLocation, HitNormal, X, Y, Z);
 
   if ( ShockProj(Other)!=None )
   {
@@ -182,6 +188,22 @@ function SetSwitchPriority(pawn Other)         //uses master priority
       }
     }
   }
+}
+
+// B227 Auxiliary
+static function Actor B227_SpawnShockBeam(Actor Spawner, vector BeamLocation, rotator BeamRotation, vector MoveAmount, int NumPuffs)
+{
+	if (OSShockRifle(Spawner) != none && OSShockRifle(Spawner).B227_bSuperShockBeam)
+		return class'SuperShockRifle'.static.B227_SpawnShockBeam(Spawner, BeamLocation, BeamRotation, MoveAmount, NumPuffs);
+	return class'ShockRifle'.static.B227_SpawnShockBeam(Spawner, BeamLocation, BeamRotation, MoveAmount, NumPuffs);
+}
+
+function B227_SpawnEffectExtension(vector HitLocation, vector BeamLocation, class<ShockRifle> ShockRifleClass)
+{
+	if (B227_bSuperShockBeam)
+		super.B227_SpawnEffectExtension(HitLocation, BeamLocation, class'SuperShockRifle');
+	else
+		super.B227_SpawnEffectExtension(HitLocation, BeamLocation, ShockRifleClass);
 }
 
 defaultproperties
