@@ -59,6 +59,8 @@ function TakeDamage( int NDamage, Pawn instigatedBy, Vector hitlocation,
           Vector momentum, name damageType)
 {
   MakeNoise(1.0);
+  if (instigatedBy != none)
+    NDamage *= instigatedBy.DamageScaling;
   Health -= NDamage;
   if (Health <= 0)
   {

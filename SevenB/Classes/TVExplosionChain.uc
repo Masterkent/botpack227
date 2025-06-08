@@ -23,6 +23,6 @@ state Exploding
 
 defaultproperties
 {
-     bNetTemporary=True
+     bNetTemporary=False
      bCollideWorld=False
 }
