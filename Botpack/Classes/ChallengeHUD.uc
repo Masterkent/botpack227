@@ -700,7 +700,7 @@ simulated function DrawWeapons(Canvas Canvas)
 		Canvas.DrawTile(Texture'BotPack.HUDWeapons', 128 * WeapScale, 64 * WeapScale, 128, 64, 128, 64);
 	}
 	if (PawnOwner.PendingWeapon != none)
-		WeaponSlot[W.InventoryGroup] = PawnOwner.PendingWeapon;
+		WeaponSlot[PawnOwner.PendingWeapon.InventoryGroup] = PawnOwner.PendingWeapon;
 	if ( Level.bHighDetailMode && (PawnOwner.PendingWeapon != None) )
 	{
 		Pending = PawnOwner.PendingWeapon.InventoryGroup;

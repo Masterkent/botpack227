@@ -152,7 +152,7 @@ function Timer()
 
 	Super.Timer();
 
-	Log(Level.TimeSeconds);
+	//-Log(Level.TimeSeconds);
 	if (TrophyTime >= 0)
 		TrophyTime--;
 	if (NewTrophyClass != None)
