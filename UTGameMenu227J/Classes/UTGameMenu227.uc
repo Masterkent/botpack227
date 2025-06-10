@@ -65,7 +65,7 @@ function ExecuteItem(UWindowPulldownMenuItem I)
 		break;
 	case Botmatch:
 		// Create botmatch dialog.
-		Root.CreateWindow(class'UMenuBotmatchWindow', 100, 100, 200, 200, Self, True);
+		ShowBotmatchMenu();
 		break;
 	case NewUTGame:
 		GetPlayerOwner().ClientTravel( "UT-Logo-Map.unr?Game=Botpack.LadderNewGame", TRAVEL_Absolute, True );
@@ -114,6 +114,29 @@ function Select(UWindowPulldownMenuItem I)
 	}
 
 	Super.Select(I);
+}
+
+function ShowBotmatchMenu()
+{
+	local UMenuBotmatchWindow BotmatchWindow;
+	local UMenuBotmatchClientWindow BotmatchClientWindow;
+	local UMenuStartMatchScrollClient UMenuStartMatchScrollClient;
+	local UMenuStartMatchClientWindow UMenuStartMatchClientWindow;
+
+	BotmatchWindow = UMenuBotmatchWindow(Root.CreateWindow(class'UMenuBotmatchWindow', 100, 100, 200, 200, Self, True));
+	if (BotmatchWindow == none)
+		return;
+	BotmatchClientWindow = UMenuBotmatchClientWindow(BotmatchWindow.ClientArea);
+	if (BotmatchClientWindow == none || BotmatchClientWindow.StartMatchPage == none || BotmatchClientWindow.ScreenshotWindow == none)
+		return;
+	UMenuStartMatchScrollClient = UMenuStartMatchScrollClient(BotmatchClientWindow.StartMatchPage.Page);
+	if (UMenuStartMatchScrollClient == none)
+		return;
+	UMenuStartMatchClientWindow = UMenuStartMatchClientWindow(UMenuStartMatchScrollClient.ClientArea);
+	if (UMenuStartMatchClientWindow == none)
+		return;
+
+	BotmatchClientWindow.ScreenshotWindow.SetMap(BotmatchClientWindow.Map); // Fix for disappearing screenshot bug
 }
 
 defaultproperties

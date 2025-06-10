@@ -4,6 +4,7 @@ var const string VersionInfo;
 var const string Version;
 
 var bool bEnabled;
+var bool bMenuBarVisible;
 var bool bShowedManagerWindow;
 
 function Created()
@@ -35,17 +36,18 @@ function Tick(float Delta)
 		MenuBar.HideWindow();
 		CreateWindow(class<UWindowWindow>(DynamicLoadObject("UTMenu.ManagerWindow", Class'Class')), 100, 100, 200, 200, self, true);
 	}
+	bMenuBarVisible = MenuBar.bWindowVisible;
 }
 
 function CloseActiveWindow()
 {
 	super.CloseActiveWindow();
-	if (!bWindowVisible)
+	if (bMenuBarVisible && !bWindowVisible)
 		bShowedManagerWindow = false;
 }
 
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v2.1 [2023-02-18]"
-	Version="2.1"
+	VersionInfo="UTGameMenu227 v2.2 [2025-06-10]"
+	Version="2.2"
 }

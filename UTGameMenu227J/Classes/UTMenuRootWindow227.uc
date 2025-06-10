@@ -7,6 +7,7 @@ var const string Version;
 var config string PreviousRootWindowType;
 
 var bool bEnabled;
+var bool bMenuBarVisible;
 var bool bShowedManagerWindow;
 
 function Created()
@@ -38,12 +39,13 @@ function Tick(float Delta)
 		MenuBar.HideWindow();
 		CreateWindow(class<UWindowWindow>(DynamicLoadObject("UTMenu.ManagerWindow", Class'Class')), 100, 100, 200, 200, self, true);
 	}
+	bMenuBarVisible = MenuBar.bWindowVisible;
 }
 
 function CloseActiveWindow()
 {
 	super.CloseActiveWindow();
-	if (!bWindowVisible)
+	if (bMenuBarVisible && !bWindowVisible)
 		bShowedManagerWindow = false;
 }
 
@@ -79,6 +81,6 @@ static function SwitchRootWindow(WindowConsole Console, string RootWindowType)
 
 defaultproperties
 {
-	VersionInfo="UTGameMenu227 v4.0 [2024-10-23]"
-	Version="4.0"
+	VersionInfo="UTGameMenu227 v4.2 [2025-06-10]"
+	Version="4.2"
 }
