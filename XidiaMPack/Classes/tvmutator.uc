@@ -263,6 +263,11 @@ if (Other.class==class'UT_ShieldBelt'){
   ReplaceWith(Other,"olWeapons.ospowershield");
   return false;
 }
+// B227 fix
+if (Other.Class.Name == 'TarydiumAmmo' && Other.Class.Outer == Level.Outer) {
+  ReplaceWith(Other, "Xidia.TarydiumAmmo");
+  return false;
+}
 if (Level.NetMode!=nm_standalone&&(Other.Isa('PlayerMotionFreeze')||Other.IsA('ViewSpot')||Other.IsA('ViewSpotStop')||Other.IsA('NonBuggyViewSpot')))
   return false; //no cutscenes in co-op!
 //-if (other.Isa('MoviePawn')) //UMS movie hack

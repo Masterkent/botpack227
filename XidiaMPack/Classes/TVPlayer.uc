@@ -1351,11 +1351,11 @@ state PlayerWalking
 {
   function EndState(){   //reset col. cylinder (in case swim and such)
     Super.EndState();
-    //- SetTimer(0.0,false);
+    SetTimer(0.0,false);
     if (SetDuck(default.collisionheight))
       bForceDuck=false;
   }
-  /*- function PlayWaiting()  //humming
+  function PlayWaiting()  //humming
   {
     Global.PlayWaiting();
     enable('timer'); //in case disabled
@@ -1367,7 +1367,7 @@ state PlayerWalking
      if (!bIsTyping && velocity == vect(0,0,0) && playermod!=1)
        PlaySound(Sound'XiHumm', SLOT_Interact, 16, true); //interact so footsteps override it
      SetTimer(GetSoundDuration(Sound'XiHumm')+4*frand(),false);
-  }*/
+  }
 
   function Dodge(eDodgeDir DodgeMove) //soundz
   {
@@ -1941,11 +1941,16 @@ function PlayLanded(float impactVel)
   BaseEyeHeight = Default.BaseEyeHeight;
 
   if ( impactVel > 0.17 && lastplaysound<level.timeseconds) {//rand soundzzzzzzzzzzzzzzzzzzzzzzz
-    rand=frand();
-    if (rand<0.5)
-      B227_PlayOwnedSound(Sound'B227_XiLand2', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
-    else /*if ( rand<0.5)*/
-      B227_PlayOwnedSound(Sound'B227_XiLand1', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+    if (LInfo.bIsMissionPack)
+    {
+      rand=frand();
+      if (rand<0.5)
+        B227_PlayOwnedSound(Sound'B227_XiLand2', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+      else /*if ( rand<0.5)*/
+        B227_PlayOwnedSound(Sound'B227_XiLand1', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
+    }
+    else
+      B227_PlayOwnedSound(LandGrunt, SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
 /*      else if ( rand<0.75)
     PlayOwnedSound(Sound'OLfall3', SLOT_Talk, FMin(5, 5 * impactVel),false,1200,FRand()*0.4+0.8);
       else
@@ -2130,7 +2135,7 @@ static function SetXiGoldskin (tvplayer SkinActor){
    SkinActor.MultiSkins[2]=Texture(DynamicLoadObject("SoldierSkins.blkt3",class'Texture'));
    SkinActor.MultiSkins[3]=Texture(DynamicLoadObject("soldierskins.sldr4rankin",class'Texture'));
    //now sound hacking for Jones
-     for (i=0;i<5;i++)
+     for (i=0;i<6;i++)
        SkinActor.Deaths[i]=class'TMale2'.default.Deaths[i];
      SkinActor.drown=class'TMale2'.default.drown;
      SkinActor.breathagain=class'TMale2'.default.breathagain;
@@ -2262,4 +2267,5 @@ defaultproperties
      MenuName="Male Soldier"
      VoiceType="BotPack.VoiceMaleTwo"
      Mesh=LodMesh'BotPack.Commando'
+     LandGrunt=Sound'Botpack.MaleSounds.land10'
 }

@@ -40,6 +40,8 @@ function SetSwitchPriority(pawn Other)   //priority stuff
 function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vector X, Vector Y, Vector Z)
 {
   local PlayerPawn PlayerOwner;
+  local float Mult;
+  local UT_RingExplosion3 AmpRingEffect;
 
   if (Other==None)
   {
@@ -56,6 +58,22 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
   {
     AmmoType.UseAmmo(2);
     ShockProj(Other).SuperExplosion();
+    return;
+  }
+
+  Amp = B227_FindActiveAmplifier(Amp);
+  if (Amp != none)
+    Mult = Amp.UseCharge(100);
+  else
+    Mult = 1.0;
+  if (Mult > 1.5)
+  {
+    AmpRingEffect = Spawn(class'UT_RingExplosion3',,, HitLocation + HitNormal * 8, rotator(HitNormal));
+    if (AmpRingEffect != none)
+    {
+      AmpRingEffect.DrawScale = 1.5;
+      AmpRingEffect.B227_bSpawnDecal = true;
+    }
   }
   else
     Spawn(class'ut_RingExplosion5',,, HitLocation+HitNormal*8,rotator(HitNormal));
@@ -64,9 +82,9 @@ function ProcessTraceHit(Actor Other, Vector HitLocation, Vector HitNormal, Vect
     if ( Other.bIsPawn && (HitLocation.Z - Other.Location.Z > 0.62 * Other.CollisionHeight)
       && (instigator.IsA('PlayerPawn') || (Bot(instigator) != none && !Bot(Instigator).bNovice)||
         (ScriptedPawn(Other) != none && (ScriptedPawn(Other).bIsBoss || level.game.difficulty>=3))) )
-      Other.TakeDamage(2*HitDamage, Pawn(Owner), HitLocation, 60000.0*X, 'decapitated');
+      Other.TakeDamage(2*HitDamage * Mult, Pawn(Owner), HitLocation, 60000.0*X, 'decapitated');
     else
-      Other.TakeDamage(HitDamage, Pawn(Owner), HitLocation, 60000.0*X, MyDamageType);
+      Other.TakeDamage(HitDamage * Mult, Pawn(Owner), HitLocation, 60000.0*X, MyDamageType);
   }
 }
 

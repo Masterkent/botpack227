@@ -209,7 +209,7 @@ function class<Weapon> ToXidiaWeaponType(class<Weapon> WeaponClass)
 
 function class<Ammo> ToXidiaAmmoType(class<Ammo> AmmoClass)
 {
-	if (AmmoClass == class'StingerAmmo')
+	if (AmmoClass == class'StingerAmmo' || AmmoClass.Name == 'TarydiumAmmo' && AmmoClass.Outer == Level.Outer)
 		return class'Xidia.TarydiumAmmo';
 	if (AmmoClass == class'ASMDAmmo')
 		return class'ShockCore';
@@ -666,13 +666,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "XidiaCoopMutator v2.2";
+	return "XidiaCoopMutator v2.3";
 }
 
 defaultproperties
 {
-	VersionInfo="XidiaCoopMutator v2.2 [2024-03-26]"
-	Version="2.2"
+	VersionInfo="XidiaCoopMutator v2.3 [2024-08-27]"
+	Version="2.3"
 	bReplaceUnrealWeapons=False
 	bUseXidiaJumpBoots=True
 	bUseXidiaWeaponsSupply=True
