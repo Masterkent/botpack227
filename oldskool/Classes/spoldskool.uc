@@ -375,7 +375,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 	if (Other.Class == ActorClass)
 		return true;
 	B227_ReplacingActor = none;
-	B227_ReplaceActor(Other, ActorClass);
+	if (B227_IsRelevantForReplacement(Other))
+		B227_ReplaceActor(Other, ActorClass);
 	if (B227_ReplacingActor != none)
 		B227_AdjustReplacingInventory(Inventory(B227_ReplacingActor), Inventory(Other));
 	return false;
@@ -530,6 +531,32 @@ static function string B227_DifficultyString(byte Difficulty)
 	if (Difficulty < default.B227_DifficultiesNum)
 		return class'UMenuNewGameClientWindow'.default.Skills[Difficulty];
 	return string(Difficulty);
+}
+
+static function bool B227_IsRelevantForReplacement(Actor A)
+{
+	if (A.Level.Game.Difficulty == 0 && !A.bDifficulty0 ||
+		A.Level.Game.Difficulty == 1 && !A.bDifficulty1 ||
+		A.Level.Game.Difficulty == 2 && !A.bDifficulty2 ||
+		A.Level.Game.Difficulty >= 3 && !A.bDifficulty3 ||
+		A.Level.NetMode == NM_Standalone && !A.bSinglePlayer ||
+		(A.Level.NetMode == NM_DedicatedServer || A.Level.NetMode == NM_ListenServer) && !A.bNet)
+	{
+		return false;
+	}
+	if (FRand() > A.OddsOfAppearing)
+		return false;
+	if (Inventory(A) != none)
+	{
+		// Note: Other.Region doesn't refer to the relevant zone for dynamically spawned actors
+		if (!bool(A.Location) ||
+			A.Level.GetLocZone(A.Location).ZoneNumber == 0 ||
+			Pawn(A.Owner) != none)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 function B227_AdjustInventoryClass(out class<Inventory> InventoryClass)
