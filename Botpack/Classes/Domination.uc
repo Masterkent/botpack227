@@ -133,7 +133,8 @@ function Timer()
 				if ( (CP != None) && (CP.ControllingTeam != None) && CP.bScoreReady )
 				{
 					CP.ControllingTeam.Score += c;
-					CP.Controller.PlayerReplicationInfo.Score += c;
+					if (CP.Controller != none && CP.Controller.PlayerReplicationInfo != none)
+						CP.Controller.PlayerReplicationInfo.Score += c;
 				}
 			}
 		DomScoreEvent++;

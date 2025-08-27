@@ -199,7 +199,8 @@ state Dropped
 				Level.Game.WorldLog.LogSpecialEvent("flag_pickedup", Holder.PlayerReplicationInfo.PlayerID, CTFGame(Level.Game).Teams[Team].TeamIndex);
 			if (Level.Game.LocalLog != None)
 				Level.Game.LocalLog.LogSpecialEvent("flag_pickedup", Holder.PlayerReplicationInfo.PlayerID, CTFGame(Level.Game).Teams[Team].TeamIndex);
-			GotoState('Held');
+			if (!B227_TryScoreFlag(aPawn))
+				GotoState('Held');
 		}
 	}
 
@@ -217,10 +218,23 @@ state Dropped
 		bHidden = true;
 	}
 
+	function bool B227_TryScoreFlag(Pawn aPawn)
+	{
+		local CTFFlag aFlag;
+
+		foreach aPawn.TouchingActors(class'CTFFlag', aFlag)
+			if (aPawn.PlayerReplicationInfo.Team == aFlag.Team)
+			{
+				CTFGame(Level.Game).ScoreFlag(aPawn, self);
+				SendHome();
+				return true;
+			}
+		return false;
+	}
+
 Begin:
 	if ( Region.Zone.bPainZone && (Region.Zone.DamagePerSec > 0) )
-		timer();
-
+		Timer();
 }
 
 state Held
@@ -231,7 +245,7 @@ state Held
 
 	function Timer()
 	{
-		if ( Holder == None )
+		if ( Holder == None || Holder.bDeleteMe )
 			SendHome();
 	}
 
@@ -354,6 +368,24 @@ auto state Home
 		HomeBase.bHidden = true;
 		SetTimer(0.0, false);
 	}
+
+	function B227_CheckTouchingPlayers()
+	{
+		local Pawn aPawn;
+		local CTFFlag aFlag;
+
+		foreach TouchingActors(class'Pawn', aPawn)
+			if (aPawn.PlayerReplicationInfo.Team == Team && aPawn.PlayerReplicationInfo.HasFlag != none)
+			{
+				//Score!
+				aFlag = CTFFlag(aPawn.PlayerReplicationInfo.HasFlag);
+				CTFGame(Level.Game).ScoreFlag(aPawn, aFlag);
+				aFlag.SendHome();
+			}
+	}
+
+Begin:
+	B227_CheckTouchingPlayers();
 }
 
 function BroadcastLocalizedMessage(

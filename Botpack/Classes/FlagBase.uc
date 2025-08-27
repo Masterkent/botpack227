@@ -14,7 +14,7 @@ function PostBeginPlay()
 
 	Super.PostBeginPlay();
 	LoopAnim('newflag');
-	if ( !Level.Game.IsA('CTFGame') )
+	if (CTFGame(Level.Game) == none)
 		return;
 
 	bHidden = false;

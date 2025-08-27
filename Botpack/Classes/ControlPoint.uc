@@ -26,7 +26,7 @@ replication
 
 function PostBeginPlay()
 {
-	if ( !Level.Game.IsA('Domination') )
+	if (Domination(Level.Game) == none)
 		return;
 	else
 	{
