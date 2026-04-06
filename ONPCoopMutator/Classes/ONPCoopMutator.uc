@@ -14,6 +14,9 @@ struct Remapping
 var() config bool bAdjustNPCFriendlyFire;
 var() config bool bDisableFlashlightReplacement;
 var() config bool bDiscardItemsOnGameEnd;
+var() config bool bFixCampaign_ONP;
+var() config bool bFixCampaign_PX1; // PX 2009
+var() config bool bFixCampaign_PX2; // First Day & Interloper
 var() config bool bInfiniteSpecialItems;
 var() config bool bPreventFallingOutOfWorld;
 var() config bool bReplaceONPTranslocator;
@@ -155,6 +158,8 @@ function AdjustThrowStuffDecorations()
 function AdjustDecorations()
 {
 	local Decoration Deco;
+	local SkyZoneInfo SkyZoneInfo;
+	local int i;
 
 	foreach AllActors(class'Decoration', Deco)
 		if (Deco.Physics == PHYS_Falling && Deco.Region.ZoneNumber == 0)
@@ -163,6 +168,39 @@ function AdjustDecorations()
 			Deco.bMovable = false;
 			Deco.SetPhysics(PHYS_None);
 		}
+
+	foreach AllActors(class'SkyZoneInfo', SkyZoneInfo)
+		foreach SkyZoneInfo.ZoneActors(class'Decoration', Deco)
+			if (!Deco.bStatic && !Deco.bNoDelete && !Deco.bAlwaysRelevant && !Deco.bHidden && i < 16)
+			{
+				if (bool(Deco.RotationRate) &&
+					Deco.Physics == PHYS_Rotating &&
+					Deco.RemoteRole == ROLE_DumbProxy)
+				{
+					if (IsExactlyReplicableRotator(Deco.RotationRate) ||
+						Spawn(class'ONPSyncInitialRotationRate', Deco) != none)
+					{
+						Deco.RemoteRole = ROLE_SimulatedProxy;
+					}
+					else
+						continue;
+				}
+				Deco.bAlwaysRelevant = true;
+				++i;
+			}
+}
+
+function bool IsExactlyReplicableRotator(rotator R)
+{
+	return
+		IsExactlyReplicableRotatorComponent(R.Pitch) &&
+		IsExactlyReplicableRotatorComponent(R.Yaw) &&
+		IsExactlyReplicableRotatorComponent(R.Roll);
+}
+
+function bool IsExactlyReplicableRotatorComponent(int Value)
+{
+	return 0 <= Value && Value < 65536 && (Value & 255) == 0;
 }
 
 function ReplaceMasterCreatureChunks()
@@ -188,9 +226,11 @@ function AdjustExplodingEffects()
 	local ExplosionChain EC;
 
 	foreach AllActors(class'ExplodingWall', EW)
-		EW.SetCollision(false);
+		if (EW.Event == '')
+			EW.SetCollision(false);
 	foreach AllActors(class'ExplosionChain', EC)
-		EC.SetCollision(false);
+		if (EC.Event == '')
+			EC.SetCollision(false);
 }
 
 function AdjustMusicEvents()
@@ -1147,16 +1187,19 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPCoopMutator v6.13";
+	return "ONPCoopMutator v6.16";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPCoopMutator v6.13 [2024-12-05]"
-	Version="6.13"
+	VersionInfo="ONPCoopMutator v6.16 [2026-04-06]"
+	Version="6.16"
 	bAdjustNPCFriendlyFire=True
 	bDisableFlashlightReplacement=True
 	bDiscardItemsOnGameEnd=True
+	bFixCampaign_ONP=True
+	bFixCampaign_PX1=True
+	bFixCampaign_PX2=True
 	bInfiniteSpecialItems=True
 	bPreventFallingOutOfWorld=True
 	bReplaceONPTranslocator=True

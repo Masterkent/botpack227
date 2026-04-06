@@ -5,6 +5,7 @@ class ONPMapFix expands Info;
 var bool bModified;
 var ONPSPFix MutatorPtr;
 var string CurrentMap;
+var string CurrentMapGUID;
 
 function PostBeginPlay()
 {
@@ -13,171 +14,181 @@ function PostBeginPlay()
 		return;
 	bModified = true;
 
-	Server_FixCurrentMap();
-	Client_FixCurrentMap();
+	if (Server_FixCurrentMap())
+		Client_FixCurrentMap();
 }
 
-function Server_FixCurrentMap()
+function bool Server_FixCurrentMap()
 {
 	CurrentMap = string(Outer.Name);
 
 	if (Left(CurrentMap, 2) ~= "NP") // Operation Na Pali
-		Server_FixCurrentMap_ONP();
-	else if (Left(CurrentMap, 7) ~= "ONP-map") // Xenome
-		Server_FixCurrentMap_Xenome();
+		return Server_FixCurrentMap_ONP();
+	if (Left(CurrentMap, 7) ~= "ONP-map") // Xenome
+		return Server_FixCurrentMap_Xenome();
+	return false;
 }
 
-function Server_FixCurrentMap_ONP()
+function bool Server_FixCurrentMap_ONP()
 {
+	if (!MutatorPtr.bFixCampaign_ONP)
+		return false;
+
 	if (CurrentMap ~= "NP02DavidM")
-		Server_FixCurrentMap_NP02DavidM();
-	else if (CurrentMap ~= "NP04Hyperion")
-		Server_FixCurrentMap_NP04Hyperion();
-	else if (CurrentMap ~= "NP05Heiko")
-		Server_FixCurrentMap_NP05Heiko();
-	else if (CurrentMap ~= "NP06Heiko")
-		Server_FixCurrentMap_NP06Heiko();
-	else if (CurrentMap ~= "NP08Hourences")
-		Server_FixCurrentMap_NP08Hourences();
-	else if (CurrentMap ~= "NP09Silver")
-		Server_FixCurrentMap_NP09Silver();
-	else if (CurrentMap ~= "NP11Tonnberry")
-		Server_FixCurrentMap_NP11Tonnberry();
-	else if (CurrentMap ~= "NP13DrPest")
-		Server_FixCurrentMap_NP13DrPest();
-	else if (CurrentMap ~= "NP14MClaneDrPest")
-		Server_FixCurrentMap_NP14MClaneDrPest();
-	else if (CurrentMap ~= "NP15Chico")
-		Server_FixCurrentMap_NP15Chico();
-	else if (CurrentMap ~= "NP16Chico")
-		Server_FixCurrentMap_NP16Chico();
-	else if (CurrentMap ~= "NP19Part2Chico")
-		Server_FixCurrentMap_NP19Part2Chico();
-	else if (CurrentMap ~= "NP19Part3ChicoHour")
-		Server_FixCurrentMap_NP19Part3ChicoHour();
-	else if (CurrentMap ~= "NP22DavidM")
-		Server_FixCurrentMap_NP22DavidM();
-	else if (CurrentMap ~= "NP23Kew")
-		Server_FixCurrentMap_NP23Kew();
-	else if (CurrentMap ~= "NP24MClane")
-		Server_FixCurrentMap_NP24MClane();
-	else if (CurrentMap ~= "NP27DavidM")
-		Server_FixCurrentMap_NP27DavidM();
-	else if (CurrentMap ~= "NP29DavidM")
-		Server_FixCurrentMap_NP29DavidM();
-	else if (CurrentMap ~= "NP31DavidM")
-		Server_FixCurrentMap_NP31DavidM();
-	else if (CurrentMap ~= "NP32Strogg")
-		Server_FixCurrentMap_NP32Strogg();
+		return Server_FixCurrentMap_NP02DavidM();
+	if (CurrentMap ~= "NP04Hyperion")
+		return Server_FixCurrentMap_NP04Hyperion();
+	if (CurrentMap ~= "NP05Heiko")
+		return Server_FixCurrentMap_NP05Heiko();
+	if (CurrentMap ~= "NP06Heiko")
+		return Server_FixCurrentMap_NP06Heiko();
+	if (CurrentMap ~= "NP08Hourences")
+		return Server_FixCurrentMap_NP08Hourences();
+	if (CurrentMap ~= "NP09Silver")
+		return Server_FixCurrentMap_NP09Silver();
+	if (CurrentMap ~= "NP11Tonnberry")
+		return Server_FixCurrentMap_NP11Tonnberry();
+	if (CurrentMap ~= "NP13DrPest")
+		return Server_FixCurrentMap_NP13DrPest();
+	if (CurrentMap ~= "NP14MClaneDrPest")
+		return Server_FixCurrentMap_NP14MClaneDrPest();
+	if (CurrentMap ~= "NP15Chico")
+		return Server_FixCurrentMap_NP15Chico();
+	if (CurrentMap ~= "NP16Chico")
+		return Server_FixCurrentMap_NP16Chico();
+	if (CurrentMap ~= "NP19Part2Chico")
+		return Server_FixCurrentMap_NP19Part2Chico();
+	if (CurrentMap ~= "NP19Part3ChicoHour")
+		return Server_FixCurrentMap_NP19Part3ChicoHour();
+	if (CurrentMap ~= "NP22DavidM")
+		return Server_FixCurrentMap_NP22DavidM();
+	if (CurrentMap ~= "NP23Kew")
+		return Server_FixCurrentMap_NP23Kew();
+	if (CurrentMap ~= "NP24MClane")
+		return Server_FixCurrentMap_NP24MClane();
+	if (CurrentMap ~= "NP27DavidM")
+		return Server_FixCurrentMap_NP27DavidM();
+	if (CurrentMap ~= "NP29DavidM")
+		return Server_FixCurrentMap_NP29DavidM();
+	if (CurrentMap ~= "NP31DavidM")
+		return Server_FixCurrentMap_NP31DavidM();
+	if (CurrentMap ~= "NP32Strogg")
+		return Server_FixCurrentMap_NP32Strogg();
 }
 
-function Server_FixCurrentMap_Xenome()
+function bool Server_FixCurrentMap_Xenome()
 {
-	// X series
-	if (CurrentMap ~= "ONP-map01FirstDayX")
-		Server_FixCurrentMap_ONP_map01FirstDayX();
-	else if (CurrentMap ~= "ONP-map02LinesofCommX")
-		Server_FixCurrentMap_ONP_map02LinesofCommX();
-	else if (CurrentMap ~= "ONP-map03oppressivemetalX")
-		Server_FixCurrentMap_ONP_map03oppressivemetalX();
-	else if (CurrentMap ~= "ONP-map06ProcessingX")
-		Server_FixCurrentMap_ONP_map06ProcessingX();
-	else if (CurrentMap ~= "ONP-map07PlanningX")
-		Server_FixCurrentMap_ONP_map07PlanningX();
-	else if (CurrentMap ~= "ONP-map08DisposalX")
-		Server_FixCurrentMap_ONP_map08DisposalX();
-	else if (CurrentMap ~= "ONP-map09SurfaceX")
-		Server_FixCurrentMap_ONP_map09SurfaceX();
-	else if (CurrentMap ~= "ONP-map10AmbushX")
-		Server_FixCurrentMap_ONP_map10AmbushX();
-	else if (CurrentMap ~= "ONP-map11CobaltX")
-		Server_FixCurrentMap_ONP_map11CobaltX();
-	else if (CurrentMap ~= "ONP-map12DamX")
-		Server_FixCurrentMap_ONP_map12DamX();
-	else if (CurrentMap ~= "ONP-map13SignsX")
-		Server_FixCurrentMap_ONP_map13SignsX();
-	else if (CurrentMap ~= "ONP-map14SoothsayerX")
-		Server_FixCurrentMap_ONP_map14SoothsayerX();
-	else if (CurrentMap ~= "ONP-map15RevelationX")
-		Server_FixCurrentMap_ONP_map15RevelationX();
-	else if (CurrentMap ~= "ONP-map16BoldX")
-		Server_FixCurrentMap_ONP_map16BoldX();
-	else if (CurrentMap ~= "ONP-map18FriendX")
-		Server_FixCurrentMap_ONP_map18FriendX();
-	else if (CurrentMap ~= "ONP-map19IceX")
-		Server_FixCurrentMap_ONP_map19IceX();
-	else if (CurrentMap ~= "ONP-map20InterloperX")
-		Server_FixCurrentMap_ONP_map20InterloperX();
-	else if (CurrentMap ~= "ONP-map21NestX")
-		Server_FixCurrentMap_ONP_map21NestX();
-	else if (CurrentMap ~= "ONP-map22TransferX")
-		Server_FixCurrentMap_ONP_map22TransferX();
-	else if (CurrentMap ~= "ONP-map23PowerPlayX")
-		Server_FixCurrentMap_ONP_map23PowerPlayX();
-	else if (CurrentMap ~= "ONP-map24CoreX")
-		Server_FixCurrentMap_ONP_map24CoreX();
+	CurrentMapGUID = Caps(GetCurrentMapGUID());
 
-	// non-X series
-	else if (CurrentMap ~= "ONP-map01FirstDay")
-		Server_FixCurrentMap_ONP_map01FirstDay();
-	else if (CurrentMap ~= "ONP-map02Detour")
-		Server_FixCurrentMap_ONP_map02Detour();
-	else if (CurrentMap ~= "ONP-map03Watchyourstep")
-		Server_FixCurrentMap_ONP_map03Watchyourstep();
-	else if (CurrentMap ~= "ONP-map04LabEntrance")
-		Server_FixCurrentMap_ONP_map04LabEntrance();
-	else if (CurrentMap ~= "ONP-map05FriendlyFire")
-		Server_FixCurrentMap_ONP_map05FriendlyFire();
-	else if (CurrentMap ~= "ONP-map06PowerPlay")
-		Server_FixCurrentMap_ONP_map06PowerPlay();
-	else if (CurrentMap ~= "ONP-map07Questionableethics")
-		Server_FixCurrentMap_ONP_map07Questionableethics();
-	else if (CurrentMap ~= "ONP-map09ComplexSituation")
-		Server_FixCurrentMap_ONP_map09ComplexSituation();
-	else if (CurrentMap ~= "ONP-map13Processing")
-		Server_FixCurrentMap_ONP_map13Processing();
-	else if (CurrentMap ~= "ONP-map14Mine")
-		Server_FixCurrentMap_ONP_map14Mine();
-	else if (CurrentMap ~= "ONP-map15CrossCountry")
-		Server_FixCurrentMap_ONP_map15CrossCountry();
-	else if (CurrentMap ~= "ONP-map16Dam")
-		Server_FixCurrentMap_ONP_map16Dam();
-	else if (CurrentMap ~= "ONP-map19Teleporter")
-		Server_FixCurrentMap_ONP_map19Teleporter();
-	else if (CurrentMap ~= "ONP-map21Welcome")
-		Server_FixCurrentMap_ONP_map21Welcome();
-	else if (CurrentMap ~= "ONP-map22Disposal")
-		Server_FixCurrentMap_ONP_map22Disposal();
-	else if (CurrentMap ~= "ONP-map23Newfoe")
-		Server_FixCurrentMap_ONP_map23Newfoe();
-	else if (CurrentMap ~= "ONP-map24Agenda")
-		Server_FixCurrentMap_ONP_map24Agenda();
-	else if (CurrentMap ~= "ONP-map25Communications")
-		Server_FixCurrentMap_ONP_map25Communications();
-	else if (CurrentMap ~= "ONP-map26EBE")
-		Server_FixCurrentMap_ONP_map26EBE();
-	else if (CurrentMap ~= "ONP-map27Entrance")
-		Server_FixCurrentMap_ONP_map27Entrance();
-	else if (CurrentMap ~= "ONP-map28Bellyofthebeast")
-		Server_FixCurrentMap_ONP_map28Bellyofthebeast();
-	else if (CurrentMap ~= "ONP-map30Ruins")
-		Server_FixCurrentMap_ONP_map30Ruins();
-	else if (CurrentMap ~= "ONP-map31Dogsofwar")
-		Server_FixCurrentMap_ONP_map31Dogsofwar();
-	else if (CurrentMap ~= "ONP-map32Gauntlet")
-		Server_FixCurrentMap_ONP_map32Gauntlet();
-	else if (CurrentMap ~= "ONP-map35Genetics")
-		Server_FixCurrentMap_ONP_map35Genetics();
-	else if (CurrentMap ~= "ONP-map36Birthing")
-		Server_FixCurrentMap_ONP_map36Birthing();
-	else if (CurrentMap ~= "ONP-map37Halted")
-		Server_FixCurrentMap_ONP_map37Halted();
-	else if (CurrentMap ~= "ONP-map38Tothecore")
-		Server_FixCurrentMap_ONP_map38Tothecore();
-	else if (CurrentMap ~= "ONP-map39Escape")
-		Server_FixCurrentMap_ONP_map39Escape();
-	else if (CurrentMap ~= "ONP-map40Boss")
-		Server_FixCurrentMap_ONP_map40Boss();
+	if (MutatorPtr.bFixCampaign_PX1)
+	{
+		if (CurrentMap ~= "ONP-map01FirstDay")
+			return Server_FixCurrentMap_ONP_map01FirstDay();
+		if (CurrentMap ~= "ONP-map02Detour")
+			return Server_FixCurrentMap_ONP_map02Detour();
+		if (CurrentMap ~= "ONP-map03Watchyourstep")
+			return Server_FixCurrentMap_ONP_map03Watchyourstep();
+		if (CurrentMap ~= "ONP-map04LabEntrance")
+			return Server_FixCurrentMap_ONP_map04LabEntrance();
+		if (CurrentMap ~= "ONP-map05FriendlyFire")
+			return Server_FixCurrentMap_ONP_map05FriendlyFire();
+		if (CurrentMap ~= "ONP-map06PowerPlay")
+			return Server_FixCurrentMap_ONP_map06PowerPlay();
+		if (CurrentMap ~= "ONP-map07Questionableethics")
+			return Server_FixCurrentMap_ONP_map07Questionableethics();
+		if (CurrentMap ~= "ONP-map09ComplexSituation")
+			return Server_FixCurrentMap_ONP_map09ComplexSituation();
+		if (CurrentMap ~= "ONP-map13Processing")
+			return Server_FixCurrentMap_ONP_map13Processing();
+		if (CurrentMap ~= "ONP-map14Mine")
+			return Server_FixCurrentMap_ONP_map14Mine();
+		if (CurrentMap ~= "ONP-map15CrossCountry")
+			return Server_FixCurrentMap_ONP_map15CrossCountry();
+		if (CurrentMap ~= "ONP-map16Dam")
+			return Server_FixCurrentMap_ONP_map16Dam();
+		if (CurrentMap ~= "ONP-map19Teleporter")
+			return Server_FixCurrentMap_ONP_map19Teleporter();
+		if (CurrentMap ~= "ONP-map21Welcome")
+			return Server_FixCurrentMap_ONP_map21Welcome();
+		if (CurrentMap ~= "ONP-map22Disposal")
+			return Server_FixCurrentMap_ONP_map22Disposal();
+		if (CurrentMap ~= "ONP-map23Newfoe")
+			return Server_FixCurrentMap_ONP_map23Newfoe();
+		if (CurrentMap ~= "ONP-map24Agenda")
+			return Server_FixCurrentMap_ONP_map24Agenda();
+		if (CurrentMap ~= "ONP-map25Communications")
+			return Server_FixCurrentMap_ONP_map25Communications();
+		if (CurrentMap ~= "ONP-map26EBE")
+			return Server_FixCurrentMap_ONP_map26EBE();
+		if (CurrentMap ~= "ONP-map27Entrance")
+			return Server_FixCurrentMap_ONP_map27Entrance();
+		if (CurrentMap ~= "ONP-map28Bellyofthebeast")
+			return Server_FixCurrentMap_ONP_map28Bellyofthebeast();
+		if (CurrentMap ~= "ONP-map30Ruins")
+			return Server_FixCurrentMap_ONP_map30Ruins();
+		if (CurrentMap ~= "ONP-map31Dogsofwar")
+			return Server_FixCurrentMap_ONP_map31Dogsofwar();
+		if (CurrentMap ~= "ONP-map32Gauntlet")
+			return Server_FixCurrentMap_ONP_map32Gauntlet();
+		if (CurrentMap ~= "ONP-map35Genetics")
+			return Server_FixCurrentMap_ONP_map35Genetics();
+		if (CurrentMap ~= "ONP-map36Birthing")
+			return Server_FixCurrentMap_ONP_map36Birthing();
+		if (CurrentMap ~= "ONP-map37Halted")
+			return Server_FixCurrentMap_ONP_map37Halted();
+		if (CurrentMap ~= "ONP-map38Tothecore")
+			return Server_FixCurrentMap_ONP_map38Tothecore();
+		if (CurrentMap ~= "ONP-map39Escape")
+			return Server_FixCurrentMap_ONP_map39Escape();
+		if (CurrentMap ~= "ONP-map40Boss")
+			return Server_FixCurrentMap_ONP_map40Boss();
+	}
+
+	if (MutatorPtr.bFixCampaign_PX2)
+	{
+		if (CurrentMap ~= "ONP-map01FirstDayX")
+			return Server_FixCurrentMap_ONP_map01FirstDayX();
+		if (CurrentMap ~= "ONP-map02LinesofCommX")
+			return Server_FixCurrentMap_ONP_map02LinesofCommX();
+		if (CurrentMap ~= "ONP-map03oppressivemetalX")
+			return Server_FixCurrentMap_ONP_map03oppressivemetalX();
+		if (CurrentMap ~= "ONP-map06ProcessingX")
+			return Server_FixCurrentMap_ONP_map06ProcessingX();
+		if (CurrentMap ~= "ONP-map07PlanningX")
+			return Server_FixCurrentMap_ONP_map07PlanningX();
+		if (CurrentMap ~= "ONP-map08DisposalX")
+			return Server_FixCurrentMap_ONP_map08DisposalX();
+		if (CurrentMap ~= "ONP-map09SurfaceX")
+			return Server_FixCurrentMap_ONP_map09SurfaceX();
+		if (CurrentMap ~= "ONP-map10AmbushX")
+			return Server_FixCurrentMap_ONP_map10AmbushX();
+		if (CurrentMap ~= "ONP-map11CobaltX")
+			return Server_FixCurrentMap_ONP_map11CobaltX();
+		if (CurrentMap ~= "ONP-map12DamX")
+			return Server_FixCurrentMap_ONP_map12DamX();
+		if (CurrentMap ~= "ONP-map13SignsX")
+			return Server_FixCurrentMap_ONP_map13SignsX();
+		if (CurrentMap ~= "ONP-map14SoothsayerX")
+			return Server_FixCurrentMap_ONP_map14SoothsayerX();
+		if (CurrentMap ~= "ONP-map15RevelationX")
+			return Server_FixCurrentMap_ONP_map15RevelationX();
+		if (CurrentMap ~= "ONP-map16BoldX")
+			return Server_FixCurrentMap_ONP_map16BoldX();
+		if (CurrentMap ~= "ONP-map18FriendX")
+			return Server_FixCurrentMap_ONP_map18FriendX();
+		if (CurrentMap ~= "ONP-map19IceX")
+			return Server_FixCurrentMap_ONP_map19IceX();
+		if (CurrentMap ~= "ONP-map20InterloperX")
+			return Server_FixCurrentMap_ONP_map20InterloperX();
+		if (CurrentMap ~= "ONP-map21NestX")
+			return Server_FixCurrentMap_ONP_map21NestX();
+		if (CurrentMap ~= "ONP-map22TransferX")
+			return Server_FixCurrentMap_ONP_map22TransferX();
+		if (CurrentMap ~= "ONP-map23PowerPlayX")
+			return Server_FixCurrentMap_ONP_map23PowerPlayX();
+		if (CurrentMap ~= "ONP-map24CoreX")
+			return Server_FixCurrentMap_ONP_map24CoreX();
+	}
 }
 
 simulated function Client_FixCurrentMap()
@@ -207,7 +218,7 @@ simulated function FixLightEffects()
 		Level.GetLocalPlayerPawn().ConsoleCommand("Flush");
 }
 
-function Server_FixCurrentMap_NP02DavidM()
+function bool Server_FixCurrentMap_NP02DavidM()
 {
 	local ScriptedPawn ScriptedPawn;
 	local Pawn P;
@@ -239,9 +250,11 @@ function Server_FixCurrentMap_NP02DavidM()
 	MoveTrigger.bNoReenter = true;
 
 	LoadLevelMover("Mover48").MoverEncroachType = ME_IgnoreWhenEncroach;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP04Hyperion()
+function bool Server_FixCurrentMap_NP04Hyperion()
 {
 	local TranslatorEvent TranslatorEvent;
 	local string Message;
@@ -261,25 +274,31 @@ function Server_FixCurrentMap_NP04Hyperion()
 	Pos = NaliFruit.Location;
 	Pos.Z = -2743.000000;
 	NaliFruit.SetLocation(Pos);
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP05Heiko()
+function bool Server_FixCurrentMap_NP05Heiko()
 {
 	LoadLevelTrigger("Trigger29").TriggerType = TT_PlayerProximity;
 
 	// Eliminate flying tree (invisible in UT, visible in Unreal 227)
 	EliminateStaticActor("Tree3");
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP06Heiko()
+function bool Server_FixCurrentMap_NP06Heiko()
 {
 	LoadLevelTrigger("Trigger33").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger35").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger61").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger62").bTriggerOnceOnly = true;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP08Hourences()
+function bool Server_FixCurrentMap_NP08Hourences()
 {
 	local Effects e;
 	local ONPParticleFireSpawner NewFireSpawner;
@@ -291,24 +310,30 @@ function Server_FixCurrentMap_NP08Hourences()
 			if (NewFireSpawner != none)
 				NewFireSpawner.ReplaceOriginalSpawner(e);
 		}
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP09Silver()
+function bool Server_FixCurrentMap_NP09Silver()
 {
 	LoadLevelDispatcher("Dispatcher4").OutEvents[4] = '';
 	LoadLevelMover("Mover7").MoverEncroachType = ME_IgnoreWhenEncroach; // ME_CrushWhenEncroach may kill the Titan
 	EliminateStaticActor("BlockAll10");
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP11Tonnberry()
+function bool Server_FixCurrentMap_NP11Tonnberry()
 {
 	local Mover m;
 
 	m = LoadLevelMover("Mover6");
 	m.PlayerBumpEvent = m.Tag;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP13DrPest()
+function bool Server_FixCurrentMap_NP13DrPest()
 {
 	local Pawn P;
 
@@ -320,6 +345,8 @@ function Server_FixCurrentMap_NP13DrPest()
 		P.Health = P.default.Health;
 		Spawn(class'ONPPhantomPawnAdjustment').ControlledPawn = P;
 	}
+
+	return true;
 }
 
 simulated function Client_FixCurrentMap_NP13DrPest()
@@ -334,7 +361,7 @@ simulated function Client_FixCurrentMap_NP13DrPest()
 		Texture.bTransparent = true;
 }
 
-function Server_FixCurrentMap_NP14MClaneDrPest()
+function bool Server_FixCurrentMap_NP14MClaneDrPest()
 {
 	local Pawn P;
 
@@ -343,19 +370,25 @@ function Server_FixCurrentMap_NP14MClaneDrPest()
 	P = Pawn(LoadLevelActor("NaliTrooper1", true));
 	if (P != none)
 		Spawn(class'ONPPhantomPawnAdjustment').ControlledPawn = P;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP15Chico()
+function bool Server_FixCurrentMap_NP15Chico()
 {
 	LoadLevelTrigger("Trigger112").bTriggerOnceOnly = true;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP16Chico()
+function bool Server_FixCurrentMap_NP16Chico()
 {
 	ZoneInfo(LoadLevelActor("ZoneInfo0")).ZoneVelocity = vect(0, 0, 0);
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP19Part2Chico()
+function bool Server_FixCurrentMap_NP19Part2Chico()
 {
 	local ZoneInfo zone;
 	local PressureZone pr_zone;
@@ -394,14 +427,18 @@ function Server_FixCurrentMap_NP19Part2Chico()
 			}
 			Trigger.bTriggerOnceOnly = false;
 		}
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP19Part3ChicoHour()
+function bool Server_FixCurrentMap_NP19Part3ChicoHour()
 {
 	LoadLevelTrigger("Trigger22").TriggerType = TT_PlayerProximity;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP22DavidM()
+function bool Server_FixCurrentMap_NP22DavidM()
 {
 	local ONPBlockAllPanel BlockAll;
 	local Actor EClip;
@@ -416,9 +453,11 @@ function Server_FixCurrentMap_NP22DavidM()
 	Pos = EClip.Location;
 	Pos.Z = -636;
 	EClip.SetLocation(Pos);
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP23Kew()
+function bool Server_FixCurrentMap_NP23Kew()
 {
 	local ONPBlockAllPanel BlockAll;
 
@@ -426,14 +465,18 @@ function Server_FixCurrentMap_NP23Kew()
 	BlockAll = Spawn(class'ONPBlockAllPanel',,, vect(-1511, -994, -935), rot(-3500, 29152, 0));
 	BlockAll.Skin = Texture(DynamicLoadObject("DavidMGras.Ground1", class'Texture', true)); // for footstep sounds
 	BlockAll.SetScale(8);
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP24MClane()
+function bool Server_FixCurrentMap_NP24MClane()
 {
 	SetEventTriggersPawnClassProximity('autsch');
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP27DavidM()
+function bool Server_FixCurrentMap_NP27DavidM()
 {
 	local Actor A;
 
@@ -446,20 +489,26 @@ function Server_FixCurrentMap_NP27DavidM()
 
 	LoadLevelTrigger("Trigger46").TriggerType = TT_PawnProximity;
 	LoadLevelTrigger("Trigger47").TriggerType = TT_PawnProximity;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP29DavidM()
+function bool Server_FixCurrentMap_NP29DavidM()
 {
 	// disable useless teleporter
 	DisableTeleporter("Teleporter6");
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP31DavidM()
+function bool Server_FixCurrentMap_NP31DavidM()
 {
 	LoadLevelActor("skaarjeyes0").Style = STY_Translucent;
+
+	return true;
 }
 
-function Server_FixCurrentMap_NP32Strogg()
+function bool Server_FixCurrentMap_NP32Strogg()
 {
 	local Effects e;
 	local ONPParticleFireSpawner NewFireSpawner;
@@ -471,223 +520,36 @@ function Server_FixCurrentMap_NP32Strogg()
 			if (NewFireSpawner != none)
 				NewFireSpawner.ReplaceOriginalSpawner(e);
 		}
+
+	return true;
 }
 
 
-function Server_FixCurrentMap_ONP_map01FirstDayX()
-{
-	MakeFallingMoverController("Mover6");
-	MakeFallingMoverController("Mover41");
-	SetEventTriggersPawnClassProximity('arhh');
-	SetNamedTriggerPawnClassProximity("Trigger52");
-}
-
-function Server_FixCurrentMap_ONP_map02LinesofCommX()
-{
-	CreatureFactory(LoadLevelActor("CreatureFactory3")).prototype =
-		CreatureFactory(LoadLevelActor("CreatureFactory2")).prototype;
-
-	LoadLevelTrigger("Trigger13").bTriggerOnceOnly = true;
-	LoadLevelTrigger("Trigger54").bTriggerOnceOnly = true; // MusicEvent3
-	EarthQuake(LoadLevelActor("Earthquake1")).bThrowPlayer = false;
-	EarthQuake(LoadLevelActor("Earthquake2")).bThrowPlayer = false;
-}
-
-function Server_FixCurrentMap_ONP_map03oppressivemetalX()
-{
-	SetNamedTriggerPawnClassProximity("Trigger4");
-	SetNamedTriggerPawnClassProximity("Trigger8");
-	SetNamedTriggerPawnClassProximity("Trigger47");
-	SetEventTriggersPawnClassProximity('felldoom');
-}
-
-function Server_FixCurrentMap_ONP_map06ProcessingX()
-{
-	local Trigger Trigger;
-
-	foreach AllActors(class'Trigger', Trigger)
-		if (StrStartsWith(Trigger.Event, "splash", true))
-			SetTriggerPawnClassProximity(Trigger);
-
-	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
-	SetTriggerPawnClassProximity(LoadLevelTrigger("Trigger5"));
-}
-
-function Server_FixCurrentMap_ONP_map07PlanningX()
-{
-	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true;
-	SetNamedTriggerPawnClassProximity("Trigger23");
-	MakeFallingMoverController("Mover65");
-	MakeFallingMoverController("Mover83");
-	MakeFallingMoverController("Mover98");
-}
-
-function Server_FixCurrentMap_ONP_map08DisposalX()
-{
-	local Trigger Trigger;
-
-	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
-	LoadLevelTrigger("Trigger59").bTriggerOnceOnly = true;
-	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
-	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
-	SetNamedTriggerPawnClassProximity("Trigger31");
-	SetNamedTriggerPawnClassProximity("Trigger75");
-
-	MakeEventRepeater('gloop', 1.0);
-	foreach AllActors(class'Trigger', Trigger)
-		if (Trigger.Event == 'gloop')
-			Trigger.RepeatTriggerTime = 0;
-}
-
-function Server_FixCurrentMap_ONP_map09SurfaceX()
-{
-	local TeamCannon Cannon;
-
-	foreach AllActors(class'TeamCannon', Cannon)
-		Cannon.SetPropertyText("B227_bAttackAnyDamageInstigators", "true");
-
-	MakeFallingMoverController("Mover65");
-	SetNamedTriggerPawnClassProximity("Trigger6");
-	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
-	if (Level.Game.Difficulty >= 3)
-	{
-		CreatureFactory(LoadLevelActor("CreatureFactory0")).bCovert = false;
-		CreatureFactory(LoadLevelActor("CreatureFactory1")).bCovert = false;
-		CreatureFactory(LoadLevelActor("CreatureFactory2")).bCovert = false;
-	}
-}
-
-function Server_FixCurrentMap_ONP_map10AmbushX()
-{
-	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
-}
-
-function Server_FixCurrentMap_ONP_map11CobaltX()
-{
-	LoadLevelTrigger("Trigger8").bTriggerOnceOnly = true;
-}
-
-function Server_FixCurrentMap_ONP_map12DamX()
-{
-	SetEventTriggersPawnClassProximity('choppedup');
-}
-
-function Server_FixCurrentMap_ONP_map13SignsX()
-{
-	LoadLevelTrigger("Trigger11").bTriggerOnceOnly = true; // MusicEvent5
-	SetNamedTriggerPawnClassProximity("Trigger30");
-}
-
-function Server_FixCurrentMap_ONP_map14SoothsayerX()
-{
-	local Teleporter Telep;
-
-	Telep = Teleporter(LoadLevelActor("Teleporter0"));
-	Telep.bEnabled = false;
-	Telep.Tag = 'TeleporterEnergyUp';
-
-	EventToEvent('energyup', 'TeleporterEnergyUp', true);
-
-	SetNamedTriggerPawnClassProximity("Trigger64");
-}
-
-function Server_FixCurrentMap_ONP_map15RevelationX()
-{
-	SetNamedTriggerPawnClassProximity("Trigger62");
-}
-
-function Server_FixCurrentMap_ONP_map16BoldX()
-{
-	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
-	LoadLevelTrigger("Trigger105").bInitiallyActive = true;
-	LoadLevelActor("SpecialEvent49").Tag = '';
-	SetEventTriggersPawnClassProximity('diced');
-	SetEventTriggersPawnClassProximity('wasted');
-}
-
-function Server_FixCurrentMap_ONP_map18FriendX()
-{
-	LoadLevelTrigger("Trigger15").bTriggerOnceOnly = true;
-	SetNamedTriggerPawnClassProximity("Trigger11");
-	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
-}
-
-function Server_FixCurrentMap_ONP_map19IceX()
-{
-	LoadLevelTrigger("Trigger49").bTriggerOnceOnly = true;
-	LoadLevelTrigger("Trigger68").bTriggerOnceOnly = true; // MusicEvent5
-	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true; // MusicEvent1
-	LoadLevelTrigger("Trigger87").bTriggerOnceOnly = true;
-	LoadLevelTrigger("Trigger88").bTriggerOnceOnly = true; // MusicEvent5
-	SetNamedTriggerPawnClassProximity("Trigger73");
-}
-
-function Server_FixCurrentMap_ONP_map20InterloperX()
-{
-	SetEventTriggersPawnClassProximity('Death');
-	SetEventTriggersPawnClassProximity('ohdearyoufell');
-}
-
-function Server_FixCurrentMap_ONP_map21NestX()
-{
-	LoadLevelMover("RotatingMover0").Tag = 'hiveoff_stop_rotating';
-	Spawn(class'ONPEventUntrigger',, 'hiveoff').Event = 'hiveoff_stop_rotating';
-
-	SetEventTriggersPawnClassProximity('wasted');
-}
-
-function Server_FixCurrentMap_ONP_map22TransferX()
-{
-	LoadLevelTrigger("Trigger29").bTriggerOnceOnly = true;
-	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = true;
-	LoadLevelMover("Mover56").MoverEncroachType = ME_IgnoreWhenEncroach;
-
-	SetNamedTriggerPawnClassProximity("Trigger46");
-	SetEventTriggersPawnClassProximity('chopped');
-	SetEventTriggersPawnClassProximity('ohdearyoufell');
-}
-
-simulated function Client_FixCurrentMap_ONP_map22TransferX()
-{
-	LoadLevelMover("Mover26").bDynamicLightMover = false;
-}
-
-function Server_FixCurrentMap_ONP_map23PowerPlayX()
-{
-	SetEventTriggersPawnClassProximity('wasted');
-}
-
-function Server_FixCurrentMap_ONP_map24CoreX()
-{
-	LoadLevelTrigger("Trigger95").bTriggerOnceOnly = true; // MusicEvent2
-	LoadLevelTrigger("Trigger96").bTriggerOnceOnly = true; // MusicEvent3
-	LoadLevelTrigger("Trigger110").bTriggerOnceOnly = true;
-	SetEventTriggersPawnClassProximity('Death');
-	SetEventTriggersPawnClassProximity('electric');
-	SetNamedTriggerPawnClassProximity("Trigger56");
-	LoadLevelActor("BlockAll4").SetCollisionSize(256, 20);
-}
-
-
-function Server_FixCurrentMap_ONP_map01FirstDay()
+function bool Server_FixCurrentMap_ONP_map01FirstDay()
 {
 	SetEventTriggersPawnClassProximity('arhh');
 	SetNamedTriggerPawnClassProximity("Trigger52");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map02Detour()
+function bool Server_FixCurrentMap_ONP_map02Detour()
 {
 	DisableTeleporter("fadeoutTeleporter3");
 	LoadLevelMover("Mover0").MoveTime = 1.0;
 	MakeFallingMoverController("Mover1");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map03Watchyourstep()
+function bool Server_FixCurrentMap_ONP_map03Watchyourstep()
 {
 	MakeFallingMoverController("Mover6");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map04LabEntrance()
+function bool Server_FixCurrentMap_ONP_map04LabEntrance()
 {
 	LoadLevelTrigger("Trigger44").bTriggerOnceOnly = true;
 	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = false;
@@ -696,50 +558,66 @@ function Server_FixCurrentMap_ONP_map04LabEntrance()
 	SetEventTriggersPawnClassProximity('aarrhh');
 	MakeFallingMoverController("Mover50");
 	MakeFallingMoverController("Mover51");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map05FriendlyFire()
+function bool Server_FixCurrentMap_ONP_map05FriendlyFire()
 {
 	DisableTeleporter("fadeoutTeleporter1");
 	SetNamedTriggerPawnClassProximity("Trigger1");
 	MakeFallingMoverController("Mover79");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map06PowerPlay()
+function bool Server_FixCurrentMap_ONP_map06PowerPlay()
 {
 	SetEventTriggersPawnClassProximity('ouch');
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map07Questionableethics()
+function bool Server_FixCurrentMap_ONP_map07Questionableethics()
 {
 	SetEventTriggersPawnClassProximity('aarrhh');
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map09ComplexSituation()
+function bool Server_FixCurrentMap_ONP_map09ComplexSituation()
 {
 	SetEventTriggersPawnClassProximity('aarrhh');
 	LoadLevelMusicEvent("MusicEvent2").bOnceOnly = true;
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map13Processing()
+function bool Server_FixCurrentMap_ONP_map13Processing()
 {
 	SetNamedTriggerPawnClassProximity("Trigger29");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map14Mine()
+function bool Server_FixCurrentMap_ONP_map14Mine()
 {
 	LoadLevelMover("Mover1").StayOpenTime = 4;
 	SetNamedTriggerPawnClassProximity("Trigger2");
 	SetNamedTriggerPawnClassProximity("Trigger16");
 	InterpolateSpecialEvent("SpecialEvent10");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map15CrossCountry()
+function bool Server_FixCurrentMap_ONP_map15CrossCountry()
 {
 	LoadLevelTrigger("Trigger6").bTriggerOnceOnly = true; // MusicEvent0
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map16Dam()
+function bool Server_FixCurrentMap_ONP_map16Dam()
 {
 	local ONPCameraSpot Cam;
 
@@ -748,24 +626,30 @@ function Server_FixCurrentMap_ONP_map16Dam()
 
 	LoadLevelTrigger("Trigger10").Event = 'blockerdoor_trigger';
 	EventToEvent('blockerdoor_trigger', 'blockerdoor', true);
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map19Teleporter()
+function bool Server_FixCurrentMap_ONP_map19Teleporter()
 {
 	LoadLevelTrigger("Trigger32").bTriggerOnceOnly = true;
 	SetEventTriggersPawnClassProximity('killkill');
 	SetEventTriggersPawnClassProximity('killkill2');
 	MakeFallingMoverController("Mover0");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map21Welcome()
+function bool Server_FixCurrentMap_ONP_map21Welcome()
 {
 	LoadLevelMover("Mover0").StayOpenTime = 4;
 	SetNamedTriggerPawnClassProximity("Trigger23");
 	MakeFallingMoverController("Mover65");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map22Disposal()
+function bool Server_FixCurrentMap_ONP_map22Disposal()
 {
 	local Trigger Trigger;
 
@@ -776,21 +660,27 @@ function Server_FixCurrentMap_ONP_map22Disposal()
 	foreach AllActors(class'Trigger', Trigger)
 		if (Trigger.Event == 'gloop')
 			Trigger.RepeatTriggerTime = 0;
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map23Newfoe()
+function bool Server_FixCurrentMap_ONP_map23Newfoe()
 {
 	LoadLevelMusicEvent("MusicEvent0").bOnceOnly = true;
 	LoadLevelMusicEvent("MusicEvent2").bOnceOnly = true;
 	SetNamedTriggerPawnClassProximity("Trigger21");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map24Agenda()
+function bool Server_FixCurrentMap_ONP_map24Agenda()
 {
 	LoadLevelMusicEvent("MusicEvent0").bOnceOnly = true;
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map25Communications()
+function bool Server_FixCurrentMap_ONP_map25Communications()
 {
 	MakeFallingMoverController("Mover5");
 	MakeFallingMoverController("Mover6");
@@ -798,9 +688,11 @@ function Server_FixCurrentMap_ONP_map25Communications()
 	MakeFallingMoverController("Mover8");
 	MakeFallingMoverController("Mover9");
 	MakeFallingMoverController("Mover93");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map26EBE()
+function bool Server_FixCurrentMap_ONP_map26EBE()
 {
 	local Mover Mover;
 	local int CollisionFlags;
@@ -830,21 +722,27 @@ function Server_FixCurrentMap_ONP_map26EBE()
 	SetActorCollisionWithFlags(Mover, CollisionFlags);
 
 	SetNamedTriggerPawnClassProximity("Trigger0");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map27Entrance()
+function bool Server_FixCurrentMap_ONP_map27Entrance()
 {
 	SetEventTriggersPawnClassProximity('burnbaby');
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map28Bellyofthebeast()
+function bool Server_FixCurrentMap_ONP_map28Bellyofthebeast()
 {
 	SetEventTriggersPawnClassProximity('zapped');
 	SetNamedTriggerPawnClassProximity("Trigger5");
 	SetNamedTriggerPawnClassProximity("Trigger40");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map30Ruins()
+function bool Server_FixCurrentMap_ONP_map30Ruins()
 {
 	local ONPSurfaceDamageTrigger DamageTrigger;
 
@@ -855,39 +753,51 @@ function Server_FixCurrentMap_ONP_map30Ruins()
 	DamageTrigger.DamageType = 'Burned';
 
 	LoadLevelTrigger("Trigger19").bTriggerOnceOnly = true;
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map31Dogsofwar()
+function bool Server_FixCurrentMap_ONP_map31Dogsofwar()
 {
 	LoadLevelTrigger("Trigger2").bTriggerOnceOnly = true;
 	LoadLevelMusicEvent("MusicEvent1").bOnceOnly = true;
 	LoadLevelMusicEvent("MusicEvent3").bOnceOnly = true;
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map32Gauntlet()
+function bool Server_FixCurrentMap_ONP_map32Gauntlet()
 {
 	MakeFallingMoverController("Mover0");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map35Genetics()
+function bool Server_FixCurrentMap_ONP_map35Genetics()
 {
 	SetEventTriggersPawnClassProximity('fallwaste');
 	MakeFallingMoverController("Mover0");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map36Birthing()
+function bool Server_FixCurrentMap_ONP_map36Birthing()
 {
 	LoadLevelMusicEvent("MusicEvent2").bOnceOnly = true;
 	SetEventTriggersPawnClassProximity('Death');
 	SetNamedTriggerPawnClassProximity("Trigger11");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map37Halted()
+function bool Server_FixCurrentMap_ONP_map37Halted()
 {
 	SetNamedTriggerPawnClassProximity("Trigger14");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map38Tothecore()
+function bool Server_FixCurrentMap_ONP_map38Tothecore()
 {
 	local class<Actor> ONPLaserDisablerClass;
 	local Actor LaserDisabler;
@@ -899,9 +809,11 @@ function Server_FixCurrentMap_ONP_map38Tothecore()
 
 	SetEventTriggersPawnClassProximity('turfed');
 	SetNamedTriggerPawnClassProximity("Trigger5");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map39Escape()
+function bool Server_FixCurrentMap_ONP_map39Escape()
 {
 	local EarthQuake EQ;
 
@@ -935,11 +847,319 @@ function Server_FixCurrentMap_ONP_map39Escape()
 	MakeFallingMoverController("Mover103", 0, 0.5);
 	MakeFallingMoverController("Mover104", 0, 0.5);
 	MakeFallingMoverController("Mover109");
+
+	return true;
 }
 
-function Server_FixCurrentMap_ONP_map40Boss()
+function bool Server_FixCurrentMap_ONP_map40Boss()
 {
 	SetEventTriggersPawnClassProximity('pitofdeath');
+
+	return true;
+}
+
+
+function bool Server_FixCurrentMap_ONP_map01FirstDayX()
+{
+	if (CurrentMapGUID != "FE2B8F0A4D37F886262C339DF583FC7E" && CurrentMapGUID != "FDA5C4D4478A990A9E846BA610AC4F4F")
+		return false;
+
+	MakeFallingMoverController("Mover6");
+	MakeFallingMoverController("Mover41");
+	SetEventTriggersPawnClassProximity('arhh');
+	SetNamedTriggerPawnClassProximity("Trigger52");
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map02LinesofCommX()
+{
+	if (CurrentMapGUID != "A535A8AD4E4DB0B7823776BCF5BECE0D" && CurrentMapGUID != "38373B8745DF6728864BF98DEE472879")
+		return false;
+
+	CreatureFactory(LoadLevelActor("CreatureFactory3")).prototype =
+		CreatureFactory(LoadLevelActor("CreatureFactory2")).prototype;
+
+	LoadLevelTrigger("Trigger13").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger54").bTriggerOnceOnly = true; // MusicEvent3
+	EarthQuake(LoadLevelActor("Earthquake1")).bThrowPlayer = false;
+	EarthQuake(LoadLevelActor("Earthquake2")).bThrowPlayer = false;
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map03oppressivemetalX()
+{
+	if (CurrentMapGUID != "80A1C89C44245A7ABA561E9094F46A9B" && CurrentMapGUID != "05B0AB4346791538A3AF24A13C70BF5C")
+		return false;
+
+	SetNamedTriggerPawnClassProximity("Trigger4");
+	SetNamedTriggerPawnClassProximity("Trigger8");
+	SetNamedTriggerPawnClassProximity("Trigger47");
+	SetEventTriggersPawnClassProximity('felldoom');
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map06ProcessingX()
+{
+	local Trigger Trigger;
+
+	if (CurrentMapGUID != "FB988867435548523BBF1F99CA71AA7B" && CurrentMapGUID != "E99535CE4BC88E37FF61E39B350944E4")
+		return false;
+
+	foreach AllActors(class'Trigger', Trigger)
+		if (StrStartsWith(Trigger.Event, "splash", true))
+			SetTriggerPawnClassProximity(Trigger);
+
+	LoadLevelTrigger("Trigger64").bTriggerOnceOnly = true;
+	SetTriggerPawnClassProximity(LoadLevelTrigger("Trigger5"));
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map07PlanningX()
+{
+	if (CurrentMapGUID != "59A4816B4A4FDB513A64199B11F1DA3C" && CurrentMapGUID != "77D0702F4A5C4B361BCBA799D64FB579")
+		return false;
+
+	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger23");
+	MakeFallingMoverController("Mover65");
+	MakeFallingMoverController("Mover83");
+	MakeFallingMoverController("Mover98");
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map08DisposalX()
+{
+	local Trigger Trigger;
+
+	if (CurrentMapGUID != "BBCF815044BF4EE9442356AFC7369016" && CurrentMapGUID != "5CD9805A4271E4C5C00CFFB87F8254DE")
+		return false;
+
+	LoadLevelTrigger("Trigger58").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger59").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger60").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger72").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger31");
+	SetNamedTriggerPawnClassProximity("Trigger75");
+
+	MakeEventRepeater('gloop', 1.0);
+	foreach AllActors(class'Trigger', Trigger)
+		if (Trigger.Event == 'gloop')
+			Trigger.RepeatTriggerTime = 0;
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map09SurfaceX()
+{
+	local TeamCannon Cannon;
+
+	if (CurrentMapGUID != "6E2E4CF745755C6AE0243AB880A4B18A" &&
+		CurrentMapGUID != "561236C34F338407E657AB8F831577F3" &&
+		CurrentMapGUID != "3FAC633048F58AEFD50E73A56FEAAF53")
+	{
+		return false;
+	}
+
+	foreach AllActors(class'TeamCannon', Cannon)
+		Cannon.SetPropertyText("B227_bAttackAnyDamageInstigators", "true");
+
+	MakeFallingMoverController("Mover65");
+	SetNamedTriggerPawnClassProximity("Trigger6");
+	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
+	if (Level.Game.Difficulty >= 3)
+	{
+		CreatureFactory(LoadLevelActor("CreatureFactory0")).bCovert = false;
+		CreatureFactory(LoadLevelActor("CreatureFactory1")).bCovert = false;
+		CreatureFactory(LoadLevelActor("CreatureFactory2")).bCovert = false;
+	}
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map10AmbushX()
+{
+	if (CurrentMapGUID != "9FCDA97143AB11356A7CD2AB57A8B429")
+		return false;
+
+	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map11CobaltX()
+{
+	if (CurrentMapGUID != "B61CD5D54E60CF72D9E495BAEBFD9374")
+		return false;
+
+	LoadLevelTrigger("Trigger8").bTriggerOnceOnly = true;
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map12DamX()
+{
+	if (CurrentMapGUID != "E053772E41AF1FDA1E026F9F4F83ABBA")
+		return false;
+
+	SetEventTriggersPawnClassProximity('choppedup');
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map13SignsX()
+{
+	if (CurrentMapGUID != "FDCE00284C9CB54CCD161F8A30523EA5")
+		return false;
+
+	LoadLevelTrigger("Trigger11").bTriggerOnceOnly = true; // MusicEvent5
+	SetNamedTriggerPawnClassProximity("Trigger30");
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map14SoothsayerX()
+{
+	local Teleporter Telep;
+
+	if (CurrentMapGUID != "2A8C3EC646660121E48798A7984E3982")
+		return false;
+
+	Telep = Teleporter(LoadLevelActor("Teleporter0"));
+	Telep.bEnabled = false;
+	Telep.Tag = 'TeleporterEnergyUp';
+
+	EventToEvent('energyup', 'TeleporterEnergyUp', true);
+
+	SetNamedTriggerPawnClassProximity("Trigger64");
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map15RevelationX()
+{
+	if (CurrentMapGUID != "DC4DFD5D409D3B9A54C32787FD974450")
+		return false;
+
+	SetNamedTriggerPawnClassProximity("Trigger62");
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map16BoldX()
+{
+	if (CurrentMapGUID != "91AC1E444C0EAFE94FCC3C9E40E5B5BD")
+		return false;
+
+	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
+	LoadLevelTrigger("Trigger105").bInitiallyActive = true;
+	LoadLevelActor("SpecialEvent49").Tag = '';
+	SetEventTriggersPawnClassProximity('diced');
+	SetEventTriggersPawnClassProximity('wasted');
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map18FriendX()
+{
+	if (CurrentMapGUID != "F34156D74FF7E885A25EB6A8C326E2DD")
+		return false;
+
+	LoadLevelTrigger("Trigger15").bTriggerOnceOnly = true;
+	SetNamedTriggerPawnClassProximity("Trigger11");
+	EarthQuake(LoadLevelActor("Earthquake0")).bThrowPlayer = false;
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map19IceX()
+{
+	if (CurrentMapGUID != "BCC5E2F942112160570832B801539D54")
+		return false;
+
+	LoadLevelTrigger("Trigger49").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger68").bTriggerOnceOnly = true; // MusicEvent5
+	LoadLevelTrigger("Trigger82").bTriggerOnceOnly = true; // MusicEvent1
+	LoadLevelTrigger("Trigger87").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger88").bTriggerOnceOnly = true; // MusicEvent5
+	SetNamedTriggerPawnClassProximity("Trigger73");
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map20InterloperX()
+{
+	if (CurrentMapGUID != "B397DC73494B5E58D272A9BF8D67D8A2")
+		return false;
+
+	SetEventTriggersPawnClassProximity('Death');
+	SetEventTriggersPawnClassProximity('ohdearyoufell');
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map21NestX()
+{
+	if (CurrentMapGUID != "6C804A76467A50BE41AC9F90D1FAC747")
+		return false;
+
+	LoadLevelMover("RotatingMover0").Tag = 'hiveoff_stop_rotating';
+	Spawn(class'ONPEventUntrigger',, 'hiveoff').Event = 'hiveoff_stop_rotating';
+
+	SetEventTriggersPawnClassProximity('wasted');
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map22TransferX()
+{
+	if (CurrentMapGUID != "8B9B48AD46F5041B1904B3B5D3535274")
+		return false;
+
+	LoadLevelTrigger("Trigger29").bTriggerOnceOnly = true;
+	LoadLevelTrigger("Trigger51").bTriggerOnceOnly = true;
+	LoadLevelMover("Mover56").MoverEncroachType = ME_IgnoreWhenEncroach;
+
+	SetNamedTriggerPawnClassProximity("Trigger46");
+	SetEventTriggersPawnClassProximity('chopped');
+	SetEventTriggersPawnClassProximity('ohdearyoufell');
+
+	return true;
+}
+
+simulated function Client_FixCurrentMap_ONP_map22TransferX()
+{
+	LoadLevelMover("Mover26").bDynamicLightMover = false;
+}
+
+function bool Server_FixCurrentMap_ONP_map23PowerPlayX()
+{
+	if (CurrentMapGUID != "63FF7CF34C90A653752E1681AA7AB207")
+		return false;
+
+	SetEventTriggersPawnClassProximity('wasted');
+
+	return true;
+}
+
+function bool Server_FixCurrentMap_ONP_map24CoreX()
+{
+	if (CurrentMapGUID != "D76ED2954B15CC67FCCBE5B1269EEF30")
+		return false;
+
+	LoadLevelTrigger("Trigger95").bTriggerOnceOnly = true; // MusicEvent2
+	LoadLevelTrigger("Trigger96").bTriggerOnceOnly = true; // MusicEvent3
+	LoadLevelTrigger("Trigger110").bTriggerOnceOnly = true;
+	SetEventTriggersPawnClassProximity('Death');
+	SetEventTriggersPawnClassProximity('electric');
+	SetNamedTriggerPawnClassProximity("Trigger56");
+	LoadLevelActor("BlockAll4").SetCollisionSize(256, 20);
+
+	return true;
 }
 
 
@@ -1108,6 +1328,19 @@ function int GetActorCollisionFlags(Actor A)
 function SetActorCollisionWithFlags(Actor A, int CollisionFlags)
 {
 	A.SetCollision((CollisionFlags & 1) > 0, (CollisionFlags & 2) > 0, (CollisionFlags & 4) > 0);
+}
+
+function string GetCurrentMapGUID()
+{
+	local name PackageName;
+	local string FileName;
+	local string GUID;
+	local int NmCount, ImpCount, ExpCount, FileSize;
+
+	foreach AllLinkers(PackageName, FileName, GUID, NmCount, ImpCount, ExpCount, FileSize)
+		if (PackageName == Outer.Name)
+			return GUID;
+	return "";
 }
 
 static function bool StrStartsWith(coerce string S, string SubStr, bool bCaseInsensitive)

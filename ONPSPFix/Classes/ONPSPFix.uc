@@ -4,6 +4,10 @@ class ONPSPFix expands Mutator
 var() const string VersionInfo;
 var() const string Version;
 
+var() config bool bFixCampaign_ONP;
+var() config bool bFixCampaign_PX1; // PX 2009
+var() config bool bFixCampaign_PX2; // First Day & Interloper
+
 var() config bool bPreventFallingOutOfWorld;
 
 event PostBeginPlay()
@@ -60,9 +64,11 @@ function AdjustExplodingEffects()
 	local ExplosionChain EC;
 
 	foreach AllActors(class'ExplodingWall', EW)
-		EW.SetCollision(false);
+		if (EW.Event == '')
+			EW.SetCollision(false);
 	foreach AllActors(class'ExplosionChain', EC)
-		EC.SetCollision(false);
+		if (EC.Event == '')
+			EC.SetCollision(false);
 }
 
 function AdjustMusicEvents()
@@ -151,12 +157,15 @@ Begin:
 
 function string GetHumanName()
 {
-	return "ONPSPFix v1.33";
+	return "ONPSPFix v1.34";
 }
 
 defaultproperties
 {
-	VersionInfo="ONPSPFix v1.33 [2024-12-05]"
-	Version="1.33"
+	VersionInfo="ONPSPFix v1.34 [2026-04-06]"
+	Version="1.34"
+	bFixCampaign_ONP=True
+	bFixCampaign_PX1=True
+	bFixCampaign_PX2=True
 	bPreventFallingOutOfWorld=True
 }
