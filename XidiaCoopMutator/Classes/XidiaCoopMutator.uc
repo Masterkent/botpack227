@@ -190,7 +190,7 @@ function class<Weapon> ToXidiaWeaponType(class<Weapon> WeaponClass)
 
 	if (bReplaceUnrealWeapons)
 	{
-		if (WeaponClass == class'Stinger')
+		if (WeaponClass == class'Stinger' || WeaponClass.Name == 'MiningTool' && WeaponClass.Outer == Level.Outer)
 			return class'Xidia.MiningTool';
 		if (WeaponClass == class'ASMD')
 			return class'XidiaShockRifle';
@@ -666,13 +666,13 @@ static function name GetObjectPackageName(Object X)
 
 function string GetHumanName()
 {
-	return "XidiaCoopMutator v2.3";
+	return "XidiaCoopMutator v2.4";
 }
 
 defaultproperties
 {
-	VersionInfo="XidiaCoopMutator v2.3 [2024-08-27]"
-	Version="2.3"
+	VersionInfo="XidiaCoopMutator v2.4 [2026-04-06]"
+	Version="2.4"
 	bReplaceUnrealWeapons=False
 	bUseXidiaJumpBoots=True
 	bUseXidiaWeaponsSupply=True

@@ -268,6 +268,10 @@ if (Other.Class.Name == 'TarydiumAmmo' && Other.Class.Outer == Level.Outer) {
   ReplaceWith(Other, "Xidia.TarydiumAmmo");
   return false;
 }
+if (Other.Class.Name == 'MiningTool' && Other.Class.Outer == Level.Outer) {
+  ReplaceWith(Other, "Xidia.MiningTool");
+  return false;
+}
 if (Level.NetMode!=nm_standalone&&(Other.Isa('PlayerMotionFreeze')||Other.IsA('ViewSpot')||Other.IsA('ViewSpotStop')||Other.IsA('NonBuggyViewSpot')))
   return false; //no cutscenes in co-op!
 //-if (other.Isa('MoviePawn')) //UMS movie hack

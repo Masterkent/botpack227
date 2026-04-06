@@ -1349,6 +1349,11 @@ function HandleWalking(){
 
 state PlayerWalking
 {
+  event BeginState()
+  {
+    super.BeginState();
+    SetTimer(0.0, false); // prevents premature humming
+  }
   function EndState(){   //reset col. cylinder (in case swim and such)
     Super.EndState();
     SetTimer(0.0,false);
