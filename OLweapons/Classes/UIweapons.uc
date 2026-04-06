@@ -15,6 +15,7 @@ var config bool newarmorrules; //new armor rules (i.e. limit at 150 armor)
 var bool bwantreload;
 var bool wepcanreload;
 
+var config bool B227_bAkimboMagInUnrealGame;
 var config bool B227_bUseClassicProjectiles;
 
 replication

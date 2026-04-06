@@ -45,11 +45,11 @@ simulated function PostRender( canvas Canvas )
   P = PlayerPawn(Owner);
   if  (P != None)
   {
-      if (P.myhud!=none&&P.myhud.isa('challengehud'))
-      multiplier=0.8;
+      if (ChallengeHUD(P.myhud) != none)
+		multiplier=0.8;
       else
-      multiplier=0.9;
-        Canvas.DrawColor.B = 0;
+		multiplier=0.9;
+    Canvas.DrawColor.B = 0;
     If (slavemag !=none){
   //reverse if left side...)
   if(P.Handedness != 1){
@@ -199,7 +199,7 @@ function bool HandlePickupQuery( inventory Item )
 
   if (Item.class == class)
   {
-    if ( (Weapon(item).bWeaponStay && (slavemag!=None||!akimbomag||level.game.isa('unrealgameinfo'))) && (!Weapon(item).bHeldItem || Weapon(item).bTossedOut) )
+    if ( (Weapon(item).bWeaponStay && (slavemag!=None || !B227_AkimboMag())) && (!Weapon(item).bHeldItem || Weapon(item).bTossedOut) )
       return true;
     P = Pawn(Owner);
 
@@ -215,26 +215,19 @@ function bool HandlePickupQuery( inventory Item )
     if (Level.Game.WorldLog != None)
       Level.Game.WorldLog.LogPickup(Item, Pawn(Owner));
     //message
-    if (!akimbomag||level.game.isa('unrealgameinfo')){
+    if (!B227_AkimboMag()){
       if (PickupMessageClass == None)
         P.ClientMessage(PickupMessage, 'Pickup');
       else
         class'UTC_Pawn'.static.UTSF_ReceiveLocalizedMessage(P, PickupMessageClass, 0, None, None, item.Class );
     }
-
     else if (slavemag!=None){
-      if (playerpawn(owner)!=none&&playerpawn(owner).myhud.isa('challengehud'))
-      P.ClientMessage("You scavenge some ammo",'PickupMessagePlus');
-      else
       P.ClientMessage("You scavenge some ammo",'Pickup');}
     else{
-      if (playerpawn(owner)!=none&&playerpawn(owner).myhud.isa('challengehud'))
-      P.clientmessage("Automag Akimbo!",'PickupMessagePlus');
-      else
       P.ClientMessage("Automag Akimbo!",'Pickup');}
     //P.ReceiveLocalizedMessage( class'PickupMessagePlus', 0, None, None, Self.Class );
 
-    if (slavemag==None&&akimbomag&&!level.game.isa('unrealgameinfo')) {
+    if (slavemag==None && B227_AkimboMag()) {
       slavemag=Spawn(class'olautomag',owner);
       slavemag.isslave=true;
       slavemag.mastermag=self; //new clip referencing..
@@ -929,6 +922,12 @@ event Destroyed()
 	if (slavemag != none && !slavemag.bDeleteMe)
 		slavemag.Destroy();
 	super.Destroyed();
+}
+
+
+function bool B227_AkimboMag()
+{
+	return akimbomag && (B227_bAkimboMagInUnrealGame || UnrealGameInfo(Level.Game) == none);
 }
 
 // End Class
