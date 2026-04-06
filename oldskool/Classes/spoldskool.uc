@@ -349,6 +349,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 			}
 			if (MiniAmmo(Other) != none)
 			{
+				if (!bmag && bmini)
+					goto L_Replace;
 				miniammo(other).UsedInWeaponSlot[0]=int(bmag && !bmini);
 				miniammo(other).UsedInWeaponSlot[7]=1;
 				//-miniammo(other).Icon=Texture'UnrealShare.Icons.I_ShellAmmo';
@@ -371,6 +373,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 		}
 	}
 
+L_Replace:
 	ActorClass = B227_ReplaceInventoryClass(Inventory(Other).Class);
 	if (Other.Class == ActorClass)
 		return true;
