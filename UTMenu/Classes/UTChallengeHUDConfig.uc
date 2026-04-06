@@ -99,6 +99,14 @@ var UWindowCheckbox B227_VerticalCrosshairScalingCheck;
 var localized string B227_VerticalCrosshairScalingText;
 var localized string B227_VerticalCrosshairScalingHelp;
 
+var UWindowCheckbox B227_UseGlobalCrosshairSettingsCheck;
+var localized string B227_UseGlobalCrosshairSettingsText;
+var localized string B227_UseGlobalCrosshairSettingsHelp;
+
+var UWindowEditControl B227_CrosshairScaleEdit;
+var localized string B227_CrosshairScaleText;
+var localized string B227_CrosshairScaleHelp;
+
 var UWindowHSliderControl CrosshairSlider;
 var localized string CrosshairText;
 var localized string CrosshairHelp;
@@ -275,6 +283,22 @@ function Created()
 	B227_VerticalCrosshairScalingCheck.Align = TA_Left;
 	ControlOffset += 20;
 
+	B227_UseGlobalCrosshairSettingsCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
+	B227_UseGlobalCrosshairSettingsCheck.SetText(B227_UseGlobalCrosshairSettingsText);
+	B227_UseGlobalCrosshairSettingsCheck.SetHelpText(B227_UseGlobalCrosshairSettingsHelp);
+	B227_UseGlobalCrosshairSettingsCheck.SetFont(F_Normal);
+	B227_UseGlobalCrosshairSettingsCheck.Align = TA_Left;
+	ControlOffset += 20;
+
+	B227_CrosshairScaleEdit = UWindowEditControl(CreateControl(class'UWindowEditControl', CenterPos, ControlOffset, ControlWidth, 1));
+	B227_CrosshairScaleEdit.SetText(B227_CrosshairScaleText);
+	B227_CrosshairScaleEdit.SetHelpText(B227_CrosshairScaleHelp);
+	B227_CrosshairScaleEdit.SetFont(F_Normal);
+	B227_CrosshairScaleEdit.SetNumericOnly(true);
+	B227_CrosshairScaleEdit.SetNumericFloat(true);
+	B227_CrosshairScaleEdit.Align = TA_Left;
+	ControlOffset += 20;
+
 	CrosshairColorCombo = UWindowComboControl(CreateControl(class'UWindowComboControl', CenterPos, ControlOffset, CenterWidth, 1));
 	CrosshairColorCombo.SetText(CrosshairColorText);
 	CrosshairColorCombo.SetHelpText(CrosshairColorHelp);
@@ -342,8 +366,10 @@ function LoadCurrentValues()
 		B227_UpscaleHUDEdit.SetValue(string(H.B227_UpscaleHUD));
 	B227_VerticalScalingCheck.bChecked = H.B227_bVerticalScaling;
 	B227_VerticalCrosshairScalingCheck.bChecked = H.B227_bVerticalCrosshairScaling;
+	B227_UseGlobalCrosshairSettingsCheck.bChecked = H.B227_bUseGlobalCrosshairSettings;
+	B227_CrosshairScaleEdit.SetValue(string(H.B227_GetActualCrosshairScale()));
 	CrosshairSlider.SetRange(0, H.CrosshairCount - 1, 1);
-	CrosshairSlider.SetValue(GetPlayerOwner().myHUD.Crosshair);
+	CrosshairSlider.SetValue(H.B227_GetActualCrosshairStyle());
 	i = HUDColorCombo.FindItemIndex2(H.FavoriteHUDColor.R$","$H.FavoriteHUDColor.G$","$H.FavoriteHUDColor.B, False);
 	if(i == -1)
 		HUDColorCombo.SetSelectedIndex(Max(HUDColorCombo.FindItemIndex2("cust", False), 0));
@@ -381,7 +407,7 @@ function LoadDefaultValues()
 
 	H = ChallengeHUD(GetPlayerOwner().MyHUD);
 
-	H.Crosshair = class'HUD'.default.Crosshair;
+	H.B227_SetActualCrosshairStyle(ChallengeHUD(GetDefaultObject(class'ChallengeHUD')).B227_GetActualCrosshairStyle());
 	H.bHideHUD = class'ChallengeHUD'.default.bHideHUD;
 	H.bHideAllWeapons = class'ChallengeHUD'.default.bHideAllWeapons;
 	H.bHideStatus = class'ChallengeHUD'.default.bHideStatus;
@@ -467,6 +493,11 @@ function BeforePaint(Canvas C, float X, float Y)
 	B227_VerticalScalingCheck.WinLeft = CenterPos;
 	B227_VerticalCrosshairScalingCheck.SetSize(CenterWidth, 1);
 	B227_VerticalCrosshairScalingCheck.WinLeft = CenterPos;
+	B227_UseGlobalCrosshairSettingsCheck.SetSize(CenterWidth, 1);
+	B227_UseGlobalCrosshairSettingsCheck.WinLeft = CenterPos;
+	B227_CrosshairScaleEdit.SetSize(CenterWidth, 1);
+	B227_CrosshairScaleEdit.WinLeft = CenterPos;
+	B227_CrosshairScaleEdit.EditBoxWidth = 90;
 	CrosshairSlider.SetSize(CenterWidth, 1);
 	CrosshairSlider.SliderWidth = 90;
 	CrosshairSlider.WinLeft = CenterPos;
@@ -501,9 +532,9 @@ function Paint(Canvas C, float X, float Y)
 	Super.Paint(C, X, Y);
 
 	H = ChallengeHUD(GetPlayerOwner().MyHUD);
-	CrossHair = H.CrosshairTextures[H.Crosshair];
+	CrossHair = H.CrosshairTextures[H.B227_GetActualCrosshairStyle()];
 	if(CrossHair == None)
-		CrossHair = H.LoadCrosshair(H.Crosshair);
+		CrossHair = H.LoadCrosshair(H.B227_GetActualCrosshairStyle());
 
 	CrosshairX = (WinWidth - Crosshair.USize) / 2;
 	T = GetLookAndFeelTexture();
@@ -586,6 +617,8 @@ function Notify(UWindowDialogControl C, byte E)
 		case B227_UpscaleHUDEdit:
 		case B227_VerticalScalingCheck:
 		case B227_VerticalCrosshairScalingCheck:
+		case B227_UseGlobalCrosshairSettingsCheck:
+		case B227_CrosshairScaleEdit:
 		case HUDColorCombo:
 		case CrosshairColorCombo:
 		case UseTeamColorCheck:
@@ -657,6 +690,8 @@ singular function HUDLayoutChanged()
 		H.B227_UpscaleHUD = FMax(1.0, float(B227_UpscaleHUDEdit.GetValue()));
 	H.B227_bVerticalScaling = B227_VerticalScalingCheck.bChecked;
 	H.B227_bVerticalCrosshairScaling = B227_VerticalCrosshairScalingCheck.bChecked;
+	H.B227_bUseGlobalCrosshairSettings = B227_UseGlobalCrosshairSettingsCheck.bChecked;
+	H.B227_SetActualCrosshairScale(float(B227_CrosshairScaleEdit.GetValue()));
 
 	if(HUDColorCombo.GetValue2() == "cust")
 	{
@@ -709,7 +744,8 @@ singular function HUDLayoutChanged()
 
 function CrosshairChanged()
 {
-	GetPlayerOwner().myHUD.Crosshair = int(CrosshairSlider.Value);
+	if (ChallengeHUD(GetPlayerOwner().MyHUD) != none)
+		ChallengeHUD(GetPlayerOwner().MyHUD).B227_SetActualCrosshairStyle(int(CrosshairSlider.Value));
 }
 
 function SaveConfigs()
@@ -794,6 +830,10 @@ defaultproperties
      B227_VerticalScalingHelp="Scale size of HUD icons by screen height instead of screen width."
      B227_VerticalCrosshairScalingText="Vertical Crosshair Scaling"
      B227_VerticalCrosshairScalingHelp="Scale size of crosshair by screen height instead of screen width."
+     B227_UseGlobalCrosshairSettingsText="Global Crosshair Settings"
+     B227_UseGlobalCrosshairSettingsHelp="Use the same crosshair index and scaling everywhere."
+     B227_CrosshairScaleText="Crosshair Scale"
+     B227_CrosshairScaleHelp="Crosshair Scaling"
      CrosshairText="Crosshair Style"
      CrosshairHelp="Choose the crosshair appearing at the center of your screen."
      DefaultsText="Reset"

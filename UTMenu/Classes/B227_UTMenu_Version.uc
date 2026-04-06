@@ -3,6 +3,6 @@ class B227_UTMenu_Version expands B227_Version
 
 defaultproperties
 {
-	VersionInfo="B227 UTMenu v1.2 [2024-08-15]"
-	Version="1.2"
+	VersionInfo="B227 UTMenu v1.3 [2026-04-06]"
+	Version="1.3"
 }
