@@ -88,7 +88,7 @@ function float RateSelf( out int bUseAltMode )
 		if ( P.PlayerReplicationInfo != none && (P != O) && (P != E)
 			&& (!Level.Game.bTeamGame || (O.PlayerReplicationInfo.Team != P.PlayerReplicationInfo.Team))
 			&& (VSize(E.Location - P.Location) < 650)
-			&& (!Level.Game.IsA('TeamGamePlus') || TeamGamePlus(Level.Game).PriorityObjective(O) < 2)
+			&& (TeamGamePlus(Level.Game) == none || TeamGamePlus(Level.Game).PriorityObjective(O) < 2)
 			&& FastTrace(P.Location, E.Location) )
 		{
 			if ( VSize(E.Location - O.Location) > 500 )

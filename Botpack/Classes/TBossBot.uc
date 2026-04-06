@@ -67,7 +67,7 @@ function StartMatch()
 	RealAccuracy = Accuracy;
 	if ( !bNovice )
 		RealSkill += 4;
-	bRatedGame = ( Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).bRatedGame );
+	bRatedGame = DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).bRatedGame;
 	if ( bRatedGame )
 	{
 		R = Rand(7) + 6;

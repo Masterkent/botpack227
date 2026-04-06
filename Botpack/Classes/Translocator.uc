@@ -196,7 +196,7 @@ function Translocate()
 	if ( TTarget.Physics == PHYS_None )
 		Dest += vect(0,0,40);
 
-	if ( Level.Game.IsA('DeathMatchPlus')
+	if ( DeathMatchPlus(Level.Game) != none
 		&& !DeathMatchPlus(Level.Game).AllowTranslocation(Pawn(Owner), Dest) )
 		return;
 

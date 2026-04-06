@@ -12,7 +12,7 @@ function PostBeginPlay()
 
 	Super.PostBeginPlay();
 
-	if ( Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).bUseTranslocator && (Region.Zone.ZoneGravity.Z < 0.9 * Region.Zone.Default.ZoneGravity.Z) )
+	if ( DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).bUseTranslocator && (Region.Zone.ZoneGravity.Z < 0.9 * Region.Zone.Default.ZoneGravity.Z) )
 		return;
 
 	// if this game type doesn't include translocator, then get rid of paths through this node

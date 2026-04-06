@@ -44,7 +44,7 @@ function Actor SpecialHandling(Pawn Other)
 	if ( (Other.JumpZ <= 1.5 * Other.Default.JumpZ) && (B.Region.Zone.ZoneGravity.Z < 0.8 * B.Region.Zone.Default.ZoneGravity.Z) )
 	{
 		if ( (B.MyTranslocator == None) || (B.MyTranslocator.TTarget != None)
-			|| (Level.Game.IsA('DeathMatchPlus') && !DeathMatchPlus(Level.Game).CanTranslocate(B)) )
+			|| (DeathMatchPlus(Level.Game) != none && !DeathMatchPlus(Level.Game).CanTranslocate(B)) )
 		{
 			if ( bImpactJump && B.CanImpactJump() )
 			{

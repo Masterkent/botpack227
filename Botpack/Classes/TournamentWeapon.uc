@@ -26,7 +26,7 @@ function ForceAltFire()
 
 function SetWeaponStay()
 {
-	if ( Level.NetMode != NM_Standalone && Level.Game.IsA('DeathMatchPlus') )
+	if ( Level.NetMode != NM_Standalone && DeathMatchPlus(Level.Game) != none )
 		bWeaponStay = bWeaponStay || DeathMatchPlus(Level.Game).bMultiWeaponStay;
 	else
 		bWeaponStay = bWeaponStay || Level.Game.bCoopWeaponMode;
@@ -149,7 +149,7 @@ function BecomeItem()
 	if (B227_ShouldAdjustNPCFirePosition() && Instigator != none && PlayerPawn(Instigator) == none)
 		B227_AdjustNPCFirePosition();
 
-	if ( (B != None) || Level.Game.bTeamGame || !Level.Game.IsA('DeathMatchPlus')
+	if ( (B != None) || Level.Game.bTeamGame || DeathMatchPlus(Level.Game) == none
 		|| DeathMatchPlus(Level.Game).bNoviceMode
 		|| (DeathMatchPlus(Level.Game).NumBots > 4) )
 		return;

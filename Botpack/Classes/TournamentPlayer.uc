@@ -178,7 +178,7 @@ event bool EncroachingOn( actor Other )
 		&& (Pawn(Other).PlayerReplicationInfo != None)
 		&& (Pawn(Other).PlayerReplicationInfo.Team == PlayerReplicationInfo.Team) )
 	{
-		if ( (Role == ROLE_Authority) && Level.Game.IsA('DeathMatchPlus')
+		if ( (Role == ROLE_Authority) && DeathMatchPlus(Level.Game) != none
 			&& DeathMatchPlus(Level.Game).bStartMatch )
 			return Super.EncroachingOn(Other);
 		else
@@ -657,7 +657,7 @@ exec function Advance()
 	if (!Level.Game.GetAccessManager().CanExecuteCheat(self, 'Advance'))
 		return;
 
-	if (Level.Game.IsA('DeathMatchPlus'))
+	if (DeathMatchPlus(Level.Game) != none)
 		DeathMatchPlus(Level.Game).Skip();
 }
 
@@ -669,7 +669,7 @@ exec function AdvanceAll()
 	if (!Level.Game.GetAccessManager().CanExecuteCheat(self, 'AdvanceAll'))
 		return;
 
-	if (Level.Game.IsA('DeathMatchPlus'))
+	if (DeathMatchPlus(Level.Game) != none)
 		DeathMatchPlus(Level.Game).SkipAll();
 }
 

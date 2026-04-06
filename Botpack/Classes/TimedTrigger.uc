@@ -8,7 +8,7 @@ var() bool bRepeating;
 
 function PostBeginPlay()
 {
-	if ( !Level.Game.IsA('DeathMatchPlus') || !DeathMatchPlus(Level.Game).bRequireReady )
+	if ( DeathMatchPlus(Level.Game) == none || !DeathMatchPlus(Level.Game).bRequireReady )
 		SetTimer(DelaySeconds, bRepeating);
 	Super.PostBeginPlay();
 }

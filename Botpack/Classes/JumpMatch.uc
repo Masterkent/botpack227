@@ -3,7 +3,7 @@ class JumpMatch expands Mutator;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	if ( Level.Game.IsA('DeathMatchPlus') )
+	if (DeathMatchPlus(Level.Game) != none)
 		DeathMatchPlus(Level.Game).bJumpMatch = true;
 }
 

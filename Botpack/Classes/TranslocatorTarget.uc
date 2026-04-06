@@ -132,7 +132,7 @@ auto state Pickup
 						break;
 					}
 					else if ( P.IsInState('Roaming') && P.bCamping
-								&& Level.Game.IsA('DeathMatchPlus') && DeathMatchPlus(Level.Game).CheckThisTranslocator(P, self) )
+								&& DeathMatchPlus(Level.Game) != none && DeathMatchPlus(Level.Game).CheckThisTranslocator(P, self) )
 					{
 						P.SetPeripheralVision();
 						P.TweenToRunning(0.1);

@@ -108,7 +108,7 @@ function DrawTrailer( canvas Canvas )
 	else
 		LevelTitle = Level.Title;
 
-	if ( (Level.NetMode == NM_Standalone) && Level.Game.IsA('DeathMatchPlus') )
+	if ( (Level.NetMode == NM_Standalone) && DeathMatchPlus(Level.Game) != none )
 	{
 		if ( DeathMatchPlus(Level.Game).bRatedGame )
 			Canvas.DrawText(DeathMatchPlus(Level.Game).RatedGameLadderObj.SkillText@PlayerOwner.GameReplicationInfo.GameName@MapTitle@MapTitleQuote$LevelTitle$MapTitleQuote, true);

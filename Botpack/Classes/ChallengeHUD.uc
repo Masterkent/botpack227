@@ -99,7 +99,10 @@ var class<ServerInfo> ServerInfoClass;
 var globalconfig string FontInfoClass;
 
 var globalconfig bool B227_bAlwaysShowAmmoBars;
+var globalconfig bool B227_bUseGlobalCrosshairSettings;
 var globalconfig bool B227_bVerticalScaling;
+var globalconfig int B227_Crosshair;
+var globalconfig float B227_CrosshairScale;
 var globalconfig float B227_UpscaleHUD;
 
 var float B227_XScale;
@@ -1471,6 +1474,9 @@ simulated function DrawCrossHair( canvas Canvas, int X, int Y)
 	local float XScale, PickDiff;
 	local float XLength;
 	local texture T;
+	local float Crosshair;
+
+	Crosshair = B227_GetActualCrosshairStyle();
 
 	if (Crosshair >= CrosshairCount)
 		return;
@@ -1498,7 +1504,7 @@ simulated function DrawCrossHair( canvas Canvas, int X, int Y)
 		else
 			XScale *= (3 - 5 * PickDiff);
 	}
-	XLength = XScale * 64.0;
+	XLength = XScale * 64.0 * B227_GetActualCrosshairScale();
 
 	Canvas.bNoSmooth = False;
 	if ( PlayerOwner.Handedness == -1 )
@@ -1897,6 +1903,36 @@ function B227_ResetUpscale(Canvas Canvas)
 		Canvas.PopCanvasScale();
 }
 
+function int B227_GetActualCrosshairStyle()
+{
+	if (B227_bUseGlobalCrosshairSettings)
+		return Crosshair;
+	return B227_Crosshair;
+}
+
+function B227_SetActualCrosshairStyle(int NewCrosshair)
+{
+	if (B227_bUseGlobalCrosshairSettings)
+		Crosshair = NewCrosshair;
+	else
+		B227_Crosshair = NewCrosshair;
+}
+
+function float B227_GetActualCrosshairScale()
+{
+	if (B227_bUseGlobalCrosshairSettings)
+		return B227_GetCrosshairScale();
+	return B227_CrosshairScale;
+}
+
+function B227_SetActualCrosshairScale(float Scale)
+{
+	if (B227_bUseGlobalCrosshairSettings)
+		B227_SetCrosshairScale(Scale);
+	else
+		B227_CrosshairScale = FClamp(Scale, 0.0, 8.0);
+}
+
 function B227_DrawTranslator(Canvas Canvas)
 {
 	local Inventory Inv;
@@ -1976,5 +2012,6 @@ defaultproperties
 	FontInfoClass="Botpack.FontInfo"
 	HUDConfigWindowType="UTMenu.UTChallengeHUDConfig"
 	B227_bVerticalScaling=True
+	B227_CrosshairScale=1.0
 	B227_UpscaleHUD=1.0
 }

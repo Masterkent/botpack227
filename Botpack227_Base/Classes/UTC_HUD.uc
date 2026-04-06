@@ -1,5 +1,5 @@
 class UTC_HUD expands HUD
-	config(Botpack);
+	config;
 
 var color WhiteColor;
 var UTC_Mutator HUDMutator;
@@ -27,6 +27,7 @@ var globalconfig bool B227_bVerticalCrosshairScaling;
 var transient private float B227_DesiredCanvasScale;
 var transient private string B227_DesiredCanvasScaleHUD;
 var transient private int B227_CanvasScaleSupport;
+var transient private int B227_CrosshairScaleSupport;
 
 event Destroyed()
 {
@@ -263,6 +264,32 @@ static function bool B227_ApplyHudScaler(Canvas Canvas, optional out float Scale
 		return true;
 	}
 	return false;
+}
+
+static function bool B227_SupportsCrosshairScale()
+{
+	if (default.B227_CrosshairScaleSupport > 0)
+		return true;
+	if (default.B227_CrosshairScaleSupport == 0)
+	{
+		default.B227_CrosshairScaleSupport = int(DynamicLoadObject("Engine.HUD.CrosshairScale", class'Object', true) != none) * 2 - 1;
+		return default.B227_CrosshairScaleSupport > 0;
+	}
+	return false;
+}
+
+static function float B227_GetCrosshairScale()
+{
+	if (B227_SupportsCrosshairScale())
+		return float(GetDefaultObject(class'HUD').GetPropertyText("CrosshairScale"));
+	return 1.0;
+}
+
+static function B227_SetCrosshairScale(float Scale)
+{
+	Scale = FClamp(Scale, 0.0, 8.0);
+	if (B227_SupportsCrosshairScale())
+		GetDefaultObject(class'HUD').SetPropertyText("CrosshairScale", string(Scale));
 }
 
 static function color B227_MultiplyColor(color Color, float Factor)

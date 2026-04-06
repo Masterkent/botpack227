@@ -204,7 +204,7 @@ function Projectile ProjectileFire(class<projectile> ProjClass, float ProjSpeed,
 	if (B227_ShouldUseEnergyAmplifier() && Proj != none)
 		Proj.Damage *= B227_AmplifyDamage(80);
 	Tracked = Proj;
-	if ( Level.Game.IsA('DeathMatchPlus') && DeathmatchPlus(Level.Game).bNoviceMode )
+	if ( DeathMatchPlus(Level.Game) != none && DeathmatchPlus(Level.Game).bNoviceMode )
 		Tracked = None; //no combo move
 	return Proj;
 }
