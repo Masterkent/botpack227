@@ -30,6 +30,11 @@ var UWindowCheckbox ShowFragsCheck;
 var localized string ShowFragsText;
 var localized string ShowFragsHelp;
 
+
+var UWindowCheckbox B227_ShowAllWeaponSlotsCheck;
+var localized string B227_ShowAllWeaponSlotsText;
+var localized string B227_ShowAllWeaponSlotsHelp;
+
 var UWindowCheckbox UseTeamColorCheck;
 var localized string UseTeamColorText;
 var localized string UseTeamColorHelp;
@@ -189,6 +194,13 @@ function Created()
 	ShowFacesCheck.SetHelpText(ShowFacesHelp);
 	ShowFacesCheck.SetFont(F_Normal);
 	ShowFacesCheck.Align = TA_Left;
+	ControlOffset += 20;
+
+	B227_ShowAllWeaponSlotsCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
+	B227_ShowAllWeaponSlotsCheck.SetText(B227_ShowAllWeaponSlotsText);
+	B227_ShowAllWeaponSlotsCheck.SetHelpText(B227_ShowAllWeaponSlotsHelp);
+	B227_ShowAllWeaponSlotsCheck.SetFont(F_Normal);
+	B227_ShowAllWeaponSlotsCheck.Align = TA_Left;
 	ControlOffset += 20;
 
 	UseTeamColorCheck = UWindowCheckbox(CreateControl(class'UWindowCheckbox', CenterPos, ControlOffset, CenterWidth, 1));
@@ -357,6 +369,7 @@ function LoadCurrentValues()
 	ShowTeamInfoCheck.bChecked = !H.bHideTeamInfo;
 	ShowFragsCheck.bChecked = !H.bHideFrags;
 	ShowFacesCheck.bChecked = !H.bHideFaces;
+	B227_ShowAllWeaponSlotsCheck.bChecked = H.B227_bShowAllWeaponSlots;
 	UseTeamColorCheck.bChecked = H.bUseTeamColor;
 	OpacitySlider.SetValue(H.Opacity);
 	HUDScaleSlider.SetValue(H.HUDScale*5);
@@ -396,6 +409,7 @@ function LoadCurrentValues()
 	ShowTeamInfoCheck.bDisabled = !ShowHUDCheck.bChecked;
 	ShowFragsCheck.bDisabled = !ShowHUDCheck.bChecked;
 	ShowFacesCheck.bDisabled = !ShowHUDCheck.bChecked;
+	B227_ShowAllWeaponSlotsCheck.bDisabled = !ShowHUDCheck.bChecked;
 	UseTeamColorCheck.bDisabled = !ShowHUDCheck.bChecked;
 
 	bInitialized = True;
@@ -415,6 +429,7 @@ function LoadDefaultValues()
 	H.bHideTeamInfo = class'ChallengeHUD'.default.bHideTeamInfo;
 	H.bHideFrags = class'ChallengeHUD'.default.bHideFrags;
 	H.bHideFaces = class'ChallengeHUD'.default.bHideFaces;
+	H.B227_bShowAllWeaponSlots = class'ChallengeHUD'.default.B227_bShowAllWeaponSlots;
 	H.bUseTeamColor = class'ChallengeHUD'.default.bUseTeamColor;
 	H.Opacity = class'ChallengeHUD'.default.Opacity;
 	H.HUDScale = class'ChallengeHUD'.default.HUDScale;
@@ -457,6 +472,8 @@ function BeforePaint(Canvas C, float X, float Y)
 	ShowFragsCheck.WinLeft = CenterPos;
 	ShowFacesCheck.SetSize(CenterWidth, 1);
 	ShowFacesCheck.WinLeft = CenterPos;
+	B227_ShowAllWeaponSlotsCheck.SetSize(CenterWidth, 1);
+	B227_ShowAllWeaponSlotsCheck.WinLeft = CenterPos;
 	OpacitySlider.SetSize(CenterWidth, 1);
 	OpacitySlider.SliderWidth = 90;
 	OpacitySlider.WinLeft = CenterPos;
@@ -610,6 +627,7 @@ function Notify(UWindowDialogControl C, byte E)
 		case ShowTeamInfoCheck:
 		case ShowFragsCheck:
 		case ShowFacesCheck:
+		case B227_ShowAllWeaponSlotsCheck:
 		case OpacitySlider:
 		case HUDScaleSlider:
 		case WeaponScaleSlider:
@@ -672,6 +690,7 @@ singular function HUDLayoutChanged()
 	ShowTeamInfoCheck.bDisabled = !ShowHUDCheck.bChecked;
 	ShowFragsCheck.bDisabled = !ShowHUDCheck.bChecked;
 	ShowFacesCheck.bDisabled = !ShowHUDCheck.bChecked;
+	B227_ShowAllWeaponSlotsCheck.bDisabled = !ShowHUDCheck.bChecked;
 	UseTeamColorCheck.bDisabled = !ShowHUDCheck.bChecked;
 
 	H.bHideHUD = !ShowHUDCheck.bChecked;
@@ -681,6 +700,7 @@ singular function HUDLayoutChanged()
 	H.bHideTeamInfo = !ShowTeamInfoCheck.bChecked;
 	H.bHideFrags = !ShowFragsCheck.bChecked;
 	H.bHideFaces = !ShowFacesCheck.bChecked;
+	H.B227_bShowAllWeaponSlots = B227_ShowAllWeaponSlotsCheck.bChecked;
 	H.bUseTeamColor = UseTeamColorCheck.bChecked;
 	H.Opacity = OpacitySlider.GetValue();
 	H.HUDScale = HUDScaleSlider.GetValue()/5;
@@ -824,6 +844,8 @@ defaultproperties
      WeaponScaleHelp="Adjust the size of the weapon icons on the HUD."
      StatusScaleText="Status Size"
      StatusScaleHelp="Adjust the scale of the player status indicator (top right) on the HUD."
+     B227_ShowAllWeaponSlotsText="Show All Weapon Slots"
+     B227_ShowAllWeaponSlotsHelp="Show weapon numbers and ammo bars in all weapon slots."
      B227_UpscaleHUDText="Upscale HUD"
      B227_UpscaleHUDHelp="If this factor is greater than 1, HUD is rendered at a lower resolution and stretched to full screen."
      B227_VerticalScalingText="Vertical Icon Scaling"

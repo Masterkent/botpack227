@@ -98,7 +98,7 @@ var class<ServerInfo> ServerInfoClass;
 
 var globalconfig string FontInfoClass;
 
-var globalconfig bool B227_bAlwaysShowAmmoBars;
+var globalconfig bool B227_bShowAllWeaponSlots;
 var globalconfig bool B227_bUseGlobalCrosshairSettings;
 var globalconfig bool B227_bVerticalScaling;
 var globalconfig int B227_Crosshair;
@@ -736,7 +736,7 @@ simulated function DrawWeapons(Canvas Canvas)
 				}
 			}
 		}
-		else if (default.B227_bAlwaysShowAmmoBars && Ammo(Inv) != none)
+		else if (default.B227_bShowAllWeaponSlots && Ammo(Inv) != none)
 		{
 			Ammo = Ammo(Inv);
 			for (j = 0; j < 10; ++j)
@@ -824,7 +824,7 @@ simulated function DrawWeapons(Canvas Canvas)
 				Canvas.DrawTile(Texture'BotPack.HudElements1', AmmoScale, 8 * WeapScale,64,64,128.0,8.0);
 			}
 		}
-		else if (default.B227_bAlwaysShowAmmoBars)
+		else if (default.B227_bShowAllWeaponSlots)
 		{
 			WeaponX = BaseX + (i - 1) * WeaponOffset + 4 * WeapScale;
 			Canvas.CurX = WeaponX;
